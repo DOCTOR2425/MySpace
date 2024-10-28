@@ -1,0 +1,15 @@
+D:\WebApplication\InstrumentStore.DataAccess\bin\Debug\net8.0\InstrumentStore.DataAccess.deps.json
+D:\WebApplication\InstrumentStore.DataAccess\bin\Debug\net8.0\InstrumentStore.DataAccess.dll
+D:\WebApplication\InstrumentStore.DataAccess\bin\Debug\net8.0\InstrumentStore.DataAccess.pdb
+D:\WebApplication\InstrumentStore.DataAccess\bin\Debug\net8.0\InstrumentStore.Domain.dll
+D:\WebApplication\InstrumentStore.DataAccess\bin\Debug\net8.0\InstrumentStore.Domain.pdb
+D:\WebApplication\InstrumentStore.DataAccess\obj\Debug\net8.0\InstrumentStore.DataAccess.csproj.AssemblyReference.cache
+D:\WebApplication\InstrumentStore.DataAccess\obj\Debug\net8.0\InstrumentStore.DataAccess.GeneratedMSBuildEditorConfig.editorconfig
+D:\WebApplication\InstrumentStore.DataAccess\obj\Debug\net8.0\InstrumentStore.DataAccess.AssemblyInfoInputs.cache
+D:\WebApplication\InstrumentStore.DataAccess\obj\Debug\net8.0\InstrumentStore.DataAccess.AssemblyInfo.cs
+D:\WebApplication\InstrumentStore.DataAccess\obj\Debug\net8.0\InstrumentStore.DataAccess.csproj.CoreCompileInputs.cache
+D:\WebApplication\InstrumentStore.DataAccess\obj\Debug\net8.0\Instrume.4FC752DB.Up2Date
+D:\WebApplication\InstrumentStore.DataAccess\obj\Debug\net8.0\InstrumentStore.DataAccess.dll
+D:\WebApplication\InstrumentStore.DataAccess\obj\Debug\net8.0\refint\InstrumentStore.DataAccess.dll
+D:\WebApplication\InstrumentStore.DataAccess\obj\Debug\net8.0\InstrumentStore.DataAccess.pdb
+D:\WebApplication\InstrumentStore.DataAccess\obj\Debug\net8.0\ref\InstrumentStore.DataAccess.dll

@@ -1,0 +1,12 @@
+D:\WebApplication\InstrumentStore.Core\bin\Debug\net8.0\InstrumentStore.Domain.deps.json
+D:\WebApplication\InstrumentStore.Core\bin\Debug\net8.0\InstrumentStore.Domain.dll
+D:\WebApplication\InstrumentStore.Core\bin\Debug\net8.0\InstrumentStore.Domain.pdb
+D:\WebApplication\InstrumentStore.Core\obj\Debug\net8.0\InstrumentStore.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\WebApplication\InstrumentStore.Core\obj\Debug\net8.0\InstrumentStore.Domain.AssemblyInfoInputs.cache
+D:\WebApplication\InstrumentStore.Core\obj\Debug\net8.0\InstrumentStore.Domain.AssemblyInfo.cs
+D:\WebApplication\InstrumentStore.Core\obj\Debug\net8.0\InstrumentStore.Domain.csproj.CoreCompileInputs.cache
+D:\WebApplication\InstrumentStore.Core\obj\Debug\net8.0\InstrumentStore.Domain.dll
+D:\WebApplication\InstrumentStore.Core\obj\Debug\net8.0\refint\InstrumentStore.Domain.dll
+D:\WebApplication\InstrumentStore.Core\obj\Debug\net8.0\InstrumentStore.Domain.pdb
+D:\WebApplication\InstrumentStore.Core\obj\Debug\net8.0\ref\InstrumentStore.Domain.dll
+D:\WebApplication\InstrumentStore.Core\obj\Debug\net8.0\InstrumentStore.Domain.csproj.AssemblyReference.cache

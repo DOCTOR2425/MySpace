@@ -1,0 +1,17 @@
+D:\WebApplication\InstrumentStore.Application\bin\Debug\net8.0\InstrumentStore.Application.deps.json
+D:\WebApplication\InstrumentStore.Application\bin\Debug\net8.0\InstrumentStore.Application.dll
+D:\WebApplication\InstrumentStore.Application\bin\Debug\net8.0\InstrumentStore.Application.pdb
+D:\WebApplication\InstrumentStore.Application\bin\Debug\net8.0\InstrumentStore.DataAccess.dll
+D:\WebApplication\InstrumentStore.Application\bin\Debug\net8.0\InstrumentStore.Domain.dll
+D:\WebApplication\InstrumentStore.Application\bin\Debug\net8.0\InstrumentStore.DataAccess.pdb
+D:\WebApplication\InstrumentStore.Application\bin\Debug\net8.0\InstrumentStore.Domain.pdb
+D:\WebApplication\InstrumentStore.Application\obj\Debug\net8.0\InstrumentStore.Application.csproj.AssemblyReference.cache
+D:\WebApplication\InstrumentStore.Application\obj\Debug\net8.0\InstrumentStore.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\WebApplication\InstrumentStore.Application\obj\Debug\net8.0\InstrumentStore.Application.AssemblyInfoInputs.cache
+D:\WebApplication\InstrumentStore.Application\obj\Debug\net8.0\InstrumentStore.Application.AssemblyInfo.cs
+D:\WebApplication\InstrumentStore.Application\obj\Debug\net8.0\InstrumentStore.Application.csproj.CoreCompileInputs.cache
+D:\WebApplication\InstrumentStore.Application\obj\Debug\net8.0\Instrume.1E55F03A.Up2Date
+D:\WebApplication\InstrumentStore.Application\obj\Debug\net8.0\InstrumentStore.Application.dll
+D:\WebApplication\InstrumentStore.Application\obj\Debug\net8.0\refint\InstrumentStore.Application.dll
+D:\WebApplication\InstrumentStore.Application\obj\Debug\net8.0\InstrumentStore.Application.pdb
+D:\WebApplication\InstrumentStore.Application\obj\Debug\net8.0\ref\InstrumentStore.Application.dll
