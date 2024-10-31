@@ -13,3 +13,4 @@ D:\WebApplication\InstrumentStore.DataAccess\obj\Debug\net8.0\InstrumentStore.Da
 D:\WebApplication\InstrumentStore.DataAccess\obj\Debug\net8.0\refint\InstrumentStore.DataAccess.dll
 D:\WebApplication\InstrumentStore.DataAccess\obj\Debug\net8.0\InstrumentStore.DataAccess.pdb
 D:\WebApplication\InstrumentStore.DataAccess\obj\Debug\net8.0\ref\InstrumentStore.DataAccess.dll
+D:\WebApplication\InstrumentStore.DataAccess\obj\Debug\net8.0\InstrumentStore.DataAccess.sourcelink.json
