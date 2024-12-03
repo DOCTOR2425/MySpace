@@ -1,97 +1,97 @@
 ﻿using InstrumentStore.API.Contracts;
 using InstrumentStore.Application.Services;
-using InstrumentStore.Domain.Models;
+using InstrumentStore.Domain.DataBase.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InstrumentStore.API.Controllers
 {
-	[ApiController]
-	[Route("api/[controller]/[action]")]
-	public class MainCintroller : ControllerBase
-	{
-		private readonly InstrumentServices _instrumentServices;
+    [ApiController]
+    [Route("api/[controller]/[action]")]
+    public class MainCintroller : ControllerBase
+    {
+        private readonly InstrumentServices _instrumentServices;
 
-		public MainCintroller()
-		{
-			_instrumentServices = new InstrumentServices();
-		}
+        public MainCintroller()
+        {
+            _instrumentServices = new InstrumentServices();
+        }
 
-		[HttpGet]
-		public async Task<ActionResult<List<InstrumentResponse>>> GetInstruments()
-		{
-			List<Instrument> instruments = await _instrumentServices.GetAllInstruments();
+        [HttpGet]
+        public ActionResult<List<InstrumentResponse>> GetInstruments()
+        {
+            List<Instrument> instruments = _instrumentServices.GetAll();
 
-			IEnumerable<InstrumentResponse> response = instruments.Select(x => new InstrumentResponse(
-				x.InstrumentID,
-				x.Name,
-				x.Description,
-				x.Price,
-				x.Quantity,
-				x.Image,
-				x.Type,
-				x.Country,
-				x.Supplier));
+            IEnumerable<InstrumentResponse> response = instruments.Select(x => new InstrumentResponse(
+                x.InstrumentId,
+                x.Name,
+                x.Description,
+                x.Price,
+                x.Quantity,
+                x.Image,
+                x.Type,
+                x.CountryId,
+                x.SupplierId));
 
-			return Ok(response);
-		}
+            return Ok(response);
+        }
 
-		[HttpGet("{id:int}")]
-		public async Task<ActionResult<InstrumentResponse>> GetInstrument(int id)
-		{
-			Instrument instrument = await _instrumentServices.GetInstrument(id);
+        [HttpGet("{Id:int}")]
+        public ActionResult<InstrumentResponse> GetInstrument(int Id)
+        {
+            Instrument instrument = _instrumentServices.Get(Id);
 
-			InstrumentResponse response = new InstrumentResponse(
-				instrument.InstrumentID,
-				instrument.Name,
-				instrument.Description,
-				instrument.Price,
-				instrument.Quantity,
-				instrument.Image,
-				instrument.Type,
-				instrument.Country,
-				instrument.Supplier);
+            InstrumentResponse response = new InstrumentResponse(
+                instrument.InstrumentId,
+                instrument.Name,
+                instrument.Description,
+                instrument.Price,
+                instrument.Quantity,
+                instrument.Image,
+                instrument.Type,
+                instrument.CountryId,
+                instrument.SupplierId);
 
-			return Ok(response);
-		}
+            return Ok(response);
+        }
 
-		[HttpPost]
-		public async Task<ActionResult<int>> CreateInstrument([FromBody] InstrumentRequest instrument)
-		{
-			Instrument inst = new Instrument(
-				0,
-				instrument.Name,
-				instrument.Description,
-				instrument.Price,
-				instrument.Quantity,
-				instrument.Image,
-				instrument.InstrumentType,
-				instrument.Country,
-				instrument.Supplier);
+        [HttpPost]
+        public ActionResult<int> CreateInstrument([FromBody] InstrumentRequest instrument)
+        {
+            Instrument inst = new Instrument(
+                0,
+                instrument.Name,
+                instrument.Description,
+                instrument.Price,
+                instrument.Quantity,
+                instrument.Image,
+                instrument.InstrumentType,
+                instrument.Country,
+                instrument.Supplier);
 
-			return Ok(await _instrumentServices.CreateInstrument(inst));
-		}
+            return Ok(_instrumentServices.Create(inst));
+        }
 
-		[HttpPut("{id:int}")]
-		public async Task<ActionResult<int>> UpdateInstrument(int id, [FromBody] InstrumentRequest instrument)
-		{
-			int instrumentId = await _instrumentServices.UpdateInstrument(
-				id,
-				instrument.Name,
-				instrument.Description,
-				instrument.Price,
-				instrument.Quantity,
-				instrument.Image,
-				instrument.InstrumentType,
-				instrument.Country,
-				instrument.Supplier);
+        [HttpPut("{Id:int}")]
+        public ActionResult<int> UpdateInstrument(int Id, [FromBody] InstrumentRequest instrument)
+        {
+            int instrumentId = _instrumentServices.Update(
+                Id,
+                instrument.Name,
+                instrument.Description,
+                instrument.Price,
+                instrument.Quantity,
+                instrument.Image,
+                instrument.InstrumentType,
+                instrument.Country,
+                instrument.Supplier);
 
-			return Ok(instrumentId);
-		}
+            return Ok(instrumentId);
+        }
 
-		[HttpDelete("{id:int}")]
-		public async Task<ActionResult<int>> DeleteInstrument(int id)
-		{
-			return Ok(await _instrumentServices.DeleteInstrument(id));
-		}
-	}
+        [HttpDelete("{Id:int}")]
+        public ActionResult<int> DeleteInstrument(int Id)
+        {
+            return Ok(_instrumentServices.Delete(Id));
+        }
+    }
 }

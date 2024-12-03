@@ -1,11 +1,12 @@
 {
   "Version": 1,
-  "Hash": "f6/Si8rzexymMQVQg/uPXwCPfmgAb6cuLCmpoliUfvo=",
+  "Hash": "Su8PF6klj8uusFWAVETBbo6IOCcoB14bBWZ2rP8i0VI=",
   "Source": "InstrumentStore.API",
   "BasePath": "_content/InstrumentStore.API",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": []
+  "Assets": [],
+  "Endpoints": []
 }

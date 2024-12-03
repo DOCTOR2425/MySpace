@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "D:\\WebApplication\\InstrumentStore.API\\InstrumentStore.API.csproj": {}
+    "D:\\MySpace\\InstrumentStore.API\\InstrumentStore.API.csproj": {}
   },
   "projects": {
-    "D:\\WebApplication\\InstrumentStore.API\\InstrumentStore.API.csproj": {
+    "D:\\MySpace\\InstrumentStore.API\\InstrumentStore.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\WebApplication\\InstrumentStore.API\\InstrumentStore.API.csproj",
+        "projectUniqueName": "D:\\MySpace\\InstrumentStore.API\\InstrumentStore.API.csproj",
         "projectName": "InstrumentStore.API",
-        "projectPath": "D:\\WebApplication\\InstrumentStore.API\\InstrumentStore.API.csproj",
-        "packagesPath": "C:\\Users\\Acer\\.nuget\\packages\\",
-        "outputPath": "D:\\WebApplication\\InstrumentStore.API\\obj\\",
+        "projectPath": "D:\\MySpace\\InstrumentStore.API\\InstrumentStore.API.csproj",
+        "packagesPath": "C:\\Users\\Yahor.Dudkin\\.nuget\\packages\\",
+        "outputPath": "D:\\MySpace\\InstrumentStore.API\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Acer\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Yahor.Dudkin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -28,14 +32,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\WebApplication\\InstrumentStore.Application\\InstrumentStore.Application.csproj": {
-                "projectPath": "D:\\WebApplication\\InstrumentStore.Application\\InstrumentStore.Application.csproj"
-              },
-              "D:\\WebApplication\\InstrumentStore.Core\\InstrumentStore.Domain.csproj": {
-                "projectPath": "D:\\WebApplication\\InstrumentStore.Core\\InstrumentStore.Domain.csproj"
-              },
-              "D:\\WebApplication\\InstrumentStore.DataAccess\\InstrumentStore.DataAccess.csproj": {
-                "projectPath": "D:\\WebApplication\\InstrumentStore.DataAccess\\InstrumentStore.DataAccess.csproj"
+              "D:\\MySpace\\InstrumentStore.Core\\InstrumentStore.Domain.csproj": {
+                "projectPath": "D:\\MySpace\\InstrumentStore.Core\\InstrumentStore.Domain.csproj"
               }
             }
           }
@@ -48,8 +46,9 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "direct"
-        }
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -57,11 +56,11 @@
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.7, )"
+              "version": "[9.0.0, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[8.0.7, )"
+              "version": "[9.0.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -87,85 +86,25 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\WebApplication\\InstrumentStore.Application\\InstrumentStore.Application.csproj": {
+    "D:\\MySpace\\InstrumentStore.Core\\InstrumentStore.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\WebApplication\\InstrumentStore.Application\\InstrumentStore.Application.csproj",
-        "projectName": "InstrumentStore.Application",
-        "projectPath": "D:\\WebApplication\\InstrumentStore.Application\\InstrumentStore.Application.csproj",
-        "packagesPath": "C:\\Users\\Acer\\.nuget\\packages\\",
-        "outputPath": "D:\\WebApplication\\InstrumentStore.Application\\obj\\",
-        "projectStyle": "PackageReference",
-        "configFilePaths": [
-          "C:\\Users\\Acer\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "net8.0"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "net8.0": {
-            "targetAlias": "net8.0",
-            "projectReferences": {
-              "D:\\WebApplication\\InstrumentStore.DataAccess\\InstrumentStore.DataAccess.csproj": {
-                "projectPath": "D:\\WebApplication\\InstrumentStore.DataAccess\\InstrumentStore.DataAccess.csproj"
-              }
-            }
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
-        }
-      },
-      "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "net481"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "D:\\WebApplication\\InstrumentStore.Core\\InstrumentStore.Domain.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "D:\\WebApplication\\InstrumentStore.Core\\InstrumentStore.Domain.csproj",
+        "projectUniqueName": "D:\\MySpace\\InstrumentStore.Core\\InstrumentStore.Domain.csproj",
         "projectName": "InstrumentStore.Domain",
-        "projectPath": "D:\\WebApplication\\InstrumentStore.Core\\InstrumentStore.Domain.csproj",
-        "packagesPath": "C:\\Users\\Acer\\.nuget\\packages\\",
-        "outputPath": "D:\\WebApplication\\InstrumentStore.Core\\obj\\",
+        "projectPath": "D:\\MySpace\\InstrumentStore.Core\\InstrumentStore.Domain.csproj",
+        "packagesPath": "C:\\Users\\Yahor.Dudkin\\.nuget\\packages\\",
+        "outputPath": "D:\\MySpace\\InstrumentStore.Core\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Acer\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Yahor.Dudkin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -189,78 +128,9 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "direct"
-        }
-      },
-      "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
-          "dependencies": {
-            "Microsoft.EntityFrameworkCore.Abstractions": {
-              "target": "Package",
-              "version": "[8.0.8, )"
-            }
-          },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "net481"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "D:\\WebApplication\\InstrumentStore.DataAccess\\InstrumentStore.DataAccess.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "D:\\WebApplication\\InstrumentStore.DataAccess\\InstrumentStore.DataAccess.csproj",
-        "projectName": "InstrumentStore.DataAccess",
-        "projectPath": "D:\\WebApplication\\InstrumentStore.DataAccess\\InstrumentStore.DataAccess.csproj",
-        "packagesPath": "C:\\Users\\Acer\\.nuget\\packages\\",
-        "outputPath": "D:\\WebApplication\\InstrumentStore.DataAccess\\obj\\",
-        "projectStyle": "PackageReference",
-        "configFilePaths": [
-          "C:\\Users\\Acer\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "net8.0"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "auditMode": "all"
         },
-        "frameworks": {
-          "net8.0": {
-            "targetAlias": "net8.0",
-            "projectReferences": {
-              "D:\\WebApplication\\InstrumentStore.Core\\InstrumentStore.Domain.csproj": {
-                "projectPath": "D:\\WebApplication\\InstrumentStore.Core\\InstrumentStore.Domain.csproj"
-              }
-            }
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
-        }
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -268,11 +138,11 @@
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.7, )"
+              "version": "[9.0.0, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[8.0.7, )"
+              "version": "[9.0.0, )"
             }
           },
           "imports": [
@@ -291,7 +161,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

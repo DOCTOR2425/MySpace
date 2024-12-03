@@ -1,12 +1,12 @@
 ﻿using InstrumentStore.Application.Services;
-using InstrumentStore.Domain.Models;
+using InstrumentStore.Domain.DataBase.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InstrumentStore.API.Controllers
 {
-	[ApiController]
+    [ApiController]
 	[Route("[controller]")]
-	public class InstrumentController : ControllerBase// TODO 
+	public class InstrumentController : ControllerBase
 	{
 		private readonly InstrumentServices _instrumentServices;
 
@@ -16,11 +16,11 @@ namespace InstrumentStore.API.Controllers
 		}
 
 		[HttpGet("{id:int}")]
-		public async Task<ActionResult<List<Instrument>>> GetSimilarInstrument(int id)
+		public ActionResult<List<Instrument>> GetSimilarInstrument(int id)
 		{
-			Instrument target = await _instrumentServices.GetInstrument(id);
+			Instrument target = _instrumentServices.Get(id);
 
-			IEnumerable<Instrument> list = (await _instrumentServices.GetAllInstruments())
+			IEnumerable<Instrument> list = _instrumentServices.GetAll()
 				.Where(x => x.Type == target.Type);
 
 			return Ok(list);
