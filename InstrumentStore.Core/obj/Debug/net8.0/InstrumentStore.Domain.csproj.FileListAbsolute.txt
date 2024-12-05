@@ -25,3 +25,6 @@ D:\MySpace\InstrumentStore.Core\obj\Debug\net8.0\InstrumentStore.Domain.pdb
 D:\MySpace\InstrumentStore.Core\obj\Debug\net8.0\ref\InstrumentStore.Domain.dll
 D:\MySpace\InstrumentStore.Core\bin\Debug\net8.0\InstrumentStore.Domain.runtimeconfig.json
 D:\MySpace\InstrumentStore.Core\obj\Debug\net8.0\InstrumentStore.Domain.genruntimeconfig.cache
+D:\WebApplication\InstrumentStore.Core\bin\Debug\net8.0\InstrumentStore.Domain.runtimeconfig.json
+D:\WebApplication\InstrumentStore.Core\obj\Debug\net8.0\InstrumentStore.Domain.sourcelink.json
+D:\WebApplication\InstrumentStore.Core\obj\Debug\net8.0\InstrumentStore.Domain.genruntimeconfig.cache
