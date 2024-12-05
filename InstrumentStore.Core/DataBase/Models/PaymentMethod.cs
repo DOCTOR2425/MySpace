@@ -3,12 +3,6 @@
     public class PaymentMethod
     {
         public int PaymentMethodId { get; set; }
-        public string Name { get; set; }
-
-        //public PaymentMethod(int paymentMethodId, string name)
-        //{
-        //    PaymentMethodId = paymentMethodId;
-        //    Name = name;
-        //}
+        public string Name { get; set; } = string.Empty;
     }
 }

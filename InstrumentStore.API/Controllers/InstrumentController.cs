@@ -8,23 +8,23 @@ namespace InstrumentStore.API.Controllers
 	[Route("[controller]")]
 	public class InstrumentController : ControllerBase
 	{
-		private readonly InstrumentServices _instrumentServices;
+		//private readonly InstrumentServices _instrumentServices;
 
-		public InstrumentController()
-		{
-			_instrumentServices = new InstrumentServices();
-		}
+		//public InstrumentController()
+		//{
+		//	_instrumentServices = new InstrumentServices();
+		//}
 
-		[HttpGet("{id:int}")]
-		public ActionResult<List<Instrument>> GetSimilarInstrument(int id)
-		{
-			Instrument target = _instrumentServices.Get(id);
+		//[HttpGet("{id:int}")]
+		//public ActionResult<List<Product>> GetSimilarInstrument(int id)
+		//{
+		//	Product target = _instrumentServices.Get(id);
 
-			IEnumerable<Instrument> list = _instrumentServices.GetAll()
-				.Where(x => x.Type == target.Type);
+		//	IEnumerable<Product> list = _instrumentServices.GetAll()
+		//		.Where(x => x.Type == target.Type);
 
-			return Ok(list);
-		}
+		//	return Ok(list);
+		//}
 		
 	}
 }

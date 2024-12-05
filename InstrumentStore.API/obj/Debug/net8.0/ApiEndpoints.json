@@ -1,93 +1,15 @@
 [
   {
-    "ContainingType": "InstrumentStore.API.Controllers.MainCintroller",
-    "Method": "CreateInstrument",
-    "RelativePath": "api/MainCintroller/CreateInstrument",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "instrument",
-        "Type": "InstrumentStore.API.Contracts.InstrumentRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Int32",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "InstrumentStore.API.Controllers.MainCintroller",
-    "Method": "DeleteInstrument",
-    "RelativePath": "api/MainCintroller/DeleteInstrument/{Id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "Id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Int32",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "InstrumentStore.API.Controllers.MainCintroller",
-    "Method": "GetInstrument",
-    "RelativePath": "api/MainCintroller/GetInstrument/{Id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "Id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "InstrumentStore.API.Contracts.InstrumentResponse",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "InstrumentStore.API.Controllers.MainCintroller",
-    "Method": "GetInstruments",
-    "RelativePath": "api/MainCintroller/GetInstruments",
+    "ContainingType": "InstrumentStore.API.Controllers.BrandsController",
+    "Method": "GetBrand",
+    "RelativePath": "api/Brands",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[InstrumentStore.API.Contracts.InstrumentResponse, InstrumentStore.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[InstrumentStore.Domain.DataBase.Models.Brand, InstrumentStore.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -98,27 +20,22 @@
     ]
   },
   {
-    "ContainingType": "InstrumentStore.API.Controllers.MainCintroller",
-    "Method": "UpdateInstrument",
-    "RelativePath": "api/MainCintroller/UpdateInstrument/{Id}",
-    "HttpMethod": "PUT",
+    "ContainingType": "InstrumentStore.API.Controllers.BrandsController",
+    "Method": "PostBrand",
+    "RelativePath": "api/Brands",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "Id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "instrument",
-        "Type": "InstrumentStore.API.Contracts.InstrumentRequest",
+        "Name": "brand",
+        "Type": "InstrumentStore.Domain.DataBase.Models.Brand",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Int32",
+        "Type": "InstrumentStore.Domain.DataBase.Models.Brand",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -129,9 +46,9 @@
     ]
   },
   {
-    "ContainingType": "InstrumentStore.API.Controllers.InstrumentController",
-    "Method": "GetSimilarInstrument",
-    "RelativePath": "Instrument/{id}",
+    "ContainingType": "InstrumentStore.API.Controllers.BrandsController",
+    "Method": "GetBrand",
+    "RelativePath": "api/Brands/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -144,7 +61,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[InstrumentStore.Domain.DataBase.Models.Instrument, InstrumentStore.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "InstrumentStore.Domain.DataBase.Models.Brand",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -153,5 +70,42 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "InstrumentStore.API.Controllers.BrandsController",
+    "Method": "PutBrand",
+    "RelativePath": "api/Brands/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "brand",
+        "Type": "InstrumentStore.Domain.DataBase.Models.Brand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "InstrumentStore.API.Controllers.BrandsController",
+    "Method": "DeleteBrand",
+    "RelativePath": "api/Brands/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

@@ -8,11 +8,11 @@ namespace InstrumentStore.API
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
+			builder.Services.AddDbContext<InstrumentStoreDBContext>();
+
 			builder.Services.AddControllers();
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
-
-			builder.Services.AddDbContext<InstrumentStoreDBContext>();
 
 			var app = builder.Build();
 

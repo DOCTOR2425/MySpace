@@ -3,20 +3,16 @@
   "WorkspaceRootPath": "D:\\MySpace\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|d:\\myspace\\instrumentstore.core\\database\\instrumentstoredbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|solutionrelative:instrumentstore.core\\database\\instrumentstoredbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|d:\\myspace\\instrumentstore.api\\controllers\\brandscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|solutionrelative:instrumentstore.api\\controllers\\brandscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|d:\\myspace\\instrumentstore.core\\services\\instrumentservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|solutionrelative:instrumentstore.core\\services\\instrumentservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|d:\\myspace\\instrumentstore.core\\database\\models\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|solutionrelative:instrumentstore.core\\database\\models\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|d:\\myspace\\instrumentstore.api\\controllers\\instrumentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|solutionrelative:instrumentstore.api\\controllers\\instrumentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|d:\\myspace\\instrumentstore.core\\database\\models\\tbl_order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|solutionrelative:instrumentstore.core\\database\\models\\tbl_order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|d:\\myspace\\instrumentstore.core\\database\\models\\orderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|solutionrelative:instrumentstore.core\\database\\models\\orderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,20 +22,19 @@
       "DocumentGroups": [
         {
           "DockedWidth": 153,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "InstrumentStoreDBContext.cs",
-              "DocumentMoniker": "D:\\MySpace\\InstrumentStore.Core\\DataBase\\InstrumentStoreDBContext.cs",
-              "RelativeDocumentMoniker": "InstrumentStore.Core\\DataBase\\InstrumentStoreDBContext.cs",
-              "ToolTip": "D:\\MySpace\\InstrumentStore.Core\\DataBase\\InstrumentStoreDBContext.cs",
-              "RelativeToolTip": "InstrumentStore.Core\\DataBase\\InstrumentStoreDBContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAIAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "Product.cs",
+              "DocumentMoniker": "D:\\MySpace\\InstrumentStore.Core\\DataBase\\Models\\Product.cs",
+              "RelativeDocumentMoniker": "InstrumentStore.Core\\DataBase\\Models\\Product.cs",
+              "ToolTip": "D:\\MySpace\\InstrumentStore.Core\\DataBase\\Models\\Product.cs",
+              "RelativeToolTip": "InstrumentStore.Core\\DataBase\\Models\\Product.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-03T12:19:53.502Z",
-              "IsPinned": true,
+              "WhenOpened": "2024-12-05T08:18:55.778Z",
               "EditorCaption": ""
             },
             {
@@ -55,42 +50,33 @@
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "tbl_Order.cs",
-              "DocumentMoniker": "D:\\MySpace\\InstrumentStore.Core\\DataBase\\Models\\tbl_Order.cs",
-              "RelativeDocumentMoniker": "InstrumentStore.Core\\DataBase\\Models\\tbl_Order.cs",
-              "ToolTip": "D:\\MySpace\\InstrumentStore.Core\\DataBase\\Models\\tbl_Order.cs",
-              "RelativeToolTip": "InstrumentStore.Core\\DataBase\\Models\\tbl_Order.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAcAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-03T12:30:26.485Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:2:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "InstrumentController.cs",
-              "DocumentMoniker": "D:\\MySpace\\InstrumentStore.API\\Controllers\\InstrumentController.cs",
-              "RelativeDocumentMoniker": "InstrumentStore.API\\Controllers\\InstrumentController.cs",
-              "ToolTip": "D:\\MySpace\\InstrumentStore.API\\Controllers\\InstrumentController.cs",
-              "RelativeToolTip": "InstrumentStore.API\\Controllers\\InstrumentController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAzAAAAAAAAAA==",
+              "Title": "OrderItem.cs",
+              "DocumentMoniker": "D:\\MySpace\\InstrumentStore.Core\\DataBase\\Models\\OrderItem.cs",
+              "RelativeDocumentMoniker": "InstrumentStore.Core\\DataBase\\Models\\OrderItem.cs",
+              "ToolTip": "D:\\MySpace\\InstrumentStore.Core\\DataBase\\Models\\OrderItem.cs",
+              "RelativeToolTip": "InstrumentStore.Core\\DataBase\\Models\\OrderItem.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-03T12:29:36.297Z",
+              "WhenOpened": "2024-12-05T08:15:52.015Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "InstrumentServices.cs",
-              "DocumentMoniker": "D:\\MySpace\\InstrumentStore.Core\\Services\\InstrumentServices.cs",
-              "RelativeDocumentMoniker": "InstrumentStore.Core\\Services\\InstrumentServices.cs",
-              "ToolTip": "D:\\MySpace\\InstrumentStore.Core\\Services\\InstrumentServices.cs",
-              "RelativeToolTip": "InstrumentStore.Core\\Services\\InstrumentServices.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAQwAcAAAA4AAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "BrandsController.cs",
+              "DocumentMoniker": "D:\\MySpace\\InstrumentStore.API\\Controllers\\BrandsController.cs",
+              "RelativeDocumentMoniker": "InstrumentStore.API\\Controllers\\BrandsController.cs",
+              "ToolTip": "D:\\MySpace\\InstrumentStore.API\\Controllers\\BrandsController.cs",
+              "RelativeToolTip": "InstrumentStore.API\\Controllers\\BrandsController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-03T12:20:46.999Z",
+              "WhenOpened": "2024-12-05T08:03:15.322Z",
               "EditorCaption": ""
             }
           ]
