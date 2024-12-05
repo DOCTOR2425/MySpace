@@ -15,3 +15,4 @@ D:\WebApplication\InstrumentStore.Application\obj\Debug\net8.0\InstrumentStore.A
 D:\WebApplication\InstrumentStore.Application\obj\Debug\net8.0\refint\InstrumentStore.Application.dll
 D:\WebApplication\InstrumentStore.Application\obj\Debug\net8.0\InstrumentStore.Application.pdb
 D:\WebApplication\InstrumentStore.Application\obj\Debug\net8.0\ref\InstrumentStore.Application.dll
+D:\WebApplication\InstrumentStore.Application\obj\Debug\net8.0\InstrumentStore.Application.sourcelink.json

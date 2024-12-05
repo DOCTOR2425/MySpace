@@ -1,7 +1,20 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\WebApplication\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C06B980E-3C57-4BB6-87FF-69B8AAD938BE}|InstrumentStore.DataAccess\\InstrumentStore.DataAccess.csproj|d:\\webapplication\\instrumentstore.dataaccess\\create.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{C06B980E-3C57-4BB6-87FF-69B8AAD938BE}|InstrumentStore.DataAccess\\InstrumentStore.DataAccess.csproj|solutionrelative:instrumentstore.dataaccess\\create.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0BB6FE97-7916-4BA0-B334-6FEEAAD546C1}|InstrumentStore.Application\\InstrumentStore.Application.csproj|D:\\WebApplication\\instrumentstore.application\\services\\instrumentservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0BB6FE97-7916-4BA0-B334-6FEEAAD546C1}|InstrumentStore.Application\\InstrumentStore.Application.csproj|solutionrelative:instrumentstore.application\\services\\instrumentservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C06B980E-3C57-4BB6-87FF-69B8AAD938BE}|InstrumentStore.DataAccess\\InstrumentStore.DataAccess.csproj|d:\\webapplication\\instrumentstore.dataaccess\\create.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
+      "RelativeMoniker": "D:0:0:{C06B980E-3C57-4BB6-87FF-69B8AAD938BE}|InstrumentStore.DataAccess\\InstrumentStore.DataAccess.csproj|solutionrelative:instrumentstore.dataaccess\\create.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 153,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -22,6 +35,42 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Create.sql ",
+              "DocumentMoniker": "D:\\WebApplication\\InstrumentStore.DataAccess\\Create.sql",
+              "RelativeDocumentMoniker": "InstrumentStore.DataAccess\\Create.sql",
+              "ToolTip": "D:\\WebApplication\\InstrumentStore.DataAccess\\Create.sql",
+              "RelativeToolTip": "InstrumentStore.DataAccess\\Create.sql",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2024-10-31T14:31:00.152Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "InstrumentServices.cs",
+              "DocumentMoniker": "D:\\WebApplication\\InstrumentStore.Application\\Services\\InstrumentServices.cs",
+              "RelativeDocumentMoniker": "InstrumentStore.Application\\Services\\InstrumentServices.cs",
+              "ToolTip": "D:\\WebApplication\\InstrumentStore.Application\\Services\\InstrumentServices.cs",
+              "RelativeToolTip": "InstrumentStore.Application\\Services\\InstrumentServices.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-31T14:24:12.642Z"
             }
           ]
         }

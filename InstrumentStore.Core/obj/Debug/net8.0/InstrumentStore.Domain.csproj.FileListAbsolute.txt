@@ -10,3 +10,4 @@ D:\WebApplication\InstrumentStore.Core\obj\Debug\net8.0\refint\InstrumentStore.D
 D:\WebApplication\InstrumentStore.Core\obj\Debug\net8.0\InstrumentStore.Domain.pdb
 D:\WebApplication\InstrumentStore.Core\obj\Debug\net8.0\ref\InstrumentStore.Domain.dll
 D:\WebApplication\InstrumentStore.Core\obj\Debug\net8.0\InstrumentStore.Domain.csproj.AssemblyReference.cache
+D:\WebApplication\InstrumentStore.Core\obj\Debug\net8.0\InstrumentStore.Domain.sourcelink.json

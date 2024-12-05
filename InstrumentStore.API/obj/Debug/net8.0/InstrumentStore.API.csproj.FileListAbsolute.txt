@@ -74,3 +74,4 @@ D:\WebApplication\InstrumentStore.API\obj\Debug\net8.0\InstrumentStore.API.genru
 D:\WebApplication\InstrumentStore.API\obj\Debug\net8.0\ref\InstrumentStore.API.dll
 D:\WebApplication\InstrumentStore.API\bin\Debug\net8.0\InstrumentStore.Application.dll
 D:\WebApplication\InstrumentStore.API\bin\Debug\net8.0\InstrumentStore.Application.pdb
+D:\WebApplication\InstrumentStore.API\obj\Debug\net8.0\InstrumentStore.API.sourcelink.json

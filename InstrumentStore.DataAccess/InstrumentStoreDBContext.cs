@@ -20,12 +20,13 @@ namespace InstrumentStore.DataAccess
 				"Trusted_Connection=True;Encrypt=False;");
 		}
 
+		public DbSet<BasketEntity> Basket { get; set; }
+		public DbSet<BasketItemEntity> BasketItem { get; set; }
 		public DbSet<CountryEntity> Country { get; set; }
 		public DbSet<CustomerEntity> Customer { get; set; }
 		public DbSet<DeliveryMethodEntity> DeliveryMethod { get; set; }
 		public DbSet<InstrumentEntity> Instrument { get; set; }
 		public DbSet<InstrumentTypeEntity> InstrumentType { get; set; }
-		public DbSet<OrderItemEntity> OrderItem { get; set; }
 		public DbSet<PaymentMethodEntity> PaymentMethod { get; set; }
 		public DbSet<SupplierEntity> Supplier { get; set; }
 		public DbSet<tbl_OrderEntity> tbl_Order { get; set; }

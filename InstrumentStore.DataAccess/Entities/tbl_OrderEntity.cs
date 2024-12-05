@@ -10,34 +10,40 @@ namespace InstrumentStore.DataAccess.Entities
 		public string CustomerAddress { get; set; }
 		public DateTime RegistrationDate { get; set; }
 		public DateTime DeliveryDate { get; set; }
+		public decimal Cost { get; set; }
+		public int Basket { get; set; }
 		public int DeliveryMethod { get; set; }
 		public int PaymentMethod { get; set; }
 		public int Customer { get; set; }
 
-		public tbl_OrderEntity(string customerCity, 
-			string customerAddress, DateTime registrationDate, 
-			DateTime deliveryDate, int deliveryMethod, 
-			int paymentMethod, int customer)
-		{
-			CustomerCity = customerCity;
-			CustomerAddress = customerAddress;
-			RegistrationDate = registrationDate;
-			DeliveryDate = deliveryDate;
-			DeliveryMethod = deliveryMethod;
-			PaymentMethod = paymentMethod;
-			Customer = customer;
-		}
-
 		public tbl_OrderEntity(int orderID, string customerCity, 
 			string customerAddress, DateTime registrationDate, 
-			DateTime deliveryDate, int deliveryMethod, 
-			int paymentMethod, int customer)
+			DateTime deliveryDate, decimal cost, int basket, 
+			int deliveryMethod, int paymentMethod, int customer)
 		{
 			OrderID = orderID;
 			CustomerCity = customerCity;
 			CustomerAddress = customerAddress;
 			RegistrationDate = registrationDate;
 			DeliveryDate = deliveryDate;
+			Cost = cost;
+			Basket = basket;
+			DeliveryMethod = deliveryMethod;
+			PaymentMethod = paymentMethod;
+			Customer = customer;
+		}
+
+		public tbl_OrderEntity(string customerCity,
+			string customerAddress, DateTime registrationDate,
+			DateTime deliveryDate, decimal cost, int basket,
+			int deliveryMethod, int paymentMethod, int customer)
+		{
+			CustomerCity = customerCity;
+			CustomerAddress = customerAddress;
+			RegistrationDate = registrationDate;
+			DeliveryDate = deliveryDate;
+			Cost = cost;
+			Basket = basket;
 			DeliveryMethod = deliveryMethod;
 			PaymentMethod = paymentMethod;
 			Customer = customer;
