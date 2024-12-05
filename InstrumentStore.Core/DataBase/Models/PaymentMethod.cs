@@ -2,7 +2,7 @@
 {
     public class PaymentMethod
     {
-        public int PaymentMethodId { get; set; }
+        public Guid PaymentMethodId { get; set; }
         public string Name { get; set; } = string.Empty;
     }
 }

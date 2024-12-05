@@ -2,7 +2,7 @@
 {
     public class Customer
     {
-        public int CustomerId { get; set; }
+        public Guid CustomerId { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string Surname { get; set; } = string.Empty;
         public string Patronymic { get; set; } = string.Empty;

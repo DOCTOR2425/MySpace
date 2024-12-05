@@ -2,7 +2,7 @@
 {
     public class tbl_Order
     {
-        public int tbl_OrderId { get; set; }
+        public Guid tbl_OrderId { get; set; }
         public DateTime RegistrationDate { get; set; }
         public DateTime DeliveryDate { get; set; }
 

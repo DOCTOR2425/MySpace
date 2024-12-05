@@ -1,4 +1,6 @@
 using InstrumentStore.Domain.DataBase;
+using InstrumentStore.Domain.Service;
+using InstrumentStore.Domain.Abstractions;
 
 namespace InstrumentStore.API
 {
@@ -8,13 +10,15 @@ namespace InstrumentStore.API
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
-			builder.Services.AddDbContext<InstrumentStoreDBContext>();
-
 			builder.Services.AddControllers();
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
 
-			var app = builder.Build();
+			builder.Services.AddDbContext<InstrumentStoreDBContext>();
+
+			builder.Services.AddScoped <IProductService, ProductService>();
+
+            var app = builder.Build();
 
 			if (app.Environment.IsDevelopment())
 			{
@@ -25,7 +29,7 @@ namespace InstrumentStore.API
 			app.UseHttpsRedirection();
 			app.UseAuthorization();
 			app.MapControllers();
-
+			
 			app.UseCors(x =>
 			{
 				x.WithHeaders().AllowAnyHeader();

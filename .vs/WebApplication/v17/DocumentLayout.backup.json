@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "D:\\MySpace\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|d:\\myspace\\instrumentstore.api\\controllers\\brandscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|solutionrelative:instrumentstore.api\\controllers\\brandscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|d:\\myspace\\instrumentstore.core\\migrations\\20241205130754_newinitialguid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|solutionrelative:instrumentstore.core\\migrations\\20241205130754_newinitialguid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|d:\\myspace\\instrumentstore.core\\database\\models\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|solutionrelative:instrumentstore.core\\database\\models\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|d:\\myspace\\instrumentstore.api\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|solutionrelative:instrumentstore.api\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|d:\\myspace\\instrumentstore.core\\database\\models\\orderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|solutionrelative:instrumentstore.core\\database\\models\\orderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|d:\\myspace\\instrumentstore.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|solutionrelative:instrumentstore.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,19 +22,33 @@
       "DocumentGroups": [
         {
           "DockedWidth": 153,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Product.cs",
-              "DocumentMoniker": "D:\\MySpace\\InstrumentStore.Core\\DataBase\\Models\\Product.cs",
-              "RelativeDocumentMoniker": "InstrumentStore.Core\\DataBase\\Models\\Product.cs",
-              "ToolTip": "D:\\MySpace\\InstrumentStore.Core\\DataBase\\Models\\Product.cs",
-              "RelativeToolTip": "InstrumentStore.Core\\DataBase\\Models\\Product.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\MySpace\\InstrumentStore.API\\Program.cs",
+              "RelativeDocumentMoniker": "InstrumentStore.API\\Program.cs",
+              "ToolTip": "D:\\MySpace\\InstrumentStore.API\\Program.cs",
+              "RelativeToolTip": "InstrumentStore.API\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-05T08:18:55.778Z",
+              "WhenOpened": "2024-12-05T08:34:21.288Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "20241205130754_newInitialGuid.cs",
+              "DocumentMoniker": "D:\\MySpace\\InstrumentStore.Core\\Migrations\\20241205130754_newInitialGuid.cs",
+              "RelativeDocumentMoniker": "InstrumentStore.Core\\Migrations\\20241205130754_newInitialGuid.cs",
+              "ToolTip": "D:\\MySpace\\InstrumentStore.Core\\Migrations\\20241205130754_newInitialGuid.cs",
+              "RelativeToolTip": "InstrumentStore.Core\\Migrations\\20241205130754_newInitialGuid.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-05T13:07:54.531Z",
               "EditorCaption": ""
             },
             {
@@ -55,28 +69,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "OrderItem.cs",
-              "DocumentMoniker": "D:\\MySpace\\InstrumentStore.Core\\DataBase\\Models\\OrderItem.cs",
-              "RelativeDocumentMoniker": "InstrumentStore.Core\\DataBase\\Models\\OrderItem.cs",
-              "ToolTip": "D:\\MySpace\\InstrumentStore.Core\\DataBase\\Models\\OrderItem.cs",
-              "RelativeToolTip": "InstrumentStore.Core\\DataBase\\Models\\OrderItem.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAiAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "ProductController.cs",
+              "DocumentMoniker": "D:\\MySpace\\InstrumentStore.API\\Controllers\\ProductController.cs",
+              "RelativeDocumentMoniker": "InstrumentStore.API\\Controllers\\ProductController.cs",
+              "ToolTip": "D:\\MySpace\\InstrumentStore.API\\Controllers\\ProductController.cs",
+              "RelativeToolTip": "InstrumentStore.API\\Controllers\\ProductController.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABAAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-05T08:15:52.015Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "BrandsController.cs",
-              "DocumentMoniker": "D:\\MySpace\\InstrumentStore.API\\Controllers\\BrandsController.cs",
-              "RelativeDocumentMoniker": "InstrumentStore.API\\Controllers\\BrandsController.cs",
-              "ToolTip": "D:\\MySpace\\InstrumentStore.API\\Controllers\\BrandsController.cs",
-              "RelativeToolTip": "InstrumentStore.API\\Controllers\\BrandsController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-05T08:03:15.322Z",
+              "WhenOpened": "2024-12-05T12:58:38.164Z",
               "EditorCaption": ""
             }
           ]

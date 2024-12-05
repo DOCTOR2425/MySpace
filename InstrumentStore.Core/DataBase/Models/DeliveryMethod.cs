@@ -2,7 +2,7 @@
 {
     public class DeliveryMethod
     {
-        public int DeliveryMethodId { get; set; }
+        public Guid DeliveryMethodId { get; set; }
         public string Name { get; set; } = string.Empty;
         public decimal Price { get; set; }
     }

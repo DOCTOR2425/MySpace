@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InstrumentStore.Domain.Migrations
 {
     [DbContext(typeof(InstrumentStoreDBContext))]
-    [Migration("20241205081103_CreateNewDataBase")]
-    partial class CreateNewDataBase
+    [Migration("20241205130531_WithGUID2")]
+    partial class WithGUID2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,9 @@ namespace InstrumentStore.Domain.Migrations
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Brand", b =>
                 {
-                    b.Property<int>("BrandId")
+                    b.Property<Guid>("BrandId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BrandId"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -52,11 +50,9 @@ namespace InstrumentStore.Domain.Migrations
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Country", b =>
                 {
-                    b.Property<int>("CountryId")
+                    b.Property<Guid>("CountryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CountryId"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -69,14 +65,12 @@ namespace InstrumentStore.Domain.Migrations
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Customer", b =>
                 {
-                    b.Property<int>("CustomerId")
+                    b.Property<Guid>("CustomerId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerId"));
-
-                    b.Property<int>("CustomerAdressId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CustomerAdressId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("EMail")
                         .IsRequired()
@@ -107,11 +101,9 @@ namespace InstrumentStore.Domain.Migrations
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.CustomerAdress", b =>
                 {
-                    b.Property<int>("CustomerAdressId")
+                    b.Property<Guid>("CustomerAdressId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerAdressId"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -136,11 +128,9 @@ namespace InstrumentStore.Domain.Migrations
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.DeliveryMethod", b =>
                 {
-                    b.Property<int>("DeliveryMethodId")
+                    b.Property<Guid>("DeliveryMethodId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DeliveryMethodId"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -156,25 +146,27 @@ namespace InstrumentStore.Domain.Migrations
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.OrderItem", b =>
                 {
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("tbl_OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("tbl_OrderId");
 
                     b.ToTable("OrderItem");
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.PaymentMethod", b =>
                 {
-                    b.Property<int>("PaymentMethodId")
+                    b.Property<Guid>("PaymentMethodId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentMethodId"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -187,17 +179,15 @@ namespace InstrumentStore.Domain.Migrations
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Product", b =>
                 {
-                    b.Property<int>("ProductId")
+                    b.Property<Guid>("ProductId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
+                    b.Property<Guid>("BrandId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("BrandId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CountryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -214,8 +204,8 @@ namespace InstrumentStore.Domain.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("ProductTypeId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ProductTypeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -233,11 +223,9 @@ namespace InstrumentStore.Domain.Migrations
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.ProductType", b =>
                 {
-                    b.Property<int>("ProductTypeId")
+                    b.Property<Guid>("ProductTypeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductTypeId"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -250,23 +238,21 @@ namespace InstrumentStore.Domain.Migrations
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.tbl_Order", b =>
                 {
-                    b.Property<int>("tbl_OrderId")
+                    b.Property<Guid>("tbl_OrderId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("tbl_OrderId"));
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DeliveryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DeliveryMethodId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("DeliveryMethodId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("PaymentMethodId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PaymentMethodId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("datetime2");
@@ -291,6 +277,25 @@ namespace InstrumentStore.Domain.Migrations
                         .IsRequired();
 
                     b.Navigation("CustomerAdress");
+                });
+
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.OrderItem", b =>
+                {
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.tbl_Order", "tbl_Order")
+                        .WithMany()
+                        .HasForeignKey("tbl_OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("tbl_Order");
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Product", b =>

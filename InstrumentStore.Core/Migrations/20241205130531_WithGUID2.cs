@@ -5,7 +5,7 @@
 namespace InstrumentStore.Domain.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateNewDataBase : Migration
+    public partial class WithGUID2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
