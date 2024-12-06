@@ -39,8 +39,7 @@
               "ViewState": "AgIAAAYAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-05T08:34:21.288Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Bookmark",
@@ -80,8 +79,7 @@
               "RelativeToolTip": "InstrumentStore.Core\\DataBase\\InstrumentStoreDBContext.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-06T11:38:54.739Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-06T11:38:54.739Z"
             },
             {
               "$type": "Document",
@@ -91,7 +89,7 @@
               "RelativeDocumentMoniker": "InstrumentStore.Core\\Services\\ProductService.cs",
               "ToolTip": "D:\\MySpace\\InstrumentStore.Core\\Services\\ProductService.cs",
               "RelativeToolTip": "InstrumentStore.Core\\Services\\ProductService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAABAAAAAAAAAAA==",
+              "ViewState": "AgIAACcAAAAAAAAAAAAYwC4AAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-06T11:06:57.203Z",
               "EditorCaption": ""
@@ -104,7 +102,7 @@
               "RelativeDocumentMoniker": "InstrumentStore.API\\Controllers\\ProductController.cs",
               "ToolTip": "D:\\MySpace\\InstrumentStore.API\\Controllers\\ProductController.cs",
               "RelativeToolTip": "InstrumentStore.API\\Controllers\\ProductController.cs",
-              "ViewState": "AgIAACYAAAAAAAAAAAAUwDgAAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAAFkAAAAAAAAAAADwv2sAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-06T08:18:29.028Z",
               "EditorCaption": ""

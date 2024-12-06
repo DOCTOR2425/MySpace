@@ -42,19 +42,18 @@ namespace InstrumentStore.Domain.Service
 
         public async Task<Guid> Update(Guid oldId, Product newProduct)
         {
-            await _dbContext.Product
-                .Where(p => p.ProductId == oldId)
-                .ExecuteUpdateAsync(x => x
-                    .SetProperty(p => p.ProductType, newProduct.ProductType)
-                    .SetProperty(p => p.Brand, newProduct.Brand)
-                    .SetProperty(p => p.Country, newProduct.Country)
-                    .SetProperty(p => p.Description, newProduct.Description)
-                    .SetProperty(p => p.Name, newProduct.Name)
-                    .SetProperty(p => p.Image, newProduct.Image)
-                    .SetProperty(p => p.Price, newProduct.Price)
-                    .SetProperty(p => p.Quantity, newProduct.Quantity));
+            Product product = await _dbContext.Product.FindAsync(oldId);
 
-            _dbContext.SaveChanges();
+            product.Name = newProduct.Name;
+            product.ProductType = newProduct.ProductType;
+            product.Brand = newProduct.Brand;
+            product.Country = newProduct.Country;
+            product.Description = newProduct.Description;
+            product.Image = newProduct.Image;
+            product.Price = newProduct.Price;
+            product.Quantity = newProduct.Quantity;
+
+            await _dbContext.SaveChangesAsync();
 
             return oldId;
         }

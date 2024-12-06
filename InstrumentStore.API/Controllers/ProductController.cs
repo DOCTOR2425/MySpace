@@ -23,9 +23,9 @@ namespace InstrumentStore.API.Controllers
             _productTypeService = productTypeService;
         }
 
-        private async Task<Product> BuldProductFromResponse(ProductResponse productResponse)
+        private async Task<Product> BuildProductFromResponse(ProductResponse productResponse)
         {
-            ProductType productResponseType = await _productTypeService.GetById((await _productTypeService.GetAll())
+            ProductType productType = await _productTypeService.GetById((await _productTypeService.GetAll())
                 .Where(t => t.Name == productResponse.ProductType).First().ProductTypeId);
 
             Brand brand = await _brandService.GetById((await _brandService.GetAll())
@@ -43,7 +43,7 @@ namespace InstrumentStore.API.Controllers
                 Quantity = productResponse.Quantity,
                 Image = productResponse.Image,
 
-                ProductType = productResponseType,
+                ProductType = productType,
                 Brand = brand,
                 Country = country
             };
@@ -94,7 +94,7 @@ namespace InstrumentStore.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Guid>> CreateProduct([FromBody] ProductResponse productResponse)
         {
-            Product product = await BuldProductFromResponse(productResponse);
+            Product product = await BuildProductFromResponse(productResponse);
 
             return Ok(await _productService.Create(product));
         }
@@ -102,7 +102,7 @@ namespace InstrumentStore.API.Controllers
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<Guid>> UpdateProduct(Guid id, [FromBody] ProductResponse productResponse)
         {
-            Product product = await BuldProductFromResponse(productResponse);
+            Product product = await BuildProductFromResponse(productResponse);
 
             return Ok(await _productService.Update(id, product));
         }
