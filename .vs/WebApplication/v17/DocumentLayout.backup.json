@@ -1,9 +1,21 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\WebApplication\\",
+  "WorkspaceRootPath": "D:\\MySpace\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|d:\\webapplication\\instrumentstore.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|d:\\myspace\\instrumentstore.core\\services\\productservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|solutionrelative:instrumentstore.core\\services\\productservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|d:\\myspace\\instrumentstore.api\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|solutionrelative:instrumentstore.api\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|d:\\myspace\\instrumentstore.core\\database\\instrumentstoredbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|solutionrelative:instrumentstore.core\\database\\instrumentstoredbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|d:\\myspace\\instrumentstore.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|solutionrelative:instrumentstore.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -14,17 +26,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 153,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 9,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "Program.cs",
-              "DocumentMoniker": "D:\\WebApplication\\InstrumentStore.API\\Program.cs",
+              "DocumentMoniker": "D:\\MySpace\\InstrumentStore.API\\Program.cs",
               "RelativeDocumentMoniker": "InstrumentStore.API\\Program.cs",
-              "ToolTip": "D:\\WebApplication\\InstrumentStore.API\\Program.cs",
+              "ToolTip": "D:\\MySpace\\InstrumentStore.API\\Program.cs",
               "RelativeToolTip": "InstrumentStore.API\\Program.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAAACAAAAATAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-05T08:34:21.288Z",
               "IsPinned": true,
@@ -44,6 +56,10 @@
             },
             {
               "$type": "Bookmark",
+              "Name": "ST:2:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            },
+            {
+              "$type": "Bookmark",
               "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
             },
             {
@@ -53,6 +69,45 @@
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "InstrumentStoreDBContext.cs",
+              "DocumentMoniker": "D:\\MySpace\\InstrumentStore.Core\\DataBase\\InstrumentStoreDBContext.cs",
+              "RelativeDocumentMoniker": "InstrumentStore.Core\\DataBase\\InstrumentStoreDBContext.cs",
+              "ToolTip": "D:\\MySpace\\InstrumentStore.Core\\DataBase\\InstrumentStoreDBContext.cs",
+              "RelativeToolTip": "InstrumentStore.Core\\DataBase\\InstrumentStoreDBContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-06T11:38:54.739Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ProductService.cs",
+              "DocumentMoniker": "D:\\MySpace\\InstrumentStore.Core\\Services\\ProductService.cs",
+              "RelativeDocumentMoniker": "InstrumentStore.Core\\Services\\ProductService.cs",
+              "ToolTip": "D:\\MySpace\\InstrumentStore.Core\\Services\\ProductService.cs",
+              "RelativeToolTip": "InstrumentStore.Core\\Services\\ProductService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-06T11:06:57.203Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ProductController.cs",
+              "DocumentMoniker": "D:\\MySpace\\InstrumentStore.API\\Controllers\\ProductController.cs",
+              "RelativeDocumentMoniker": "InstrumentStore.API\\Controllers\\ProductController.cs",
+              "ToolTip": "D:\\MySpace\\InstrumentStore.API\\Controllers\\ProductController.cs",
+              "RelativeToolTip": "InstrumentStore.API\\Controllers\\ProductController.cs",
+              "ViewState": "AgIAACYAAAAAAAAAAAAUwDgAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-06T08:18:29.028Z",
+              "EditorCaption": ""
             }
           ]
         }

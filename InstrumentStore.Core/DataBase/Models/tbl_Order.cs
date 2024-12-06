@@ -6,8 +6,8 @@
         public DateTime RegistrationDate { get; set; }
         public DateTime DeliveryDate { get; set; }
 
-        public DeliveryMethod DeliveryMethod { get; set; }
-        public PaymentMethod PaymentMethod { get; set; }
-        public Customer Customer { get; set; }
+        public required DeliveryMethod DeliveryMethod { get; set; }
+        public required PaymentMethod PaymentMethod { get; set; }
+        public required Customer Customer { get; set; }
     }
 }

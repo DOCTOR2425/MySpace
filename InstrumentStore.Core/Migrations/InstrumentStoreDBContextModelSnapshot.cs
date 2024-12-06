@@ -28,21 +28,13 @@ namespace InstrumentStore.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("BrandId");
 
-                    b.ToTable("Brand");
+                    b.ToTable("Brand", (string)null);
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Country", b =>
@@ -57,7 +49,7 @@ namespace InstrumentStore.Domain.Migrations
 
                     b.HasKey("CountryId");
 
-                    b.ToTable("Country");
+                    b.ToTable("Country", (string)null);
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Customer", b =>
@@ -93,7 +85,7 @@ namespace InstrumentStore.Domain.Migrations
 
                     b.HasIndex("CustomerAdressId");
 
-                    b.ToTable("Customer");
+                    b.ToTable("Customer", (string)null);
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.CustomerAdress", b =>
@@ -120,7 +112,7 @@ namespace InstrumentStore.Domain.Migrations
 
                     b.HasKey("CustomerAdressId");
 
-                    b.ToTable("CustomerAdresses");
+                    b.ToTable("CustomerAdresses", (string)null);
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.DeliveryMethod", b =>
@@ -138,7 +130,7 @@ namespace InstrumentStore.Domain.Migrations
 
                     b.HasKey("DeliveryMethodId");
 
-                    b.ToTable("DeliveryMethod");
+                    b.ToTable("DeliveryMethod", (string)null);
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.OrderItem", b =>
@@ -156,7 +148,7 @@ namespace InstrumentStore.Domain.Migrations
 
                     b.HasIndex("tbl_OrderId");
 
-                    b.ToTable("OrderItem");
+                    b.ToTable("OrderItem", (string)null);
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.PaymentMethod", b =>
@@ -171,7 +163,7 @@ namespace InstrumentStore.Domain.Migrations
 
                     b.HasKey("PaymentMethodId");
 
-                    b.ToTable("PaymentMethod");
+                    b.ToTable("PaymentMethod", (string)null);
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Product", b =>
@@ -215,7 +207,7 @@ namespace InstrumentStore.Domain.Migrations
 
                     b.HasIndex("ProductTypeId");
 
-                    b.ToTable("Product");
+                    b.ToTable("Product", (string)null);
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.ProductType", b =>
@@ -230,7 +222,7 @@ namespace InstrumentStore.Domain.Migrations
 
                     b.HasKey("ProductTypeId");
 
-                    b.ToTable("ProductType");
+                    b.ToTable("ProductType", (string)null);
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.tbl_Order", b =>
@@ -262,7 +254,7 @@ namespace InstrumentStore.Domain.Migrations
 
                     b.HasIndex("PaymentMethodId");
 
-                    b.ToTable("tbl_Order");
+                    b.ToTable("tbl_Order", (string)null);
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Customer", b =>

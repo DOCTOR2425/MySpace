@@ -1,6 +1,7 @@
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.Service;
 using InstrumentStore.Domain.Abstractions;
+using InstrumentStore.Domain.Services;
 
 namespace InstrumentStore.API
 {
@@ -16,7 +17,10 @@ namespace InstrumentStore.API
 
 			builder.Services.AddDbContext<InstrumentStoreDBContext>();
 
-			builder.Services.AddScoped <IProductService, ProductService>();
+			builder.Services.AddScoped<IProductService, ProductService>();
+			builder.Services.AddScoped<IBrandService, BrandService>();
+			builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
+			builder.Services.AddScoped<ICountryService, CountryService>();
 
             var app = builder.Build();
 

@@ -9,8 +9,8 @@
         public int Quantity { get; set; }
         public byte[] Image { get; set; }
 
-        public ProductType ProductType { get; set; }
-        public Country Country { get; set; }
-        public Brand Brand { get; set; }
+        public required ProductType ProductType { get; set; }
+        public required Brand Brand { get; set; }
+        public required Country Country { get; set; }
     }
 }

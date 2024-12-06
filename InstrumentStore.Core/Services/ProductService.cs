@@ -16,12 +16,20 @@ namespace InstrumentStore.Domain.Service
 
         public async Task<List<Product>> GetAll()
         {
-            return await _dbContext.Product.AsNoTracking().ToListAsync();
+            return await _dbContext.Product
+                .Include(p => p.ProductType)
+                .Include(p => p.Brand)
+                .Include(p => p.Country).AsNoTracking().ToListAsync();
         }
 
         public async Task<Product> GetById(Guid id)
         {
-            return await _dbContext.Product.FindAsync(id);
+            return await _dbContext.Product
+                .Include(p => p.ProductType)
+                .Include(p => p.Brand)
+                .Include(p => p.Country)
+                .Where(p => p.ProductId == id)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<Guid> Create(Product product)

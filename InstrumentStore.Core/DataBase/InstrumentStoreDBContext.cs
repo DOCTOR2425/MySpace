@@ -7,7 +7,7 @@ namespace InstrumentStore.Domain.DataBase
 	{
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-            optionsBuilder.UseSqlServer(@"Server=DESKTOP-0MK8KC9\MSSQLSERVER01;Database=MySpaceDB;
+            optionsBuilder.UseSqlServer(@"Server=WSA-195-74-BY;Database=MySpaceDB;
 				Trusted_Connection=True;Encrypt=False;TrustServerCertificate=True;");
         }
 

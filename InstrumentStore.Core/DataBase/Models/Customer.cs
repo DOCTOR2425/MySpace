@@ -9,6 +9,6 @@
         public string Telephone { get; set; } = string.Empty;
         public string EMail { get; set; } = string.Empty;
 
-        public CustomerAdress CustomerAdress { get; set; }
+        public required CustomerAdress CustomerAdress { get; set; }
     }
 }
