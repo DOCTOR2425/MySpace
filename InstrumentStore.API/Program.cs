@@ -3,7 +3,6 @@ using InstrumentStore.Domain.Service;
 using InstrumentStore.Domain.Abstractions;
 using InstrumentStore.Domain.Services;
 using InstrumentStore.Domain.Mapper;
-//using AutoMapper;
 
 namespace InstrumentStore.API
 {
@@ -25,19 +24,6 @@ namespace InstrumentStore.API
             builder.Services.AddScoped<ICountryService, CountryService>();
 
             builder.Services.AddAutoMapper(typeof(AppMappingProfile));
-
-            //builder.Services.AddAutoMapper((serviceProvider, automapper) =>
-            //{
-            //    using (var scope = serviceProvider.CreateScope())
-            //    {
-            //        var scopedProvider = scope.ServiceProvider;
-            //        var countryService = scopedProvider.GetRequiredService<ICountryService>();
-            //        var brandService = scopedProvider.GetRequiredService<IBrandService>();
-            //        var productTypeService = scopedProvider.GetRequiredService<IProductTypeService>();
-
-            //        automapper.AddProfile(new AppMappingProfile(countryService, brandService, productTypeService));
-            //    }
-            //}, typeof(AppMappingProfile));
 
             var app = builder.Build();
 

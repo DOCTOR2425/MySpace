@@ -2,7 +2,6 @@
 using InstrumentStore.Domain.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using InstrumentStore.Domain.Contracts.Products;
-using InstrumentStore.Domain.Mapper;
 using AutoMapper;
 
 namespace InstrumentStore.API.Controllers
@@ -12,50 +11,12 @@ namespace InstrumentStore.API.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
-        private readonly IBrandService _brandService;
-        private readonly IProductTypeService _productTypeService;
-        private readonly ICountryService _countryService;
         private readonly IMapper _mapper;
 
-        public ProductController(IProductService productService, IBrandService brandService,
-            ICountryService countryService, IProductTypeService productTypeService, IMapper mapper)
+        public ProductController(IProductService productService, IMapper mapper)
         {
             _productService = productService;
-            _brandService = brandService;
-            _countryService = countryService;
-            _productTypeService = productTypeService;
             _mapper = mapper;
-        }
-
-        private async Task<Product> BuildProductFromReuest(ProductRequest productRequest)
-        {  // потому что нужны ссылки на объекты, а не их копии
-            //ProductType productType = await _productTypeService.GetById((await _productTypeService.GetAll())
-            //    .Where(t => t.Name == productRequest.ProductType).First().ProductTypeId);
-
-            ////ProductType productType = (await _productTypeService.GetAll()).FirstOrDefault(t => t.Name == productRequest.ProductType);//Неробить
-
-            //Brand brand = await _brandService.GetById((await _brandService.GetAll())
-            //    .Where(b => b.Name == productRequest.Brand).First().BrandId);
-
-            //Country country = await _countryService.GetById((await _countryService.GetAll())
-            //    .Where(c => c.Name == productRequest.Country).First().CountryId);
-
-            //Product product = new Product
-            //{
-            //    ProductId = Guid.NewGuid(),
-            //    Name = productRequest.Name,
-            //    Description = productRequest.Description,
-            //    Price = productRequest.Price,
-            //    Quantity = productRequest.Quantity,
-            //    Image = productRequest.Image,
-
-            //    ProductType = productType,
-            //    Brand = brand,
-            //    Country = country
-            //};
-
-            //return product;
-            return _mapper.Map<Product>(productRequest);
         }
 
         [HttpGet]
@@ -82,17 +43,13 @@ namespace InstrumentStore.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Guid>> CreateProduct([FromBody] ProductRequest productRequest)
         {
-            Product product = await BuildProductFromReuest(productRequest);
-
-            return Ok(await _productService.Create(product));
+            return Ok(await _productService.Create(productRequest));
         }
 
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<Guid>> UpdateProduct(Guid id, [FromBody] ProductRequest productRequest)
         {
-            Product product = await BuildProductFromReuest(productRequest);
-
-            return Ok(await _productService.Update(id, product));
+            return Ok(await _productService.Update(id, productRequest));
         }
 
         [HttpDelete("{id:guid}")]
@@ -102,3 +59,15 @@ namespace InstrumentStore.API.Controllers
         }
     }
 }
+/*
+{
+  "name": "CheckRequest",
+  "description": "И ещё ForPath",
+  "price": 30,
+  "quantity": 30,
+  "image": "QA==",
+  "productTypeId": "dd6995d4-30fe-4637-a34d-1f7d8ef2f53b",
+  "brandId": "f0c2afe2-70d3-4a4f-b9c9-490a8020730f",
+  "countryId": "7a0e0584-7c19-403f-bf9f-20753e9cd175"
+}
+*/
