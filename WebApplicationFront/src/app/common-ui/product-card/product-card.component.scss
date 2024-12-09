@@ -1,5 +1,7 @@
-.product-card
-{
+$font-f: 'Arial';
+
+.product-card {
+    font-family: $font-f;
     border-radius: 12px;
     background-color: #FFFFFF;
 
@@ -14,44 +16,33 @@
     box-sizing: border-box;
     padding: 15px;
 
-    .product-card
-    {
+    .img {
         width: 100%;
         aspect-ratio: 1/1;
         border-radius: 12px;
         object-fit: cover;
     }
-}
 
+    .price {
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 28.78px;
+    }
 
+    .title {
+        font-size: 24px;
+        font-weight: 400;
+        line-height: 28.78px;
+    }
 
-.product-card__price
-{
-    font-family: Inria Sans;
-    font-size: 24px;
-    font-weight: 700;
-    line-height: 28.78px;
+    .description {
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 19.18px;
 
-}
-
-.product-card__title
-{
-    font-family: Inria Sans;
-    font-size: 24px;
-    font-weight: 400;
-    line-height: 28.78px;
-
-}
-
-.product-card__description
-{
-    font-family: Inria Sans;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 19.18px;
-
-    width: 100%;
-    white-space: nowrap; /* Запрещает перенос текста */
-    overflow: hidden;
-    text-overflow: ellipsis;
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }

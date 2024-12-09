@@ -61,10 +61,10 @@ namespace InstrumentStore.API.Controllers
 }
 /*
 {
-  "name": "CheckRequest",
-  "description": "И ещё ForPath",
-  "price": 30,
-  "quantity": 30,
+  "name": "Test Product Name",
+  "description": "Test Product description long",
+  "price": 240,
+  "quantity": 1230,
   "image": "QA==",
   "productTypeId": "dd6995d4-30fe-4637-a34d-1f7d8ef2f53b",
   "brandId": "f0c2afe2-70d3-4a4f-b9c9-490a8020730f",
