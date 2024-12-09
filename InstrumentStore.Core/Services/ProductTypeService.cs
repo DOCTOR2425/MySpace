@@ -21,7 +21,7 @@ namespace InstrumentStore.Domain.Services
 
         public async Task<ProductType> GetById(Guid id)
         {
-            return await _dbContext.ProductType.FindAsync(id);
+            return await _dbContext.ProductType.FirstOrDefaultAsync(x => x.ProductTypeId == id);
         }
 
         public async Task<Guid> Create(ProductType brand)

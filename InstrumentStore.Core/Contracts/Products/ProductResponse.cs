@@ -1,6 +1,7 @@
 ﻿namespace InstrumentStore.Domain.Contracts.Products
 {
     public record ProductResponse(
+        Guid ProductId,
         string Name,
         string Description,
         decimal Price,

@@ -224,17 +224,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProductResponse"
+                "$ref": "#/components/schemas/ProductRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProductResponse"
+                "$ref": "#/components/schemas/ProductRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/ProductResponse"
+                "$ref": "#/components/schemas/ProductRequest"
               }
             }
           }
@@ -288,26 +288,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ProductPage"
-                  }
+                  "$ref": "#/components/schemas/ProductResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ProductPage"
-                  }
+                  "$ref": "#/components/schemas/ProductResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ProductPage"
-                  }
+                  "$ref": "#/components/schemas/ProductResponse"
                 }
               }
             }
@@ -335,17 +326,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProductResponse"
+                "$ref": "#/components/schemas/ProductRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProductResponse"
+                "$ref": "#/components/schemas/ProductRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/ProductResponse"
+                "$ref": "#/components/schemas/ProductRequest"
               }
             }
           }
@@ -539,6 +530,10 @@
       "ProductCard": {
         "type": "object",
         "properties": {
+          "productId": {
+            "type": "string",
+            "format": "uuid"
+          },
           "name": {
             "type": "string",
             "nullable": true
@@ -571,20 +566,20 @@
         },
         "additionalProperties": false
       },
-      "ProductPage": {
+      "ProductRequest": {
         "type": "object",
         "properties": {
           "name": {
             "type": "string",
             "nullable": true
           },
-          "price": {
-            "type": "number",
-            "format": "double"
-          },
           "description": {
             "type": "string",
             "nullable": true
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
           },
           "quantity": {
             "type": "integer",
@@ -595,17 +590,17 @@
             "format": "byte",
             "nullable": true
           },
-          "productType": {
+          "productTypeId": {
             "type": "string",
-            "nullable": true
+            "format": "uuid"
           },
-          "brand": {
+          "brandId": {
             "type": "string",
-            "nullable": true
+            "format": "uuid"
           },
-          "country": {
+          "countryId": {
             "type": "string",
-            "nullable": true
+            "format": "uuid"
           }
         },
         "additionalProperties": false
@@ -613,6 +608,10 @@
       "ProductResponse": {
         "type": "object",
         "properties": {
+          "productId": {
+            "type": "string",
+            "format": "uuid"
+          },
           "name": {
             "type": "string",
             "nullable": true

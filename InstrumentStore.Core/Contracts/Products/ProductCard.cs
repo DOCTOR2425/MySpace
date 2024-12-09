@@ -1,6 +1,7 @@
 ﻿namespace InstrumentStore.Domain.Contracts.Products
 {
     public record ProductCard(
+        Guid ProductId,
         string Name,
         decimal Price,
         int Quantity,

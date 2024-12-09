@@ -15,7 +15,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[InstrumentStore.Domain.Contracts.Products.ProductPage, InstrumentStore.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "InstrumentStore.Domain.Contracts.Products.ProductResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -146,8 +146,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "productResponse",
-        "Type": "InstrumentStore.Domain.Contracts.Products.ProductResponse",
+        "Name": "productRequest",
+        "Type": "InstrumentStore.Domain.Contracts.Products.ProductRequest",
         "IsRequired": true
       }
     ],
@@ -177,8 +177,8 @@
         "IsRequired": true
       },
       {
-        "Name": "productResponse",
-        "Type": "InstrumentStore.Domain.Contracts.Products.ProductResponse",
+        "Name": "productRequest",
+        "Type": "InstrumentStore.Domain.Contracts.Products.ProductRequest",
         "IsRequired": true
       }
     ],

@@ -1,12 +1,12 @@
 ﻿namespace InstrumentStore.Domain.Contracts.Products
 {
-    public record ProductPage(
+    public record ProductRequest(
         string Name,
-        decimal Price,
         string Description,
+        decimal Price,
         int Quantity,
         byte[] Image,
-        string ProductType,
-        string Brand,
-        string Country);
+        Guid ProductTypeId,
+        Guid BrandId,
+        Guid CountryId);
 }
