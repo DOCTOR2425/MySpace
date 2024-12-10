@@ -548,7 +548,6 @@
           },
           "image": {
             "type": "string",
-            "format": "byte",
             "nullable": true
           },
           "productType": {
@@ -587,7 +586,6 @@
           },
           "image": {
             "type": "string",
-            "format": "byte",
             "nullable": true
           },
           "productTypeId": {
@@ -630,7 +628,6 @@
           },
           "image": {
             "type": "string",
-            "format": "byte",
             "nullable": true
           },
           "productType": {

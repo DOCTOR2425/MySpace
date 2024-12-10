@@ -5,7 +5,7 @@
         string Description,
         decimal Price,
         int Quantity,
-        byte[] Image,
+        string Image,
         Guid ProductTypeId,
         Guid BrandId,
         Guid CountryId);

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Product } from '../../data/interfaces/product.interface';
+import { ProductCard } from '../../data/interfaces/productCard.interface';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,5 +9,5 @@ import { CommonModule } from '@angular/common';
   styleUrl: './product-card.component.scss'
 })
 export class ProductCardComponent {
-  @Input() product! : Product
+  @Input() product!: ProductCard
 }

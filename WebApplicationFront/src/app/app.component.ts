@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ProductCardComponent } from './common-ui/product-card/product-card.component';
-import { Product } from './data/interfaces/product.interface';
+import { ProductCard } from './data/interfaces/productCard.interface';
 import { ProductService } from './service/product.service';
 import { CommonModule } from '@angular/common';
 
@@ -11,10 +11,9 @@ import { CommonModule } from '@angular/common';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  productService = inject(ProductService);
-  products: Product[] = [];
-  constructor() {
-    this.productService.getTestProduct().subscribe((val) => {
+  products: ProductCard[] = [];
+  constructor(private productService: ProductService) {
+    this.productService.getProductCards().subscribe((val) => {
       this.products = val;
       console.log(this.products);
     });
