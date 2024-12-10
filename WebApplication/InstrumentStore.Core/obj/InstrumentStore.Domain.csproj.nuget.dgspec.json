@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\MySpase\\WebApplication\\InstrumentStore.Core\\InstrumentStore.Domain.csproj": {}
+    "D:\\MySpace\\WebApplication\\InstrumentStore.Core\\InstrumentStore.Domain.csproj": {}
   },
   "projects": {
-    "D:\\MySpase\\WebApplication\\InstrumentStore.Core\\InstrumentStore.Domain.csproj": {
+    "D:\\MySpace\\WebApplication\\InstrumentStore.Core\\InstrumentStore.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\MySpase\\WebApplication\\InstrumentStore.Core\\InstrumentStore.Domain.csproj",
+        "projectUniqueName": "D:\\MySpace\\WebApplication\\InstrumentStore.Core\\InstrumentStore.Domain.csproj",
         "projectName": "InstrumentStore.Domain",
-        "projectPath": "D:\\MySpase\\WebApplication\\InstrumentStore.Core\\InstrumentStore.Domain.csproj",
-        "packagesPath": "C:\\Users\\Acer\\.nuget\\packages\\",
-        "outputPath": "D:\\MySpase\\WebApplication\\InstrumentStore.Core\\obj\\",
+        "projectPath": "D:\\MySpace\\WebApplication\\InstrumentStore.Core\\InstrumentStore.Domain.csproj",
+        "packagesPath": "C:\\Users\\Yahor.Dudkin\\.nuget\\packages\\",
+        "outputPath": "D:\\MySpace\\WebApplication\\InstrumentStore.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Acer\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Yahor.Dudkin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -42,7 +42,7 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "direct"
+          "auditMode": "all"
         },
         "SdkAnalysisLevel": "9.0.100"
       },
@@ -95,7 +95,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
