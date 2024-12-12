@@ -3,6 +3,9 @@ using InstrumentStore.Domain.Service;
 using InstrumentStore.Domain.Abstractions;
 using InstrumentStore.Domain.Services;
 using InstrumentStore.Domain.Mapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace InstrumentStore.API
 {
@@ -22,6 +25,24 @@ namespace InstrumentStore.API
             builder.Services.AddScoped<IBrandService, BrandService>();
             builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
             builder.Services.AddScoped<ICountryService, CountryService>();
+            builder.Services.AddScoped<IUsersService, UsersService>();
+
+            builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
+                {
+                    opt.TokenValidationParameters = new()
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtProvider.JwtKey))
+                    };
+                });
+
+            builder.Services.AddAuthorization();
 
             builder.Services.AddAutoMapper(typeof(AppMappingProfile));
 
@@ -34,7 +55,10 @@ namespace InstrumentStore.API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
             app.UseAuthorization();
+            
             app.MapControllers();
 
             app.UseCors(x =>

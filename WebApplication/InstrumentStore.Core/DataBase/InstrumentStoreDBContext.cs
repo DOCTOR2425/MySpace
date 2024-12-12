@@ -13,8 +13,9 @@ namespace InstrumentStore.Domain.DataBase
 
         public DbSet<Brand> Brand { get; set; }
         public DbSet<Country> Country { get; set; }
-		public DbSet<Customer> Customer { get; set; }
-		public DbSet<CustomerAdress> CustomerAdresses { get; set; }
+		public DbSet<User> User { get; set; }
+		public DbSet<UserRegistrInfo> UserRegistrInfos { get; set; }
+		public DbSet<UserAdress> UserAdresses { get; set; }
 		public DbSet<DeliveryMethod> DeliveryMethod { get; set; }
 		public DbSet<OrderItem> OrderItem { get; set; }
 		public DbSet<PaymentMethod> PaymentMethod { get; set; }

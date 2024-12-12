@@ -8,6 +8,6 @@
 
         public required DeliveryMethod DeliveryMethod { get; set; }
         public required PaymentMethod PaymentMethod { get; set; }
-        public required Customer Customer { get; set; }
+        public required User User { get; set; }
     }
 }

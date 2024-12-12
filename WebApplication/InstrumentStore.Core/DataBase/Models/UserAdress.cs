@@ -1,8 +1,8 @@
 ﻿namespace InstrumentStore.Domain.DataBase.Models
 {
-    public class CustomerAdress
+    public class UserAdress
     {
-        public Guid CustomerAdressId { get; set; }
+        public Guid UserAdressId { get; set; }
         public string City { get; set; } = string.Empty;
         public string Street { get; set; } = string.Empty;
         public string Entrance { get; set; } = string.Empty;

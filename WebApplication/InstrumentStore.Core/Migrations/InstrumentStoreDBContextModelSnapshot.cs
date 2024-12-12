@@ -52,69 +52,6 @@ namespace InstrumentStore.Domain.Migrations
                     b.ToTable("Country");
                 });
 
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Customer", b =>
-                {
-                    b.Property<Guid>("CustomerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CustomerAdressId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("EMail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Patronymic")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Telephone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CustomerId");
-
-                    b.HasIndex("CustomerAdressId");
-
-                    b.ToTable("Customer");
-                });
-
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.CustomerAdress", b =>
-                {
-                    b.Property<Guid>("CustomerAdressId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Entrance")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Flat")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CustomerAdressId");
-
-                    b.ToTable("CustomerAdresses");
-                });
-
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.DeliveryMethod", b =>
                 {
                     b.Property<Guid>("DeliveryMethodId")
@@ -269,13 +206,93 @@ namespace InstrumentStore.Domain.Migrations
                     b.ToTable("ProductType");
                 });
 
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.User", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Patronymic")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telephone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserAdressId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserRegistrInfoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserId");
+
+                    b.HasIndex("UserAdressId");
+
+                    b.HasIndex("UserRegistrInfoId");
+
+                    b.ToTable("User");
+                });
+
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.UserAdress", b =>
+                {
+                    b.Property<Guid>("UserAdressId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Entrance")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Flat")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserAdressId");
+
+                    b.ToTable("UserAdresses");
+                });
+
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.UserRegistrInfo", b =>
+                {
+                    b.Property<Guid>("UserRegistrInfoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EMail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserRegistrInfoId");
+
+                    b.ToTable("UserRegistrInfos");
+                });
+
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.tbl_Order", b =>
                 {
                     b.Property<Guid>("tbl_OrderId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DeliveryDate")
@@ -290,26 +307,18 @@ namespace InstrumentStore.Domain.Migrations
                     b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("tbl_OrderId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasIndex("CustomerId");
+                    b.HasKey("tbl_OrderId");
 
                     b.HasIndex("DeliveryMethodId");
 
                     b.HasIndex("PaymentMethodId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("tbl_Order");
-                });
-
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Customer", b =>
-                {
-                    b.HasOne("InstrumentStore.Domain.DataBase.Models.CustomerAdress", "CustomerAdress")
-                        .WithMany()
-                        .HasForeignKey("CustomerAdressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CustomerAdress");
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.OrderItem", b =>
@@ -385,14 +394,27 @@ namespace InstrumentStore.Domain.Migrations
                     b.Navigation("ProductType");
                 });
 
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.tbl_Order", b =>
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.User", b =>
                 {
-                    b.HasOne("InstrumentStore.Domain.DataBase.Models.Customer", "Customer")
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.UserAdress", "UserAdress")
                         .WithMany()
-                        .HasForeignKey("CustomerId")
+                        .HasForeignKey("UserAdressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.UserRegistrInfo", "UserRegistrInfo")
+                        .WithMany()
+                        .HasForeignKey("UserRegistrInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserAdress");
+
+                    b.Navigation("UserRegistrInfo");
+                });
+
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.tbl_Order", b =>
+                {
                     b.HasOne("InstrumentStore.Domain.DataBase.Models.DeliveryMethod", "DeliveryMethod")
                         .WithMany()
                         .HasForeignKey("DeliveryMethodId")
@@ -405,11 +427,17 @@ namespace InstrumentStore.Domain.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("DeliveryMethod");
 
                     b.Navigation("PaymentMethod");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

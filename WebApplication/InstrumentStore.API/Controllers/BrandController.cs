@@ -1,5 +1,6 @@
 ﻿using InstrumentStore.Domain.Abstractions;
 using InstrumentStore.Domain.DataBase.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InstrumentStore.API.Controllers
@@ -15,6 +16,7 @@ namespace InstrumentStore.API.Controllers
             _brandService = brandService;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<List<Brand>>> GetAllBrands()
         {
