@@ -10,6 +10,7 @@
         "dependencies": {
           "AutoMapper": "13.0.1",
           "InstrumentStore.Domain": "1.0.0",
+          "Microsoft.AspNetCore.Authentication.Google": "8.0.11",
           "Microsoft.EntityFrameworkCore": "9.0.0",
           "Microsoft.EntityFrameworkCore.Design": "9.0.0",
           "Microsoft.EntityFrameworkCore.SqlServer": "9.0.0",
@@ -605,6 +606,14 @@
         "resources": {
           "lib/net6.0/zh-Hant/Humanizer.resources.dll": {
             "locale": "zh-Hant"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Authentication.Google/8.0.11": {
+        "runtime": {
+          "lib/net8.0/Microsoft.AspNetCore.Authentication.Google.dll": {
+            "assemblyVersion": "8.0.11.0",
+            "fileVersion": "8.0.1124.52116"
           }
         }
       },
@@ -2548,6 +2557,13 @@
       "sha512": "sha512-VIXB7HCUC34OoaGnO3HJVtSv2/wljPhjV7eKH4+TFPgQdJj2lvHNKY41Dtg0Bphu7X5UaXFR4zrYYyo+GNOjbA==",
       "path": "humanizer.core.zh-hant/2.14.1",
       "hashPath": "humanizer.core.zh-hant.2.14.1.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Authentication.Google/8.0.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XYjmQF9ggDnpXds7aH5CgW2SWVmubJ/F6NOnDwDseMYnEBZSwhstkY9qZszd6wsAhpW1HeT9yO9nZqFPRMiDAA==",
+      "path": "microsoft.aspnetcore.authentication.google/8.0.11",
+      "hashPath": "microsoft.aspnetcore.authentication.google.8.0.11.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Razor.Language/6.0.24": {
       "type": "package",

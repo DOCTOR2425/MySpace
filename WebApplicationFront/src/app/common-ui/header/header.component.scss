@@ -1,0 +1,53 @@
+.header {
+  width: calc(100% - 100px);
+  box-sizing: border-box;
+
+  align-items: start;
+
+  .hightMenu {
+    width: 100%;
+    gap: 100px;
+
+    a {
+      color: #000;
+    }
+  }
+
+  .middleMenu {
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+
+    input {
+      width: 500px;
+      height: 50px;
+      background-color: lightgray;
+      border: none;
+      border-radius: 20px;
+    }
+
+    .buttons {
+      gap: 10px;
+
+      span {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        img {
+          width: 32px;
+        }
+      }
+    }
+  }
+
+  .lowMenu {
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+
+    a {
+      color: #000;
+    }
+  }
+}
