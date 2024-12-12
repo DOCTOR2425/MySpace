@@ -1,5 +1,6 @@
 ﻿using InstrumentStore.Domain.Abstractions;
 using InstrumentStore.Domain.Contracts.Users;
+using InstrumentStore.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InstrumentStore.API.Controllers
@@ -22,13 +23,13 @@ namespace InstrumentStore.API.Controllers
         }
 
         [HttpPost("/login")]
-        public async Task<IResult> Login(LoginUserRequest request, HttpContext context)
+        public async Task<IResult> Login(LoginUserRequest request)
         {
             string token = await _usersService.Login(request.EMail, request.Password);
 
-            context.Response.Cookies.Append("token-cookies", token);
+            HttpContext.Response.Cookies.Append(JwtProvider.CookiesName, token);
 
-            return Results.Ok(token);
+            return Results.Ok();
         }
     }
 }

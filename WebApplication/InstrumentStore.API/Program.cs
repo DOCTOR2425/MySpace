@@ -40,6 +40,15 @@ namespace InstrumentStore.API
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtProvider.JwtKey))
                     };
+
+                    opt.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            context.Token = context.Request.Cookies[JwtProvider.CookiesName];
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
 
             builder.Services.AddAuthorization();
@@ -58,7 +67,14 @@ namespace InstrumentStore.API
 
             app.UseAuthentication();
             app.UseAuthorization();
-            
+
+            app.UseCookiePolicy(new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.Strict,
+                HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always,
+                Secure = CookieSecurePolicy.Always
+            });
+
             app.MapControllers();
 
             app.UseCors(x =>

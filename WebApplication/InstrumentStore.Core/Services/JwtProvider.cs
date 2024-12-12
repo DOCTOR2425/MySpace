@@ -10,6 +10,7 @@ namespace InstrumentStore.Domain.Services
     public class JwtProvider : IJwtProvider// TODO Сделать что то с secret key
     {
         public static string JwtKey = "secretkeysecretkeysecretkeysecretkeysecretkeysecretkey";//6
+        public static string CookiesName = "token-cookies";
         public string GenerateToken(User user)
         {
             Claim[] claims = [new("userId", user.UserId.ToString())];
