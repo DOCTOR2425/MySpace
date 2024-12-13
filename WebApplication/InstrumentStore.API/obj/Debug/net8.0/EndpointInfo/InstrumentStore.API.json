@@ -266,7 +266,7 @@
         }
       }
     },
-    "/{id}": {
+    "/api/Product/{id}": {
       "get": {
         "tags": [
           "Product"
@@ -304,9 +304,7 @@
             }
           }
         }
-      }
-    },
-    "/api/Product/{id}": {
+      },
       "put": {
         "tags": [
           "Product"

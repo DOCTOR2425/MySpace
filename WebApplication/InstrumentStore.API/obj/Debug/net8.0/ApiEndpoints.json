@@ -1,31 +1,5 @@
 [
   {
-    "ContainingType": "InstrumentStore.API.Controllers.ProductController",
-    "Method": "GetProduct",
-    "RelativePath": "{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "InstrumentStore.Domain.Contracts.Products.ProductResponse",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
     "ContainingType": "InstrumentStore.API.Controllers.BrandController",
     "Method": "GetAllBrands",
     "RelativePath": "api/Brand",
@@ -154,6 +128,32 @@
     "ReturnTypes": [
       {
         "Type": "System.Guid",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "InstrumentStore.API.Controllers.ProductController",
+    "Method": "GetProduct",
+    "RelativePath": "api/Product/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "InstrumentStore.Domain.Contracts.Products.ProductResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",

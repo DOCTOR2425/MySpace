@@ -64,7 +64,7 @@ namespace InstrumentStore.API
             }
 
             app.UseHttpsRedirection();
-
+            app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -72,8 +72,9 @@ namespace InstrumentStore.API
             {
                 MinimumSameSitePolicy = SameSiteMode.Strict,
                 HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always,
-                Secure = CookieSecurePolicy.Always
+                Secure = CookieSecurePolicy.Always,
             });
+
 
             app.MapControllers();
 
@@ -81,6 +82,8 @@ namespace InstrumentStore.API
             {
                 x.AllowAnyHeader();
                 x.AllowAnyOrigin();
+                x.WithOrigins("https://localhost:4200").AllowCredentials();
+                x.WithOrigins("https://localhost:7295").AllowCredentials();
                 x.AllowAnyMethod();
             });
 

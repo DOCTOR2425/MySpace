@@ -3,6 +3,7 @@ using InstrumentStore.Domain.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using InstrumentStore.Domain.Contracts.Products;
 using AutoMapper;
+using InstrumentStore.Domain.Services;
 
 namespace InstrumentStore.API.Controllers
 {
@@ -22,6 +23,8 @@ namespace InstrumentStore.API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<ProductCard>>> GetAllProductsCards()
         {
+            Console.WriteLine(HttpContext.Request.Cookies[JwtProvider.CookiesName]);
+            Console.WriteLine(JwtProvider.CookiesName);
             List<Product> products = await _productService.GetAll();
             List<ProductCard> productsCards = new List<ProductCard>();
 
@@ -31,7 +34,7 @@ namespace InstrumentStore.API.Controllers
             return Ok(productsCards);
         }
 
-        [HttpGet("/{id}")]
+        [HttpGet("{id:guid}")]
         public async Task<ActionResult<ProductResponse>> GetProduct([FromRoute] Guid id)
         {
             var product = await _productService.GetById(id);

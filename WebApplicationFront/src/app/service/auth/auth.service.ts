@@ -4,15 +4,17 @@ import { LoginModel } from '../../data/interfaces/loginModel.interface';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
+  baseApiUrl = 'https://localhost:7295/login';
 
-  baseApiUrl = 'https://localhost:7295/1';
-
-  public getProductCards(): Observable<LoginModel> {
-    return this.http.get<LoginModel>(`${this.baseApiUrl}`);
+  public login(payload: {
+    eMail: string;
+    password: string;
+  }) {
+    this.http.post<LoginModel>('https://localhost:7295/login', payload, { withCredentials: true }).subscribe(response => console.log(response))
   }
 }

@@ -1,19 +1,29 @@
-import { Component, Input } from '@angular/core';
-import { LoginModel } from '../../data/interfaces/loginModel.interface';
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../service/auth/auth.service';
 
 @Component({
   selector: 'app-login-page',
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './login-page.component.html',
-  styleUrl: './login-page.component.scss'
+  styleUrl: './login-page.component.scss',
 })
+
 export class LoginPageComponent {
-  loginModel: LoginModel | undefined;
-  constructor(private authService: AuthService) {
-    this.authService.getProductCards().subscribe((val) => {
-      this.loginModel = val;
-      console.log(this.loginModel);
-    });
+  
+  constructor(private authService: AuthService) {}
+
+  form = new FormGroup({
+    eMail: new FormControl(null, Validators.required),
+    password: new FormControl(null, Validators.required),
+  });
+
+  public onSubmit(): void {
+    if (this.form.valid) {
+      console.log(this.form.value);
+      //@ts-ignore
+      this.authService.login(this.form.value);
+    }
   }
 }
