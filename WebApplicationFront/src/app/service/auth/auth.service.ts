@@ -12,9 +12,9 @@ export class AuthService {
   baseApiUrl = 'https://localhost:7295/login';
 
   public login(payload: {
-    eMail: string;
+    eMail: string,
     password: string;
   }) {
-    this.http.post<LoginModel>('https://localhost:7295/login', payload, { withCredentials: true }).subscribe(response => console.log(response))
+    this.http.post<LoginModel>('https://localhost:7295/login', payload, { withCredentials: true }).subscribe()
   }
 }

@@ -29,7 +29,10 @@ namespace InstrumentStore.API.Controllers
             List<ProductCard> productsCards = new List<ProductCard>();
 
             foreach (var p in products)
+            {
+                p.Image = "https://localhost:7295/images/" + p.Image;
                 productsCards.Add(_mapper.Map<ProductCard>(p));
+            }
 
             return Ok(productsCards);
         }
@@ -38,6 +41,7 @@ namespace InstrumentStore.API.Controllers
         public async Task<ActionResult<ProductResponse>> GetProduct([FromRoute] Guid id)
         {
             var product = await _productService.GetById(id);
+            product.Image = "https://localhost:7295/images/" + product.Image;
             var response = _mapper.Map<ProductResponse>(product);
 
             return Ok(response);

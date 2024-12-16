@@ -22,7 +22,6 @@ export class ProductComponent {
     this.productId = this.route.snapshot.paramMap.get('id')!;
     this.productService.getProductById(this.productId).subscribe((data) => {
       this.product = data;
-      this.product.image = `https://localhost:7295/images/${this.product.image}`;
     });
   }
 }

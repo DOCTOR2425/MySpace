@@ -1,8 +1,8 @@
 ﻿namespace InstrumentStore.Domain.DataBase.Models
 {
-    public class tbl_Order
+    public class Order
     {
-        public Guid tbl_OrderId { get; set; }
+        public Guid OrderId { get; set; }
         public DateTime RegistrationDate { get; set; }
         public DateTime DeliveryDate { get; set; }
 

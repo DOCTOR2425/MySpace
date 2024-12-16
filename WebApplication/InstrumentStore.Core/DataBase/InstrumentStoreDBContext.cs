@@ -11,17 +11,17 @@ namespace InstrumentStore.Domain.DataBase
 				Trusted_Connection=True;Encrypt=False;TrustServerCertificate=True;");
         }
 
-        public DbSet<Brand> Brand { get; set; }
-        public DbSet<Country> Country { get; set; }
-		public DbSet<User> User { get; set; }
-		public DbSet<UserRegistrInfo> UserRegistrInfos { get; set; }
-		public DbSet<UserAdress> UserAdresses { get; set; }
-		public DbSet<DeliveryMethod> DeliveryMethod { get; set; }
-		public DbSet<OrderItem> OrderItem { get; set; }
-		public DbSet<PaymentMethod> PaymentMethod { get; set; }
-		public DbSet<Product> Product { get; set; }
-		public DbSet<ProductType> ProductType { get; set; }
-		public DbSet<tbl_Order> tbl_Order { get; set; }
-		public DbSet<ProductArchive> ProductArchive { get; set; }
+        public required DbSet<Brand> Brand { get; set; }
+        public required DbSet<Country> Country { get; set; }
+		public required DbSet<User> User { get; set; }
+		public required DbSet<UserRegistrInfo> UserRegistrInfos { get; set; }
+		public required DbSet<UserAdress> UserAdresses { get; set; }
+		public required DbSet<DeliveryMethod> DeliveryMethod { get; set; }
+		public required DbSet<OrderItem> OrderItem { get; set; }
+		public required DbSet<PaymentMethod> PaymentMethod { get; set; }
+		public required DbSet<Product> Product { get; set; }
+		public required DbSet<ProductType> ProductType { get; set; }
+		public required DbSet<Order> Order { get; set; }
+		public required DbSet<ProductArchive> ProductArchive { get; set; }
 	}
 }
