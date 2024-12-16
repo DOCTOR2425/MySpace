@@ -10,5 +10,6 @@ namespace InstrumentStore.Domain.Abstractions
         Task<string> Login(string email, string password);
         Task<Guid> Register(RegisterUserRequest registerUserRequest);
         bool Verify(string password, string passwordHash);
+        Task<User> GetById(Guid id);
     }
 }

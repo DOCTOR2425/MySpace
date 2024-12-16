@@ -3,9 +3,9 @@
 namespace InstrumentStore.Domain.DataBase.Models
 {
     [Keyless]
-    public class OrderItem
+    public class PaidOrderItem
     {
-        public Order tbl_Order { get; set; }
+        public PaidOrder PaidOrder { get; set; }
         public Product Product { get; set; }
         public int Quantity { get; set; }
     }

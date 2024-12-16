@@ -13,7 +13,7 @@ namespace InstrumentStore.Domain.Service
         private readonly ICountryService _countryService;
         private readonly IProductTypeService _productTypeService;
 
-        public ProductService(InstrumentStoreDBContext dbContext, IBrandService brandService, 
+        public ProductService(InstrumentStoreDBContext dbContext, IBrandService brandService,
             ICountryService countryService, IProductTypeService productTypeService)
         {
             _dbContext = dbContext;
@@ -27,7 +27,9 @@ namespace InstrumentStore.Domain.Service
             return await _dbContext.Product
                 .Include(p => p.ProductType)
                 .Include(p => p.Brand)
-                .Include(p => p.Country).AsNoTracking().ToListAsync();
+                .Include(p => p.Country)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<Product> GetById(Guid id)

@@ -90,5 +90,14 @@ namespace InstrumentStore.Domain.Services
 
             return user;
         }
+
+        public async Task<User> GetById(Guid id)
+        {
+            return await _dbContext.User
+                .Include(u => u.UserAdress)
+                .Include(u => u.UserRegistrInfo)
+                .Where(u => u.UserId == id)
+                .FirstOrDefaultAsync();
+        }
     }
 }
