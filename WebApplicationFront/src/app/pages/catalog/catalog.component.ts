@@ -3,6 +3,7 @@ import { ProductCardComponent } from '../../common-ui/product-card/product-card.
 import { CommonModule } from '@angular/common';
 import { ProductCard } from '../../data/interfaces/productCard.interface';
 import { ProductService } from '../../service/product.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-catalog',
@@ -12,10 +13,13 @@ import { ProductService } from '../../service/product.service';
 })
 export class CatalogComponent {
   products: ProductCard[] = [];
-  constructor(private productService: ProductService) {
+  constructor(private productService: ProductService, private router: Router) {
     this.productService.getProductCards().subscribe((val) => {
       this.products = val;
-      console.log(this.products);
     });
+  }
+
+  public viewProduct(productId: string) {
+    this.router.navigate([`/product/${productId}`]);
   }
 }

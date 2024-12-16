@@ -10,7 +10,7 @@ export const routes: Routes = [
     component: LayoutComponent,
     children: [
       { path: '', component: CatalogComponent },
-      { path: 'product', component: ProductComponent },
+      { path: 'product/:id', component: ProductComponent },
     ],
   },
   { path: 'login', component: LoginPageComponent },

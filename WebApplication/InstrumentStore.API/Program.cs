@@ -77,6 +77,7 @@ namespace InstrumentStore.API
 
 
             app.MapControllers();
+            app.UseStaticFiles();
 
             app.UseCors(x =>
             {

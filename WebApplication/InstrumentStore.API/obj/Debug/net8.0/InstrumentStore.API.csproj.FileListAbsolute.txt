@@ -1151,3 +1151,4 @@ D:\MySpase\WebApplication\InstrumentStore.API\obj\Debug\net8.0\ref\InstrumentSto
 D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.Google.dll
 D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\BCrypt.Net-Next.dll
 D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\InstrumentStore.API.staticwebassets.runtime.json

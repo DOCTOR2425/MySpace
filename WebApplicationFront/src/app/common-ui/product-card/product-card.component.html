@@ -1,13 +1,15 @@
 <div class="card" style="width: 100%; height: 100%">
-  <img src="..." class="card-img-top" alt="..." />
+  <img
+    src="https://localhost:7295/images/{{ product.image }}"
+    class="card-img-top"
+  />
   <div class="card-body">
-    <h5 class="card-title">
-      {{ product.name }}
-    </h5>
     <p class="card-text">
       {{ product.price }}
     </p>
-    <p class="card-text">...</p>
+    <h5 class="card-title">
+      {{ product.name }}
+    </h5>
     <a href="#" class="btn btn-primary">В корзину</a>
   </div>
 </div>

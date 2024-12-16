@@ -1,12 +1,20 @@
 {
   "Version": 1,
-  "Hash": "Su8PF6klj8uusFWAVETBbo6IOCcoB14bBWZ2rP8i0VI=",
+  "Hash": "r9z5bwY5Cz+YTN6Gkw3V74RcGlZxZuG6axNj+AGjlvc=",
   "Source": "InstrumentStore.API",
   "BasePath": "_content/InstrumentStore.API",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "InstrumentStore.API\\wwwroot",
+      "Source": "InstrumentStore.API",
+      "ContentRoot": "D:\\MySpace\\WebApplication\\InstrumentStore.API\\wwwroot\\",
+      "BasePath": "_content/InstrumentStore.API",
+      "Pattern": "**"
+    }
+  ],
   "Assets": [],
   "Endpoints": []
 }
