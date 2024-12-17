@@ -17,10 +17,6 @@ namespace InstrumentStore.Domain.Mapper
                 .ForPath(dest => dest.Country, opt => opt.MapFrom(src => src.Country.Name))
                 .ForPath(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand.Name))
                 .ForPath(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductType.Name));
-
-            CreateMap<CartItem, PaidOrderItem>()
-                .ForPath(dest => dest.Product, opt => opt.MapFrom(src => src.Product))
-                .ForPath(dest => dest.PaidOrder, opt => opt.MapFrom(src => Guid.NewGuid()));
         }
     }
 }

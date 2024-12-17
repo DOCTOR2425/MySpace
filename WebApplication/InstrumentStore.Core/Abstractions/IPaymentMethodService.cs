@@ -6,5 +6,6 @@ namespace InstrumentStore.Domain.Abstractions
     {
         Task<List<PaymentMethod>> GetAll();
         Task<PaymentMethod> GetById(Guid id);
+        Task<Guid> Create(PaymentMethod paymentMethod);
     }
 }

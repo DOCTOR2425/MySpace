@@ -19,9 +19,19 @@ namespace InstrumentStore.Domain.Services
             return await _dbContext.DeliveryMethod.AsNoTracking().ToListAsync();
         }
 
-        public async Task<DeliveryMethod> GetById(Guid id)
+        public async Task<DeliveryMethod> GetById(Guid deliveryMethodId)
         {
-            return await _dbContext.DeliveryMethod.FindAsync(id);
+            return await _dbContext.DeliveryMethod.FindAsync(deliveryMethodId);
         }
+
+        public async Task<Guid> Create(DeliveryMethod deliveryMethod)
+        {
+            await _dbContext.DeliveryMethod.AddAsync(deliveryMethod);
+            await _dbContext.SaveChangesAsync();
+
+            return deliveryMethod.DeliveryMethodId;
+        }
+
+
     }
 }

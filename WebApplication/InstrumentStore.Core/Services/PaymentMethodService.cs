@@ -23,5 +23,13 @@ namespace InstrumentStore.Domain.Services
         {
             return await _dbContext.PaymentMethod.FindAsync(id);
         }
+
+        public async Task<Guid> Create(PaymentMethod paymentMethod)
+        {
+            await _dbContext.PaymentMethod.AddAsync(paymentMethod);
+            await _dbContext.SaveChangesAsync();
+
+            return paymentMethod.PaymentMethodId;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using InstrumentStore.Domain.Abstractions;
+﻿using System.Linq;
+using InstrumentStore.Domain.Abstractions;
 using InstrumentStore.Domain.Contracts.Products;
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
@@ -13,8 +14,10 @@ namespace InstrumentStore.Domain.Service
         private readonly ICountryService _countryService;
         private readonly IProductTypeService _productTypeService;
 
-        public ProductService(InstrumentStoreDBContext dbContext, IBrandService brandService,
-            ICountryService countryService, IProductTypeService productTypeService)
+        public ProductService(InstrumentStoreDBContext dbContext, 
+            IBrandService brandService,
+            ICountryService countryService, 
+            IProductTypeService productTypeService)
         {
             _dbContext = dbContext;
             _brandService = brandService;

@@ -5,6 +5,7 @@ namespace InstrumentStore.Domain.Abstractions
     public interface IDeliveryMethodService
     {
         Task<List<DeliveryMethod>> GetAll();
-        Task<DeliveryMethod> GetById(Guid id);
+        Task<DeliveryMethod> GetById(Guid deliveryMethodId);
+        Task<Guid> Create(DeliveryMethod deliveryMethod);
     }
 }
