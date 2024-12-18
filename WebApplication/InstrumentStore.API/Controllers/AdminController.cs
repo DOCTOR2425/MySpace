@@ -57,5 +57,7 @@ namespace InstrumentStore.API.Controllers
 
             return Ok(await _paymentMethodService.Create(paymentMethod));
         }
+
+
     }
 }

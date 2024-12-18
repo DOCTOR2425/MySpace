@@ -99,6 +99,26 @@
   },
   {
     "ContainingType": "InstrumentStore.API.Controllers.CartController",
+    "Method": "GetUserCart",
+    "RelativePath": "api/Cart",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[InstrumentStore.Domain.DataBase.Models.CartItem, InstrumentStore.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "InstrumentStore.API.Controllers.CartController",
     "Method": "RemoveFromCart",
     "RelativePath": "api/Cart/{cartItemId}",
     "HttpMethod": "DELETE",
@@ -112,32 +132,6 @@
       }
     ],
     "ReturnTypes": []
-  },
-  {
-    "ContainingType": "InstrumentStore.API.Controllers.CartController",
-    "Method": "GetUserCart",
-    "RelativePath": "api/Cart/{userId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "userId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[InstrumentStore.Domain.DataBase.Models.CartItem, InstrumentStore.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
   },
   {
     "ContainingType": "InstrumentStore.API.Controllers.CartController",
@@ -244,6 +238,26 @@
     "ReturnTypes": [
       {
         "Type": "System.Guid",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "InstrumentStore.API.Controllers.PaidOrderController",
+    "Method": "GetUserCart",
+    "RelativePath": "api/PaidOrder",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[InstrumentStore.Domain.DataBase.Models.CartItem, InstrumentStore.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
