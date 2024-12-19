@@ -32,6 +32,12 @@ namespace InstrumentStore.Domain.Services
             return deliveryMethod.DeliveryMethodId;
         }
 
-
+        public async Task<bool> IsHomeDelivery(Guid deliveryMethodId)
+        {
+            if((await this.GetById(deliveryMethodId)).DeliveryMethodId.ToString()
+                == "5066ce29-5821-41e8-965a-56e6a18aaa8f")
+                return true;
+            return false;
+        }
     }
 }

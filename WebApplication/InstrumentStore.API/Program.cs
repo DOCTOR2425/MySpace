@@ -21,10 +21,12 @@ namespace InstrumentStore.API
 
             builder.Services.AddDbContext<InstrumentStoreDBContext>();
 
+            builder.Services.AddScoped<IAdminService, AdminService>();
             builder.Services.AddScoped<IBrandService, BrandService>();
             builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddScoped<ICountryService, CountryService>();
             builder.Services.AddScoped<IDeliveryMethodService, DeliveryMethodService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<IPaidOrderService, PaidOrderService>();
             builder.Services.AddScoped<IPaymentMethodService, PaymentMethodService>();
             builder.Services.AddScoped<IProductService, ProductService>();

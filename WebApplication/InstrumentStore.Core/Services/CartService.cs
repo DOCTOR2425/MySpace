@@ -11,16 +11,19 @@ namespace InstrumentStore.Domain.Services
         private IUsersService _usersService;
         private IProductService _productService;
         private IPaidOrderService _paidOrderService;
+        private IAdminService _adminService;
 
         public CartService(InstrumentStoreDBContext dbContext,
             IUsersService usersService,
             IProductService productService,
-            IPaidOrderService paidOrderService)
+            IPaidOrderService paidOrderService,
+            IAdminService adminService)
         {
             _dbContext = dbContext;
             _usersService = usersService;
             _productService = productService;
             _paidOrderService = paidOrderService;
+            _adminService = adminService;
         }
 
         public async Task<List<CartItem>> GetAllCart(Guid userId)
@@ -45,10 +48,10 @@ namespace InstrumentStore.Domain.Services
 
         public async Task<Guid> AddToCart(Guid userId, Guid productId, int quantity)
         {
-            CartItem? targetCartItem = _dbContext.CartItem
+            CartItem? targetCartItem = await _dbContext.CartItem
                 .Include(c => c.User)
                 .Include(c => c.Product)
-                .FirstOrDefault(c =>
+                .FirstOrDefaultAsync(c =>
                     c.User.UserId == userId &&
                     c.Product.ProductId == productId);
 
@@ -97,24 +100,31 @@ namespace InstrumentStore.Domain.Services
 
             await _dbContext.SaveChangesAsync();
 
+            await _adminService.SendAdminMailAboutOrder(paidOrderId);
+
             return paidOrderId;
         }
 
         public async Task<Guid> OrderProduct(Guid userId,
             Guid productId,
+            int quantity,
             Guid deliveryMethodId,
             Guid paymentMethodId)
         {
             Guid paidOrderId = await _paidOrderService.Create(userId, deliveryMethodId, paymentMethodId);
+            await _dbContext.SaveChangesAsync();
 
             await _dbContext.PaidOrderItem.AddAsync(new PaidOrderItem()
             {
+                PaidOrderItemId= Guid.NewGuid(),
                 PaidOrder = await _paidOrderService.GetById(paidOrderId),
                 Product = await _productService.GetById(productId),
-                Quantity = 1,
+                Quantity = quantity,
             });
 
             await _dbContext.SaveChangesAsync();
+
+            await _adminService.SendAdminMailAboutOrder(paidOrderId);
 
             return paidOrderId;
         }
@@ -131,3 +141,11 @@ namespace InstrumentStore.Domain.Services
         }
     }
 }
+/*
+{
+  "productId": "2DC2220A-6A77-42E9-BD0F-2C23A56700BB",
+  "quantity": 2,
+  "deliveryMethodId": "5066CE29-5821-41E8-965A-56E6A18AAA8F",
+  "paymentMethodId": "859A6A38-9012-4594-A270-F401EA9F5B74"
+}
+*/
