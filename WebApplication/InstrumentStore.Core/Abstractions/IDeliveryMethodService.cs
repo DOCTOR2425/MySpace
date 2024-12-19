@@ -7,5 +7,6 @@ namespace InstrumentStore.Domain.Abstractions
         Task<List<DeliveryMethod>> GetAll();
         Task<DeliveryMethod> GetById(Guid deliveryMethodId);
         Task<Guid> Create(DeliveryMethod deliveryMethod);
+        Task<bool> IsHomeDelivery(Guid deliveryMethodId);
     }
 }

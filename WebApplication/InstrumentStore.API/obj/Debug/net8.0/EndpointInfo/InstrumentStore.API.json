@@ -194,21 +194,10 @@
         }
       }
     },
-    "/api/Cart/{userId}": {
+    "/api/Cart": {
       "get": {
         "tags": [
           "Cart"
-        ],
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
         ],
         "responses": {
           "200": {
@@ -479,6 +468,44 @@
                 "schema": {
                   "type": "string",
                   "format": "uuid"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/PaidOrder": {
+      "get": {
+        "tags": [
+          "PaidOrder"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CartItem"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CartItem"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CartItem"
+                  }
                 }
               }
             }
@@ -889,10 +916,6 @@
       "AddToCartRequest": {
         "type": "object",
         "properties": {
-          "userId": {
-            "type": "string",
-            "format": "uuid"
-          },
           "productId": {
             "type": "string",
             "format": "uuid"
@@ -983,10 +1006,6 @@
       "OrderCartRequest": {
         "type": "object",
         "properties": {
-          "userId": {
-            "type": "string",
-            "format": "uuid"
-          },
           "deliveryMethodId": {
             "type": "string",
             "format": "uuid"
@@ -1001,13 +1020,13 @@
       "OrderProductRequest": {
         "type": "object",
         "properties": {
-          "userId": {
-            "type": "string",
-            "format": "uuid"
-          },
           "productId": {
             "type": "string",
             "format": "uuid"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
           },
           "deliveryMethodId": {
             "type": "string",
@@ -1290,6 +1309,10 @@
             "nullable": true
           },
           "street": {
+            "type": "string",
+            "nullable": true
+          },
+          "houseNumber": {
             "type": "string",
             "nullable": true
           },

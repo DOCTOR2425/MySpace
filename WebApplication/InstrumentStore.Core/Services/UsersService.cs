@@ -68,7 +68,7 @@ namespace InstrumentStore.Domain.Services
         {
             User user = await GetByEMail(email);
 
-            bool result = Verify(email, user.UserRegistrInfo.PasswordHash);
+            bool result = Verify(password, user.UserRegistrInfo.PasswordHash);
 
             if (result == false)
                 throw new Exception("Invalid password of user email: " + email);

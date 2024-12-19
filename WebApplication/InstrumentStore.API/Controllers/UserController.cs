@@ -25,12 +25,11 @@ namespace InstrumentStore.API.Controllers
         [HttpPost("/login")]
         public async Task<IResult> Login([FromBody] LoginUserRequest request)
         {
-            Console.WriteLine("login");
             string token = await _usersService.Login(request.EMail, request.Password);
 
             HttpContext.Response.Cookies.Append(JwtProvider.CookiesName, token, new CookieOptions()
             {
-                Expires = DateTime.Now.AddMinutes(10)
+                Expires = DateTime.Now.AddMinutes(120)
             });
 
             return Results.Ok();

@@ -28,5 +28,11 @@ namespace InstrumentStore.Domain.Services
 
             return tokenValue;
         }
+
+        public static async Task<Guid> getUserIdFromToken(string token)
+        {
+            var jsonToken = new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken;
+            return Guid.Parse(jsonToken.Claims.First(claim => claim.Type == "userId").Value);
+        }
     }
 }
