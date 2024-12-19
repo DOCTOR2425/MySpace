@@ -44,6 +44,17 @@ namespace InstrumentStore.Domain.Services
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<List<PaidOrderItem>> GetAllItemsByOrder(Guid paidOrderId)
+        {
+            List<PaidOrderItem> itemsInOrder = new List<PaidOrderItem>();
+
+            foreach(var i in await _dbContext.PaidOrderItem.Include(i=>i.PaidOrder).ToListAsync())
+                if(i.PaidOrder.PaidOrderId == paidOrderId)
+                    itemsInOrder.Add(i);
+
+            return itemsInOrder;
+        }
+
         public async Task<Guid> Create(Guid userId, Guid deliveryMethodId, Guid paymentMethodId)
         {
             PaidOrder paidOrder = new PaidOrder()

@@ -1024,6 +1024,10 @@
             "type": "string",
             "format": "uuid"
           },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
           "deliveryMethodId": {
             "type": "string",
             "format": "uuid"
@@ -1305,6 +1309,10 @@
             "nullable": true
           },
           "street": {
+            "type": "string",
+            "nullable": true
+          },
+          "houseNumber": {
             "type": "string",
             "nullable": true
           },

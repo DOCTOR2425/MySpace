@@ -7,5 +7,6 @@ namespace InstrumentStore.Domain.Abstractions
         Task<Guid> Create(Guid userId, Guid deliveryMethodId, Guid paymentMethodId);
         Task<List<PaidOrder>> GetAll(Guid userId);
         Task<PaidOrder> GetById(Guid orderId);
+        Task<List<PaidOrderItem>> GetAllItemsByOrder(Guid paidOrderId);
     }
 }

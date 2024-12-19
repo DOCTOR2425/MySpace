@@ -64,6 +64,7 @@ namespace InstrumentStore.API.Controllers
                 await JwtProvider.getUserIdFromToken(
                     HttpContext.Request.Cookies[JwtProvider.CookiesName]),
                 orderProductRequest.ProductId,
+                orderProductRequest.Quantity,
                 orderProductRequest.DeliveryMethodId,
                 orderProductRequest.PaymentMethodId));
         }
