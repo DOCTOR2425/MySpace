@@ -4,6 +4,8 @@ namespace InstrumentStore.Domain.Abstractions
 {
     public interface IJwtProvider
     {
-        string GenerateToken(User user);
+        string GenerateAccessToken(User user);
+        string GenerateRefreshToken(User user);
+        Task<Guid> getUserIdFromToken(string token);
     }
 }

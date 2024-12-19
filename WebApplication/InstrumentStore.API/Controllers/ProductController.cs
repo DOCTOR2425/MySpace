@@ -23,8 +23,8 @@ namespace InstrumentStore.API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<ProductCard>>> GetAllProductsCards()
         {
-            Console.WriteLine(HttpContext.Request.Cookies[JwtProvider.CookiesName]);
-            Console.WriteLine(JwtProvider.CookiesName);
+            Console.WriteLine(HttpContext.Request.Cookies[JwtProvider.AccessCookiesName]);
+            Console.WriteLine(JwtProvider.AccessCookiesName);
             List<Product> products = await _productService.GetAll();
             List<ProductCard> productsCards = new List<ProductCard>();
 

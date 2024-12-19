@@ -12,10 +12,13 @@ namespace InstrumentStore.API.Controllers
     public class CartController : ControllerBase
     {
         private ICartService _cartService;
+        private IJwtProvider _jwtProvider;
 
-        public CartController(ICartService cartService)
+        public CartController(ICartService cartService, 
+            IJwtProvider jwtProvider)
         {
             _cartService = cartService;
+            _jwtProvider = jwtProvider;
         }
 
         [Authorize]
@@ -23,8 +26,8 @@ namespace InstrumentStore.API.Controllers
         public async Task<ActionResult<List<CartItem>>> GetUserCart()
         {
             return Ok(await _cartService.GetAllCart(
-                await JwtProvider.getUserIdFromToken(
-                    HttpContext.Request.Cookies[JwtProvider.CookiesName])));
+                await _jwtProvider.getUserIdFromToken(
+                    HttpContext.Request.Cookies[JwtProvider.AccessCookiesName])));
         }
 
         [Authorize]
@@ -32,8 +35,8 @@ namespace InstrumentStore.API.Controllers
         public async Task<ActionResult> AddToUserCart([FromBody] AddToCartRequest request)
         {
             return Ok(await _cartService.AddToCart(
-                await JwtProvider.getUserIdFromToken(
-                    HttpContext.Request.Cookies[JwtProvider.CookiesName]),
+                await _jwtProvider.getUserIdFromToken(
+                    HttpContext.Request.Cookies[JwtProvider.AccessCookiesName]),
                 request.ProductId,
                 request.Quantity));
         }
@@ -50,8 +53,8 @@ namespace InstrumentStore.API.Controllers
         public async Task<ActionResult<Guid>> OrderCart([FromBody] OrderCartRequest orderCartRequest)
         {
             return Ok(await _cartService.OrderCart(
-                await JwtProvider.getUserIdFromToken(
-                    HttpContext.Request.Cookies[JwtProvider.CookiesName]),
+                await _jwtProvider.getUserIdFromToken(
+                    HttpContext.Request.Cookies[JwtProvider.AccessCookiesName]),
                 orderCartRequest.DeliveryMethodId,
                 orderCartRequest.PaymentMethodId));
         }
@@ -61,8 +64,8 @@ namespace InstrumentStore.API.Controllers
         public async Task<ActionResult<Guid>> OrderProduct([FromBody] OrderProductRequest orderProductRequest)
         {
             return Ok(await _cartService.OrderProduct(
-                await JwtProvider.getUserIdFromToken(
-                    HttpContext.Request.Cookies[JwtProvider.CookiesName]),
+                await _jwtProvider.getUserIdFromToken(
+                    HttpContext.Request.Cookies[JwtProvider.AccessCookiesName]),
                 orderProductRequest.ProductId,
                 orderProductRequest.Quantity,
                 orderProductRequest.DeliveryMethodId,

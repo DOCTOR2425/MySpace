@@ -52,7 +52,7 @@ namespace InstrumentStore.API
                     {
                         OnMessageReceived = context =>
                         {
-                            context.Token = context.Request.Cookies[JwtProvider.CookiesName];
+                            context.Token = context.Request.Cookies[JwtProvider.AccessCookiesName];
                             return Task.CompletedTask;
                         }
                     };

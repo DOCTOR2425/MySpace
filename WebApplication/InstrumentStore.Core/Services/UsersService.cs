@@ -3,6 +3,7 @@ using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
 using InstrumentStore.Domain.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
 namespace InstrumentStore.Domain.Services
 {
@@ -64,7 +65,7 @@ namespace InstrumentStore.Domain.Services
             return user.UserId;
         }
 
-        public async Task<string> Login(string email, string password)
+        public async Task<string[]> Login(string email, string password)
         {
             User user = await GetByEMail(email);
 
@@ -73,9 +74,12 @@ namespace InstrumentStore.Domain.Services
             if (result == false)
                 throw new Exception("Invalid password of user email: " + email);
 
-            string token = _jwtProvider.GenerateToken(user);
+            string[] tokens = new string[] {
+                _jwtProvider.GenerateAccessToken(user),
+                _jwtProvider.GenerateRefreshToken(user)
+            };
 
-            return token;
+            return tokens;
         }
 
         public async Task<User> GetByEMail(string email)
@@ -99,6 +103,18 @@ namespace InstrumentStore.Domain.Services
                 .Include(u => u.UserRegistrInfo)
                 .Where(u => u.UserId == id)
                 .FirstOrDefaultAsync();
+        }
+
+        public void InsertTokenInCookies(HttpContext context, string[] tokens)
+        {
+            context.Response.Cookies.Append(JwtProvider.AccessCookiesName, tokens[0], new CookieOptions()
+            {
+                Expires = DateTime.Now.AddMinutes(JwtProvider.AccessTokenLifeMinets)
+            });
+            context.Response.Cookies.Append(JwtProvider.RefreshCookiesName, tokens[1], new CookieOptions()
+            {
+                Expires = DateTime.Now.AddMinutes(JwtProvider.RefreshTokenLifeDays)
+            });
         }
     }
 }

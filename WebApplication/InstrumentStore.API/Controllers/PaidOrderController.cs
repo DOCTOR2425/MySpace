@@ -11,10 +11,13 @@ namespace InstrumentStore.API.Controllers
     public class PaidOrderController : ControllerBase
     {
         private ICartService _cartService;
+        private IJwtProvider _jwtProvider;
 
-        public PaidOrderController(ICartService cartService)
+        public PaidOrderController(ICartService cartService, 
+            IJwtProvider jwtProvider)
         {
             _cartService = cartService;
+            _jwtProvider = jwtProvider;
         }
 
         [Authorize]
@@ -22,8 +25,8 @@ namespace InstrumentStore.API.Controllers
         public async Task<ActionResult<List<CartItem>>> GetUserCart()
         {
             return Ok(await _cartService.GetAllOrders(
-                await JwtProvider.getUserIdFromToken(
-                    HttpContext.Request.Cookies[JwtProvider.CookiesName])));
+                await _jwtProvider.getUserIdFromToken(
+                    HttpContext.Request.Cookies[JwtProvider.AccessCookiesName])));
         }
     }
 }
