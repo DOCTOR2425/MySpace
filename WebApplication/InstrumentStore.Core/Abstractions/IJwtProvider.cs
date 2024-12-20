@@ -6,6 +6,6 @@ namespace InstrumentStore.Domain.Abstractions
     {
         string GenerateAccessToken(User user);
         string GenerateRefreshToken(User user);
-        Task<Guid> getUserIdFromToken(string token);
+        Guid GetUserIdFromToken(string token);
     }
 }

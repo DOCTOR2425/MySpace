@@ -67,6 +67,7 @@ namespace InstrumentStore.Domain.Services
             };
 
             await _dbContext.PaidOrder.AddAsync(paidOrder);
+            await _dbContext.SaveChangesAsync();
 
             return paidOrder.PaidOrderId;
         }

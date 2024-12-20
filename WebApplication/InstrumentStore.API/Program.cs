@@ -6,6 +6,7 @@ using InstrumentStore.Domain.Mapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using InstrumentStore.Domain.Middlewares;
 
 namespace InstrumentStore.API
 {
@@ -69,6 +70,7 @@ namespace InstrumentStore.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseMiddleware<TokenMiddleware>();
 
             app.UseHttpsRedirection();
             app.UseRouting();
@@ -94,6 +96,7 @@ namespace InstrumentStore.API
                 x.WithOrigins("https://localhost:7295").AllowCredentials();
                 x.AllowAnyMethod();
             });
+
 
             app.Run();
         }

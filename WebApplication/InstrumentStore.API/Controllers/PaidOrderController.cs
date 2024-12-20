@@ -25,7 +25,7 @@ namespace InstrumentStore.API.Controllers
         public async Task<ActionResult<List<CartItem>>> GetUserCart()
         {
             return Ok(await _cartService.GetAllOrders(
-                await _jwtProvider.getUserIdFromToken(
+                _jwtProvider.GetUserIdFromToken(
                     HttpContext.Request.Cookies[JwtProvider.AccessCookiesName])));
         }
     }

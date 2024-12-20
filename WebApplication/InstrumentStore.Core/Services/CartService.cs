@@ -112,7 +112,6 @@ namespace InstrumentStore.Domain.Services
             Guid paymentMethodId)
         {
             Guid paidOrderId = await _paidOrderService.Create(userId, deliveryMethodId, paymentMethodId);
-            await _dbContext.SaveChangesAsync();
 
             await _dbContext.PaidOrderItem.AddAsync(new PaidOrderItem()
             {

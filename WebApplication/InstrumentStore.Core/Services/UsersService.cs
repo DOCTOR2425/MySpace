@@ -109,7 +109,7 @@ namespace InstrumentStore.Domain.Services
         {
             context.Response.Cookies.Append(JwtProvider.AccessCookiesName, tokens[0], new CookieOptions()
             {
-                Expires = DateTime.Now.AddMinutes(JwtProvider.AccessTokenLifeMinets)
+                Expires = DateTime.Now.AddMinutes(JwtProvider.RefreshTokenLifeDays)
             });
             context.Response.Cookies.Append(JwtProvider.RefreshCookiesName, tokens[1], new CookieOptions()
             {
