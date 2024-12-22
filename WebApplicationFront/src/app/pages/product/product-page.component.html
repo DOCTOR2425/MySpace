@@ -17,30 +17,37 @@
   <div class="product">
     <div class="another-photos">
       <div class="photo">
-        <img [src]="product.image" />
+        <img
+        src="https://localhost:7295/images/{{product.image}}"
+        />
       </div>
       <div class="photo">
-        <img [src]="product.image" />
+        <img
+        src="https://localhost:7295/images/{{product.image}}"
+        />
       </div>
       <div class="photo">
-        <img [src]="product.image" />
+        <img
+        src="https://localhost:7295/images/{{product.image}}"
+        />
       </div>
       <div class="photo">
-        <img [src]="product.image" />
+        <img
+        src="https://localhost:7295/images/{{product.image}}"
+        />
       </div>
     </div>
-
     <div class="big-photo">
-      <img [src]="product.image" />
+      <img
+        src="https://localhost:7295/images/{{product.image}}"
+      />
     </div>
     <div class="card-body">
       <h1 class="card-title">
-        {{ product.name }}
+        {{product.name}}
       </h1>
-      <p class="card-text">{{ product.price }} p.</p>
-      <p class="card-text">
-        {{ product.description }}
-      </p>
+      <p class="card-text">{{product.price}}p</p>
+      <p class="card-text">...</p>
       <a href="#" class="btn btn-primary">В корзину</a>
     </div>
   </div>

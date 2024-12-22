@@ -5,14 +5,14 @@
 namespace InstrumentStore.Domain.Migrations
 {
     /// <inheritdoc />
-    public partial class AddUserHousNumber : Migration
+    public partial class addToken : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "HouseNumber",
-                table: "UserAdresses",
+                name: "RefreshToken",
+                table: "UserRegistrInfos",
                 type: "nvarchar(max)",
                 nullable: false,
                 defaultValue: "");
@@ -22,8 +22,8 @@ namespace InstrumentStore.Domain.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "HouseNumber",
-                table: "UserAdresses");
+                name: "RefreshToken",
+                table: "UserRegistrInfos");
         }
     }
 }

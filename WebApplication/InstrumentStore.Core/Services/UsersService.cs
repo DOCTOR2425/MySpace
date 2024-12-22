@@ -4,117 +4,124 @@ using InstrumentStore.Domain.DataBase.Models;
 using InstrumentStore.Domain.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace InstrumentStore.Domain.Services
 {
-    public class UsersService : IUsersService
-    {
-        private readonly InstrumentStoreDBContext _dbContext;
-        private readonly IJwtProvider _jwtProvider;
+	public class UsersService : IUsersService
+	{
+		private readonly InstrumentStoreDBContext _dbContext;
+		private readonly IJwtProvider _jwtProvider;
 
-        public UsersService(InstrumentStoreDBContext dbContext, IJwtProvider jwtProvider)
-        {
-            _dbContext = dbContext;
-            _jwtProvider = jwtProvider;
-        }
-        public string GeneratePasswordHas(string password)
-        {
-            return BCrypt.Net.BCrypt.EnhancedHashPassword(password);
-        }
+		public UsersService(InstrumentStoreDBContext dbContext, IJwtProvider jwtProvider)
+		{
+			_dbContext = dbContext;
+			_jwtProvider = jwtProvider;
+		}
+		public string GeneratePasswordHas(string password)
+		{
+			return BCrypt.Net.BCrypt.EnhancedHashPassword(password);
+		}
 
-        public bool Verify(string password, string passwordHash)
-        {
-            return BCrypt.Net.BCrypt.EnhancedVerify(password, passwordHash);
-        }
+		public bool Verify(string password, string passwordHash)
+		{
+			return BCrypt.Net.BCrypt.EnhancedVerify(password, passwordHash);
+		}
 
-        public async Task<Guid> Register(RegisterUserRequest registerUserRequest)
-        {
-            string passwordHash = GeneratePasswordHas(registerUserRequest.Password);
+		public async Task<Guid> Register(RegisterUserRequest registerUserRequest)
+		{
+			UserAdress userAdress = new UserAdress
+			{
+				UserAdressId = Guid.NewGuid(),
+				City = registerUserRequest.City,
+				Entrance = registerUserRequest.Entrance,
+				Street = registerUserRequest.Street,
+				Flat = registerUserRequest.Flat
+			};
 
-            UserAdress userAdress = new UserAdress
-            {
-                UserAdressId = Guid.NewGuid(),
-                City = registerUserRequest.City,
-                Entrance = registerUserRequest.Entrance,
-                Street = registerUserRequest.Street,
-                Flat = registerUserRequest.Flat
-            };
+			UserRegistrInfo userRegistrInfo = new UserRegistrInfo
+			{
+				UserRegistrInfoId = Guid.NewGuid(),
+				EMail = registerUserRequest.EMail,
+				PasswordHash = GeneratePasswordHas(registerUserRequest.Password)
+			};
 
-            UserRegistrInfo userRegistrInfo = new UserRegistrInfo
-            {
-                EMail = registerUserRequest.EMail,
-                PasswordHash = passwordHash
-            };
+			User user = new User
+			{
+				UserId = Guid.NewGuid(),
+				FirstName = registerUserRequest.FirstName,
+				Surname = registerUserRequest.Surname,
+				Patronymic = registerUserRequest.Patronymic,
+				Telephone = registerUserRequest.Telephone,
+				UserAdress = userAdress,
+				UserRegistrInfo = userRegistrInfo
+			};
 
-            User user = new User
-            {
-                UserId = Guid.NewGuid(),
-                FirstName = registerUserRequest.FirstName,
-                Surname = registerUserRequest.Surname,
-                Patronymic = registerUserRequest.Patronymic,
-                Telephone = registerUserRequest.Telephone,
-                UserAdress = userAdress,
-                UserRegistrInfo = userRegistrInfo
-            };
+			userRegistrInfo.RefreshToken = _jwtProvider.GenerateRefreshToken(user);
 
-            await _dbContext.UserAdresses.AddAsync(userAdress);
-            await _dbContext.UserRegistrInfos.AddAsync(userRegistrInfo);
-            await _dbContext.User.AddAsync(user);
-            await _dbContext.SaveChangesAsync();
+			await _dbContext.UserAdresses.AddAsync(userAdress);
+			await _dbContext.UserRegistrInfos.AddAsync(userRegistrInfo);
+			await _dbContext.User.AddAsync(user);
+			await _dbContext.SaveChangesAsync();
 
-            return user.UserId;
-        }
+			return user.UserId;
+		}
 
-        public async Task<string[]> Login(string email, string password)
-        {
-            User user = await GetByEMail(email);
+		public async Task<string> Login(string email, string password)
+		{
+			User user = await GetByEMail(email);
 
-            bool result = Verify(password, user.UserRegistrInfo.PasswordHash);
+			bool result = Verify(password, user.UserRegistrInfo.PasswordHash);
 
-            if (result == false)
-                throw new Exception("Invalid password of user email: " + email);
+			if (result == false)
+				throw new Exception("Invalid password of user email: " + email);
 
-            string[] tokens = new string[] {
-                _jwtProvider.GenerateAccessToken(user),
-                _jwtProvider.GenerateRefreshToken(user)
-            };
+			return _jwtProvider.GenerateAccessToken(user);
+		}
 
-            return tokens;
-        }
+		public async Task<string> ReLogin(string cookiesToken)
+		{
+			User user = await GetById(_jwtProvider.GetUserIdFromToken(cookiesToken));
 
-        public async Task<User> GetByEMail(string email)
-        {
-            User? user = await _dbContext.User
-                .Include(u => u.UserAdress)
-                .Include(u => u.UserRegistrInfo)
-                .FirstOrDefaultAsync(
-                u => u.UserRegistrInfo.EMail == email);
+			user.UserRegistrInfo.RefreshToken = _jwtProvider.GenerateRefreshToken(user);
 
-            if (user == null)
-                throw new ArgumentNullException("No user with that email");
+			return _jwtProvider.GenerateAccessToken(user);
+		}
 
-            return user;
-        }
+		public async Task<JwtSecurityToken> GetRefreshToken(string cookiesToken)
+		{
+			User user = await GetById(_jwtProvider.GetUserIdFromToken(cookiesToken));
 
-        public async Task<User> GetById(Guid id)
-        {
-            return await _dbContext.User
-                .Include(u => u.UserAdress)
-                .Include(u => u.UserRegistrInfo)
-                .Where(u => u.UserId == id)
-                .FirstOrDefaultAsync();
-        }
+			return new JwtSecurityTokenHandler().ReadToken(
+				user.UserRegistrInfo.RefreshToken) as JwtSecurityToken;
+		}
 
-        public void InsertTokenInCookies(HttpContext context, string[] tokens)
-        {
-            context.Response.Cookies.Append(JwtProvider.AccessCookiesName, tokens[0], new CookieOptions()
-            {
-                Expires = DateTime.Now.AddMinutes(JwtProvider.RefreshTokenLifeDays)
-            });
-            context.Response.Cookies.Append(JwtProvider.RefreshCookiesName, tokens[1], new CookieOptions()
-            {
-                Expires = DateTime.Now.AddMinutes(JwtProvider.RefreshTokenLifeDays)
-            });
-        }
-    }
+		public async Task<User> GetByEMail(string email)
+		{
+			User? user = await _dbContext.User
+				.Include(u => u.UserAdress)
+				.Include(u => u.UserRegistrInfo)
+				.FirstOrDefaultAsync(
+				u => u.UserRegistrInfo.EMail == email);
+
+			if (user == null)
+				throw new ArgumentNullException("No user with that email");
+
+			return user;
+		}
+
+		public async Task<User> GetById(Guid id)
+		{
+			User? user = await _dbContext.User
+				.Include(u => u.UserAdress)
+				.Include(u => u.UserRegistrInfo)
+				.Where(u => u.UserId == id)
+				.FirstOrDefaultAsync();
+
+			if (user == null)
+				throw new ArgumentNullException("No user with that Id");
+
+			return user;
+		}
+	}
 }

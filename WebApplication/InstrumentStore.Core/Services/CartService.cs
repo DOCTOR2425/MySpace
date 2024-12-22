@@ -31,6 +31,9 @@ namespace InstrumentStore.Domain.Services
             return await _dbContext.CartItem
                 .Include(c => c.User)
                 .Include(c => c.Product)
+                .Include(c => c.Product.Brand)
+                .Include(c => c.Product.Country)
+                .Include(c => c.Product.ProductType)
                 .Where(c => c.User.UserId == userId)
                 .AsNoTracking()
                 .ToListAsync();

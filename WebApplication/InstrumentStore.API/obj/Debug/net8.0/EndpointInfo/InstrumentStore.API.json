@@ -207,7 +207,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CartItem"
+                    "$ref": "#/components/schemas/CartItemResponse"
                   }
                 }
               },
@@ -215,7 +215,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CartItem"
+                    "$ref": "#/components/schemas/CartItemResponse"
                   }
                 }
               },
@@ -223,7 +223,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CartItem"
+                    "$ref": "#/components/schemas/CartItemResponse"
                   }
                 }
               }
@@ -961,6 +961,23 @@
         },
         "additionalProperties": false
       },
+      "CartItemResponse": {
+        "type": "object",
+        "properties": {
+          "cartItemId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "product": {
+            "$ref": "#/components/schemas/ProductResponse"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "Country": {
         "type": "object",
         "properties": {
@@ -1339,6 +1356,10 @@
             "nullable": true
           },
           "passwordHash": {
+            "type": "string",
+            "nullable": true
+          },
+          "refreshToken": {
             "type": "string",
             "nullable": true
           }

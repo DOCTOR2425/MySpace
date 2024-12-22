@@ -107,7 +107,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[InstrumentStore.Domain.DataBase.Models.CartItem, InstrumentStore.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[InstrumentStore.Domain.Contracts.Cart.CartItemResponse, InstrumentStore.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

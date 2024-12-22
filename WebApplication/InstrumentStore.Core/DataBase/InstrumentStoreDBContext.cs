@@ -1,13 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using InstrumentStore.Domain.DataBase.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace InstrumentStore.Domain.DataBase
 {
     public class InstrumentStoreDBContext : DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		private IConfiguration _config;
+
+		public InstrumentStoreDBContext(IConfiguration config)
+		{
+			_config = config;
+		}
+
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=WSA-195-74-BY;Database=MySpaceDB;
+            optionsBuilder.UseSqlServer(@$"Server=DESKTOP-0MK8KC9\MSSQLSERVER01;Database=MySpaceDB;
 				Trusted_Connection=True;Encrypt=False;TrustServerCertificate=True;");
         }
 

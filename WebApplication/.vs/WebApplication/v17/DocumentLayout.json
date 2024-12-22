@@ -3,28 +3,20 @@
   "WorkspaceRootPath": "D:\\MySpace\\WebApplication\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|d:\\myspace\\webapplication\\instrumentstore.core\\middlewares\\tokenmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|solutionrelative:instrumentstore.core\\middlewares\\tokenmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|d:\\myspace\\webapplication\\instrumentstore.api\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|solutionrelative:instrumentstore.api\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|d:\\myspace\\webapplication\\instrumentstore.api\\middlewares\\tokenmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|solutionrelative:instrumentstore.api\\middlewares\\tokenmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|d:\\myspace\\webapplication\\instrumentstore.core\\services\\usersservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|solutionrelative:instrumentstore.core\\services\\usersservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|d:\\myspace\\webapplication\\instrumentstore.core\\abstractions\\ijwtprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|solutionrelative:instrumentstore.core\\abstractions\\ijwtprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|d:\\myspace\\webapplication\\instrumentstore.core\\services\\jwtprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|solutionrelative:instrumentstore.core\\services\\jwtprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|d:\\myspace\\webapplication\\instrumentstore.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|solutionrelative:instrumentstore.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|d:\\myspace\\webapplication\\instrumentstore.api\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|solutionrelative:instrumentstore.api\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 153,
-          "SelectedChildIndex": 9,
+          "SelectedChildIndex": 10,
           "Children": [
             {
               "$type": "Bookmark",
@@ -50,10 +42,6 @@
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:2:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
-            },
-            {
-              "$type": "Bookmark",
               "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
             },
             {
@@ -65,77 +53,60 @@
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "UsersService.cs",
-              "DocumentMoniker": "D:\\MySpace\\WebApplication\\InstrumentStore.Core\\Services\\UsersService.cs",
-              "RelativeDocumentMoniker": "InstrumentStore.Core\\Services\\UsersService.cs",
-              "ToolTip": "D:\\MySpace\\WebApplication\\InstrumentStore.Core\\Services\\UsersService.cs",
-              "RelativeToolTip": "InstrumentStore.Core\\Services\\UsersService.cs",
-              "ViewState": "AgIAAF0AAAAAAAAAAAAmwHMAAABSAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-20T08:44:52.616Z"
+              "$type": "Bookmark",
+              "Name": "ST:2:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "UserController.cs",
               "DocumentMoniker": "D:\\MySpace\\WebApplication\\InstrumentStore.API\\Controllers\\UserController.cs",
               "RelativeDocumentMoniker": "InstrumentStore.API\\Controllers\\UserController.cs",
               "ToolTip": "D:\\MySpace\\WebApplication\\InstrumentStore.API\\Controllers\\UserController.cs",
               "RelativeToolTip": "InstrumentStore.API\\Controllers\\UserController.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-20T08:44:47.939Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "TokenMiddleware.cs",
-              "DocumentMoniker": "D:\\MySpace\\WebApplication\\InstrumentStore.Core\\Middlewares\\TokenMiddleware.cs",
-              "RelativeDocumentMoniker": "InstrumentStore.Core\\Middlewares\\TokenMiddleware.cs",
-              "ToolTip": "D:\\MySpace\\WebApplication\\InstrumentStore.Core\\Middlewares\\TokenMiddleware.cs",
-              "RelativeToolTip": "InstrumentStore.Core\\Middlewares\\TokenMiddleware.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-20T07:37:15.546Z",
+              "WhenOpened": "2024-12-22T17:12:00.244Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
+              "Title": "UsersService.cs",
+              "DocumentMoniker": "D:\\MySpace\\WebApplication\\InstrumentStore.Core\\Services\\UsersService.cs",
+              "RelativeDocumentMoniker": "InstrumentStore.Core\\Services\\UsersService.cs",
+              "ToolTip": "D:\\MySpace\\WebApplication\\InstrumentStore.Core\\Services\\UsersService.cs",
+              "RelativeToolTip": "InstrumentStore.Core\\Services\\UsersService.cs",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAiwFUAAABPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-22T16:26:12.992Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "JwtProvider.cs",
               "DocumentMoniker": "D:\\MySpace\\WebApplication\\InstrumentStore.Core\\Services\\JwtProvider.cs",
               "RelativeDocumentMoniker": "InstrumentStore.Core\\Services\\JwtProvider.cs",
               "ToolTip": "D:\\MySpace\\WebApplication\\InstrumentStore.Core\\Services\\JwtProvider.cs",
               "RelativeToolTip": "InstrumentStore.Core\\Services\\JwtProvider.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAzAAAAAAAAAA==",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAACwAAABIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-20T08:05:53.385Z"
+              "WhenOpened": "2024-12-22T14:08:14.331Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "IJwtProvider.cs",
-              "DocumentMoniker": "D:\\MySpace\\WebApplication\\InstrumentStore.Core\\Abstractions\\IJwtProvider.cs",
-              "RelativeDocumentMoniker": "InstrumentStore.Core\\Abstractions\\IJwtProvider.cs",
-              "ToolTip": "D:\\MySpace\\WebApplication\\InstrumentStore.Core\\Abstractions\\IJwtProvider.cs",
-              "RelativeToolTip": "InstrumentStore.Core\\Abstractions\\IJwtProvider.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAkAAAAFAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "TokenMiddleware.cs",
+              "DocumentMoniker": "D:\\MySpace\\WebApplication\\InstrumentStore.API\\Middlewares\\TokenMiddleware.cs",
+              "RelativeDocumentMoniker": "InstrumentStore.API\\Middlewares\\TokenMiddleware.cs",
+              "ToolTip": "D:\\MySpace\\WebApplication\\InstrumentStore.API\\Middlewares\\TokenMiddleware.cs",
+              "RelativeToolTip": "InstrumentStore.API\\Middlewares\\TokenMiddleware.cs",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAkwDMAAAAHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-20T08:14:10.798Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\MySpace\\WebApplication\\InstrumentStore.API\\Program.cs",
-              "RelativeDocumentMoniker": "InstrumentStore.API\\Program.cs",
-              "ToolTip": "D:\\MySpace\\WebApplication\\InstrumentStore.API\\Program.cs",
-              "RelativeToolTip": "InstrumentStore.API\\Program.cs",
-              "ViewState": "AgIAAEAAAAAAAAAAAAAhwEgAAAAcAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-20T08:13:13.809Z"
+              "WhenOpened": "2024-12-22T13:59:51.622Z",
+              "EditorCaption": ""
             }
           ]
         }

@@ -1,4 +1,5 @@
-﻿using InstrumentStore.Domain.Abstractions;
+﻿using AutoMapper;
+using InstrumentStore.Domain.Abstractions;
 using InstrumentStore.Domain.Contracts.Cart;
 using InstrumentStore.Domain.DataBase.Models;
 using InstrumentStore.Domain.Services;
@@ -13,21 +14,31 @@ namespace InstrumentStore.API.Controllers
     {
         private ICartService _cartService;
         private IJwtProvider _jwtProvider;
+		private IMapper _mapper;
 
-        public CartController(ICartService cartService, 
-            IJwtProvider jwtProvider)
+		public CartController(ICartService cartService, 
+            IJwtProvider jwtProvider,
+            IMapper mapper)
         {
             _cartService = cartService;
             _jwtProvider = jwtProvider;
+            _mapper = mapper;
         }
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<List<CartItem>>> GetUserCart()
+        public async Task<ActionResult<List<CartItemResponse>>> GetUserCart()
         {
-            return Ok(await _cartService.GetAllCart(
+            List<CartItem> cartItems = await _cartService.GetAllCart(
                 _jwtProvider.GetUserIdFromToken(
-                    HttpContext.Request.Cookies[JwtProvider.AccessCookiesName])));
+                    HttpContext.Request.Cookies[JwtProvider.AccessCookiesName]));
+
+            List<CartItemResponse> result = new List<CartItemResponse>();
+
+            foreach (CartItem cartItem in cartItems)
+                result.Add(_mapper.Map<CartItemResponse>(cartItem));
+
+			return Ok(result);
         }
 
         [Authorize]

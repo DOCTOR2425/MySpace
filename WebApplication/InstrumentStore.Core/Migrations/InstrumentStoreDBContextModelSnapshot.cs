@@ -347,6 +347,10 @@ namespace InstrumentStore.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("UserRegistrInfoId");
 
                     b.ToTable("UserRegistrInfos");

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InstrumentStore.Domain.Migrations
 {
     [DbContext(typeof(InstrumentStoreDBContext))]
-    [Migration("20241209184258_AddArchive")]
-    partial class AddArchive
+    [Migration("20241221110528_check")]
+    partial class check
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,6 +40,30 @@ namespace InstrumentStore.Domain.Migrations
                     b.ToTable("Brand");
                 });
 
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.CartItem", b =>
+                {
+                    b.Property<Guid>("CartItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CartItemId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CartItem");
+                });
+
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Country", b =>
                 {
                     b.Property<Guid>("CountryId")
@@ -53,69 +77,6 @@ namespace InstrumentStore.Domain.Migrations
                     b.HasKey("CountryId");
 
                     b.ToTable("Country");
-                });
-
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Customer", b =>
-                {
-                    b.Property<Guid>("CustomerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CustomerAdressId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("EMail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Patronymic")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Telephone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CustomerId");
-
-                    b.HasIndex("CustomerAdressId");
-
-                    b.ToTable("Customer");
-                });
-
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.CustomerAdress", b =>
-                {
-                    b.Property<Guid>("CustomerAdressId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Entrance")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Flat")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CustomerAdressId");
-
-                    b.ToTable("CustomerAdresses");
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.DeliveryMethod", b =>
@@ -136,22 +97,57 @@ namespace InstrumentStore.Domain.Migrations
                     b.ToTable("DeliveryMethod");
                 });
 
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.OrderItem", b =>
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.PaidOrder", b =>
                 {
+                    b.Property<Guid>("PaidOrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("DeliveryMethodId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("PaymentMethodId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("PaidOrderId");
+
+                    b.HasIndex("DeliveryMethodId");
+
+                    b.HasIndex("PaymentMethodId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PaidOrder");
+                });
+
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.PaidOrderItem", b =>
+                {
+                    b.Property<Guid>("PaidOrderItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PaidOrderId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("tbl_OrderId")
-                        .HasColumnType("uniqueidentifier");
+                    b.HasKey("PaidOrderItemId");
+
+                    b.HasIndex("PaidOrderId");
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("tbl_OrderId");
-
-                    b.ToTable("OrderItem");
+                    b.ToTable("PaidOrderItem");
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.PaymentMethod", b =>
@@ -185,9 +181,9 @@ namespace InstrumentStore.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Image")
+                    b.Property<string>("Image")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -229,9 +225,9 @@ namespace InstrumentStore.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Image")
+                    b.Property<string>("Image")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -272,50 +268,94 @@ namespace InstrumentStore.Domain.Migrations
                     b.ToTable("ProductType");
                 });
 
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.tbl_Order", b =>
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.User", b =>
                 {
-                    b.Property<Guid>("tbl_OrderId")
+                    b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CustomerId")
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Patronymic")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telephone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserAdressId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("DeliveryDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("DeliveryMethodId")
+                    b.Property<Guid>("UserRegistrInfoId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PaymentMethodId")
-                        .HasColumnType("uniqueidentifier");
+                    b.HasKey("UserId");
 
-                    b.Property<DateTime>("RegistrationDate")
-                        .HasColumnType("datetime2");
+                    b.HasIndex("UserAdressId");
 
-                    b.HasKey("tbl_OrderId");
+                    b.HasIndex("UserRegistrInfoId");
 
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("DeliveryMethodId");
-
-                    b.HasIndex("PaymentMethodId");
-
-                    b.ToTable("tbl_Order");
+                    b.ToTable("User");
                 });
 
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Customer", b =>
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.UserAdress", b =>
                 {
-                    b.HasOne("InstrumentStore.Domain.DataBase.Models.CustomerAdress", "CustomerAdress")
-                        .WithMany()
-                        .HasForeignKey("CustomerAdressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<Guid>("UserAdressId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Navigation("CustomerAdress");
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Entrance")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Flat")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HouseNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserAdressId");
+
+                    b.ToTable("UserAdresses");
                 });
 
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.OrderItem", b =>
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.UserRegistrInfo", b =>
+                {
+                    b.Property<Guid>("UserRegistrInfoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EMail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserRegistrInfoId");
+
+                    b.ToTable("UserRegistrInfos");
+                });
+
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.CartItem", b =>
                 {
                     b.HasOne("InstrumentStore.Domain.DataBase.Models.Product", "Product")
                         .WithMany()
@@ -323,15 +363,61 @@ namespace InstrumentStore.Domain.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("InstrumentStore.Domain.DataBase.Models.tbl_Order", "tbl_Order")
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("tbl_OrderId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
 
-                    b.Navigation("tbl_Order");
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.PaidOrder", b =>
+                {
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.DeliveryMethod", "DeliveryMethod")
+                        .WithMany()
+                        .HasForeignKey("DeliveryMethodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.PaymentMethod", "PaymentMethod")
+                        .WithMany()
+                        .HasForeignKey("PaymentMethodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DeliveryMethod");
+
+                    b.Navigation("PaymentMethod");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.PaidOrderItem", b =>
+                {
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.PaidOrder", "PaidOrder")
+                        .WithMany()
+                        .HasForeignKey("PaidOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PaidOrder");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Product", b =>
@@ -388,31 +474,23 @@ namespace InstrumentStore.Domain.Migrations
                     b.Navigation("ProductType");
                 });
 
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.tbl_Order", b =>
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.User", b =>
                 {
-                    b.HasOne("InstrumentStore.Domain.DataBase.Models.Customer", "Customer")
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.UserAdress", "UserAdress")
                         .WithMany()
-                        .HasForeignKey("CustomerId")
+                        .HasForeignKey("UserAdressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("InstrumentStore.Domain.DataBase.Models.DeliveryMethod", "DeliveryMethod")
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.UserRegistrInfo", "UserRegistrInfo")
                         .WithMany()
-                        .HasForeignKey("DeliveryMethodId")
+                        .HasForeignKey("UserRegistrInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("InstrumentStore.Domain.DataBase.Models.PaymentMethod", "PaymentMethod")
-                        .WithMany()
-                        .HasForeignKey("PaymentMethodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("UserAdress");
 
-                    b.Navigation("Customer");
-
-                    b.Navigation("DeliveryMethod");
-
-                    b.Navigation("PaymentMethod");
+                    b.Navigation("UserRegistrInfo");
                 });
 #pragma warning restore 612, 618
         }

@@ -6,7 +6,7 @@ using InstrumentStore.Domain.Mapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using InstrumentStore.Domain.Middlewares;
+using InstrumentStore.API.Middlewares;
 
 namespace InstrumentStore.API
 {
@@ -70,10 +70,12 @@ namespace InstrumentStore.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            app.UseMiddleware<TokenMiddleware>();
 
             app.UseHttpsRedirection();
             app.UseRouting();
+
+            app.UseMiddleware<TokenMiddleware>();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -83,7 +85,6 @@ namespace InstrumentStore.API
                 HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always,
                 Secure = CookieSecurePolicy.Always,
             });
-
 
             app.MapControllers();
             app.UseStaticFiles();
@@ -96,7 +97,6 @@ namespace InstrumentStore.API
                 x.WithOrigins("https://localhost:7295").AllowCredentials();
                 x.AllowAnyMethod();
             });
-
 
             app.Run();
         }
