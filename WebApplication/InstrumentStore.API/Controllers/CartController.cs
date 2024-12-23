@@ -29,16 +29,20 @@ namespace InstrumentStore.API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<CartItemResponse>>> GetUserCart()
         {
+            string token = HttpContext.Request.Headers["Authorization"]
+                .ToString().Substring("Bearer ".Length).Trim();
+
             List<CartItem> cartItems = await _cartService.GetAllCart(
-                _jwtProvider.GetUserIdFromToken(
-                    HttpContext.Request.Cookies[JwtProvider.AccessCookiesName]));
+                _jwtProvider.GetUserIdFromToken(token));
 
             List<CartItemResponse> result = new List<CartItemResponse>();
 
             foreach (CartItem cartItem in cartItems)
                 result.Add(_mapper.Map<CartItemResponse>(cartItem));
 
-			return Ok(result);
+            Console.WriteLine("Cart Items Sent:", result.Count);
+
+            return Ok(result);
         }
 
         [Authorize]

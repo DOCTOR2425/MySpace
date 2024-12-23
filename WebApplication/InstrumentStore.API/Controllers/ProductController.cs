@@ -66,15 +66,3 @@ namespace InstrumentStore.API.Controllers
         }
     }
 }
-/*
-{
-  "name": "Test Product Name",
-  "description": "Test Product description long",
-  "price": 240,
-  "quantity": 1230,
-  "image": "hammer.jpg",
-  "productTypeId": "dd6995d4-30fe-4637-a34d-1f7d8ef2f53b",
-  "brandId": "f0c2afe2-70d3-4a4f-b9c9-490a8020730f",
-  "countryId": "7a0e0584-7c19-403f-bf9f-20753e9cd175"
-}
-*/

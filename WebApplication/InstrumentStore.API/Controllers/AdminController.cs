@@ -15,20 +15,29 @@ namespace InstrumentStore.API.Controllers
         private IPaidOrderService _paidOrderService;
         private IDeliveryMethodService _deliveryMethodService;
         private IPaymentMethodService _paymentMethodService;
+        private IBrandService _brandService;
+        private ICountryService _countryService;
+        private IProductTypeService _productTypeService;
         private IMapper _mapper;
 
-        public AdminController(IUsersService usersService, 
-            IProductService productService, 
-            IPaidOrderService paidOrderService, 
-            IDeliveryMethodService deliveryMethodService, 
-            IPaymentMethodService paymentMethodService, 
-            IMapper mapper)
+        public AdminController(IUsersService usersService,
+            IProductService productService,
+            IPaidOrderService paidOrderService,
+            IDeliveryMethodService deliveryMethodService,
+            IPaymentMethodService paymentMethodService,
+            IMapper mapper,
+            IBrandService brandService,
+            ICountryService countryService,
+            IProductTypeService productTypeService)
         {
             _usersService = usersService;
             _productService = productService;
             _paidOrderService = paidOrderService;
             _deliveryMethodService = deliveryMethodService;
             _paymentMethodService = paymentMethodService;
+            _brandService = brandService;
+            _countryService = countryService;
+            _productTypeService = productTypeService;
             _mapper = mapper;
         }
 
@@ -58,6 +67,46 @@ namespace InstrumentStore.API.Controllers
             return Ok(await _paymentMethodService.Create(paymentMethod));
         }
 
+        [HttpGet("FillOneProduct")]
+        public async Task<Guid> FillOneProduct()
+        {
+            Brand brand = new Brand()
+            {
+                BrandId = Guid.NewGuid(),
+                Name = "string"
+            };
 
+            ProductType productType = new ProductType()
+            {
+                ProductTypeId = Guid.NewGuid(),
+                Name = "string"
+            };
+
+            Country country = new Country()
+            {
+                CountryId = Guid.NewGuid(),
+                Name = "string"
+            };
+
+            Product product = new Product()
+            {
+                ProductId = Guid.NewGuid(),
+                Name = "string",
+                Brand = brand,
+                Country = country,
+                ProductType = productType,
+                Description = "string",
+                Price = 14,
+                Image = "hammer.jpg",
+                Quantity = 100
+            };
+
+            await _brandService.Create(brand);
+            await _countryService.Create(country);
+            await _productTypeService.Create(productType);
+            await _productService.Create(product);
+
+            return product.ProductId;
+        }
     }
 }

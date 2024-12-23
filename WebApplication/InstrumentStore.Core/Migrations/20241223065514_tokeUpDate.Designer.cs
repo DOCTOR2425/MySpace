@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InstrumentStore.Domain.Migrations
 {
     [DbContext(typeof(InstrumentStoreDBContext))]
-    [Migration("20241221121308_addToken")]
-    partial class addToken
+    [Migration("20241223065514_tokeUpDate")]
+    partial class tokeUpDate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -52,6 +52,26 @@
     ]
   },
   {
+    "ContainingType": "InstrumentStore.API.Controllers.AdminController",
+    "Method": "FillOneProduct",
+    "RelativePath": "api/Admin/FillOneProduct",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Guid",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "InstrumentStore.API.Controllers.BrandController",
     "Method": "GetAllBrands",
     "RelativePath": "api/Brand",

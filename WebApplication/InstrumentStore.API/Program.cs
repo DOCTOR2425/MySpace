@@ -34,11 +34,12 @@ namespace InstrumentStore.API
             builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
             builder.Services.AddScoped<IUsersService, UsersService>();
 
-
             builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+            builder.Services.AddAutoMapper(typeof(AppMappingProfile));
 
+            builder.Services.AddAuthorization();
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
+                .AddJwtBearer(opt =>
                 {
                     opt.TokenValidationParameters = new()
                     {
@@ -48,20 +49,7 @@ namespace InstrumentStore.API
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtProvider.JwtKey))
                     };
-
-                    opt.Events = new JwtBearerEvents
-                    {
-                        OnMessageReceived = context =>
-                        {
-                            context.Token = context.Request.Cookies[JwtProvider.AccessCookiesName];
-                            return Task.CompletedTask;
-                        }
-                    };
                 });
-
-            builder.Services.AddAuthorization();
-
-            builder.Services.AddAutoMapper(typeof(AppMappingProfile));
 
             var app = builder.Build();
 
@@ -71,32 +59,36 @@ namespace InstrumentStore.API
                 app.UseSwaggerUI();
             }
 
+            app.UseCookiePolicy(new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.Lax,
+                //HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always,
+                Secure = CookieSecurePolicy.Always,
+            });
+
+            app.UseCors(x =>
+            {
+                x.AllowAnyOrigin();
+                x.AllowAnyMethod();
+                x.AllowAnyHeader();
+
+                x.WithOrigins("https://localhost:4200")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
+
+            app.UseAuthentication();
+
             app.UseHttpsRedirection();
             app.UseRouting();
 
             app.UseMiddleware<TokenMiddleware>();
 
-            app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseCookiePolicy(new CookiePolicyOptions
-            {
-                MinimumSameSitePolicy = SameSiteMode.Strict,
-                HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always,
-                Secure = CookieSecurePolicy.Always,
-            });
 
             app.MapControllers();
             app.UseStaticFiles();
-
-            app.UseCors(x =>
-            {
-                x.AllowAnyHeader();
-                x.AllowAnyOrigin();
-                x.WithOrigins("https://localhost:4200").AllowCredentials();
-                x.WithOrigins("https://localhost:7295").AllowCredentials();
-                x.AllowAnyMethod();
-            });
 
             app.Run();
         }

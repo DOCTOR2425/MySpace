@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CartItem } from '../../data/interfaces/cartItem.interface';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,15 @@ export class CartService {
 
   baseApiUrl = 'https://localhost:7295/api/Cart';
 
-  public getCartItems() {
-    return this.http.get<CartItem[]>(this.baseApiUrl, { withCredentials: true });
+  public async getCartItems(): Promise<CartItem[]> {
+    try {
+      const response = await firstValueFrom(
+        this.http.get<CartItem[]>(this.baseApiUrl, { withCredentials: true })
+      );
+      return response;
+    } catch (error) {
+      console.error('Error fetching cart items:', error);
+      return [];
+    }
   }
 }

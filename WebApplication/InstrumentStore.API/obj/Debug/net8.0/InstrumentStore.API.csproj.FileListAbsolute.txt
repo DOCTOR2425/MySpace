@@ -635,7 +635,6 @@ D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\Microsoft.Identit
 D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\Microsoft.NET.StringTools.dll
-D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\Microsoft.OpenApi.dll
 D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\Microsoft.SqlServer.Server.dll
 D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\Microsoft.VisualStudio.Web.CodeGeneration.dll
 D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\Microsoft.VisualStudio.Web.CodeGeneration.Core.dll
@@ -655,9 +654,6 @@ D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\NuGet.Packaging.d
 D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\NuGet.ProjectModel.dll
 D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\NuGet.Protocol.dll
 D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\NuGet.Versioning.dll
-D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
-D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
-D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\System.ClientModel.dll
 D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\System.CodeDom.dll
 D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\System.Composition.AttributedModel.dll
@@ -843,7 +839,6 @@ D:\MySpace\WebApplication\InstrumentStore.API\obj\Debug\net8.0\InstrumentStore.A
 D:\MySpace\WebApplication\InstrumentStore.API\obj\Debug\net8.0\InstrumentStore.API.AssemblyInfoInputs.cache
 D:\MySpace\WebApplication\InstrumentStore.API\obj\Debug\net8.0\InstrumentStore.API.AssemblyInfo.cs
 D:\MySpace\WebApplication\InstrumentStore.API\obj\Debug\net8.0\InstrumentStore.API.csproj.CoreCompileInputs.cache
-D:\MySpace\WebApplication\InstrumentStore.API\obj\Debug\net8.0\InstrumentStore.API.MvcApplicationPartsAssemblyInfo.cs
 D:\MySpace\WebApplication\InstrumentStore.API\obj\Debug\net8.0\InstrumentStore.API.MvcApplicationPartsAssemblyInfo.cache
 D:\MySpace\WebApplication\InstrumentStore.API\obj\Debug\net8.0\InstrumentStore.API.sourcelink.json
 D:\MySpace\WebApplication\InstrumentStore.API\obj\Debug\net8.0\scopedcss\bundle\InstrumentStore.API.styles.css
@@ -1148,7 +1143,6 @@ D:\MySpase\WebApplication\InstrumentStore.API\obj\Debug\net8.0\refint\Instrument
 D:\MySpase\WebApplication\InstrumentStore.API\obj\Debug\net8.0\InstrumentStore.API.pdb
 D:\MySpase\WebApplication\InstrumentStore.API\obj\Debug\net8.0\InstrumentStore.API.genruntimeconfig.cache
 D:\MySpase\WebApplication\InstrumentStore.API\obj\Debug\net8.0\ref\InstrumentStore.API.dll
-D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.Google.dll
 D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\BCrypt.Net-Next.dll
 D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\InstrumentStore.API.staticwebassets.runtime.json
@@ -1156,3 +1150,8 @@ D:\MySpase\WebApplication\InstrumentStore.API\bin\Debug\net8.0\InstrumentStore.A
 D:\MySpase\WebApplication\InstrumentStore.API\bin\Debug\net8.0\BCrypt.Net-Next.dll
 D:\MySpase\WebApplication\InstrumentStore.API\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.Google.dll
 D:\MySpase\WebApplication\InstrumentStore.API\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\Microsoft.OpenApi.dll
+D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\MySpace\WebApplication\InstrumentStore.API\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+D:\MySpace\WebApplication\InstrumentStore.API\obj\Debug\net8.0\InstrumentStore.API.MvcApplicationPartsAssemblyInfo.cs

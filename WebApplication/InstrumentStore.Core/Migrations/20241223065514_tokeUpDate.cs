@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace InstrumentStore.Domain.Migrations
 {
     /// <inheritdoc />
-    public partial class check : Migration
+    public partial class tokeUpDate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -94,7 +94,8 @@ namespace InstrumentStore.Domain.Migrations
                 {
                     UserRegistrInfoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     EMail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

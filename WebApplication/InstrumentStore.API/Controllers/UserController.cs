@@ -29,7 +29,6 @@ namespace InstrumentStore.API.Controllers
 
 			HttpContext.Response.Cookies.Append(JwtProvider.AccessCookiesName, token, new CookieOptions()
 			{
-				HttpOnly = true,
 				Secure = true,
 				SameSite = SameSiteMode.Lax,
 				Expires = DateTime.Now.AddMinutes(JwtProvider.RefreshTokenLifeDays)

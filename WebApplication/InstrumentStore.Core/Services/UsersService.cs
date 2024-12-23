@@ -3,7 +3,6 @@ using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
 using InstrumentStore.Domain.Abstractions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace InstrumentStore.Domain.Services
@@ -76,7 +75,10 @@ namespace InstrumentStore.Domain.Services
 			if (result == false)
 				throw new Exception("Invalid password of user email: " + email);
 
-			return _jwtProvider.GenerateAccessToken(user);
+            user.UserRegistrInfo.RefreshToken = _jwtProvider.GenerateRefreshToken(user);
+            _dbContext.SaveChanges();
+
+            return _jwtProvider.GenerateAccessToken(user);
 		}
 
 		public async Task<string> ReLogin(string cookiesToken)
@@ -84,6 +86,7 @@ namespace InstrumentStore.Domain.Services
 			User user = await GetById(_jwtProvider.GetUserIdFromToken(cookiesToken));
 
 			user.UserRegistrInfo.RefreshToken = _jwtProvider.GenerateRefreshToken(user);
+			await _dbContext.SaveChangesAsync();
 
 			return _jwtProvider.GenerateAccessToken(user);
 		}

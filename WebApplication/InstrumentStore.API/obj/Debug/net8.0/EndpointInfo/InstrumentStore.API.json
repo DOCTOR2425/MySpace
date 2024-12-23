@@ -107,6 +107,38 @@
         }
       }
     },
+    "/api/Admin/FillOneProduct": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Brand": {
       "get": {
         "tags": [
@@ -1057,11 +1089,6 @@
         "additionalProperties": false
       },
       "Product": {
-        "required": [
-          "brand",
-          "country",
-          "productType"
-        ],
         "type": "object",
         "properties": {
           "productId": {

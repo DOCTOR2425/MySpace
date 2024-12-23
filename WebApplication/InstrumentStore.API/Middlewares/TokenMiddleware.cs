@@ -1,70 +1,66 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using InstrumentStore.Domain.Abstractions;
-using InstrumentStore.Domain.DataBase.Models;
 using InstrumentStore.Domain.Services;
 
 namespace InstrumentStore.API.Middlewares
 {
-	public class TokenMiddleware
-	{
-		private readonly RequestDelegate _next;
-		private readonly IServiceScopeFactory _scopeFactory;
+    public class TokenMiddleware
+    {
+        private readonly RequestDelegate _next;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-		public TokenMiddleware(RequestDelegate next, IServiceScopeFactory scopeFactory)
-		{
-			_next = next;
-			_scopeFactory = scopeFactory;
-		}
+        public TokenMiddleware(RequestDelegate next, IServiceScopeFactory scopeFactory)
+        {
+            _next = next;
+            _scopeFactory = scopeFactory;
+        }
 
-		public async Task InvokeAsync(HttpContext context)
-		{
-			using (var scope = _scopeFactory.CreateScope())
-			{
-				var usersService = scope.ServiceProvider.GetRequiredService<IUsersService>();
-				var jwtProvider = scope.ServiceProvider.GetRequiredService<IJwtProvider>();
+        public async Task InvokeAsync(HttpContext context)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var usersService = scope.ServiceProvider.GetRequiredService<IUsersService>();
 
-				try
-				{
-					var token = new JwtSecurityTokenHandler().ReadToken(
-						context.Request.Cookies[JwtProvider.AccessCookiesName]) as JwtSecurityToken;
+                if (context.Request.Headers.ContainsKey("Authorization"))
+                {
+                    string cookieToken = context.Request.Headers["Authorization"]
+                        .ToString().Substring("Bearer ".Length).Trim();
 
-					if (context.Request.Path != "/login" &&
-						context.Request.Path != "/register" &&
-						token.ValidTo < DateTime.UtcNow)
-					{
-						Console.WriteLine(false);
+                    var token = new JwtSecurityTokenHandler().ReadToken(cookieToken) as JwtSecurityToken;
 
-						var refreshToken = await usersService.GetRefreshToken(
-							context.Request.Cookies[JwtProvider.AccessCookiesName]);
+                    if (context.Request.Path != "/login" &&
+                        context.Request.Path != "/register" &&
+                        token.ValidTo < DateTime.UtcNow)
+                    {
+                        Console.WriteLine(false);
 
-						if (refreshToken.ValidTo > DateTime.UtcNow)
-						{
-							context.Response.Cookies.Append(JwtProvider.AccessCookiesName,
-								await usersService.ReLogin(
-									context.Request.Cookies[JwtProvider.AccessCookiesName]),
-								new CookieOptions()
-								{
-									HttpOnly = true,
-									Secure = true,
-									SameSite = SameSiteMode.Lax,
-									Expires = DateTime.Now.AddDays(JwtProvider.RefreshTokenLifeDays)
-								});
-						}
-					}
-					else
-					{
-						Console.WriteLine(true);
-					}
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine(ex.Message);
-				}
-				finally
-				{
-					await _next(context);
-				}
-			}
-		}
-	}
+                        var oldRefreshToken = await usersService.GetRefreshToken(cookieToken);
+
+                        if (oldRefreshToken.ValidTo > DateTime.UtcNow)
+                        {
+                            var newAccessToken = await usersService.ReLogin(cookieToken);
+                            context.Response.Cookies.Append(JwtProvider.AccessCookiesName,
+                                newAccessToken,
+                                new CookieOptions()
+                                {
+                                    Secure = true,
+                                    SameSite = SameSiteMode.Lax,
+                                    Expires = DateTime.Now.AddDays(JwtProvider.RefreshTokenLifeDays)
+                                });
+
+                            context.Request.Headers["Authorization"] = "Bearer " + newAccessToken;
+
+                            await _next(context);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine(true);
+                        await _next(context);
+                    }
+                }
+            }
+        }
+    }
 }

@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LoginModel } from '../../data/interfaces/loginModel.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +13,6 @@ export class AuthService {
     eMail: string,
     password: string;
   }) {
-    this.http.post<LoginModel>('https://localhost:7295/login', payload, { withCredentials: true }).subscribe()
+    this.http.post('https://localhost:7295/login', payload, { withCredentials: true }).subscribe()
   }
 }

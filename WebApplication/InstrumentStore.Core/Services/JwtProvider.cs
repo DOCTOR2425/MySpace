@@ -20,7 +20,7 @@ namespace InstrumentStore.Domain.Services
             Claim[] claims = [new("userId", user.UserId.ToString())];
 
             var signingCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtKey)), 
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtKey)),
                     SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
