@@ -133,9 +133,7 @@ namespace InstrumentStore.Domain.Services
 
         private async Task<Guid> ChangeItemQuantity(Guid cartItemId, int quantity)
         {
-            (await _dbContext.CartItem.FirstOrDefaultAsync(c =>
-                c.CartItemId == cartItemId))
-                .Quantity = quantity;
+            (await _dbContext.CartItem.FindAsync(cartItemId)).Quantity = quantity;
 
             await _dbContext.SaveChangesAsync();
 

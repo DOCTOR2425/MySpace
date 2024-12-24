@@ -1,12 +1,16 @@
-<div class="card" style="width: 100%; height: 100%">
-  <img [src]="product.image" [alt]="product.image" class="card-img-top" />
+<div class="card" style="width: 240px; height: auto; cursor: pointer">
+  <img
+    [src]="product.image"
+    [alt]="product.image"
+    class="card-img-top"
+    style="width: 100%; height: auto"
+    (click)="viewProduct(product.productId)"
+  />
   <div class="card-body">
-    <p class="card-text">
-      {{ product.price }}
-    </p>
+    <p class="card-text">{{ product.price }} руб.</p>
     <h5 class="card-title">
       {{ product.name }}
     </h5>
-    <a href="#" class="btn btn-primary">В корзину</a>
+    <a class="btn btn-primary" (click)="addToCart()">В корзину</a>
   </div>
 </div>

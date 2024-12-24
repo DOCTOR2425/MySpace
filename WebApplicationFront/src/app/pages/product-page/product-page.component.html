@@ -14,40 +14,29 @@
     >
   </div>
 
-  <div class="product">
+  <div class="product" *ngIf="product">
     <div class="another-photos">
       <div class="photo">
-        <img
-        src="https://localhost:7295/images/{{product.image}}"
-        />
+        <img [src]="product.image" [alt]="product.image" />
       </div>
       <div class="photo">
-        <img
-        src="https://localhost:7295/images/{{product.image}}"
-        />
+        <img [src]="product.image" [alt]="product.image" />
       </div>
       <div class="photo">
-        <img
-        src="https://localhost:7295/images/{{product.image}}"
-        />
+        <img [src]="product.image" [alt]="product.image" />
       </div>
       <div class="photo">
-        <img
-        src="https://localhost:7295/images/{{product.image}}"
-        />
+        <img [src]="product.image" [alt]="product.image" />
       </div>
     </div>
     <div class="big-photo">
-      <img
-        src="https://localhost:7295/images/{{product.image}}"
-      />
+      <img [src]="product.image" [alt]="product.image" />
     </div>
     <div class="card-body">
       <h1 class="card-title">
-        {{product.name}}
+        {{ product.name }}
       </h1>
-      <p class="card-text">{{product.price}}p</p>
-      <p class="card-text">...</p>
+      <p class="card-text">{{ product.price }} руб.</p>
       <a href="#" class="btn btn-primary">В корзину</a>
     </div>
   </div>

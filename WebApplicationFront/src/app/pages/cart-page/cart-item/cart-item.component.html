@@ -1,0 +1,23 @@
+<div class="cart-item" [attr.data-id]="item.cartItemId">
+  <img
+    [src]="item.product.image"
+    [alt]="item.product.image"
+    class="img-top"
+    style="width: 100%; height: auto"
+  />
+  <div class="cart-info">
+    <p>
+      {{ item.product.price }}
+    </p>
+    <h5>
+      {{ item.product.name }}
+    </h5>
+    <div>
+      <button id="decBtn{{ item.cartItemId }}" (click)="changeQuantity(false, item.cartItemId)" [disabled]="item.quantity === 0" [style.backgroundColor]="item.quantity === 0 ? 'grey' : ''">-</button>
+      <p id="counter{{ item.cartItemId }}">{{ item.quantity }}</p>
+      <button id="incBtn{{ item.cartItemId }}" (click)="changeQuantity(true, item.cartItemId)">+</button>
+      <button id="removeBtn{{ item.cartItemId }}" (click)="removeCartItem(item.cartItemId)">Удалить</button>
+    </div>
+    <p>{{ item.product.price * item.quantity }} руб.</p>
+  </div>
+</div>

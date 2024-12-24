@@ -83,12 +83,12 @@ namespace InstrumentStore.API
             app.UseHttpsRedirection();
             app.UseRouting();
 
+            app.UseStaticFiles();
             app.UseMiddleware<TokenMiddleware>();
 
             app.UseAuthorization();
 
             app.MapControllers();
-            app.UseStaticFiles();
 
             app.Run();
         }

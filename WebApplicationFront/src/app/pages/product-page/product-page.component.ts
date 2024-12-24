@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Product } from '../../data/interfaces/product.interface';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../service/product.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-product',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './product-page.component.html',
   styleUrl: './product-page.component.scss',
 })

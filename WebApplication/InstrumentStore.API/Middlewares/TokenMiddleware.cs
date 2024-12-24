@@ -1,5 +1,4 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using InstrumentStore.Domain.Abstractions;
 using InstrumentStore.Domain.Services;
 
@@ -18,49 +17,48 @@ namespace InstrumentStore.API.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            using (var scope = _scopeFactory.CreateScope())
+            var scope = _scopeFactory.CreateScope();
+            var usersService = scope.ServiceProvider.GetRequiredService<IUsersService>();
+
+            if (context.Request.Path != "/login" && context.Request.Path != "/register" &&
+                context.Request.Headers.ContainsKey("Authorization"))
             {
-                var usersService = scope.ServiceProvider.GetRequiredService<IUsersService>();
+                string cookieToken = context.Request.Headers["Authorization"]
+                    .ToString().Substring("Bearer ".Length).Trim();
 
-                if (context.Request.Headers.ContainsKey("Authorization"))
+                var token = new JwtSecurityTokenHandler().ReadToken(cookieToken) as JwtSecurityToken;
+
+                if (token.ValidTo < DateTime.UtcNow)
                 {
-                    string cookieToken = context.Request.Headers["Authorization"]
-                        .ToString().Substring("Bearer ".Length).Trim();
+                    Console.WriteLine(false);
 
-                    var token = new JwtSecurityTokenHandler().ReadToken(cookieToken) as JwtSecurityToken;
+                    var oldRefreshToken = await usersService.GetRefreshToken(cookieToken);
 
-                    if (context.Request.Path != "/login" &&
-                        context.Request.Path != "/register" &&
-                        token.ValidTo < DateTime.UtcNow)
+                    if (oldRefreshToken.ValidTo > DateTime.UtcNow)
                     {
-                        Console.WriteLine(false);
+                        var newAccessToken = await usersService.ReLogin(cookieToken);
+                        context.Response.Cookies.Append(JwtProvider.AccessCookiesName,
+                            newAccessToken,
+                            new CookieOptions()
+                            {
+                                Secure = true,
+                                SameSite = SameSiteMode.Lax,
+                                Expires = DateTime.Now.AddDays(JwtProvider.RefreshTokenLifeDays)
+                            });
 
-                        var oldRefreshToken = await usersService.GetRefreshToken(cookieToken);
+                        context.Request.Headers["Authorization"] = "Bearer " + newAccessToken;
 
-                        if (oldRefreshToken.ValidTo > DateTime.UtcNow)
-                        {
-                            var newAccessToken = await usersService.ReLogin(cookieToken);
-                            context.Response.Cookies.Append(JwtProvider.AccessCookiesName,
-                                newAccessToken,
-                                new CookieOptions()
-                                {
-                                    Secure = true,
-                                    SameSite = SameSiteMode.Lax,
-                                    Expires = DateTime.Now.AddDays(JwtProvider.RefreshTokenLifeDays)
-                                });
-
-                            context.Request.Headers["Authorization"] = "Bearer " + newAccessToken;
-
-                            await _next(context);
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine(true);
                         await _next(context);
                     }
                 }
+                else
+                {
+                    Console.WriteLine(true);
+                    await _next(context);
+                }
             }
+            else
+                await _next(context);
         }
     }
 }

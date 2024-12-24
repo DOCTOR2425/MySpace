@@ -1,1 +1,11 @@
-<p (click)="view()">cart-page works!</p>
+<div class="cart-catalog">
+  <app-cart-item
+    *ngFor="let item of items"
+    [item]="item"
+  ></app-cart-item>
+</div>
+
+<div class="total">
+  <h2>Итого: 1000 р уб.</h2>
+  <button class="checkout">Оформить заказ</button>
+</div>
