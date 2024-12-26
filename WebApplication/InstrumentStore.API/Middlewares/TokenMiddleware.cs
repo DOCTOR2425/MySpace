@@ -47,18 +47,10 @@ namespace InstrumentStore.API.Middlewares
                             });
 
                         context.Request.Headers["Authorization"] = "Bearer " + newAccessToken;
-
-                        await _next(context);
                     }
                 }
-                else
-                {
-                    Console.WriteLine(true);
-                    await _next(context);
-                }
             }
-            else
-                await _next(context);
+            await _next(context);
         }
     }
 }

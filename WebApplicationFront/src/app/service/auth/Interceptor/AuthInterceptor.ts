@@ -10,7 +10,7 @@ export const authInterceptor: HttpInterceptorFn = (
   req: HttpRequest<any>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<any>> => {
-  const token = getCookie('token-cookies'); // Получаем токен из куки
+  const token = getCookie('token-cookies');
 
   if (token) {
     const cloned = req.clone({

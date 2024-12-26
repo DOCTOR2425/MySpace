@@ -23,7 +23,7 @@ export class ProductCardComponent {
       productId: this.product.productId,
       quantity: 1,
     };
-    this.cartService.addToCart(addToCartRequest);
+    this.cartService.cahngeCart(addToCartRequest);
 
     const button = document.querySelector('.btn') as HTMLButtonElement;
     button.style.backgroundColor = 'gray';

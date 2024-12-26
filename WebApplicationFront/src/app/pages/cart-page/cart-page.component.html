@@ -1,11 +1,99 @@
-<div class="cart-catalog">
-  <app-cart-item
-    *ngFor="let item of items"
-    [item]="item"
-  ></app-cart-item>
-</div>
+<div class="cart">
+  <div class="cart-catalog">
+    <app-cart-item
+      *ngFor="let item of items"
+      [item]="item"
+      [cartPage]="this"
+    ></app-cart-item>
 
-<div class="total">
-  <h2>Итого: 1000 р уб.</h2>
-  <button class="checkout">Оформить заказ</button>
+    <div class="total">
+      <h2>Итого: {{ totalPrice }} руб.</h2>
+      <button class="checkout">Оформить заказ</button>
+    </div>
+  </div>
+
+  <div class="registration-form">
+    <form
+      #registrationForm="ngForm"
+      (ngSubmit)="onSubmit(registrationForm.value)"
+    >
+      <div class="line">
+        <div class="form-group">
+          <label for="name">Имя:</label>
+          <input type="text" id="name" name="name" ngModel required />
+        </div>
+        <div class="form-group">
+          <label for="phone">Телефон:</label>
+          <input type="tel" id="phone" name="phone" ngModel required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" ngModel required />
+        </div>
+      </div>
+      <div class="line">
+        <div class="form-group">
+          <label for="city">Город:</label>
+          <input type="text" id="city" name="city" ngModel required />
+        </div>
+        <div class="form-group">
+          <label for="street">Улица:</label>
+          <input type="text" id="street" name="street" ngModel required />
+        </div>
+        <div class="form-group">
+          <label for="houseNumber">Номер дома:</label>
+          <input
+            type="text"
+            id="houseNumber"
+            name="houseNumber"
+            ngModel
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="apartment">Квартира:</label>
+          <input type="text" id="apartment" name="apartment" ngModel />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Способ доставки:</label>
+        <div class="options">
+          <div
+            class="option"
+            [class.selected]="selectedDeliveryMethod === 'courier'"
+            (click)="selectDelivery('courier')"
+          >
+            Курьером
+          </div>
+          <div
+            class="option"
+            [class.selected]="selectedDeliveryMethod === 'pickup'"
+            (click)="selectDelivery('pickup')"
+          >
+            Самовывоз
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Способ оплаты:</label>
+        <div class="options">
+          <div
+            class="option"
+            [class.selected]="selectedPaymentMethod === 'erip'"
+            (click)="selectPayment('erip')"
+          >
+            ЕРИП перевод
+          </div>
+          <div
+            class="option"
+            [class.selected]="selectedPaymentMethod === 'cash'"
+            (click)="selectPayment('cash')"
+          >
+            Наличными при получении
+          </div>
+        </div>
+      </div>
+      <button type="submit">Зарегистрироваться</button>
+    </form>
+  </div>
 </div>

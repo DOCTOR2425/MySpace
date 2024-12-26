@@ -13,16 +13,22 @@ namespace InstrumentStore.API.Controllers
     public class CartController : ControllerBase
     {
         private ICartService _cartService;
+        private IDeliveryMethodService _deliveryMethodService;
+        private IPaymentMethodService _paymentMethodService;
         private IJwtProvider _jwtProvider;
-		private IMapper _mapper;
+        private IMapper _mapper;
 
-		public CartController(ICartService cartService, 
+        public CartController(ICartService cartService,
             IJwtProvider jwtProvider,
-            IMapper mapper)
+            IMapper mapper,
+            IDeliveryMethodService deliveryMethodService,
+            IPaymentMethodService paymentMethodService)
         {
             _cartService = cartService;
             _jwtProvider = jwtProvider;
             _mapper = mapper;
+            _deliveryMethodService = deliveryMethodService;
+            _paymentMethodService = paymentMethodService;
         }
 
         [Authorize]
@@ -85,6 +91,15 @@ namespace InstrumentStore.API.Controllers
                 orderProductRequest.Quantity,
                 orderProductRequest.DeliveryMethodId,
                 orderProductRequest.PaymentMethodId));
+        }
+
+        [Authorize]
+        [HttpGet("get-order-options")]
+        public async Task<ActionResult<OrderOptionsResponse>> GetOrderOptions()
+        {
+            return Ok(new OrderOptionsResponse(
+                await _deliveryMethodService.GetAll(),
+                await _paymentMethodService.GetAll()));
         }
     }
 }

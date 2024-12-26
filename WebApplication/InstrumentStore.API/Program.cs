@@ -84,9 +84,9 @@ namespace InstrumentStore.API
             app.UseRouting();
 
             app.UseStaticFiles();
-            app.UseMiddleware<TokenMiddleware>();
 
             app.UseAuthorization();
+            app.UseMiddleware<TokenMiddleware>();
 
             app.MapControllers();
 

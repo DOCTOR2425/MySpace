@@ -420,6 +420,35 @@
         }
       }
     },
+    "/api/Cart/get-order-options": {
+      "get": {
+        "tags": [
+          "Cart"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderOptionsResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderOptionsResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderOptionsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Country": {
       "get": {
         "tags": [
@@ -1038,6 +1067,24 @@
         },
         "additionalProperties": false
       },
+      "DeliveryMethod": {
+        "type": "object",
+        "properties": {
+          "deliveryMethodId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
       "LoginUserRequest": {
         "type": "object",
         "properties": {
@@ -1066,6 +1113,26 @@
         },
         "additionalProperties": false
       },
+      "OrderOptionsResponse": {
+        "type": "object",
+        "properties": {
+          "deliveryMethods": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeliveryMethod"
+            },
+            "nullable": true
+          },
+          "paymentMethods": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PaymentMethod"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "OrderProductRequest": {
         "type": "object",
         "properties": {
@@ -1084,6 +1151,20 @@
           "paymentMethodId": {
             "type": "string",
             "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PaymentMethod": {
+        "type": "object",
+        "properties": {
+          "paymentMethodId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
