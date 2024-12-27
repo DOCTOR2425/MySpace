@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { CartItem } from '../../data/interfaces/cartItem.interface';
 import { Observable } from 'rxjs';
 import { OrderOptions } from '../../data/interfaces/order-options/order-options.interface';
+import { UserOrderInfo } from '../../data/interfaces/user/user-order-info.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -45,5 +46,14 @@ export class CartService {
         withCredentials: true,
       })
       .subscribe();
+  }
+
+  public getUserOrderInfo(): Observable<UserOrderInfo> {
+    return this.http.get<UserOrderInfo>(
+      `${this.baseApiUrl}get-user-order-info`,
+      {
+        withCredentials: true,
+      }
+    );
   }
 }

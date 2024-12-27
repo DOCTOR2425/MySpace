@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using InstrumentStore.Domain.Abstractions;
 using InstrumentStore.Domain.Contracts.Cart;
+using InstrumentStore.Domain.Contracts.User;
 using InstrumentStore.Domain.DataBase.Models;
 using InstrumentStore.Domain.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -15,6 +16,7 @@ namespace InstrumentStore.API.Controllers
         private ICartService _cartService;
         private IDeliveryMethodService _deliveryMethodService;
         private IPaymentMethodService _paymentMethodService;
+        private IUsersService _usersService;
         private IJwtProvider _jwtProvider;
         private IMapper _mapper;
 
@@ -22,31 +24,34 @@ namespace InstrumentStore.API.Controllers
             IJwtProvider jwtProvider,
             IMapper mapper,
             IDeliveryMethodService deliveryMethodService,
-            IPaymentMethodService paymentMethodService)
+            IPaymentMethodService paymentMethodService,
+            IUsersService usersService)
         {
             _cartService = cartService;
-            _jwtProvider = jwtProvider;
-            _mapper = mapper;
             _deliveryMethodService = deliveryMethodService;
             _paymentMethodService = paymentMethodService;
+            _usersService = usersService;
+            _jwtProvider = jwtProvider;
+            _mapper = mapper;
+        }
+
+        private string GetToken()
+        {
+            return HttpContext.Request.Headers["Authorization"]
+                .ToString().Substring("Bearer ".Length).Trim();
         }
 
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<List<CartItemResponse>>> GetUserCart()
         {
-            string token = HttpContext.Request.Headers["Authorization"]
-                .ToString().Substring("Bearer ".Length).Trim();
-
             List<CartItem> cartItems = await _cartService.GetAllCart(
-                _jwtProvider.GetUserIdFromToken(token));
+                _jwtProvider.GetUserIdFromToken(GetToken()));
 
             List<CartItemResponse> result = new List<CartItemResponse>();
 
             foreach (CartItem cartItem in cartItems)
                 result.Add(_mapper.Map<CartItemResponse>(cartItem));
-
-            Console.WriteLine("Cart Items Sent:", result.Count);
 
             return Ok(result);
         }
@@ -56,8 +61,7 @@ namespace InstrumentStore.API.Controllers
         public async Task<ActionResult> AddToUserCart([FromBody] AddToCartRequest request)
         {
             return Ok(await _cartService.AddToCart(
-                _jwtProvider.GetUserIdFromToken(
-                    HttpContext.Request.Cookies[JwtProvider.AccessCookiesName]),
+                _jwtProvider.GetUserIdFromToken(GetToken()),
                 request.ProductId,
                 request.Quantity));
         }
@@ -74,8 +78,7 @@ namespace InstrumentStore.API.Controllers
         public async Task<ActionResult<Guid>> OrderCart([FromBody] OrderCartRequest orderCartRequest)
         {
             return Ok(await _cartService.OrderCart(
-                _jwtProvider.GetUserIdFromToken(
-                    HttpContext.Request.Cookies[JwtProvider.AccessCookiesName]),
+                _jwtProvider.GetUserIdFromToken(GetToken()),
                 orderCartRequest.DeliveryMethodId,
                 orderCartRequest.PaymentMethodId));
         }
@@ -85,8 +88,7 @@ namespace InstrumentStore.API.Controllers
         public async Task<ActionResult<Guid>> OrderProduct([FromBody] OrderProductRequest orderProductRequest)
         {
             return Ok(await _cartService.OrderProduct(
-                _jwtProvider.GetUserIdFromToken(
-                    HttpContext.Request.Cookies[JwtProvider.AccessCookiesName]),
+                _jwtProvider.GetUserIdFromToken(GetToken()),
                 orderProductRequest.ProductId,
                 orderProductRequest.Quantity,
                 orderProductRequest.DeliveryMethodId,
@@ -100,6 +102,16 @@ namespace InstrumentStore.API.Controllers
             return Ok(new OrderOptionsResponse(
                 await _deliveryMethodService.GetAll(),
                 await _paymentMethodService.GetAll()));
+        }
+
+        [Authorize]
+        [HttpGet("get-user-order-info")]
+        public async Task<ActionResult<UserOrderInfo>> GetUserOrderInfo()
+        {
+            User user = await _usersService.GetById(
+                _jwtProvider.GetUserIdFromToken(GetToken()));
+
+            return Ok(_mapper.Map<UserOrderInfo>(user));
         }
     }
 }

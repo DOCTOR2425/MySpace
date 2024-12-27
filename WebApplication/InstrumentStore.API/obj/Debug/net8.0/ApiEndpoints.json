@@ -191,6 +191,26 @@
   },
   {
     "ContainingType": "InstrumentStore.API.Controllers.CartController",
+    "Method": "GetUserOrderInfo",
+    "RelativePath": "api/Cart/get-user-order-info",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "InstrumentStore.Domain.Contracts.User.UserOrderInfo",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "InstrumentStore.API.Controllers.CartController",
     "Method": "OrderCart",
     "RelativePath": "api/Cart/order-cart-for-registered",
     "HttpMethod": "POST",
@@ -492,7 +512,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "InstrumentStore.Domain.Contracts.Users.LoginUserRequest",
+        "Type": "InstrumentStore.Domain.Contracts.User.LoginUserRequest",
         "IsRequired": true
       }
     ],
@@ -508,7 +528,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "InstrumentStore.Domain.Contracts.Users.RegisterUserRequest",
+        "Type": "InstrumentStore.Domain.Contracts.User.RegisterUserRequest",
         "IsRequired": true
       }
     ],

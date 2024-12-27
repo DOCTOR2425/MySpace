@@ -1,5 +1,5 @@
 ﻿using InstrumentStore.Domain.Abstractions;
-using InstrumentStore.Domain.Contracts.Users;
+using InstrumentStore.Domain.Contracts.User;
 using InstrumentStore.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 

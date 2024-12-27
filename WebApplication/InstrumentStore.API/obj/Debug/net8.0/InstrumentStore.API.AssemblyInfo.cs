@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("InstrumentStore.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dac5e6bef9fd96c46a3ced705e4c9afe90e82a27")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3834d63c2bb948487b8a48e521d80f9b829da7ea")]
 [assembly: System.Reflection.AssemblyProductAttribute("InstrumentStore.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("InstrumentStore.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

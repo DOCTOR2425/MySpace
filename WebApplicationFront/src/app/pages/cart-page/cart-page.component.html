@@ -12,54 +12,91 @@
     </div>
   </div>
 
-  <div class="registration-form">
-    <form #orderForm="ngForm" (ngSubmit)="onSubmit(orderForm)">
+  <div class="registration-form modal-body">
+    <form *ngIf="userOrderInfo" #orderForm="ngForm" (ngSubmit)="orderCart(orderForm)">
       <div class="line">
         <div class="form-group">
-          <label for="name">Имя:</label>
-          <input type="text" id="name" name="name" ngModel required />
-        </div>
-        <div class="form-group">
-          <label for="phone">Телефон:</label>
-          <input type="tel" id="phone" name="phone" ngModel required />
-        </div>
-        <div class="form-group">
-          <label for="email">Email:</label>
-          <input type="email" id="email" name="email" ngModel required />
-        </div>
-      </div>
-      <div class="line">
-        <div class="form-group">
-          <label for="city">Город:</label>
-          <input type="text" id="city" name="city" ngModel required />
-        </div>
-        <div class="form-group">
-          <label for="street">Улица:</label>
-          <input type="text" id="street" name="street" ngModel required />
-        </div>
-        <div class="form-group">
-          <label for="houseNumber">Номер дома:</label>
+          <label class="col-form-label" for="name">Имя:</label>
           <input
+            class="form-control"
             type="text"
-            id="houseNumber"
-            name="houseNumber"
-            ngModel
+            id="name"
+            name="name"
+            [(ngModel)]="userOrderInfo.firstName"
             required
           />
         </div>
         <div class="form-group">
-          <label for="apartment">Квартира:</label>
-          <input type="text" id="apartment" name="apartment" ngModel />
+          <label class="col-form-label" for="phone">Телефон:</label>
+          <input
+            class="form-control"
+            type="tel"
+            id="phone"
+            name="phone"
+            [(ngModel)]="userOrderInfo.telephone"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label class="col-form-label" for="email">Email:</label>
+          <input
+            class="form-control"
+            type="email"
+            id="email"
+            name="email"
+            [(ngModel)]="userOrderInfo.eMail"
+            required
+          />
+        </div>
+      </div>
+      <div class="line">
+        <div class="form-group">
+          <label class="col-form-label" for="city">Город:</label>
+          <input
+            class="form-control"
+            type="text"
+            id="city"
+            name="city"
+            [(ngModel)]="userOrderInfo.city"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label class="col-form-label" for="street">Улица:</label>
+          <input
+            class="form-control"
+            type="text"
+            id="street"
+            name="street"
+            [(ngModel)]="userOrderInfo.street"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label class="col-form-label" for="houseNumber">Номер дома:</label>
+          <input
+            class="form-control"
+            type="text"
+            id="houseNumber"
+            name="houseNumber"
+            [(ngModel)]="userOrderInfo.houseNumber"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label class="col-form-label" for="flat">Квартира:</label>
+          <input
+            class="form-control"
+            type="text"
+            id="flat"
+            name="flat"
+            [(ngModel)]="userOrderInfo.flat"
+          />
         </div>
       </div>
       <div class="form-group">
-        <label>Способ доставки:</label>
-        <select
-          *ngIf="orderOptions"
-          ngModel
-          required
-          name="deliveryMethodId"
-        >
+        <label class="col-form-label">Способ доставки:</label>
+        <select *ngIf="orderOptions" ngModel required name="deliveryMethodId">
           <option
             *ngFor="let deliveryMethod of orderOptions.deliveryMethods"
             [value]="deliveryMethod.deliveryMethodId"
@@ -69,13 +106,8 @@
         </select>
       </div>
       <div class="form-group">
-        <label>Способ оплаты:</label>
-        <select
-          *ngIf="orderOptions"
-          ngModel
-          required
-          name="paymentMethodId"
-        >
+        <label class="col-form-label">Способ оплаты:</label>
+        <select *ngIf="orderOptions" ngModel required name="paymentMethodId">
           <option
             *ngFor="let paymentMethod of orderOptions.paymentMethods"
             [value]="paymentMethod.paymentMethodId"
@@ -84,7 +116,9 @@
           </option>
         </select>
       </div>
-      <button type="submit" [disabled]="orderForm.invalid">Зарегистрироваться</button>
+      <button type="submit" [disabled]="orderForm.invalid">
+        Зарегистрироваться
+      </button>
     </form>
   </div>
 </div>

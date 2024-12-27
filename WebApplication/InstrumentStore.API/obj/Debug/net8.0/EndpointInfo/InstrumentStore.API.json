@@ -449,6 +449,35 @@
         }
       }
     },
+    "/api/Cart/get-user-order-info": {
+      "get": {
+        "tags": [
+          "Cart"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserOrderInfo"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserOrderInfo"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserOrderInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Country": {
       "get": {
         "tags": [
@@ -1428,6 +1457,48 @@
           "userAdressId": {
             "type": "string",
             "format": "uuid"
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "street": {
+            "type": "string",
+            "nullable": true
+          },
+          "houseNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "entrance": {
+            "type": "string",
+            "nullable": true
+          },
+          "flat": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserOrderInfo": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "telephone": {
+            "type": "string",
+            "nullable": true
+          },
+          "eMail": {
+            "type": "string",
+            "nullable": true
           },
           "city": {
             "type": "string",

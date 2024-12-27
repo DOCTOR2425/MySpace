@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { CartItemComponent } from './cart-item/cart-item.component';
 import { FormsModule, NgForm } from '@angular/forms';
 import { OrderOptions } from '../../data/interfaces/order-options/order-options.interface';
+import { UserOrderInfo } from '../../data/interfaces/user/user-order-info.interface';
 
 @Component({
   selector: 'app-cart-page',
@@ -16,6 +17,7 @@ export class CartPageComponent implements OnInit {
   items: CartItem[] = [];
   totalPrice: number = 0;
   orderOptions!: OrderOptions;
+  userOrderInfo!: UserOrderInfo;
 
   constructor(private cartService: CartService) {}
 
@@ -31,6 +33,13 @@ export class CartPageComponent implements OnInit {
     this.cartService.getOrderOptions().subscribe({
       next: (orderOptions) => {
         this.orderOptions = orderOptions;
+      },
+      error: (error) => console.log(error),
+    });
+
+    this.cartService.getUserOrderInfo().subscribe({
+      next: (userOrderInfo) => {
+        this.userOrderInfo = userOrderInfo;
       },
       error: (error) => console.log(error),
     });
@@ -70,12 +79,14 @@ export class CartPageComponent implements OnInit {
     this.updateTotalPrice();
   }
 
-  public onSubmit(form: NgForm): void {
+  public orderCart(form: NgForm): void {
     let payload = {
       deliveryMethodId: form.value.deliveryMethodId,
       paymentMethodId: form.value.paymentMethodId,
     };
     this.cartService.orderCartForRegistered(payload);
-    console.log(form.value);
+    
+    this.items = [];
+    this.updateTotalPrice();
   }
 }
