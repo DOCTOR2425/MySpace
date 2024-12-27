@@ -70,7 +70,7 @@ namespace InstrumentStore.API.Controllers
         }
 
         [Authorize]
-        [HttpPost("order-cart")]
+        [HttpPost("order-cart-for-registered")]
         public async Task<ActionResult<Guid>> OrderCart([FromBody] OrderCartRequest orderCartRequest)
         {
             return Ok(await _cartService.OrderCart(

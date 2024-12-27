@@ -3,7 +3,8 @@ import { CartService } from '../../service/cart/cart.service';
 import { CartItem } from '../../data/interfaces/cartItem.interface';
 import { CommonModule } from '@angular/common';
 import { CartItemComponent } from './cart-item/cart-item.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
+import { OrderOptions } from '../../data/interfaces/order-options/order-options.interface';
 
 @Component({
   selector: 'app-cart-page',
@@ -14,8 +15,7 @@ import { FormsModule } from '@angular/forms';
 export class CartPageComponent implements OnInit {
   items: CartItem[] = [];
   totalPrice: number = 0;
-  selectedDeliveryMethod: string = '';
-  selectedPaymentMethod: string = '';
+  orderOptions!: OrderOptions;
 
   constructor(private cartService: CartService) {}
 
@@ -24,6 +24,13 @@ export class CartPageComponent implements OnInit {
       next: (cartItems) => {
         this.items = cartItems;
         this.updateTotalPrice();
+      },
+      error: (error) => console.log(error),
+    });
+
+    this.cartService.getOrderOptions().subscribe({
+      next: (orderOptions) => {
+        this.orderOptions = orderOptions;
       },
       error: (error) => console.log(error),
     });
@@ -63,16 +70,12 @@ export class CartPageComponent implements OnInit {
     this.updateTotalPrice();
   }
 
-  public selectDelivery(method: string): void {
-    this.selectedDeliveryMethod = method;
-  }
-
-  public selectPayment(method: string): void {
-    this.selectedPaymentMethod = method;
-  }
-
-  public onSubmit(form: any): void {
-    console.log('Form Data:', form);
-    alert('Форма отправлена!');
+  public onSubmit(form: NgForm): void {
+    let payload = {
+      deliveryMethodId: form.value.deliveryMethodId,
+      paymentMethodId: form.value.paymentMethodId,
+    };
+    this.cartService.orderCartForRegistered(payload);
+    console.log(form.value);
   }
 }

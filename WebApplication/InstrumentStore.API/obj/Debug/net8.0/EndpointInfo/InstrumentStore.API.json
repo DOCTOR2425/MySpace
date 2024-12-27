@@ -318,7 +318,7 @@
         }
       }
     },
-    "/api/Cart/order-cart": {
+    "/api/Cart/order-cart-for-registered": {
       "post": {
         "tags": [
           "Cart"

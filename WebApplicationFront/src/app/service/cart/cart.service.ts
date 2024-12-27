@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CartItem } from '../../data/interfaces/cartItem.interface';
-import { firstValueFrom, Observable } from 'rxjs';
-import { OrderOptions } from '../../data/interfaces/orderOptions.interface';
+import { Observable } from 'rxjs';
+import { OrderOptions } from '../../data/interfaces/order-options/order-options.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +24,7 @@ export class CartService {
     });
   }
 
-  public async cahngeCart(payload: { productId: string; quantity: number }) {
+  public cahngeCart(payload: { productId: string; quantity: number }): void {
     this.http
       .post(`${this.baseApiUrl}add-to-cart`, payload, {
         withCredentials: true,
@@ -32,16 +32,16 @@ export class CartService {
       .subscribe();
   }
 
-  public async removeFromCart(cartItemId: string) {
+  public removeFromCart(cartItemId: string): void {
     this.http.delete(this.baseApiUrl + cartItemId).subscribe();
   }
 
-  public async orderCart(payload: {
+  public orderCartForRegistered(payload: {
     deliveryMethodId: string;
     paymentMethodId: string;
-  }) {
+  }): void {
     this.http
-      .post(`${this.baseApiUrl}order-cart`, payload, {
+      .post(`${this.baseApiUrl}order-cart-for-registered`, payload, {
         withCredentials: true,
       })
       .subscribe();

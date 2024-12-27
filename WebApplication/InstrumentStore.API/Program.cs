@@ -78,15 +78,14 @@ namespace InstrumentStore.API
                     .AllowCredentials();
             });
 
-            app.UseAuthentication();
-
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
             app.UseRouting();
 
-            app.UseStaticFiles();
-
-            app.UseAuthorization();
             app.UseMiddleware<TokenMiddleware>();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllers();
 

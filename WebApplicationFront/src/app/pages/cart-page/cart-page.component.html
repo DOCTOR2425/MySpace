@@ -13,10 +13,7 @@
   </div>
 
   <div class="registration-form">
-    <form
-      #registrationForm="ngForm"
-      (ngSubmit)="onSubmit(registrationForm.value)"
-    >
+    <form #orderForm="ngForm" (ngSubmit)="onSubmit(orderForm)">
       <div class="line">
         <div class="form-group">
           <label for="name">Имя:</label>
@@ -57,43 +54,37 @@
       </div>
       <div class="form-group">
         <label>Способ доставки:</label>
-        <div class="options">
-          <div
-            class="option"
-            [class.selected]="selectedDeliveryMethod === 'courier'"
-            (click)="selectDelivery('courier')"
+        <select
+          *ngIf="orderOptions"
+          ngModel
+          required
+          name="deliveryMethodId"
+        >
+          <option
+            *ngFor="let deliveryMethod of orderOptions.deliveryMethods"
+            [value]="deliveryMethod.deliveryMethodId"
           >
-            Курьером
-          </div>
-          <div
-            class="option"
-            [class.selected]="selectedDeliveryMethod === 'pickup'"
-            (click)="selectDelivery('pickup')"
-          >
-            Самовывоз
-          </div>
-        </div>
+            {{ deliveryMethod.name }} ({{ deliveryMethod.price }} руб.)
+          </option>
+        </select>
       </div>
       <div class="form-group">
         <label>Способ оплаты:</label>
-        <div class="options">
-          <div
-            class="option"
-            [class.selected]="selectedPaymentMethod === 'erip'"
-            (click)="selectPayment('erip')"
+        <select
+          *ngIf="orderOptions"
+          ngModel
+          required
+          name="paymentMethodId"
+        >
+          <option
+            *ngFor="let paymentMethod of orderOptions.paymentMethods"
+            [value]="paymentMethod.paymentMethodId"
           >
-            ЕРИП перевод
-          </div>
-          <div
-            class="option"
-            [class.selected]="selectedPaymentMethod === 'cash'"
-            (click)="selectPayment('cash')"
-          >
-            Наличными при получении
-          </div>
-        </div>
+            {{ paymentMethod.name }}
+          </option>
+        </select>
       </div>
-      <button type="submit">Зарегистрироваться</button>
+      <button type="submit" [disabled]="orderForm.invalid">Зарегистрироваться</button>
     </form>
   </div>
 </div>
