@@ -8,15 +8,15 @@ namespace InstrumentStore.Domain.Services
 {
     public class AdminService : IAdminService
     {
-        private InstrumentStoreDBContext _dbContext;
-        private IUsersService _usersService;
-        private IProductService _productService;
-        private IPaidOrderService _paidOrderService;
-        private IDeliveryMethodService _deliveryMethodService;
-        private IPaymentMethodService _paymentMethodService;
-        private IEmailService _emailService;
-        private IMapper _mapper;
-        private IConfiguration _config;
+        private readonly InstrumentStoreDBContext _dbContext;
+        private readonly IUsersService _usersService;
+        private readonly IProductService _productService;
+        private readonly IPaidOrderService _paidOrderService;
+        private readonly IDeliveryMethodService _deliveryMethodService;
+        private readonly IPaymentMethodService _paymentMethodService;
+        private readonly IEmailService _emailService;
+        private readonly IMapper _mapper;
+        private readonly IConfiguration _config;
 
         public AdminService(InstrumentStoreDBContext dbContext,
             IUsersService usersService,

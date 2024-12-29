@@ -13,12 +13,12 @@ namespace InstrumentStore.API.Controllers
     [ApiController]
     public class CartController : ControllerBase
     {
-        private ICartService _cartService;
-        private IDeliveryMethodService _deliveryMethodService;
-        private IPaymentMethodService _paymentMethodService;
-        private IUsersService _usersService;
-        private IJwtProvider _jwtProvider;
-        private IMapper _mapper;
+        private readonly ICartService _cartService;
+        private readonly IDeliveryMethodService _deliveryMethodService;
+        private readonly IPaymentMethodService _paymentMethodService;
+        private readonly IUsersService _usersService;
+        private readonly IJwtProvider _jwtProvider;
+        private readonly IMapper _mapper;
 
         public CartController(ICartService cartService,
             IJwtProvider jwtProvider,

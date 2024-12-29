@@ -6,7 +6,7 @@ namespace InstrumentStore.Domain.DataBase
 {
     public class InstrumentStoreDBContext : DbContext
     {
-		private IConfiguration _config;
+		private readonly IConfiguration _config;
 
 		public InstrumentStoreDBContext(IConfiguration config)
 		{

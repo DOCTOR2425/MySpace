@@ -7,10 +7,10 @@ namespace InstrumentStore.Domain.Services
 {
     public class PaidOrderService : IPaidOrderService
     {
-        private InstrumentStoreDBContext _dbContext;
-        private IUsersService _usersService;
-        private IDeliveryMethodService _deliveryMethodService;
-        private IPaymentMethodService _paymentMethodService;
+        private readonly InstrumentStoreDBContext _dbContext;
+        private readonly IUsersService _usersService;
+        private readonly IDeliveryMethodService _deliveryMethodService;
+        private readonly IPaymentMethodService _paymentMethodService;
 
         public PaidOrderService(InstrumentStoreDBContext dbContext,
             IUsersService usersService,

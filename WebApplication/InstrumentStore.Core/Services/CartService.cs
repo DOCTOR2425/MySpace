@@ -7,11 +7,11 @@ namespace InstrumentStore.Domain.Services
 {
     public class CartService : ICartService
     {
-        private InstrumentStoreDBContext _dbContext;
-        private IUsersService _usersService;
-        private IProductService _productService;
-        private IPaidOrderService _paidOrderService;
-        private IAdminService _adminService;
+        private readonly InstrumentStoreDBContext _dbContext;
+        private readonly IUsersService _usersService;
+        private readonly IProductService _productService;
+        private readonly IPaidOrderService _paidOrderService;
+        private readonly IAdminService _adminService;
 
         public CartService(InstrumentStoreDBContext dbContext,
             IUsersService usersService,
