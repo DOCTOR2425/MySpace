@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProductCard } from '../data/interfaces/productCard.interface';
 import { Product } from '../data/interfaces/product.interface';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,7 @@ import { Product } from '../data/interfaces/product.interface';
 export class ProductService {
   constructor(private http: HttpClient) {}
 
-  baseApiUrl = 'https://localhost:7295/api/Product/';
+  baseApiUrl = environment.apiUrl + '/api/Product/';
 
   public getProductCards(): Observable<ProductCard[]> {
     return this.http.get<ProductCard[]>(`${this.baseApiUrl}`);

@@ -4,6 +4,7 @@ using InstrumentStore.Domain.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InstrumentStore.Domain.Migrations
 {
     [DbContext(typeof(InstrumentStoreDBContext))]
-    partial class InstrumentStoreDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241230111454_productProperty")]
+    partial class productProperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -233,7 +236,7 @@ namespace InstrumentStore.Domain.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("ProductCategoryId")
+                    b.Property<Guid>("ProductTypeProductCategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantity")
@@ -245,7 +248,7 @@ namespace InstrumentStore.Domain.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.HasIndex("ProductCategoryId");
+                    b.HasIndex("ProductTypeProductCategoryId");
 
                     b.ToTable("ProductArchive");
                 });
@@ -507,9 +510,9 @@ namespace InstrumentStore.Domain.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("InstrumentStore.Domain.DataBase.Models.ProductCategory", "ProductCategory")
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.ProductCategory", "ProductType")
                         .WithMany()
-                        .HasForeignKey("ProductCategoryId")
+                        .HasForeignKey("ProductTypeProductCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -517,7 +520,7 @@ namespace InstrumentStore.Domain.Migrations
 
                     b.Navigation("Country");
 
-                    b.Navigation("ProductCategory");
+                    b.Navigation("ProductType");
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.ProductProperty", b =>

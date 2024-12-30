@@ -11,6 +11,6 @@
     <h5 class="card-title">
       {{ product.name }}
     </h5>
-    <a class="btn btn-primary" (click)="addToCart()">В корзину</a>
+    <a [id]="product.productId" class="btn btn-primary" (click)="addToCart()">В корзину</a>
   </div>
 </div>

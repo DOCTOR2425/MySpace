@@ -33,7 +33,7 @@ namespace InstrumentStore.Domain.Services
                 .Include(c => c.Product)
                 .Include(c => c.Product.Brand)
                 .Include(c => c.Product.Country)
-                .Include(c => c.Product.ProductType)
+                .Include(c => c.Product.ProductCategory)
                 .Where(c => c.User.UserId == userId)
                 .AsNoTracking()
                 .ToListAsync();

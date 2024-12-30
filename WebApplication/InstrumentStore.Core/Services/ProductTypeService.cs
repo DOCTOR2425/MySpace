@@ -14,28 +14,28 @@ namespace InstrumentStore.Domain.Services
             _dbContext = dbContext;
         }
 
-        public async Task<List<ProductType>> GetAll()
+        public async Task<List<ProductCategory>> GetAll()
         {
-            return await _dbContext.ProductType.AsNoTracking().ToListAsync();
+            return await _dbContext.ProductCategory.AsNoTracking().ToListAsync();
         }
 
-        public async Task<ProductType> GetById(Guid id)
+        public async Task<ProductCategory> GetById(Guid id)
         {
-            return await _dbContext.ProductType.FirstOrDefaultAsync(x => x.ProductTypeId == id);
+            return await _dbContext.ProductCategory.FirstOrDefaultAsync(x => x.ProductCategoryId == id);
         }
 
-        public async Task<Guid> Create(ProductType brand)
+        public async Task<Guid> Create(ProductCategory brand)
         {
-            await _dbContext.ProductType.AddAsync(brand);
+            await _dbContext.ProductCategory.AddAsync(brand);
             await _dbContext.SaveChangesAsync();
 
-            return brand.ProductTypeId;
+            return brand.ProductCategoryId;
         }
 
-        public async Task<Guid> Update(Guid oldId, ProductType newProductType)
+        public async Task<Guid> Update(Guid oldId, ProductCategory newProductType)
         {
-            await _dbContext.ProductType
-                .Where(p => p.ProductTypeId == oldId)
+            await _dbContext.ProductCategory
+                .Where(p => p.ProductCategoryId == oldId)
                 .ExecuteUpdateAsync(x => x
                     .SetProperty(p => p.Name, newProductType.Name));
 
@@ -46,8 +46,8 @@ namespace InstrumentStore.Domain.Services
 
         public async Task<Guid> Delete(Guid id)
         {
-            await _dbContext.ProductType
-                .Where(p => p.ProductTypeId == id)
+            await _dbContext.ProductCategory
+                .Where(p => p.ProductCategoryId == id)
                 .ExecuteDeleteAsync();
 
             return id;

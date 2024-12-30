@@ -10,6 +10,7 @@
 
         string City,
         string Street,
+        string HouseNumber,
         string Entrance,
         string Flat);
 }

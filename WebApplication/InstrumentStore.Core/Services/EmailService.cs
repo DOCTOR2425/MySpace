@@ -16,7 +16,7 @@ namespace InstrumentStore.Domain.Services
 
         public void SendMail(string to, string text, string subject = "")
         {
-            MailAddress mailFrom = new MailAddress(_config.GetValue<string>("MySpaceMail"), "MySpaceBy");
+            MailAddress mailFrom = new MailAddress(_config["AdminMail:MySpaceMail"], "MySpaceBy");
             MailAddress mailTo = new MailAddress(to);
             MailMessage message = new MailMessage(mailFrom, mailTo);
             message.Body = text;

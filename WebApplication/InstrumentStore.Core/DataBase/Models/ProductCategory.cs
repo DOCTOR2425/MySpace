@@ -1,8 +1,8 @@
 ﻿namespace InstrumentStore.Domain.DataBase.Models
 {
-    public class ProductType
+    public class ProductCategory
     {
-        public Guid ProductTypeId { get; set; }
+        public Guid ProductCategoryId { get; set; }
         public string Name { get; set; } = string.Empty;
     }
 }

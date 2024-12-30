@@ -25,7 +25,7 @@ export class ProductCardComponent {
     };
     this.cartService.cahngeCart(addToCartRequest);
 
-    const button = document.querySelector('.btn') as HTMLButtonElement;
+    const button = document.getElementById(this.product.productId) as HTMLButtonElement;
     button.style.backgroundColor = 'gray';
   }
 }

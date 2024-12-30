@@ -844,7 +844,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ProductType"
+                    "$ref": "#/components/schemas/ProductCategory"
                   }
                 }
               },
@@ -852,7 +852,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ProductType"
+                    "$ref": "#/components/schemas/ProductCategory"
                   }
                 }
               },
@@ -860,7 +860,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ProductType"
+                    "$ref": "#/components/schemas/ProductCategory"
                   }
                 }
               }
@@ -1199,6 +1199,11 @@
         "additionalProperties": false
       },
       "Product": {
+        "required": [
+          "brand",
+          "country",
+          "productCategory"
+        ],
         "type": "object",
         "properties": {
           "productId": {
@@ -1225,8 +1230,8 @@
             "type": "string",
             "nullable": true
           },
-          "productType": {
-            "$ref": "#/components/schemas/ProductType"
+          "productCategory": {
+            "$ref": "#/components/schemas/ProductCategory"
           },
           "brand": {
             "$ref": "#/components/schemas/Brand"
@@ -1269,6 +1274,20 @@
             "nullable": true
           },
           "country": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProductCategory": {
+        "type": "object",
+        "properties": {
+          "productCategoryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
             "type": "string",
             "nullable": true
           }
@@ -1349,20 +1368,6 @@
             "nullable": true
           },
           "country": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "ProductType": {
-        "type": "object",
-        "properties": {
-          "productTypeId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
             "type": "string",
             "nullable": true
           }

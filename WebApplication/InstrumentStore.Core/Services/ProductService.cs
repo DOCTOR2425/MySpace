@@ -28,7 +28,7 @@ namespace InstrumentStore.Domain.Service
         public async Task<List<Product>> GetAll()
         {
             return await _dbContext.Product
-                .Include(p => p.ProductType)
+                .Include(p => p.ProductCategory)
                 .Include(p => p.Brand)
                 .Include(p => p.Country)
                 .AsNoTracking()
@@ -38,7 +38,7 @@ namespace InstrumentStore.Domain.Service
         public async Task<Product> GetById(Guid id)
         {
             return await _dbContext.Product
-                .Include(p => p.ProductType)
+                .Include(p => p.ProductCategory)
                 .Include(p => p.Brand)
                 .Include(p => p.Country)
                 .Where(p => p.ProductId == id)
@@ -64,7 +64,7 @@ namespace InstrumentStore.Domain.Service
                 Quantity = productRequest.Quantity,
                 Image = productRequest.Image,
 
-                ProductType = await _productTypeService.GetById(productRequest.ProductTypeId),
+                ProductCategory = await _productTypeService.GetById(productRequest.ProductTypeId),
                 Brand = await _brandService.GetById(productRequest.BrandId),
                 Country = await _countryService.GetById(productRequest.CountryId)
             };
@@ -80,7 +80,7 @@ namespace InstrumentStore.Domain.Service
             Product product = await _dbContext.Product.FindAsync(oldId);
 
             product.Name = newProduct.Name;
-            product.ProductType = newProduct.ProductType;
+            product.ProductCategory = newProduct.ProductCategory;
             product.Brand = newProduct.Brand;
             product.Country = newProduct.Country;
             product.Description = newProduct.Description;
@@ -102,7 +102,7 @@ namespace InstrumentStore.Domain.Service
             product.Image = newProduct.Image;
             product.Price = newProduct.Price;
             product.Quantity = newProduct.Quantity;
-            product.ProductType = await _productTypeService.GetById(newProduct.ProductTypeId);
+            product.ProductCategory = await _productTypeService.GetById(newProduct.ProductTypeId);
             product.Brand = await _brandService.GetById(newProduct.BrandId);
             product.Country = await _countryService.GetById(newProduct.CountryId);
 

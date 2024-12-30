@@ -16,7 +16,7 @@ namespace InstrumentStore.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ProductType>>> GetAllProductTypes()
+        public async Task<ActionResult<List<ProductCategory>>> GetAllProductTypes()
         {
             return await _productTypeService.GetAll();
         }
@@ -24,9 +24,9 @@ namespace InstrumentStore.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Guid>> CreateProductType([FromBody] string productTypeName)
         {
-            ProductType productType = new ProductType
+            ProductCategory productType = new ProductCategory
             {
-                ProductTypeId = Guid.NewGuid(),
+                ProductCategoryId = Guid.NewGuid(),
                 Name = productTypeName
             };
 

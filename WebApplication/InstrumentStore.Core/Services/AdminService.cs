@@ -69,7 +69,8 @@ namespace InstrumentStore.Domain.Services
             mailText += $"\nОбщая сумма заказанных товаров: {summaryPrice}.р";
             mailText += $"\nОбщая сумма с доставкой: {summaryPrice + paidOrder.DeliveryMethod.Price}.р";
 
-            _emailService.SendMail(_config.GetValue<string>("MySpaceMail"), mailText, "Новый заказ");
+            Console.WriteLine(_config["AdminMail:MySpaceMail"]);
+            _emailService.SendMail(_config["AdminMail:MySpaceMail"], mailText, "Новый заказ");
         }
     }
 }

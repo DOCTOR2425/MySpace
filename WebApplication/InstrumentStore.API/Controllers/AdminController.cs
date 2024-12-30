@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using InstrumentStore.Domain.Abstractions;
 using InstrumentStore.Domain.Contracts.Some;
+using InstrumentStore.Domain.Contracts.User;
 using InstrumentStore.Domain.DataBase.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +20,7 @@ namespace InstrumentStore.API.Controllers
         private readonly IBrandService _brandService;
         private readonly ICountryService _countryService;
         private readonly IProductTypeService _productTypeService;
+        private readonly ICartService _cartService;
         private readonly IMapper _mapper;
 
         public AdminController(IUsersService usersService,
@@ -28,7 +31,8 @@ namespace InstrumentStore.API.Controllers
             IMapper mapper,
             IBrandService brandService,
             ICountryService countryService,
-            IProductTypeService productTypeService)
+            IProductTypeService productTypeService,
+            ICartService cartService)
         {
             _usersService = usersService;
             _productService = productService;
@@ -39,6 +43,7 @@ namespace InstrumentStore.API.Controllers
             _countryService = countryService;
             _productTypeService = productTypeService;
             _mapper = mapper;
+            _cartService = cartService;
         }
 
         [HttpPost("create-delivery-method")]
@@ -67,46 +72,178 @@ namespace InstrumentStore.API.Controllers
             return Ok(await _paymentMethodService.Create(paymentMethod));
         }
 
-        [HttpGet("FillOneProduct")]
-        public async Task<Guid> FillOneProduct()
+        [HttpGet("FillAll")]
+        public async Task<ActionResult> FillOneProduct()
         {
+            //Product
             Brand brand = new Brand()
             {
                 BrandId = Guid.NewGuid(),
                 Name = "string"
             };
-
-            ProductType productType = new ProductType()
+            ProductCategory productType = new ProductCategory()
             {
-                ProductTypeId = Guid.NewGuid(),
+                ProductCategoryId = Guid.NewGuid(),
                 Name = "string"
             };
-
             Country country = new Country()
             {
                 CountryId = Guid.NewGuid(),
                 Name = "string"
             };
-
             Product product = new Product()
             {
                 ProductId = Guid.NewGuid(),
                 Name = "string",
                 Brand = brand,
                 Country = country,
-                ProductType = productType,
+                ProductCategory = productType,
                 Description = "string",
                 Price = 14,
                 Image = "hammer.jpg",
                 Quantity = 100
             };
-
             await _brandService.Create(brand);
             await _countryService.Create(country);
             await _productTypeService.Create(productType);
             await _productService.Create(product);
 
-            return product.ProductId;
+            Brand brand2 = new Brand()
+            {
+                BrandId = Guid.NewGuid(),
+                Name = "string2"
+            };
+            ProductCategory productType2 = new ProductCategory()
+            {
+                ProductCategoryId = Guid.NewGuid(),
+                Name = "string2"
+            };
+            Country country2 = new Country()
+            {
+                CountryId = Guid.NewGuid(),
+                Name = "string2"
+            };
+            Product product2 = new Product()
+            {
+                ProductId = Guid.NewGuid(),
+                Name = "string2",
+                Brand = brand2,
+                Country = country2,
+                ProductCategory = productType2,
+                Description = "string2",
+                Price = 14,
+                Image = "saw.jpg",
+                Quantity = 100
+            };
+            await _brandService.Create(brand2);
+            await _countryService.Create(country2);
+            await _productTypeService.Create(productType2);
+            await _productService.Create(product2);
+
+            Brand brand3 = new Brand()
+            {
+                BrandId = Guid.NewGuid(),
+                Name = "string3"
+            };
+            ProductCategory productType3 = new ProductCategory()
+            {
+                ProductCategoryId = Guid.NewGuid(),
+                Name = "string3"
+            };
+            Country country3 = new Country()
+            {
+                CountryId = Guid.NewGuid(),
+                Name = "string3"
+            };
+            Product product3 = new Product()
+            {
+                ProductId = Guid.NewGuid(),
+                Name = "string3",
+                Brand = brand3,
+                Country = country3,
+                ProductCategory = productType3,
+                Description = "string3",
+                Price = 14,
+                Image = "screwdriver.jpg",
+                Quantity = 100
+            };
+            await _brandService.Create(brand3);
+            await _countryService.Create(country3);
+            await _productTypeService.Create(productType3);
+            await _productService.Create(product3);
+            Brand brand4 = new Brand()
+            {
+                BrandId = Guid.NewGuid(),
+                Name = "string4"
+            };
+            ProductCategory productType4 = new ProductCategory()
+            {
+                ProductCategoryId = Guid.NewGuid(),
+                Name = "string4"
+            };
+            Country country4 = new Country()
+            {
+                CountryId = Guid.NewGuid(),
+                Name = "string4"
+            };
+            Product produc4t = new Product()
+            {
+                ProductId = Guid.NewGuid(),
+                Name = "string4",
+                Brand = brand4,
+                Country = country4,
+                ProductCategory = productType4,
+                Description = "string4",
+                Price = 14,
+                Image = "screwdriver.jpg",
+                Quantity = 100
+            };
+            await _brandService.Create(brand);
+            await _countryService.Create(country);
+            await _productTypeService.Create(productType);
+            await _productService.Create(product);
+
+
+            // Options
+            DeliveryMethod deliveryMethod1 = new DeliveryMethod()
+            {
+                DeliveryMethodId = Guid.NewGuid(),
+                Name = "Доставка до дома",
+                Price = 6
+            };
+            DeliveryMethod deliveryMethod2 = new DeliveryMethod()
+            {
+                DeliveryMethodId = Guid.NewGuid(),
+                Name = "Самовывоз",
+                Price = 6
+            };
+
+            await _deliveryMethodService.Create(deliveryMethod1);
+
+
+            // User
+            RegisterUserRequest registerUserRequest = new RegisterUserRequest(
+                "Egor",
+                "Dudkin",
+                "Searheevich",
+                "+375445555555",
+                "aboba",
+                "aboba",
+                "Minsk",
+                "Matusevicha",
+                "100",
+                "10",
+                "10"
+            );
+            Guid userId = await _usersService.Register(registerUserRequest);
+
+            //User cart
+            await _cartService.AddToCart(userId, product.ProductId, 1);
+            await _cartService.AddToCart(userId, product2.ProductId, 2);
+            //await _cartService.OrderCart(userId, )
+
+
+            return Ok();
         }
     }
 }

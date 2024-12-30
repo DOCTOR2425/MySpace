@@ -35,8 +35,8 @@ namespace InstrumentStore.Domain.Services
 
         public async Task<bool> IsHomeDelivery(Guid deliveryMethodId)
         {
-            if((await this.GetById(deliveryMethodId)).DeliveryMethodId.ToString()
-                == "5066ce29-5821-41e8-965a-56e6a18aaa8f")
+            if((await this.GetById(deliveryMethodId)).Name
+                == "Доставка до дома")
                 return true;
             return false;
         }

@@ -4,6 +4,8 @@ import { CartItem } from '../../data/interfaces/cartItem.interface';
 import { Observable } from 'rxjs';
 import { OrderOptions } from '../../data/interfaces/order-options/order-options.interface';
 import { UserOrderInfo } from '../../data/interfaces/user/user-order-info.interface';
+import { environment } from '../../../environments/environment.development';
+
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +13,7 @@ import { UserOrderInfo } from '../../data/interfaces/user/user-order-info.interf
 export class CartService {
   constructor(private http: HttpClient) {}
 
-  baseApiUrl = 'https://localhost:7295/api/Cart/';
+  baseApiUrl = environment.apiUrl + '/api/Cart/';
 
   public getCartItems(): Observable<CartItem[]> {
     return this.http.get<CartItem[]>(`${this.baseApiUrl}`, {
