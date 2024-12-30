@@ -1,4 +1,4 @@
-﻿using InstrumentStore.Domain.Contracts.Users;
+﻿using InstrumentStore.Domain.Contracts.User;
 using InstrumentStore.Domain.DataBase.Models;
 using System.IdentityModel.Tokens.Jwt;
 

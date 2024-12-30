@@ -6,17 +6,26 @@
     style="width: 100%; height: auto"
   />
   <div class="cart-info">
-    <p>
-      {{ item.product.price }}
-    </p>
+    <p>{{ item.product.price }} руб.</p>
     <h5>
       {{ item.product.name }}
     </h5>
-    <div>
-      <button id="decBtn{{ item.cartItemId }}" (click)="changeQuantity(false, item.cartItemId)" [disabled]="item.quantity === 0" [style.backgroundColor]="item.quantity === 0 ? 'grey' : ''">-</button>
-      <p id="counter{{ item.cartItemId }}">{{ item.quantity }}</p>
-      <button id="incBtn{{ item.cartItemId }}" (click)="changeQuantity(true, item.cartItemId)">+</button>
-      <button id="removeBtn{{ item.cartItemId }}" (click)="removeCartItem(item.cartItemId)">Удалить</button>
+    <div class="number-control">
+      <button
+        [id]="'decBtn' + item.cartItemId"
+        (click)="changeQuantity(false)"
+        [disabled]="item.quantity <= 1"
+        [style.backgroundColor]="item.quantity <= 1 ? 'grey' : ''"
+      >
+        -
+      </button>
+      <p [id]="'counter' + item.cartItemId">{{ item.quantity }}</p>
+      <button [id]="'incBtn' + item.cartItemId" (click)="changeQuantity(true)">
+        +
+      </button>
+      <button [id]="'removeBtn' + item.cartItemId" (click)="removeItem()">
+        Удалить
+      </button>
     </div>
     <p>{{ item.product.price * item.quantity }} руб.</p>
   </div>

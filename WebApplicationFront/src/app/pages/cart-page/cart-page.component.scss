@@ -1,52 +1,94 @@
 :host {
-  display: grid;
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 10px;
-  background-color: lightgray;
-}
-
-.cart-item {
   display: flex;
-  align-items: center;
-  padding: 10px;
+  font-family: Arial, sans-serif;
+  padding-left: 100px;
+  padding-right: 100px;
+  background-color: rgb(231, 230, 230);
+}
+
+.cart {
+  display: flex;
+
+  .cart-catalog {
+    min-width: 900px;
+    max-width: 900px;
+    margin-top: 10px;
+
+    .total {
+      text-align: right;
+      margin: 10px;
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 5px;
+
+      button {
+        background-color: #333;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        &:hover {
+          background-color: #555;
+        }
+      }
+    }
+  }
+}
+
+.registration-form {
   background-color: #fff;
-  margin: 10px;
-  border-radius: 5px;
-  .cart-item img {
-    width: 100px;
-    height: 100px;
-    margin-right: 20px;
-  }
-}
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 480px;
+  height: 600px;
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
 
-.item-details {
-  flex-grow: 1;
-  .item-details h2 {
-    margin: 0;
-  }
+  form {
+    display: flex;
+    flex-wrap: wrap;
 
-  .item-details p {
-    margin: 5px 0;
-  }
-}
+    .line {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
 
-.total {
-  text-align: right;
-  padding: 10px;
-  background-color: #fff;
-  // margin: 10px;
-  border-radius: 5px;
-}
+      .form-group {
+        flex-grow: 1;
+        flex-basis: 240px;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
 
-button {
-  background-color: #333;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 5px;
-  button:hover {
-    background-color: #555;
+        padding: 10px;
+
+        label {
+          display: block;
+          margin-bottom: 5px;
+        }
+
+        input {
+          flex-grow: 1;
+          width: 100%;
+          padding: 8px;
+          box-sizing: border-box;
+          // height: 40px;
+        }
+      }
+    }
+
+    button {
+      flex-grow: 1;
+      margin: 20px;
+      padding: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
   }
 }

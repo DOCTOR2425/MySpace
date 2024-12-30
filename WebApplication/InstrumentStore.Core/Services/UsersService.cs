@@ -1,4 +1,4 @@
-﻿using InstrumentStore.Domain.Contracts.Users;
+﻿using InstrumentStore.Domain.Contracts.User;
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
 using InstrumentStore.Domain.Abstractions;
@@ -118,8 +118,7 @@ namespace InstrumentStore.Domain.Services
 			User? user = await _dbContext.User
 				.Include(u => u.UserAdress)
 				.Include(u => u.UserRegistrInfo)
-				.Where(u => u.UserId == id)
-				.FirstOrDefaultAsync();
+				.FirstOrDefaultAsync(u => u.UserId == id);
 
 			if (user == null)
 				throw new ArgumentNullException("No user with that Id");

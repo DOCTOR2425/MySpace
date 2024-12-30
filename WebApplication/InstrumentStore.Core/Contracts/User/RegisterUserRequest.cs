@@ -1,4 +1,4 @@
-﻿namespace InstrumentStore.Domain.Contracts.Users
+﻿namespace InstrumentStore.Domain.Contracts.User
 {
     public record RegisterUserRequest(
         string FirstName,

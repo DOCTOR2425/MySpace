@@ -10,8 +10,8 @@ namespace InstrumentStore.API.Controllers
     [ApiController]
     public class PaidOrderController : ControllerBase
     {
-        private ICartService _cartService;
-        private IJwtProvider _jwtProvider;
+        private readonly ICartService _cartService;
+        private readonly IJwtProvider _jwtProvider;
 
         public PaidOrderController(ICartService cartService, 
             IJwtProvider jwtProvider)

@@ -1,11 +1,124 @@
-<div class="cart-catalog">
-  <app-cart-item
-    *ngFor="let item of items"
-    [item]="item"
-  ></app-cart-item>
-</div>
+<div class="cart">
+  <div class="cart-catalog">
+    <app-cart-item
+      *ngFor="let item of items"
+      [item]="item"
+      [cartPage]="this"
+    ></app-cart-item>
 
-<div class="total">
-  <h2>Итого: 1000 р уб.</h2>
-  <button class="checkout">Оформить заказ</button>
+    <div class="total">
+      <h2>Итого: {{ totalPrice }} руб.</h2>
+      <button class="checkout">Оформить заказ</button>
+    </div>
+  </div>
+
+  <div class="registration-form modal-body">
+    <form *ngIf="userOrderInfo" #orderForm="ngForm" (ngSubmit)="orderCart(orderForm)">
+      <div class="line">
+        <div class="form-group">
+          <label class="col-form-label" for="name">Имя:</label>
+          <input
+            class="form-control"
+            type="text"
+            id="name"
+            name="name"
+            [(ngModel)]="userOrderInfo.firstName"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label class="col-form-label" for="phone">Телефон:</label>
+          <input
+            class="form-control"
+            type="tel"
+            id="phone"
+            name="phone"
+            [(ngModel)]="userOrderInfo.telephone"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label class="col-form-label" for="email">Email:</label>
+          <input
+            class="form-control"
+            type="email"
+            id="email"
+            name="email"
+            [(ngModel)]="userOrderInfo.eMail"
+            required
+          />
+        </div>
+      </div>
+      <div class="line">
+        <div class="form-group">
+          <label class="col-form-label" for="city">Город:</label>
+          <input
+            class="form-control"
+            type="text"
+            id="city"
+            name="city"
+            [(ngModel)]="userOrderInfo.city"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label class="col-form-label" for="street">Улица:</label>
+          <input
+            class="form-control"
+            type="text"
+            id="street"
+            name="street"
+            [(ngModel)]="userOrderInfo.street"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label class="col-form-label" for="houseNumber">Номер дома:</label>
+          <input
+            class="form-control"
+            type="text"
+            id="houseNumber"
+            name="houseNumber"
+            [(ngModel)]="userOrderInfo.houseNumber"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label class="col-form-label" for="flat">Квартира:</label>
+          <input
+            class="form-control"
+            type="text"
+            id="flat"
+            name="flat"
+            [(ngModel)]="userOrderInfo.flat"
+          />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-form-label">Способ доставки:</label>
+        <select *ngIf="orderOptions" ngModel required name="deliveryMethodId">
+          <option
+            *ngFor="let deliveryMethod of orderOptions.deliveryMethods"
+            [value]="deliveryMethod.deliveryMethodId"
+          >
+            {{ deliveryMethod.name }} ({{ deliveryMethod.price }} руб.)
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="col-form-label">Способ оплаты:</label>
+        <select *ngIf="orderOptions" ngModel required name="paymentMethodId">
+          <option
+            *ngFor="let paymentMethod of orderOptions.paymentMethods"
+            [value]="paymentMethod.paymentMethodId"
+          >
+            {{ paymentMethod.name }}
+          </option>
+        </select>
+      </div>
+      <button type="submit" [disabled]="orderForm.invalid">
+        Зарегистрироваться
+      </button>
+    </form>
+  </div>
 </div>

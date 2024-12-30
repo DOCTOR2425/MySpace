@@ -10,15 +10,15 @@ namespace InstrumentStore.API.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
-        private IUsersService _usersService;
-        private IProductService _productService;
-        private IPaidOrderService _paidOrderService;
-        private IDeliveryMethodService _deliveryMethodService;
-        private IPaymentMethodService _paymentMethodService;
-        private IBrandService _brandService;
-        private ICountryService _countryService;
-        private IProductTypeService _productTypeService;
-        private IMapper _mapper;
+        private readonly IUsersService _usersService;
+        private readonly IProductService _productService;
+        private readonly IPaidOrderService _paidOrderService;
+        private readonly IDeliveryMethodService _deliveryMethodService;
+        private readonly IPaymentMethodService _paymentMethodService;
+        private readonly IBrandService _brandService;
+        private readonly ICountryService _countryService;
+        private readonly IProductTypeService _productTypeService;
+        private readonly IMapper _mapper;
 
         public AdminController(IUsersService usersService,
             IProductService productService,

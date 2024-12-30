@@ -7,7 +7,7 @@ namespace InstrumentStore.Domain.Services
 {
     public class EmailService : IEmailService
     {
-        private IConfiguration _config;
+        private readonly IConfiguration _config;
 
         public EmailService(IConfiguration config)
         {
