@@ -29,7 +29,7 @@ namespace InstrumentStore.Domain.Services
                 EnableSsl = true,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(mailFrom.Address, _config.GetValue<string>("MailPassword"))
+                Credentials = new NetworkCredential(mailFrom.Address, _config["AdminMail:MailPassword"])
             };
 
             smtpClient.Send(message);

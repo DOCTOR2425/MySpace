@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from '../../data/interfaces/product.interface';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../service/product.service';
 import { CommonModule } from '@angular/common';
+import { Product } from '../../data/interfaces/product/product.interface';
 
 @Component({
   selector: 'app-product',
@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 export class ProductComponent implements OnInit {
   productId!: string;
   product!: Product;
+  propertyNames: string[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -21,8 +22,9 @@ export class ProductComponent implements OnInit {
 
   public ngOnInit(): void {
     this.productId = this.route.snapshot.paramMap.get('id')!;
-    this.productService
-      .getProductById(this.productId)
-      .subscribe((data) => (this.product = data));
+    this.productService.getProductById(this.productId).subscribe((data) => {
+      this.product = data;
+      this.propertyNames = Object.keys(data.properties);
+    });
   }
 }

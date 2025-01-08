@@ -2,7 +2,7 @@
 
 namespace InstrumentStore.Domain.Abstractions
 {
-    public interface IProductTypeService
+    public interface IProductCategoryService
     {
         Task<Guid> Create(ProductCategory brand);
         Task<Guid> Delete(Guid id);

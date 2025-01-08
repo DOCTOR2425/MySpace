@@ -17,27 +17,48 @@
   <div class="product" *ngIf="product">
     <div class="another-photos">
       <div class="photo">
-        <img [src]="product.image" [alt]="product.image" />
+        <img
+          [src]="product.productResponseData.image"
+          [alt]="product.productResponseData.image"
+        />
       </div>
       <div class="photo">
-        <img [src]="product.image" [alt]="product.image" />
+        <img
+          [src]="product.productResponseData.image"
+          [alt]="product.productResponseData.image"
+        />
       </div>
       <div class="photo">
-        <img [src]="product.image" [alt]="product.image" />
+        <img
+          [src]="product.productResponseData.image"
+          [alt]="product.productResponseData.image"
+        />
       </div>
       <div class="photo">
-        <img [src]="product.image" [alt]="product.image" />
+        <img
+          [src]="product.productResponseData.image"
+          [alt]="product.productResponseData.image"
+        />
       </div>
     </div>
     <div class="big-photo">
-      <img [src]="product.image" [alt]="product.image" />
+      <img
+        [src]="product.productResponseData.image"
+        [alt]="product.productResponseData.image"
+      />
     </div>
     <div class="card-body">
       <h1 class="card-title">
-        {{ product.name }}
+        {{ product.productResponseData.name }}
       </h1>
-      <p class="card-text">{{ product.price }} руб.</p>
+      <p class="card-text">{{ product.productResponseData.price }} руб.</p>
+      <p class="card-text">
+        Описание: {{ product.productResponseData.description }}
+      </p>
       <a href="#" class="btn btn-primary">В корзину</a>
+      <p *ngFor="let propName of propertyNames">
+        {{propName}}: {{product.properties[propName]}}
+      </p>
     </div>
   </div>
 </div>

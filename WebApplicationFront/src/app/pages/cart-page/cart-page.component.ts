@@ -30,9 +30,7 @@ export class CartPageComponent implements OnInit {
     }).subscribe((val) => {
       this.items = val.cartItems;
       this.updateTotalPrice();
-
       this.orderOptions = val.orderOptions;
-
       this.userOrderInfo = val.userOrderInfo;
     });
   }

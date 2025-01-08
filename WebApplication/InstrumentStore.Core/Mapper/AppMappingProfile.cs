@@ -10,24 +10,24 @@ namespace InstrumentStore.Domain.Mapper
     {
         public AppMappingProfile()
         {
-            CreateMap<Product, ProductResponse>()
+            CreateMap<Product, ProductResponseData>()
                 .ForPath(dest => dest.Country, opt => opt.MapFrom(src => src.Country.Name))
                 .ForPath(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand.Name))
-                .ForPath(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductCategory.Name))
+                .ForPath(dest => dest.ProductCategory, opt => opt.MapFrom(src => src.ProductCategory.Name))
                 .ForPath(dest => dest.Image, opt => opt.MapFrom(src =>
                     "https://localhost:7295/images/" + src.Image));
 
             CreateMap<Product, ProductCard>()
                 .ForPath(dest => dest.Country, opt => opt.MapFrom(src => src.Country.Name))
                 .ForPath(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand.Name))
-                .ForPath(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductCategory.Name))
+                .ForPath(dest => dest.ProductCategory, opt => opt.MapFrom(src => src.ProductCategory.Name))
                 .ForPath(dest => dest.Image, opt => opt.MapFrom(src =>
                     "https://localhost:7295/images/" + src.Image));
 
 
             CreateMap<CartItem, CartItemResponse>()
                 .ForPath(dest => dest.Product, opt => opt.MapFrom(src => src.Product))
-                .ForPath(dest => dest.Product.ProductType, opt => opt.MapFrom(src => src.Product.ProductCategory.Name))
+                .ForPath(dest => dest.Product.ProductCategory, opt => opt.MapFrom(src => src.Product.ProductCategory.Name))
                 .ForPath(dest => dest.Product.Brand, opt => opt.MapFrom(src => src.Product.Brand.Name))
                 .ForPath(dest => dest.Product.Country, opt => opt.MapFrom(src => src.Product.Country.Name))
                 .ForPath(dest => dest.Product.Image, opt => opt.MapFrom(src =>

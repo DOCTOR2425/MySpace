@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using InstrumentStore.Domain.Abstractions;
+﻿using InstrumentStore.Domain.Abstractions;
 using InstrumentStore.Domain.Contracts.Products;
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
@@ -12,17 +11,17 @@ namespace InstrumentStore.Domain.Service
         private readonly InstrumentStoreDBContext _dbContext;
         private readonly IBrandService _brandService;
         private readonly ICountryService _countryService;
-        private readonly IProductTypeService _productTypeService;
+        private readonly IProductCategoryService _productCategoryService;
 
         public ProductService(InstrumentStoreDBContext dbContext, 
             IBrandService brandService,
             ICountryService countryService, 
-            IProductTypeService productTypeService)
+            IProductCategoryService productCategoryService)
         {
             _dbContext = dbContext;
             _brandService = brandService;
             _countryService = countryService;
-            _productTypeService = productTypeService;
+            _productCategoryService = productCategoryService;
         }
 
         public async Task<List<Product>> GetAll()
@@ -41,8 +40,7 @@ namespace InstrumentStore.Domain.Service
                 .Include(p => p.ProductCategory)
                 .Include(p => p.Brand)
                 .Include(p => p.Country)
-                .Where(p => p.ProductId == id)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(p => p.ProductId == id);
         }
 
         public async Task<Guid> Create(Product product)
@@ -64,7 +62,7 @@ namespace InstrumentStore.Domain.Service
                 Quantity = productRequest.Quantity,
                 Image = productRequest.Image,
 
-                ProductCategory = await _productTypeService.GetById(productRequest.ProductTypeId),
+                ProductCategory = await _productCategoryService.GetById(productRequest.ProductTypeId),
                 Brand = await _brandService.GetById(productRequest.BrandId),
                 Country = await _countryService.GetById(productRequest.CountryId)
             };
@@ -102,7 +100,7 @@ namespace InstrumentStore.Domain.Service
             product.Image = newProduct.Image;
             product.Price = newProduct.Price;
             product.Quantity = newProduct.Quantity;
-            product.ProductCategory = await _productTypeService.GetById(newProduct.ProductTypeId);
+            product.ProductCategory = await _productCategoryService.GetById(newProduct.ProductTypeId);
             product.Brand = await _brandService.GetById(newProduct.BrandId);
             product.Country = await _countryService.GetById(newProduct.CountryId);
 
@@ -119,5 +117,7 @@ namespace InstrumentStore.Domain.Service
 
             return id;
         }
+
+
     }
 }

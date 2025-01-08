@@ -30,8 +30,6 @@ namespace InstrumentStore.API.Middlewares
 
                 if (token.ValidTo < DateTime.UtcNow)
                 {
-                    Console.WriteLine(false);
-
                     var oldRefreshToken = await usersService.GetRefreshToken(cookieToken);
 
                     if (oldRefreshToken.ValidTo > DateTime.UtcNow)

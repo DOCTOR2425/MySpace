@@ -3,7 +3,6 @@ using InstrumentStore.Domain.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using InstrumentStore.Domain.Contracts.Products;
 using AutoMapper;
-using InstrumentStore.Domain.Services;
 
 namespace InstrumentStore.API.Controllers
 {
@@ -12,11 +11,15 @@ namespace InstrumentStore.API.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
+        private readonly IProductPropertyService _productPropertyService;
         private readonly IMapper _mapper;
 
-        public ProductController(IProductService productService, IMapper mapper)
+        public ProductController(IProductService productService, 
+            IProductPropertyService productPropertyService, 
+            IMapper mapper)
         {
             _productService = productService;
+            _productPropertyService = productPropertyService;
             _mapper = mapper;
         }
 
@@ -27,10 +30,7 @@ namespace InstrumentStore.API.Controllers
             List<ProductCard> productsCards = new List<ProductCard>();
 
             foreach (var p in products)
-            {
-                //p.Image = "https://localhost:7295/images/" + p.Image;
                 productsCards.Add(_mapper.Map<ProductCard>(p));
-            }
 
             return Ok(productsCards);
         }
@@ -39,8 +39,11 @@ namespace InstrumentStore.API.Controllers
         public async Task<ActionResult<ProductResponse>> GetProduct([FromRoute] Guid id)
         {
             var product = await _productService.GetById(id);
-            //product.Image = "https://localhost:7295/images/" + product.Image;
-            var response = _mapper.Map<ProductResponse>(product);
+            var productResponseData = _mapper.Map<ProductResponseData>(product);
+
+            ProductResponse response = new ProductResponse(
+                productResponseData,
+                await _productPropertyService.GetProductProperties(id));
 
             return Ok(response);
         }

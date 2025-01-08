@@ -30,8 +30,9 @@ namespace InstrumentStore.API
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<IPaidOrderService, PaidOrderService>();
             builder.Services.AddScoped<IPaymentMethodService, PaymentMethodService>();
+            builder.Services.AddScoped<IProductPropertyService, ProductPropertyService>();
             builder.Services.AddScoped<IProductService, ProductService>();
-            builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
+            builder.Services.AddScoped<IProductCategoryService, ProductTypeService>();
             builder.Services.AddScoped<IUsersService, UsersService>();
 
             builder.Services.AddScoped<IJwtProvider, JwtProvider>();

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InstrumentStore.Domain.Services
 {
-    public class ProductTypeService : IProductTypeService
+    public class ProductTypeService : IProductCategoryService
     {
         private readonly InstrumentStoreDBContext _dbContext;
 

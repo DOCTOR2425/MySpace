@@ -141,11 +141,3 @@ namespace InstrumentStore.Domain.Services
         }
     }
 }
-/*
-{
-  "productId": "2DC2220A-6A77-42E9-BD0F-2C23A56700BB",
-  "quantity": 2,
-  "deliveryMethodId": "5066CE29-5821-41E8-965A-56E6A18AAA8F",
-  "paymentMethodId": "859A6A38-9012-4594-A270-F401EA9F5B74"
-}
-*/

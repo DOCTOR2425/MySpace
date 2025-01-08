@@ -3,6 +3,7 @@ using Azure.Core;
 using InstrumentStore.Domain.Abstractions;
 using InstrumentStore.Domain.Contracts.Some;
 using InstrumentStore.Domain.Contracts.User;
+using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,9 +20,11 @@ namespace InstrumentStore.API.Controllers
         private readonly IPaymentMethodService _paymentMethodService;
         private readonly IBrandService _brandService;
         private readonly ICountryService _countryService;
-        private readonly IProductTypeService _productTypeService;
+        private readonly IProductCategoryService _productCategoryService;
         private readonly ICartService _cartService;
+        IProductPropertyService _productPropertyService;
         private readonly IMapper _mapper;
+        private readonly InstrumentStoreDBContext _dBContext;
 
         public AdminController(IUsersService usersService,
             IProductService productService,
@@ -31,8 +34,10 @@ namespace InstrumentStore.API.Controllers
             IMapper mapper,
             IBrandService brandService,
             ICountryService countryService,
-            IProductTypeService productTypeService,
-            ICartService cartService)
+            IProductCategoryService productCategoryService,
+            ICartService cartService,
+            IProductPropertyService productPropertyService,
+            InstrumentStoreDBContext dBContext)
         {
             _usersService = usersService;
             _productService = productService;
@@ -41,9 +46,11 @@ namespace InstrumentStore.API.Controllers
             _paymentMethodService = paymentMethodService;
             _brandService = brandService;
             _countryService = countryService;
-            _productTypeService = productTypeService;
+            _productCategoryService = productCategoryService;
             _mapper = mapper;
             _cartService = cartService;
+            _productPropertyService = productPropertyService;
+            _dBContext = dBContext;
         }
 
         [HttpPost("create-delivery-method")]
@@ -81,7 +88,7 @@ namespace InstrumentStore.API.Controllers
                 BrandId = Guid.NewGuid(),
                 Name = "string"
             };
-            ProductCategory productType = new ProductCategory()
+            ProductCategory productCategory = new ProductCategory()
             {
                 ProductCategoryId = Guid.NewGuid(),
                 Name = "string"
@@ -97,7 +104,7 @@ namespace InstrumentStore.API.Controllers
                 Name = "string",
                 Brand = brand,
                 Country = country,
-                ProductCategory = productType,
+                ProductCategory = productCategory,
                 Description = "string",
                 Price = 14,
                 Image = "hammer.jpg",
@@ -105,7 +112,7 @@ namespace InstrumentStore.API.Controllers
             };
             await _brandService.Create(brand);
             await _countryService.Create(country);
-            await _productTypeService.Create(productType);
+            await _productCategoryService.Create(productCategory);
             await _productService.Create(product);
 
             Brand brand2 = new Brand()
@@ -113,7 +120,7 @@ namespace InstrumentStore.API.Controllers
                 BrandId = Guid.NewGuid(),
                 Name = "string2"
             };
-            ProductCategory productType2 = new ProductCategory()
+            ProductCategory productCategory2 = new ProductCategory()
             {
                 ProductCategoryId = Guid.NewGuid(),
                 Name = "string2"
@@ -129,7 +136,7 @@ namespace InstrumentStore.API.Controllers
                 Name = "string2",
                 Brand = brand2,
                 Country = country2,
-                ProductCategory = productType2,
+                ProductCategory = productCategory2,
                 Description = "string2",
                 Price = 14,
                 Image = "saw.jpg",
@@ -137,7 +144,7 @@ namespace InstrumentStore.API.Controllers
             };
             await _brandService.Create(brand2);
             await _countryService.Create(country2);
-            await _productTypeService.Create(productType2);
+            await _productCategoryService.Create(productCategory2);
             await _productService.Create(product2);
 
             Brand brand3 = new Brand()
@@ -145,7 +152,7 @@ namespace InstrumentStore.API.Controllers
                 BrandId = Guid.NewGuid(),
                 Name = "string3"
             };
-            ProductCategory productType3 = new ProductCategory()
+            ProductCategory productCategory3 = new ProductCategory()
             {
                 ProductCategoryId = Guid.NewGuid(),
                 Name = "string3"
@@ -161,7 +168,7 @@ namespace InstrumentStore.API.Controllers
                 Name = "string3",
                 Brand = brand3,
                 Country = country3,
-                ProductCategory = productType3,
+                ProductCategory = productCategory3,
                 Description = "string3",
                 Price = 14,
                 Image = "screwdriver.jpg",
@@ -169,14 +176,15 @@ namespace InstrumentStore.API.Controllers
             };
             await _brandService.Create(brand3);
             await _countryService.Create(country3);
-            await _productTypeService.Create(productType3);
+            await _productCategoryService.Create(productCategory3);
             await _productService.Create(product3);
+
             Brand brand4 = new Brand()
             {
                 BrandId = Guid.NewGuid(),
                 Name = "string4"
             };
-            ProductCategory productType4 = new ProductCategory()
+            ProductCategory productCategory4 = new ProductCategory()
             {
                 ProductCategoryId = Guid.NewGuid(),
                 Name = "string4"
@@ -186,22 +194,214 @@ namespace InstrumentStore.API.Controllers
                 CountryId = Guid.NewGuid(),
                 Name = "string4"
             };
-            Product produc4t = new Product()
+            Product product4 = new Product()
             {
                 ProductId = Guid.NewGuid(),
                 Name = "string4",
                 Brand = brand4,
                 Country = country4,
-                ProductCategory = productType4,
+                ProductCategory = productCategory4,
                 Description = "string4",
                 Price = 14,
                 Image = "screwdriver.jpg",
                 Quantity = 100
             };
-            await _brandService.Create(brand);
-            await _countryService.Create(country);
-            await _productTypeService.Create(productType);
-            await _productService.Create(product);
+            await _brandService.Create(brand4);
+            await _countryService.Create(country4);
+            await _productCategoryService.Create(productCategory4);
+            await _productService.Create(product4);
+
+
+            //Product propperty
+            ProductProperty productProperty11 = new ProductProperty()
+            {
+                ProductPropertyId = Guid.NewGuid(),
+                ProductCategory = productCategory,
+                Name = "Вес1"
+            };
+            ProductProperty productProperty12 = new ProductProperty()
+            {
+                ProductPropertyId = Guid.NewGuid(),
+                ProductCategory = productCategory,
+                Name = "Длинна1"
+            };
+            ProductProperty productProperty13 = new ProductProperty()
+            {
+                ProductPropertyId = Guid.NewGuid(),
+                ProductCategory = productCategory,
+                Name = "Ширина1"
+            };
+
+            ProductProperty productProperty21 = new ProductProperty()
+            {
+                ProductPropertyId = Guid.NewGuid(),
+                ProductCategory = productCategory2,
+                Name = "Вес2"
+            };
+            ProductProperty productProperty22 = new ProductProperty()
+            {
+                ProductPropertyId = Guid.NewGuid(),
+                ProductCategory = productCategory2,
+                Name = "Объём2"
+            };
+            ProductProperty productProperty23 = new ProductProperty()
+            {
+                ProductPropertyId = Guid.NewGuid(),
+                ProductCategory = productCategory2,
+                Name = "Ширина2"
+            };
+
+            ProductProperty productProperty31 = new ProductProperty()
+            {
+                ProductPropertyId = Guid.NewGuid(),
+                ProductCategory = productCategory3,
+                Name = "Вес3"
+            };
+            ProductProperty productProperty32 = new ProductProperty()
+            {
+                ProductPropertyId = Guid.NewGuid(),
+                ProductCategory = productCategory3,
+                Name = "Длинна3"
+            };
+            ProductProperty productProperty33 = new ProductProperty()
+            {
+                ProductPropertyId = Guid.NewGuid(),
+                ProductCategory = productCategory3,
+                Name = "Ширина3"
+            };
+
+            ProductProperty productProperty41 = new ProductProperty()
+            {
+                ProductPropertyId = Guid.NewGuid(),
+                ProductCategory = productCategory4,
+                Name = "Вес4"
+            };
+            ProductProperty productProperty42 = new ProductProperty()
+            {
+                ProductPropertyId = Guid.NewGuid(),
+                ProductCategory = productCategory4,
+                Name = "Длинна4"
+            };
+            ProductProperty productProperty43 = new ProductProperty()
+            {
+                ProductPropertyId = Guid.NewGuid(),
+                ProductCategory = productCategory4,
+                Name = "Ширина4"
+            };
+
+            await _productPropertyService.CreateProperty(productProperty11);
+            await _productPropertyService.CreateProperty(productProperty12);
+            await _productPropertyService.CreateProperty(productProperty13);
+            await _productPropertyService.CreateProperty(productProperty21);
+            await _productPropertyService.CreateProperty(productProperty22);
+            await _productPropertyService.CreateProperty(productProperty23);
+            await _productPropertyService.CreateProperty(productProperty31);
+            await _productPropertyService.CreateProperty(productProperty32);
+            await _productPropertyService.CreateProperty(productProperty33);
+            await _productPropertyService.CreateProperty(productProperty41);
+            await _productPropertyService.CreateProperty(productProperty42);
+            await _productPropertyService.CreateProperty(productProperty43);
+
+            ProductPropertyValue value11 = new ProductPropertyValue()
+            {
+                ProductPropertyValueId = Guid.NewGuid(),
+                Product = product,
+                ProductProperty = productProperty11,
+                Value = "VALUE 1 AT PRODUCT 1"
+            };
+            ProductPropertyValue value12 = new ProductPropertyValue()
+            {
+                ProductPropertyValueId = Guid.NewGuid(),
+                Product = product,
+                ProductProperty = productProperty12,
+                Value = "VALUE 2 AT PRODUCT 1"
+            };
+            ProductPropertyValue value13 = new ProductPropertyValue()
+            {
+                ProductPropertyValueId = Guid.NewGuid(),
+                Product = product,
+                ProductProperty = productProperty13,
+                Value = "VALUE 3 AT PRODUCT 1"
+            };
+
+            ProductPropertyValue value21 = new ProductPropertyValue()
+            {
+                ProductPropertyValueId = Guid.NewGuid(),
+                Product = product2,
+                ProductProperty = productProperty21,
+                Value = "VALUE 1 AT PRODUCT 2"
+            };
+            ProductPropertyValue value22 = new ProductPropertyValue()
+            {
+                ProductPropertyValueId = Guid.NewGuid(),
+                Product = product2,
+                ProductProperty = productProperty22,
+                Value = "VALUE 2 AT PRODUCT 2"
+            };
+            ProductPropertyValue value23 = new ProductPropertyValue()
+            {
+                ProductPropertyValueId = Guid.NewGuid(),
+                Product = product2,
+                ProductProperty = productProperty23,
+                Value = "VALUE 3 AT PRODUCT 2"
+            };
+
+            ProductPropertyValue value31 = new ProductPropertyValue()
+            {
+                ProductPropertyValueId = Guid.NewGuid(),
+                Product = product3,
+                ProductProperty = productProperty31,
+                Value = "VALUE 1 AT PRODUCT 3"
+            };
+            ProductPropertyValue value32 = new ProductPropertyValue()
+            {
+                ProductPropertyValueId = Guid.NewGuid(),
+                Product = product3,
+                ProductProperty = productProperty32,
+                Value = "VALUE 2 AT PRODUCT 3"
+            };
+            ProductPropertyValue value33 = new ProductPropertyValue()
+            {
+                ProductPropertyValueId = Guid.NewGuid(),
+                Product = product3,
+                ProductProperty = productProperty33,
+                Value = "VALUE 3 AT PRODUCT 3"
+            };
+
+            ProductPropertyValue value41 = new ProductPropertyValue()
+            {
+                ProductPropertyValueId = Guid.NewGuid(),
+                Product = product4,
+                ProductProperty = productProperty41,
+                Value = "VALUE 1 AT PRODUCT 4"
+            };
+            ProductPropertyValue value42 = new ProductPropertyValue()
+            {
+                ProductPropertyValueId = Guid.NewGuid(),
+                Product = product4,
+                ProductProperty = productProperty42,
+                Value = "VALUE 2 AT PRODUCT 4"
+            };
+            ProductPropertyValue value43 = new ProductPropertyValue()
+            {
+                ProductPropertyValueId = Guid.NewGuid(),
+                Product = product4,
+                ProductProperty = productProperty43,
+                Value = "VALUE 3 AT PRODUCT 4"
+            };
+
+            await _productPropertyService.CreatePropertyValue(value11);
+            await _productPropertyService.CreatePropertyValue(value12);
+            await _productPropertyService.CreatePropertyValue(value13);
+            await _productPropertyService.CreatePropertyValue(value21);
+            await _productPropertyService.CreatePropertyValue(value22);
+            await _productPropertyService.CreatePropertyValue(value23);
+            await _productPropertyService.CreatePropertyValue(value31);
+            await _productPropertyService.CreatePropertyValue(value32);
+            await _productPropertyService.CreatePropertyValue(value33);
+            await _productPropertyService.CreatePropertyValue(value41);
+            await _productPropertyService.CreatePropertyValue(value42);
+            await _productPropertyService.CreatePropertyValue(value43);
 
 
             // Options
@@ -215,10 +415,24 @@ namespace InstrumentStore.API.Controllers
             {
                 DeliveryMethodId = Guid.NewGuid(),
                 Name = "Самовывоз",
-                Price = 6
+                Price = 0
+            };
+
+            PaymentMethod paymentMethod1 = new PaymentMethod()
+            {
+                PaymentMethodId = Guid.NewGuid(),
+                Name = "Картой",
+            };
+            PaymentMethod paymentMethod2 = new PaymentMethod()
+            {
+                PaymentMethodId = Guid.NewGuid(),
+                Name = "Наличными",
             };
 
             await _deliveryMethodService.Create(deliveryMethod1);
+            await _deliveryMethodService.Create(deliveryMethod2);
+            await _paymentMethodService.Create(paymentMethod1);
+            await _paymentMethodService.Create(paymentMethod2);
 
 
             // User
@@ -240,8 +454,40 @@ namespace InstrumentStore.API.Controllers
             //User cart
             await _cartService.AddToCart(userId, product.ProductId, 1);
             await _cartService.AddToCart(userId, product2.ProductId, 2);
-            //await _cartService.OrderCart(userId, )
 
+            await _cartService.OrderCart(userId,
+                deliveryMethod1.DeliveryMethodId,
+                paymentMethod2.PaymentMethodId);
+
+            await _cartService.AddToCart(userId, product3.ProductId, 3);
+            await _cartService.AddToCart(userId, product4.ProductId, 4);
+
+
+
+
+            return Ok();
+        }
+
+        [HttpGet("clearDataBase")]
+        public async Task<ActionResult> ClearDatabase()
+        {
+            _dBContext.Brand.RemoveRange(_dBContext.Brand);
+            _dBContext.CartItem.RemoveRange(_dBContext.CartItem);
+            _dBContext.Country.RemoveRange(_dBContext.Country);
+            _dBContext.DeliveryMethod.RemoveRange(_dBContext.DeliveryMethod);
+            _dBContext.PaidOrder.RemoveRange(_dBContext.PaidOrder);
+            _dBContext.PaidOrderItem.RemoveRange(_dBContext.PaidOrderItem);
+            _dBContext.PaymentMethod.RemoveRange(_dBContext.PaymentMethod);
+            _dBContext.Product.RemoveRange(_dBContext.Product);
+            _dBContext.ProductArchive.RemoveRange(_dBContext.ProductArchive);
+            _dBContext.ProductCategory.RemoveRange(_dBContext.ProductCategory);
+            _dBContext.ProductProperty.RemoveRange(_dBContext.ProductProperty);
+            _dBContext.ProductPropertyValue.RemoveRange(_dBContext.ProductPropertyValue);
+            _dBContext.User.RemoveRange(_dBContext.User);
+            _dBContext.UserAdresses.RemoveRange(_dBContext.UserAdresses);
+            _dBContext.UserRegistrInfos.RemoveRange(_dBContext.UserRegistrInfos);
+
+            _dBContext.SaveChanges();
 
             return Ok();
         }

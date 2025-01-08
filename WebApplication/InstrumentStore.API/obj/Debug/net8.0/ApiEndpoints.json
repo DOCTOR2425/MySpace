@@ -1,6 +1,16 @@
 [
   {
     "ContainingType": "InstrumentStore.API.Controllers.AdminController",
+    "Method": "ClearDatabase",
+    "RelativePath": "api/Admin/clearDataBase",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "InstrumentStore.API.Controllers.AdminController",
     "Method": "CreateDeliveryMethod",
     "RelativePath": "api/Admin/create-delivery-method",
     "HttpMethod": "POST",
@@ -54,22 +64,12 @@
   {
     "ContainingType": "InstrumentStore.API.Controllers.AdminController",
     "Method": "FillOneProduct",
-    "RelativePath": "api/Admin/FillOneProduct",
+    "RelativePath": "api/Admin/FillAll",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Guid",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "InstrumentStore.API.Controllers.BrandController",
@@ -485,7 +485,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "productTypeName",
+        "Name": "productCategoryName",
         "Type": "System.String",
         "IsRequired": true
       }

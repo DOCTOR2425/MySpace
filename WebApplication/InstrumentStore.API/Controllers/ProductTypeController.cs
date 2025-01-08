@@ -8,29 +8,29 @@ namespace InstrumentStore.API.Controllers
     [ApiController]
     public class ProductTypeController : ControllerBase
     {
-        private readonly IProductTypeService _productTypeService;
+        private readonly IProductCategoryService _productCategoryService;
 
-        public ProductTypeController(IProductTypeService productTypeService)
+        public ProductTypeController(IProductCategoryService productCategoryService)
         {
-            _productTypeService = productTypeService;
+            _productCategoryService = productCategoryService;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<ProductCategory>>> GetAllProductTypes()
         {
-            return await _productTypeService.GetAll();
+            return await _productCategoryService.GetAll();
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> CreateProductType([FromBody] string productTypeName)
+        public async Task<ActionResult<Guid>> CreateProductType([FromBody] string productCategoryName)
         {
-            ProductCategory productType = new ProductCategory
+            ProductCategory productCategory = new ProductCategory
             {
                 ProductCategoryId = Guid.NewGuid(),
-                Name = productTypeName
+                Name = productCategoryName
             };
 
-            return Ok(await _productTypeService.Create(productType));
+            return Ok(await _productCategoryService.Create(productCategory));
         }
 
     }
