@@ -33,8 +33,9 @@ namespace InstrumentStore.Domain.Services
 			{
 				UserAdressId = Guid.NewGuid(),
 				City = registerUserRequest.City,
-				Entrance = registerUserRequest.Entrance,
 				Street = registerUserRequest.Street,
+				HouseNumber = registerUserRequest.HouseNumber,
+				Entrance = registerUserRequest.Entrance,
 				Flat = registerUserRequest.Flat
 			};
 

@@ -4,10 +4,11 @@
     [alt]="item.product.image"
     class="img-top"
     style="width: 100%; height: auto"
+    [routerLink]="['/product/' + item.product.productId]"
   />
   <div class="cart-info">
     <p>{{ item.product.price }} руб.</p>
-    <h5>
+    <h5 [routerLink]="['/product/' + item.product.productId]">
       {{ item.product.name }}
     </h5>
     <div class="number-control">

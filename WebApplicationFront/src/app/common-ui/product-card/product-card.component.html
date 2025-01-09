@@ -4,13 +4,15 @@
     [alt]="product.image"
     class="card-img-top"
     style="width: 100%; height: auto"
-    (click)="viewProduct(product.productId)"
+    [routerLink]="['/product/' + product.productId]"
   />
   <div class="card-body">
     <p class="card-text">{{ product.price }} руб.</p>
     <h5 class="card-title">
       {{ product.name }}
     </h5>
-    <a [id]="product.productId" class="btn btn-primary" (click)="addToCart()">В корзину</a>
+    <a [id]="product.productId" class="btn btn-primary" (click)="addToCart()"
+      >В корзину</a
+    >
   </div>
 </div>

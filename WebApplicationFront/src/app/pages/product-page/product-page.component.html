@@ -1,5 +1,5 @@
 <div class="product-page">
-  <div class="list">
+  <!-- <div class="list">
     <span
       ><img src="https://cdn-icons-png.flaticon.com/128/994/994414.png" />
       <p>В избранное</p></span
@@ -12,7 +12,7 @@
       ><img src="https://cdn-icons-png.flaticon.com/128/481/481384.png" />
       <p>К сравнению</p></span
     >
-  </div>
+  </div> -->
 
   <div class="product" *ngIf="product">
     <div class="another-photos">
@@ -55,9 +55,11 @@
       <p class="card-text">
         Описание: {{ product.productResponseData.description }}
       </p>
-      <a href="#" class="btn btn-primary">В корзину</a>
+      <button id="addToCart" class="btn btn-primary" (click)="addToCart()">
+        В корзину
+      </button>
       <p *ngFor="let propName of propertyNames">
-        {{propName}}: {{product.properties[propName]}}
+        {{ propName }}: {{ product.properties[propName] }}
       </p>
     </div>
   </div>

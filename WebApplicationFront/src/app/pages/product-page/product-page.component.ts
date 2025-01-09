@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../service/product.service';
 import { CommonModule } from '@angular/common';
 import { Product } from '../../data/interfaces/product/product.interface';
+import { CartService } from '../../service/cart/cart.service';
 
 @Component({
   selector: 'app-product',
@@ -17,7 +18,8 @@ export class ProductComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private productService: ProductService
+    private productService: ProductService,
+    private cartService: CartService
   ) {}
 
   public ngOnInit(): void {
@@ -26,5 +28,16 @@ export class ProductComponent implements OnInit {
       this.product = data;
       this.propertyNames = Object.keys(data.properties);
     });
+  }
+
+  public addToCart(): void {
+    const addToCartRequest = {
+      productId: this.productId,
+      quantity: 1,
+    };
+    this.cartService.cahngeCart(addToCartRequest);
+
+    const button = document.getElementById("addToCart") as HTMLButtonElement;
+    button.style.backgroundColor = 'gray';
   }
 }

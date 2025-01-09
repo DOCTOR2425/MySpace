@@ -1,22 +1,18 @@
 import { Component, Input } from '@angular/core';
 import { ProductCard } from '../../data/interfaces/product/productCard.interface';
 import { CartService } from '../../service/cart/cart.service';
-import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-product-card',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.scss',
 })
 export class ProductCardComponent {
   @Input() product!: ProductCard;
 
-  constructor(private router: Router, private cartService: CartService) {}
-
-  public viewProduct(id: string): void {
-    this.router.navigate([`/product/${id}`]);
-  }
+  constructor(private cartService: CartService) {}
 
   public addToCart(): void {
     const addToCartRequest = {
