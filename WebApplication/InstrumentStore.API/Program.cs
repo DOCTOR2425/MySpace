@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using InstrumentStore.API.Middlewares;
+using InstrumentStore.API.Authentication;
 
 namespace InstrumentStore.API
 {
@@ -37,11 +38,14 @@ namespace InstrumentStore.API
 
             builder.Services.AddScoped<IJwtProvider, JwtProvider>();
             builder.Services.AddAutoMapper(typeof(AppMappingProfile));
+            builder.Services.AddScoped<CustomJwtBearerEvents>();
 
             builder.Services.AddAuthorization();
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(opt =>
                 {
+                    opt.EventsType = typeof(CustomJwtBearerEvents);
+
                     opt.TokenValidationParameters = new()
                     {
                         ValidateIssuer = false,
@@ -83,7 +87,7 @@ namespace InstrumentStore.API
             app.UseStaticFiles();
             app.UseRouting();
 
-            app.UseMiddleware<TokenMiddleware>();
+            //app.UseMiddleware<TokenMiddleware>();
 
             app.UseAuthentication();
             app.UseAuthorization();

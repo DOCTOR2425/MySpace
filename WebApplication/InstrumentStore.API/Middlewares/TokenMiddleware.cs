@@ -17,12 +17,12 @@ namespace InstrumentStore.API.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            var scope = _scopeFactory.CreateScope();
-            var usersService = scope.ServiceProvider.GetRequiredService<IUsersService>();
-
             if (context.Request.Path != "/login" && context.Request.Path != "/register" &&
                 context.Request.Headers.ContainsKey("Authorization"))
             {
+                var scope = _scopeFactory.CreateScope();
+                var usersService = scope.ServiceProvider.GetRequiredService<IUsersService>();
+
                 string cookieToken = context.Request.Headers["Authorization"]
                     .ToString().Substring("Bearer ".Length).Trim();
 
