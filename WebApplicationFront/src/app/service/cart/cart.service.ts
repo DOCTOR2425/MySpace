@@ -27,27 +27,25 @@ export class CartService {
     });
   }
 
-  public cahngeCart(payload: { productId: string; quantity: number }): void {
-    this.http
+  public cahngeCart(payload: { productId: string; quantity: number }): Observable<Object> {
+    return this.http
       .post(`${this.baseApiUrl}add-to-cart`, payload, {
         withCredentials: true,
-      })
-      .subscribe();
+      });
   }
 
-  public removeFromCart(cartItemId: string): void {
-    this.http.delete(this.baseApiUrl + cartItemId).subscribe();
+  public removeFromCart(cartItemId: string): Observable<Object> {
+    return this.http.delete(this.baseApiUrl + cartItemId);
   }
 
   public orderCartForRegistered(payload: {
     deliveryMethodId: string;
     paymentMethodId: string;
-  }): void {
-    this.http
+  }): Observable<Object> {
+    return this.http
       .post(`${this.baseApiUrl}order-cart-for-registered`, payload, {
         withCredentials: true,
-      })
-      .subscribe();
+      });
   }
 
   public getUserOrderInfo(): Observable<UserOrderInfo> {

@@ -6,7 +6,6 @@ using InstrumentStore.Domain.Mapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using InstrumentStore.API.Middlewares;
 using InstrumentStore.API.Authentication;
 
 namespace InstrumentStore.API

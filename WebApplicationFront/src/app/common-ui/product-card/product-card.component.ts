@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { ProductCard } from '../../data/interfaces/product/productCard.interface';
 import { CartService } from '../../service/cart/cart.service';
 import { RouterModule } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-product-card',
@@ -9,19 +10,30 @@ import { RouterModule } from '@angular/router';
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.scss',
 })
-export class ProductCardComponent {
+export class ProductCardComponent implements OnDestroy {
   @Input() product!: ProductCard;
+  private unsubscribe$ = new Subject<void>();
 
   constructor(private cartService: CartService) {}
+
+  public ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 
   public addToCart(): void {
     const addToCartRequest = {
       productId: this.product.productId,
       quantity: 1,
     };
-    this.cartService.cahngeCart(addToCartRequest);
+    this.cartService
+      .cahngeCart(addToCartRequest)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe();
 
-    const button = document.getElementById(this.product.productId) as HTMLButtonElement;
+    const button = document.getElementById(
+      this.product.productId
+    ) as HTMLButtonElement;
     button.style.backgroundColor = 'gray';
   }
 }

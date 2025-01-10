@@ -9,9 +9,9 @@ import { Product } from '../data/interfaces/product/product.interface';
   providedIn: 'root',
 })
 export class ProductService {
-  constructor(private http: HttpClient) {}
-
   baseApiUrl = environment.apiUrl + '/api/Product/';
+
+  constructor(private http: HttpClient) {}
 
   public getProductCards(): Observable<ProductCard[]> {
     return this.http.get<ProductCard[]>(`${this.baseApiUrl}`);

@@ -66,8 +66,7 @@
               "RelativeToolTip": "InstrumentStore.API\\Controllers\\CartController.cs",
               "ViewState": "AgIAABcAAAAAAAAAAAAQwCwAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-09T11:37:53.039Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-09T11:37:53.039Z"
             },
             {
               "$type": "Document",
@@ -79,8 +78,7 @@
               "RelativeToolTip": "InstrumentStore.API\\Controllers\\ProductController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-09T11:20:26.084Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-09T11:20:26.084Z"
             },
             {
               "$type": "Document",
@@ -90,7 +88,7 @@
               "RelativeDocumentMoniker": "InstrumentStore.API\\Authentication\\CustomJwtBearerEvents.cs",
               "ToolTip": "D:\\MySpace\\WebApplication\\InstrumentStore.API\\Authentication\\CustomJwtBearerEvents.cs",
               "RelativeToolTip": "InstrumentStore.API\\Authentication\\CustomJwtBearerEvents.cs",
-              "ViewState": "AgIAAEcAAAAAAAAAAAAwwGUAAAALAAAAAAAAAA==",
+              "ViewState": "AgIAABAAAAAAAAAAAAAgwDEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-09T10:16:37.529Z",
               "EditorCaption": ""
@@ -105,8 +103,7 @@
               "RelativeToolTip": "InstrumentStore.API\\Program.cs",
               "ViewState": "AgIAACMAAAAAAAAAAAAgwCIAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-09T09:35:38.65Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-09T09:35:38.65Z"
             },
             {
               "$type": "Document",
@@ -118,8 +115,7 @@
               "RelativeToolTip": "InstrumentStore.Core\\Services\\JwtProvider.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-09T09:40:32.356Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-09T09:40:32.356Z"
             }
           ]
         }

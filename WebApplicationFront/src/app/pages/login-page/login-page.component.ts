@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../service/auth/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-login-page',
@@ -10,8 +11,9 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss',
 })
-export class LoginPageComponent implements OnInit {
-  returnUrl: string = '';
+export class LoginPageComponent implements OnInit, OnDestroy {
+  public returnUrl: string = '';
+  private unsubscribe$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
@@ -25,9 +27,16 @@ export class LoginPageComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      this.returnUrl = params['returnUrl'] || '/';
-    });
+    this.route.queryParams
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((params) => {
+        this.returnUrl = params['returnUrl'] || '/';
+      });
+  }
+
+  public ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   public onSubmit(): void {
