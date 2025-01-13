@@ -171,6 +171,22 @@
   },
   {
     "ContainingType": "InstrumentStore.API.Controllers.CartController",
+    "Method": "ChangeCartItemQuantity",
+    "RelativePath": "api/Cart/change-cart-item-quantity",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "InstrumentStore.Domain.Contracts.Cart.CartItemResponse",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "InstrumentStore.API.Controllers.CartController",
     "Method": "GetOrderOptions",
     "RelativePath": "api/Cart/get-order-options",
     "HttpMethod": "GET",

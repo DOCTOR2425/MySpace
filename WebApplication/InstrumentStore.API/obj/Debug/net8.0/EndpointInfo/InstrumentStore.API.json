@@ -287,6 +287,37 @@
         }
       }
     },
+    "/api/Cart/change-cart-item-quantity": {
+      "post": {
+        "tags": [
+          "Cart"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CartItemResponse"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CartItemResponse"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CartItemResponse"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Cart/{cartItemId}": {
       "delete": {
         "tags": [
@@ -1051,7 +1082,7 @@
             "format": "uuid"
           },
           "product": {
-            "$ref": "#/components/schemas/ProductResponseData"
+            "$ref": "#/components/schemas/ProductData"
           },
           "quantity": {
             "type": "integer",
@@ -1286,6 +1317,48 @@
         },
         "additionalProperties": false
       },
+      "ProductData": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
+          },
+          "productCategory": {
+            "type": "string",
+            "nullable": true
+          },
+          "brand": {
+            "type": "string",
+            "nullable": true
+          },
+          "country": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "ProductRequest": {
         "type": "object",
         "properties": {
@@ -1328,55 +1401,13 @@
         "type": "object",
         "properties": {
           "productResponseData": {
-            "$ref": "#/components/schemas/ProductResponseData"
+            "$ref": "#/components/schemas/ProductData"
           },
           "properties": {
             "type": "object",
             "additionalProperties": {
               "type": "string"
             },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "ProductResponseData": {
-        "type": "object",
-        "properties": {
-          "productId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "price": {
-            "type": "number",
-            "format": "double"
-          },
-          "quantity": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "image": {
-            "type": "string",
-            "nullable": true
-          },
-          "productCategory": {
-            "type": "string",
-            "nullable": true
-          },
-          "brand": {
-            "type": "string",
-            "nullable": true
-          },
-          "country": {
-            "type": "string",
             "nullable": true
           }
         },

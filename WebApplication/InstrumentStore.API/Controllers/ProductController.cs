@@ -39,7 +39,7 @@ namespace InstrumentStore.API.Controllers
         public async Task<ActionResult<ProductResponse>> GetProduct([FromRoute] Guid id)
         {
             var product = await _productService.GetById(id);
-            var productResponseData = _mapper.Map<ProductResponseData>(product);
+            var productResponseData = _mapper.Map<ProductData>(product);
 
             ProductResponse response = new ProductResponse(
                 productResponseData,

@@ -5,12 +5,13 @@ import {
   HttpHandlerFn,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { CookiesManagerService } from '../../cookies-manager/cookies-manager.service';
 
 export const authInterceptor: HttpInterceptorFn = (
   req: HttpRequest<any>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<any>> => {
-  const token = getCookie('token-cookies');
+  const token = new CookiesManagerService().getAuthCookie();
 
   if (token) {
     const cloned = req.clone({
@@ -23,14 +24,3 @@ export const authInterceptor: HttpInterceptorFn = (
     return next(req);
   }
 };
-
-function getCookie(name: string): string | null {
-  const nameEQ = name + '=';
-  const ca = document.cookie.split(';');
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-  }
-  return null;
-}

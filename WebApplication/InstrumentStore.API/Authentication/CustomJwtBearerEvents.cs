@@ -18,8 +18,6 @@ namespace InstrumentStore.API.Authentication
 
         public override async Task AuthenticationFailed(AuthenticationFailedContext context)
         {
-            Console.WriteLine("AuthenticationFailed: " + context.Exception.Message);
-
             if (context.Exception is SecurityTokenExpiredException)
             {
                 var token = context.Request.Headers["Authorization"].ToString().Substring("Bearer ".Length).Trim();

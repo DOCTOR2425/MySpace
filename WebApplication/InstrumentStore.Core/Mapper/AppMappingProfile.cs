@@ -10,7 +10,7 @@ namespace InstrumentStore.Domain.Mapper
     {
         public AppMappingProfile()
         {
-            CreateMap<Product, ProductResponseData>()
+            CreateMap<Product, ProductData>()
                 .ForPath(dest => dest.Country, opt => opt.MapFrom(src => src.Country.Name))
                 .ForPath(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand.Name))
                 .ForPath(dest => dest.ProductCategory, opt => opt.MapFrom(src => src.ProductCategory.Name))

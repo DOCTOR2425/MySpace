@@ -71,13 +71,9 @@ export class CartPageComponent implements OnInit, OnDestroy {
     this.updateTotalPrice();
   }
 
-  public cahngeItemNumber(item: CartItem): void {
-    const cahngeCartRequest = {
-      productId: item.product.productId,
-      quantity: item.quantity,
-    };
+  public cahngeItemNumber(cartItem: CartItem): void {
     this.cartService
-      .cahngeCart(cahngeCartRequest)
+      .cahngeCart(cartItem)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe();
     this.updateTotalPrice();

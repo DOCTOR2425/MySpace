@@ -1,51 +1,125 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CartItem } from '../../data/interfaces/cartItem.interface';
-import { Observable } from 'rxjs';
+import { asapScheduler, Observable, scheduled } from 'rxjs';
 import { OrderOptions } from '../../data/interfaces/order-options/order-options.interface';
 import { UserOrderInfo } from '../../data/interfaces/user/user-order-info.interface';
 import { environment } from '../../../environments/environment.development';
-
+import { AuthService } from '../auth/auth.service';
+import { ProductService } from '../product.service';
+import { ProductData } from '../../data/interfaces/product/productData.interface';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
-  constructor(private http: HttpClient) {}
+  private cartKey = 'cart';
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    private productService: ProductService
+  ) {}
 
   baseApiUrl = environment.apiUrl + '/api/Cart/';
 
   public getCartItems(): Observable<CartItem[]> {
-    return this.http.get<CartItem[]>(`${this.baseApiUrl}`, {
-      withCredentials: true,
-    });
-  }
-
-  public getOrderOptions(): Observable<OrderOptions> {
-    return this.http.get<OrderOptions>(`${this.baseApiUrl}get-order-options`, {
-      withCredentials: true,
-    });
-  }
-
-  public cahngeCart(payload: { productId: string; quantity: number }): Observable<Object> {
-    return this.http
-      .post(`${this.baseApiUrl}add-to-cart`, payload, {
+    if (this.authService.isLoggedIn() == true) {
+      return this.http.get<CartItem[]>(`${this.baseApiUrl}`, {
         withCredentials: true,
       });
+    } else {
+      return scheduled([this.getCartItemsFromLocalStorage()], asapScheduler);
+    }
+  }
+
+  private getCartItemsFromLocalStorage(): CartItem[] {
+    let cartItemsJson = localStorage.getItem(this.cartKey);
+    return cartItemsJson ? JSON.parse(cartItemsJson) : [];
+  }
+
+  public cahngeCart(cartItem: CartItem): Observable<Object> {
+    if (this.authService.isLoggedIn() == true) {
+      return this.http.post(
+        `${this.baseApiUrl}change-cart-item-quantity`,
+        cartItem,
+        {
+          withCredentials: true,
+        }
+      );
+    } else {
+      this.cahngeCartLocalStorage(cartItem);
+      return scheduled([Object], asapScheduler);
+    }
+  }
+
+  private cahngeCartLocalStorage(cartItem: CartItem): void {
+    this.removeFromCartLocalStorage(cartItem.cartItemId);
+    if (cartItem.quantity != 0) {
+      let cartItems = this.getCartItemsFromLocalStorage();
+      cartItems.push(cartItem);
+      localStorage.setItem(this.cartKey, JSON.stringify(cartItems));
+    }
+  }
+
+  public addToUserCart(payload: {
+    productId: string;
+    quantity: number;
+  }): Observable<Object> {
+    if (this.authService.isLoggedIn() == true) {
+      return this.http.post(`${this.baseApiUrl}add-to-cart`, payload, {
+        withCredentials: true,
+      });
+    } else {
+      this.addToUserCartLocalStorage(payload);
+      return scheduled([Object], asapScheduler);
+    }
+  }
+
+  private addToUserCartLocalStorage(payload: {
+    productId: string;
+    quantity: number;
+  }): void {
+    const cartItems = this.getCartItemsFromLocalStorage();
+    let productData: ProductData;
+    this.productService.getProductById(payload.productId).subscribe((val) => {
+      productData = val.productResponseData;
+      let cartItem = {
+        cartItemId: uuidv4(),
+        product: productData,
+        quantity: 1,
+      };
+      cartItems.push(cartItem);
+      localStorage.setItem(this.cartKey, JSON.stringify(cartItems));
+    });
   }
 
   public removeFromCart(cartItemId: string): Observable<Object> {
-    return this.http.delete(this.baseApiUrl + cartItemId);
+    if (this.authService.isLoggedIn() == true) {
+      return this.http.delete(this.baseApiUrl + cartItemId);
+    } else {
+      this.removeFromCartLocalStorage(cartItemId);
+      return scheduled([Object], asapScheduler);
+    }
+  }
+
+  private removeFromCartLocalStorage(itemId: string): void {
+    let cartItems = this.getCartItemsFromLocalStorage();
+    cartItems = cartItems.filter((item) => item.cartItemId !== itemId);
+    localStorage.setItem(this.cartKey, JSON.stringify(cartItems));
   }
 
   public orderCartForRegistered(payload: {
     deliveryMethodId: string;
     paymentMethodId: string;
   }): Observable<Object> {
-    return this.http
-      .post(`${this.baseApiUrl}order-cart-for-registered`, payload, {
+    return this.http.post(
+      `${this.baseApiUrl}order-cart-for-registered`,
+      payload,
+      {
         withCredentials: true,
-      });
+      }
+    );
   }
 
   public getUserOrderInfo(): Observable<UserOrderInfo> {
@@ -55,5 +129,11 @@ export class CartService {
         withCredentials: true,
       }
     );
+  }
+
+  public getOrderOptions(): Observable<OrderOptions> {
+    return this.http.get<OrderOptions>(`${this.baseApiUrl}get-order-options`, {
+      withCredentials: true,
+    });
   }
 }

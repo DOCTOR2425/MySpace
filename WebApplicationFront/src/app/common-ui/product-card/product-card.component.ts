@@ -27,7 +27,7 @@ export class ProductCardComponent implements OnDestroy {
       quantity: 1,
     };
     this.cartService
-      .cahngeCart(addToCartRequest)
+      .addToUserCart(addToCartRequest)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe();
 

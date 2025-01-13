@@ -3,7 +3,6 @@ using InstrumentStore.Domain.Abstractions;
 using InstrumentStore.Domain.Contracts.Cart;
 using InstrumentStore.Domain.Contracts.User;
 using InstrumentStore.Domain.DataBase.Models;
-using InstrumentStore.Domain.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,7 +41,6 @@ namespace InstrumentStore.API.Controllers
                 .ToString().Substring("Bearer ".Length).Trim();
         }
 
-        [Authorize]
         [HttpGet]
         public async Task<ActionResult<List<CartItemResponse>>> GetUserCart()
         {
@@ -57,7 +55,6 @@ namespace InstrumentStore.API.Controllers
             return Ok(result);
         }
 
-        [Authorize]
         [HttpPost("add-to-cart")]
         public async Task<ActionResult> AddToUserCart([FromBody] AddToCartRequest request)
         {
@@ -67,14 +64,21 @@ namespace InstrumentStore.API.Controllers
                 request.Quantity));
         }
 
-        [Authorize]
+        [HttpPost("change-cart-item-quantity")]
+        public async Task<ActionResult> ChangeCartItemQuantity([FromBody] CartItemResponse request)
+        {
+            return Ok(await _cartService.AddToCart(
+                _jwtProvider.GetUserIdFromToken(GetToken()),
+                request.Product.ProductId,
+                request.Quantity));
+        }
+
         [HttpDelete("{cartItemId:guid}")]
         public async Task<ActionResult> RemoveFromCart(Guid cartItemId)
         {
             return Ok(await _cartService.RemoveFromCart(cartItemId));
         }
 
-        [Authorize]
         [HttpPost("order-cart-for-registered")]
         public async Task<ActionResult<Guid>> OrderCart([FromBody] OrderCartRequest orderCartRequest)
         {
@@ -84,7 +88,6 @@ namespace InstrumentStore.API.Controllers
                 orderCartRequest.PaymentMethodId));
         }
 
-        [Authorize]
         [HttpPost("order-product")]
         public async Task<ActionResult<Guid>> OrderProduct([FromBody] OrderProductRequest orderProductRequest)
         {
@@ -96,7 +99,6 @@ namespace InstrumentStore.API.Controllers
                 orderProductRequest.PaymentMethodId));
         }
 
-        [Authorize]
         [HttpGet("get-order-options")]
         public async Task<ActionResult<OrderOptionsResponse>> GetOrderOptions()
         {
@@ -105,7 +107,6 @@ namespace InstrumentStore.API.Controllers
                 await _paymentMethodService.GetAll()));
         }
 
-        [Authorize]
         [HttpGet("get-user-order-info")]
         public async Task<ActionResult<UserOrderInfo>> GetUserOrderInfo()
         {

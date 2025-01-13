@@ -4,7 +4,7 @@ namespace InstrumentStore.Domain.Contracts.Cart
 {
 	public record CartItemResponse(
 		 Guid CartItemId,
-		 ProductResponseData Product,
+		 ProductData Product,
 		 int Quantity
 	);
 }

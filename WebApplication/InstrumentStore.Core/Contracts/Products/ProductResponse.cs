@@ -1,6 +1,6 @@
 ﻿namespace InstrumentStore.Domain.Contracts.Products
 {
     public record ProductResponse(
-        ProductResponseData ProductResponseData,
+        ProductData ProductResponseData,
         Dictionary<string, string> Properties);
 }

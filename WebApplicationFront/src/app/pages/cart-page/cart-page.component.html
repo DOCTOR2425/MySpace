@@ -12,7 +12,11 @@
   </div>
 
   <div class="registration-form modal-body">
-    <form *ngIf="userOrderInfo" #orderForm="ngForm" (ngSubmit)="orderCart(orderForm)">
+    <form
+      *ngIf="userOrderInfo"
+      #orderForm="ngForm"
+      (ngSubmit)="orderCart(orderForm)"
+    >
       <div class="line">
         <div class="form-group">
           <label class="col-form-label" for="name">Имя:</label>
