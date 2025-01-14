@@ -1,4 +1,5 @@
 ﻿using InstrumentStore.Domain.Abstractions;
+using InstrumentStore.Domain.Contracts.Cart;
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
 using Microsoft.EntityFrameworkCore;
@@ -84,7 +85,7 @@ namespace InstrumentStore.Domain.Services
             return cartItemId;
         }
 
-        public async Task<Guid> OrderCart(Guid userId, Guid deliveryMethodId, Guid paymentMethodId)
+        public async Task<Guid> OrderCartForLogined(Guid userId, Guid deliveryMethodId, Guid paymentMethodId)
         {
             Guid paidOrderId = await _paidOrderService.Create(userId, deliveryMethodId, paymentMethodId);
 
@@ -106,6 +107,14 @@ namespace InstrumentStore.Domain.Services
             await _adminService.SendAdminMailAboutOrder(paidOrderId);
 
             return paidOrderId;
+        }
+
+        public async Task<Guid> OrderCartForUnlogined(Guid userId, OrderCartOfUnregisteredRequest request)
+        {
+            foreach(var item in request.CartItems)
+                await AddToCart(userId, item.ProductId, item.Quantity);
+
+            return await OrderCartForLogined(userId, request.DeliveryMethodId, request.PaymentMethodId);
         }
 
         public async Task<Guid> OrderProduct(Guid userId,

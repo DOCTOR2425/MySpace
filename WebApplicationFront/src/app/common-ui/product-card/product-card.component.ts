@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy } from '@angular/core';
-import { ProductCard } from '../../data/interfaces/product/productCard.interface';
+import { ProductCard } from '../../data/interfaces/product/product-card.interface';
 import { CartService } from '../../service/cart/cart.service';
 import { RouterModule } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';

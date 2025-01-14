@@ -107,6 +107,18 @@
         }
       }
     },
+    "/api/Admin/test": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Admin/FillAll": {
       "get": {
         "tags": [
@@ -388,6 +400,37 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/Cart/order-cart-for-unregistered": {
+      "post": {
+        "tags": [
+          "Cart"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderCartOfUnregisteredRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderCartOfUnregisteredRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderCartOfUnregisteredRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -1151,6 +1194,30 @@
         },
         "additionalProperties": false
       },
+      "OrderCartOfUnregisteredRequest": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/RegisterUserFromOrderRequest"
+          },
+          "cartItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AddToCartRequest"
+            },
+            "nullable": true
+          },
+          "deliveryMethodId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "paymentMethodId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
       "OrderCartRequest": {
         "type": "object",
         "properties": {
@@ -1413,7 +1480,7 @@
         },
         "additionalProperties": false
       },
-      "RegisterUserRequest": {
+      "RegisterUserFromOrderRequest": {
         "type": "object",
         "properties": {
           "firstName": {
@@ -1424,7 +1491,45 @@
             "type": "string",
             "nullable": true
           },
-          "patronymic": {
+          "telephone": {
+            "type": "string",
+            "nullable": true
+          },
+          "eMail": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "street": {
+            "type": "string",
+            "nullable": true
+          },
+          "houseNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "entrance": {
+            "type": "string",
+            "nullable": true
+          },
+          "flat": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RegisterUserRequest": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "surname": {
             "type": "string",
             "nullable": true
           },
@@ -1479,10 +1584,6 @@
             "nullable": true
           },
           "surname": {
-            "type": "string",
-            "nullable": true
-          },
-          "patronymic": {
             "type": "string",
             "nullable": true
           },

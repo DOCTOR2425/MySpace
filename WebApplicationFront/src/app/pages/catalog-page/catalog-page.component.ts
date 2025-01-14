@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ProductCardComponent } from '../../common-ui/product-card/product-card.component';
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../../service/product.service';
-import { ProductData } from '../../data/interfaces/product/productData.interface';
+import { ProductData } from '../../data/interfaces/product/product-data.interface';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({

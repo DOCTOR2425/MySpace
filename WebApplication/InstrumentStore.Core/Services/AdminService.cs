@@ -47,8 +47,9 @@ namespace InstrumentStore.Domain.Services
             string mailText = string.Empty;
 
             mailText += $"Заказ от {paidOrder.PaymentDate}\n";
-            mailText += $"Клиент - {paidOrder.User.Surname} {paidOrder.User.FirstName} {paidOrder.User.Patronymic}\n";
+            mailText += $"Клиент - {paidOrder.User.Surname} {paidOrder.User.FirstName}\n";
             mailText += $"Телефон клиента - {paidOrder.User.Telephone}\n";
+            mailText += $"EMail клиента - {paidOrder.User.UserRegistrInfo.EMail}\n";
             mailText += $"Способ оплаты - {paidOrder.PaymentMethod.Name}\n";
             mailText += $"Способ доставки - {paidOrder.DeliveryMethod.Name} (стоимость - {paidOrder.DeliveryMethod.Price})\n";
 

@@ -1,11 +1,10 @@
 ﻿namespace InstrumentStore.Domain.Contracts.User
 {
-    public record RegisterUserRequest(
+    public record RegisterUserFromOrderRequest(
         string FirstName,
         string Surname,
         string Telephone,
         string EMail,
-        string Password,
 
         string City,
         string Street,

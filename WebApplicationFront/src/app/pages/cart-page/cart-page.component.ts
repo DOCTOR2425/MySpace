@@ -1,12 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CartService } from '../../service/cart/cart.service';
-import { CartItem } from '../../data/interfaces/cartItem.interface';
+import { CartItem } from '../../data/interfaces/cart/cart-item.interface';
 import { CommonModule } from '@angular/common';
 import { CartItemComponent } from './cart-item/cart-item.component';
 import { FormsModule, NgForm } from '@angular/forms';
 import { OrderOptions } from '../../data/interfaces/order-options/order-options.interface';
 import { UserOrderInfo } from '../../data/interfaces/user/user-order-info.interface';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
+import { AuthService } from '../../service/auth/auth.service';
+import { RegisterUserFromOrderRequest } from '../../data/interfaces/user/register-user-from-order-request.interface';
+import { AddToCartRequest } from '../../data/interfaces/cart/add-to-cart-request.interface';
 
 @Component({
   selector: 'app-cart-page',
@@ -21,7 +24,10 @@ export class CartPageComponent implements OnInit, OnDestroy {
   public userOrderInfo!: UserOrderInfo;
   private unsubscribe$ = new Subject<void>();
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private authService: AuthService
+  ) {}
 
   public ngOnInit(): void {
     forkJoin({
@@ -80,16 +86,55 @@ export class CartPageComponent implements OnInit, OnDestroy {
   }
 
   public orderCart(form: NgForm): void {
-    let payload = {
-      deliveryMethodId: form.value.deliveryMethodId,
-      paymentMethodId: form.value.paymentMethodId,
-    };
-    this.cartService
-      .orderCartForRegistered(payload)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe();
-
+    if (this.authService.isLoggedIn() == true) {
+      let payload = {
+        deliveryMethodId: form.value.deliveryMethodId,
+        paymentMethodId: form.value.paymentMethodId,
+      };
+      this.cartService
+        .orderCartForRegistered(payload)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe();
+    } else {
+      this.orderCartForUnregistered(form);
+    }
     this.items = [];
     this.updateTotalPrice();
+  }
+
+  private orderCartForUnregistered(form: NgForm): void {
+    let user: RegisterUserFromOrderRequest = {
+      firstName: form.value.firstName,
+      surname: '',
+      telephone: form.value.telephone,
+      eMail: form.value.email,
+
+      city: form.value.city,
+      street: form.value.street,
+      houseNumber: form.value.houseNumber,
+      entrance: '',
+      flat: form.value.flat,
+    };
+
+    let cartItems: AddToCartRequest[] = [];
+    this.cartService.getCartItems().subscribe((val) => {
+      val.forEach((item) => {
+        let newItem: AddToCartRequest = {
+          productId: item.product.productId,
+          quantity: item.quantity,
+        };
+        cartItems.push(newItem);
+      });
+
+      let payload = {
+        user,
+        cartItems,
+        deliveryMethodId: form.value.deliveryMethodId,
+        paymentMethodId: form.value.paymentMethodId,
+      };
+
+      this.cartService.orderCartForUnregistered(payload).subscribe();
+      this.cartService.clearLocalCart();
+    });
   }
 }

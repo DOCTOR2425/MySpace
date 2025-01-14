@@ -3,16 +3,20 @@
   "WorkspaceRootPath": "D:\\MySpace\\WebApplication\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|d:\\myspace\\webapplication\\instrumentstore.api\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|solutionrelative:instrumentstore.api\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|d:\\myspace\\webapplication\\instrumentstore.core\\services\\usersservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|solutionrelative:instrumentstore.core\\services\\usersservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|d:\\myspace\\webapplication\\instrumentstore.api\\controllers\\cartcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|solutionrelative:instrumentstore.api\\controllers\\cartcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|d:\\myspace\\webapplication\\instrumentstore.api\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|solutionrelative:instrumentstore.api\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|d:\\myspace\\webapplication\\instrumentstore.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{13F83B6F-B0D0-4A77-8E75-699B9B131369}|InstrumentStore.API\\InstrumentStore.API.csproj|solutionrelative:instrumentstore.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|d:\\myspace\\webapplication\\instrumentstore.core\\services\\cartservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{99A2D860-E3B8-4253-8D1C-7D1FD4158032}|InstrumentStore.Core\\InstrumentStore.Domain.csproj|solutionrelative:instrumentstore.core\\services\\cartservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 1008,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -50,41 +54,54 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "UserController.cs",
-              "DocumentMoniker": "D:\\MySpace\\WebApplication\\InstrumentStore.API\\Controllers\\UserController.cs",
-              "RelativeDocumentMoniker": "InstrumentStore.API\\Controllers\\UserController.cs",
-              "ToolTip": "D:\\MySpace\\WebApplication\\InstrumentStore.API\\Controllers\\UserController.cs",
-              "RelativeToolTip": "InstrumentStore.API\\Controllers\\UserController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "D:\\MySpace\\WebApplication\\InstrumentStore.API\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "InstrumentStore.API\\Controllers\\AdminController.cs",
+              "ToolTip": "D:\\MySpace\\WebApplication\\InstrumentStore.API\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "InstrumentStore.API\\Controllers\\AdminController.cs",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAowF8AAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-13T11:27:38.287Z",
+              "WhenOpened": "2025-01-14T11:25:52.371Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CartService.cs",
+              "DocumentMoniker": "D:\\MySpace\\WebApplication\\InstrumentStore.Core\\Services\\CartService.cs",
+              "RelativeDocumentMoniker": "InstrumentStore.Core\\Services\\CartService.cs",
+              "ToolTip": "D:\\MySpace\\WebApplication\\InstrumentStore.Core\\Services\\CartService.cs",
+              "RelativeToolTip": "InstrumentStore.Core\\Services\\CartService.cs",
+              "ViewState": "AgIAAHYAAAAAAAAAAAAawCkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-14T10:57:09.394Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UsersService.cs",
+              "DocumentMoniker": "D:\\MySpace\\WebApplication\\InstrumentStore.Core\\Services\\UsersService.cs",
+              "RelativeDocumentMoniker": "InstrumentStore.Core\\Services\\UsersService.cs",
+              "ToolTip": "D:\\MySpace\\WebApplication\\InstrumentStore.Core\\Services\\UsersService.cs",
+              "RelativeToolTip": "InstrumentStore.Core\\Services\\UsersService.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAYwCEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-14T10:40:17.777Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\MySpace\\WebApplication\\InstrumentStore.API\\Program.cs",
-              "RelativeDocumentMoniker": "InstrumentStore.API\\Program.cs",
-              "ToolTip": "D:\\MySpace\\WebApplication\\InstrumentStore.API\\Program.cs",
-              "RelativeToolTip": "InstrumentStore.API\\Program.cs",
-              "ViewState": "AgIAABkAAAAAAAAAAAAgwDQAAAA4AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-13T09:45:59.164Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
               "Title": "CartController.cs",
               "DocumentMoniker": "D:\\MySpace\\WebApplication\\InstrumentStore.API\\Controllers\\CartController.cs",
               "RelativeDocumentMoniker": "InstrumentStore.API\\Controllers\\CartController.cs",
               "ToolTip": "D:\\MySpace\\WebApplication\\InstrumentStore.API\\Controllers\\CartController.cs",
               "RelativeToolTip": "InstrumentStore.API\\Controllers\\CartController.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAA1wAQAAAAtAAAAAAAAAA==",
+              "ViewState": "AgIAAEoAAAAAAAAAAAAiwHYAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-09T11:37:53.039Z",
+              "WhenOpened": "2025-01-14T10:19:34.9Z",
               "EditorCaption": ""
             }
           ]

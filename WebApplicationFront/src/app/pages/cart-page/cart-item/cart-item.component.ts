@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { CartItem } from '../../../data/interfaces/cartItem.interface';
+import { CartItem } from '../../../data/interfaces/cart/cart-item.interface';
 import { CartPageComponent } from '../cart-page.component';
 import { RouterModule } from '@angular/router';
 

@@ -1,13 +1,14 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { CookiesManagerService } from '../cookies-manager/cookies-manager.service';
+import { catchError, Observable, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private baseApiUrl = environment.apiUrl + '/login';
+  private baseApiUrl = environment.apiUrl;
 
   constructor(
     private http: HttpClient,
@@ -16,14 +17,20 @@ export class AuthService {
 
   public login(payload: { eMail: string; password: string }) {
     this.http
-      .post(this.baseApiUrl, payload, { withCredentials: true })
+      .post(`${this.baseApiUrl}/login`, payload, { withCredentials: true })
       .subscribe();
   }
 
-  isLoggedIn(): boolean {
+  public isLoggedIn(): boolean {
     if (this.cookiesManager.getAuthCookie() !== null) {
       return true;
     }
     return false;
+  }
+
+  public test(): Observable<Object> {
+    return this.http.get(`${this.baseApiUrl}/api/Admin/test`, {
+      withCredentials: true,
+    });
   }
 }

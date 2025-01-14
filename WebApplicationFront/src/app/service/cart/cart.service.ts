@@ -1,14 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CartItem } from '../../data/interfaces/cartItem.interface';
+import { CartItem } from '../../data/interfaces/cart/cart-item.interface';
 import { asapScheduler, Observable, scheduled } from 'rxjs';
 import { OrderOptions } from '../../data/interfaces/order-options/order-options.interface';
 import { UserOrderInfo } from '../../data/interfaces/user/user-order-info.interface';
 import { environment } from '../../../environments/environment.development';
 import { AuthService } from '../auth/auth.service';
 import { ProductService } from '../product.service';
-import { ProductData } from '../../data/interfaces/product/productData.interface';
+import { ProductData } from '../../data/interfaces/product/product-data.interface';
 import { v4 as uuidv4 } from 'uuid';
+import { RegisterUserFromOrderRequest } from '../../data/interfaces/user/register-user-from-order-request.interface';
+import { AddToCartRequest } from '../../data/interfaces/cart/add-to-cart-request.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -122,18 +124,55 @@ export class CartService {
     );
   }
 
-  public getUserOrderInfo(): Observable<UserOrderInfo> {
-    return this.http.get<UserOrderInfo>(
-      `${this.baseApiUrl}get-user-order-info`,
+  public orderCartForUnregistered(payload: {
+    user: RegisterUserFromOrderRequest;
+    cartItems: AddToCartRequest[];
+    deliveryMethodId: any;
+    paymentMethodId: any;
+  }): Observable<Object> {
+    return this.http.post(
+      `${this.baseApiUrl}order-cart-for-unregistered`,
+      payload,
       {
         withCredentials: true,
       }
     );
   }
 
+  public getUserOrderInfo(): Observable<UserOrderInfo> {
+    if (this.authService.isLoggedIn() == true) {
+      return this.http.get<UserOrderInfo>(
+        `${this.baseApiUrl}get-user-order-info`,
+        {
+          withCredentials: true,
+        }
+      );
+    } else {
+      return scheduled([this.getUserOrderInfoLocalStorage()], asapScheduler);
+    }
+  }
+
+  private getUserOrderInfoLocalStorage(): UserOrderInfo {
+    return {
+      userId: '',
+      firstName: '',
+      eMail: '',
+      telephone: '',
+      city: '',
+      street: '',
+      houseNumber: '',
+      entrance: '',
+      flat: '',
+    };
+  }
+
   public getOrderOptions(): Observable<OrderOptions> {
     return this.http.get<OrderOptions>(`${this.baseApiUrl}get-order-options`, {
       withCredentials: true,
     });
+  }
+
+  public clearLocalCart(): void {
+    localStorage.setItem(this.cartKey, '');
   }
 }

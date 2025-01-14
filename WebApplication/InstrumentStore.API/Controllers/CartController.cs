@@ -80,12 +80,22 @@ namespace InstrumentStore.API.Controllers
         }
 
         [HttpPost("order-cart-for-registered")]
-        public async Task<ActionResult<Guid>> OrderCart([FromBody] OrderCartRequest orderCartRequest)
+        public async Task<ActionResult<Guid>> OrderCartForRegistered([FromBody] OrderCartRequest orderCartRequest)
         {
-            return Ok(await _cartService.OrderCart(
+            return Ok(await _cartService.OrderCartForLogined(
                 _jwtProvider.GetUserIdFromToken(GetToken()),
                 orderCartRequest.DeliveryMethodId,
                 orderCartRequest.PaymentMethodId));
+        }
+
+        [AllowAnonymous]
+        [HttpPost("order-cart-for-unregistered")]
+        public async Task<ActionResult> OrderCartForUnregistered([FromBody] OrderCartOfUnregisteredRequest request)
+        {
+            Guid userId = await _usersService.RegisterUserFromOrder(request.User);
+            Guid orderId = await _cartService.OrderCartForUnlogined(userId, request);
+
+            return Ok(orderId);
         }
 
         [HttpPost("order-product")]
@@ -99,6 +109,7 @@ namespace InstrumentStore.API.Controllers
                 orderProductRequest.PaymentMethodId));
         }
 
+        [AllowAnonymous]
         [HttpGet("get-order-options")]
         public async Task<ActionResult<OrderOptionsResponse>> GetOrderOptions()
         {

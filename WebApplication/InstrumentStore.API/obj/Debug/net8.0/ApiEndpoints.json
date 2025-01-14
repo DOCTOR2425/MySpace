@@ -72,6 +72,16 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "InstrumentStore.API.Controllers.AdminController",
+    "Method": "Test",
+    "RelativePath": "api/Admin/test",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "InstrumentStore.API.Controllers.BrandController",
     "Method": "GetAllBrands",
     "RelativePath": "api/Brand",
@@ -227,7 +237,7 @@
   },
   {
     "ContainingType": "InstrumentStore.API.Controllers.CartController",
-    "Method": "OrderCart",
+    "Method": "OrderCartForRegistered",
     "RelativePath": "api/Cart/order-cart-for-registered",
     "HttpMethod": "POST",
     "IsController": true,
@@ -250,6 +260,22 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "InstrumentStore.API.Controllers.CartController",
+    "Method": "OrderCartForUnregistered",
+    "RelativePath": "api/Cart/order-cart-for-unregistered",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "InstrumentStore.Domain.Contracts.Cart.OrderCartOfUnregisteredRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "InstrumentStore.API.Controllers.CartController",

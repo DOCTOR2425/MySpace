@@ -79,6 +79,13 @@ namespace InstrumentStore.API.Controllers
             return Ok(await _paymentMethodService.Create(paymentMethod));
         }
 
+        [HttpGet("test")]
+        public async Task<IActionResult> Test()
+        {
+            //throw new Exception("test exep");
+            return new StatusCodeResult(StatusCodes.Status400BadRequest);
+        }
+
         [HttpGet("FillAll")]
         public async Task<ActionResult> FillOneProduct()
         {
@@ -439,7 +446,6 @@ namespace InstrumentStore.API.Controllers
             RegisterUserRequest registerUserRequest = new RegisterUserRequest(
                 "Egor",
                 "Dudkin",
-                "Searheevich",
                 "+375445555555",
                 "aboba",
                 "aboba",
@@ -455,7 +461,7 @@ namespace InstrumentStore.API.Controllers
             await _cartService.AddToCart(userId, product.ProductId, 1);
             await _cartService.AddToCart(userId, product2.ProductId, 2);
 
-            await _cartService.OrderCart(userId,
+            await _cartService.OrderCartForLogined(userId,
                 deliveryMethod1.DeliveryMethodId,
                 paymentMethod2.PaymentMethodId);
 
