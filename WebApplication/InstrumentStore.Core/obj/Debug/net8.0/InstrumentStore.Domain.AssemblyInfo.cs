@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("InstrumentStore.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e9e2905b6bc78870bd83bbd86777d4b5831c5231")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5a0bbc3708419ba9c29af6d607c26db0ff03af0f")]
 [assembly: System.Reflection.AssemblyProductAttribute("InstrumentStore.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("InstrumentStore.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

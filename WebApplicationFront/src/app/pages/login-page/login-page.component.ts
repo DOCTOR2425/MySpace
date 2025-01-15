@@ -7,7 +7,7 @@ import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-login-page',
-  imports: [ReactiveFormsModule ],
+  imports: [ReactiveFormsModule],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss',
 })
@@ -45,21 +45,15 @@ export class LoginPageComponent implements OnInit, OnDestroy {
         eMail: this.form.get('eMail')!.value!,
         password: this.form.get('password')!.value!,
       };
-      this.authService.login(formValue);
-      this.router.navigate([`/${this.returnUrl}`]);
+      this.authService.login(formValue).subscribe({
+        next: (response) => {
+          this.router.navigate([`/${this.returnUrl}`]);
+        },
+        error: (error) => {
+          console.log(error.status);
+          
+        }
+      });
     }
-  }
-
-  public test(): void {
-    this.authService.test().subscribe({
-      next: (response) => {
-        // console.log(response);
-      },
-      error: (error) => {
-      },
-      complete: () => {
-        // console.log('complete');
-      },
-    });
   }
 }

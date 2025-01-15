@@ -5,36 +5,46 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InstrumentStore.API.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class UserController : ControllerBase
-	{
-		private readonly IUsersService _usersService;
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UserController : ControllerBase
+    {
+        private readonly IUsersService _usersService;
 
-		public UserController(IUsersService usersService)
-		{
-			_usersService = usersService;
-		}
+        public UserController(IUsersService usersService)
+        {
+            _usersService = usersService;
+        }
 
-		[HttpPost("/register")]
-		public async Task<ActionResult<Guid>> Register([FromBody] RegisterUserRequest request)
-		{
-			return Ok(await _usersService.Register(request));
-		}
+        [HttpPost("/register")]
+        public async Task<ActionResult<Guid>> Register([FromBody] RegisterUserRequest request)
+        {
+            return Ok(await _usersService.Register(request));
+        }
 
-		[HttpPost("/login")]
-		public async Task<ActionResult> Login([FromBody] LoginUserRequest request)
-		{
-			string token = await _usersService.Login(request.EMail, request.Password);
+        [HttpPost("/login")]
+        public async Task<ActionResult> Login([FromBody] LoginUserRequest request)
+        {
+            string token = "";
 
-			HttpContext.Response.Cookies.Append(JwtProvider.AccessCookiesName, token, new CookieOptions()
-			{
-				Secure = true,
-				SameSite = SameSiteMode.Lax,
-				Expires = DateTime.Now.AddMinutes(JwtProvider.RefreshTokenLifeDays)
-			});
+            try
+            {
+                token = await _usersService.Login(request.EMail, request.Password);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new StatusCodeResult(StatusCodes.Status401Unauthorized);
+            }
 
-			return Ok();
-		}
-	}
+            HttpContext.Response.Cookies.Append(JwtProvider.AccessCookiesName, token, new CookieOptions()
+            {
+                Secure = true,
+                SameSite = SameSiteMode.Lax,
+                Expires = DateTime.Now.AddMinutes(JwtProvider.RefreshTokenLifeDays)
+            });
+
+            return Ok();
+        }
+    }
 }

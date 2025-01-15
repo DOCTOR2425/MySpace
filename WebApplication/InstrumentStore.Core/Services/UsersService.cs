@@ -77,7 +77,9 @@ namespace InstrumentStore.Domain.Services
 
         public async Task<string> Login(string email, string password)
         {
-            User user = await GetByEMail(email);
+            User? user = await GetByEMail(email);
+            if(user == null)
+                throw new Exception("No user with that email");
 
             bool result = Verify(password, user.UserRegistrInfo.PasswordHash);
 

@@ -15,10 +15,13 @@ export class AuthService {
     private cookiesManager: CookiesManagerService
   ) {}
 
-  public login(payload: { eMail: string; password: string }) {
-    this.http
-      .post(`${this.baseApiUrl}/login`, payload, { withCredentials: true })
-      .subscribe();
+  public login(payload: {
+    eMail: string;
+    password: string;
+  }): Observable<Object> {
+    return this.http.post(`${this.baseApiUrl}/login`, payload, {
+      withCredentials: true,
+    });
   }
 
   public isLoggedIn(): boolean {
