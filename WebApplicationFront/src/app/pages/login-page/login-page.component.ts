@@ -1,15 +1,21 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { AuthService } from '../../service/auth/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { ToastService } from '../../service/toast/toast.service';
 
 @Component({
   selector: 'app-login-page',
+  standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './login-page.component.html',
-  styleUrl: './login-page.component.scss',
+  styleUrls: ['./login-page.component.scss'],
 })
 export class LoginPageComponent implements OnInit, OnDestroy {
   public returnUrl: string = '';
@@ -18,7 +24,8 @@ export class LoginPageComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastService: ToastService
   ) {}
 
   form = new FormGroup({
@@ -51,8 +58,8 @@ export class LoginPageComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.log(error.status);
-          
-        }
+          this.toastService.showError(error.message, 'Ошибка');
+        },
       });
     }
   }
