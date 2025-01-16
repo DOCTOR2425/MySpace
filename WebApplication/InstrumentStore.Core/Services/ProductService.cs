@@ -1,4 +1,5 @@
 ﻿using InstrumentStore.Domain.Abstractions;
+using InstrumentStore.Domain.Contracts.Filters;
 using InstrumentStore.Domain.Contracts.Products;
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
@@ -13,9 +14,9 @@ namespace InstrumentStore.Domain.Service
         private readonly ICountryService _countryService;
         private readonly IProductCategoryService _productCategoryService;
 
-        public ProductService(InstrumentStoreDBContext dbContext, 
+        public ProductService(InstrumentStoreDBContext dbContext,
             IBrandService brandService,
-            ICountryService countryService, 
+            ICountryService countryService,
             IProductCategoryService productCategoryService)
         {
             _dbContext = dbContext;
@@ -32,6 +33,101 @@ namespace InstrumentStore.Domain.Service
                 .Include(p => p.Country)
                 .AsNoTracking()
                 .ToListAsync();
+        }
+
+        public async Task<List<Product>> GetAllByCategory(string categoryName)
+        {
+            Guid categoryId = (await _dbContext.ProductCategory
+                .FirstOrDefaultAsync(c => c.Name.ToLower() == categoryName.ToLower()))
+                    .ProductCategoryId;
+
+            return await _dbContext.Product
+                .Include(p => p.ProductCategory)
+                .Include(p => p.Brand)
+                .Include(p => p.Country)
+                .Where(p => p.ProductCategory.ProductCategoryId == categoryId)
+                .ToListAsync();
+        }
+
+        public async Task<List<Product>> GetAllWithFilters(FilterRequest filter, List<Product> productsForFilter)
+        {
+            List<Product> products = await FilterByStaticProperties(filter, productsForFilter);
+
+            products = await FilterByUnStaticProperties(filter, products);
+
+            return products;
+        }
+
+        private async Task<List<Product>> FilterByUnStaticProperties(FilterRequest filter, List<Product> productsForFilter)
+        {
+            return productsForFilter;
+        }
+
+        private async Task<List<Product>> FilterByStaticProperties(FilterRequest filter, List<Product> productsForFilter)
+        {
+            List<Product> products = await FilterByPrice(filter, productsForFilter);
+            products = await FilterByBrand(filter, products);
+            products = await FilterByCountry(filter, products);
+
+            return products;
+        }
+
+        private async Task<List<Product>> FilterByPrice(FilterRequest filter, List<Product> productsForFilter)
+        {
+            RangeFilter? priceRange = filter.RangeFilters
+                .FirstOrDefault(f => f.Property.ToLower() == "price");
+
+            if (priceRange == null)
+                return productsForFilter;
+
+            List<Product> products = new List<Product>();
+            foreach (var product in productsForFilter)
+                if (product.Price >= priceRange.ValueFrom &&
+                        product.Price <= priceRange.ValueTo)
+                {
+                    products.Add(product);
+                    Console.WriteLine(product.Price);
+                }
+
+            return products;
+        }
+
+        private async Task<List<Product>> FilterByBrand(FilterRequest filter, List<Product> productsForFilter)
+        {
+            List<CollectionFilter> collectionFilters = filter.CollectionFilters
+                .Where(f => f.PropertyId.ToLower() == "brand")
+                .ToList();
+
+            if (collectionFilters.Count == 0)
+                return productsForFilter;
+
+            List<Product> productsAfterFilter = new List<Product>();
+
+            foreach (var f in collectionFilters)
+                foreach (var p in productsForFilter)
+                    if (p.Brand.Name.ToLower() == f.PropertyValue.ToLower())
+                        productsAfterFilter.Add(p);
+
+            return productsAfterFilter;
+        }
+
+        private async Task<List<Product>> FilterByCountry(FilterRequest filter, List<Product> productsForFilter)
+        {
+            List<CollectionFilter> collectionFilters = filter.CollectionFilters
+                .Where(f => f.PropertyId.ToLower() == "country")
+                .ToList();
+
+            if (collectionFilters.Count == 0)
+                return productsForFilter;
+
+            List<Product> productsAfterFilter = new List<Product>();
+
+            foreach (var f in collectionFilters)
+                foreach (var p in productsForFilter)
+                    if (p.Country.Name.ToLower() == f.PropertyValue.ToLower())
+                        productsAfterFilter.Add(p);
+
+            return productsAfterFilter;
         }
 
         public async Task<Product> GetById(Guid id)

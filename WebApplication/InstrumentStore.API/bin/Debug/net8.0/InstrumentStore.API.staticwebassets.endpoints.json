@@ -1,5 +1,170 @@
 {
   "Version": 1,
   "ManifestType": "Build",
-  "Endpoints": []
+  "Endpoints": [
+    {
+      "Route": "Images/топор.44epf95q5o.png",
+      "AssetFile": "Images/топор.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "257917"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"TOn60zD+Wk3w+q3Xo6n8tvSe1SWqYiL6qGBfVvZcDeg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 16 Jan 2025 08:09:22 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "44epf95q5o"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-TOn60zD+Wk3w+q3Xo6n8tvSe1SWqYiL6qGBfVvZcDeg="
+        },
+        {
+          "Name": "label",
+          "Value": "Images/топор.png"
+        }
+      ]
+    },
+    {
+      "Route": "Images/топор.png",
+      "AssetFile": "Images/топор.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "257917"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"TOn60zD+Wk3w+q3Xo6n8tvSe1SWqYiL6qGBfVvZcDeg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 16 Jan 2025 08:09:22 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-TOn60zD+Wk3w+q3Xo6n8tvSe1SWqYiL6qGBfVvZcDeg="
+        }
+      ]
+    },
+    {
+      "Route": "Images/шуруповёрт.png",
+      "AssetFile": "Images/шуруповёрт.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "264530"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"V5IzoPj69ucIsU+xf985PdZRaGWJiUlrAsFJ+rI+lZk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 16 Jan 2025 08:04:10 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-V5IzoPj69ucIsU+xf985PdZRaGWJiUlrAsFJ+rI+lZk="
+        }
+      ]
+    },
+    {
+      "Route": "Images/шуруповёрт.zhdklzjh2t.png",
+      "AssetFile": "Images/шуруповёрт.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "264530"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"V5IzoPj69ucIsU+xf985PdZRaGWJiUlrAsFJ+rI+lZk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 16 Jan 2025 08:04:10 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "zhdklzjh2t"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-V5IzoPj69ucIsU+xf985PdZRaGWJiUlrAsFJ+rI+lZk="
+        },
+        {
+          "Name": "label",
+          "Value": "Images/шуруповёрт.png"
+        }
+      ]
+    }
+  ]
 }

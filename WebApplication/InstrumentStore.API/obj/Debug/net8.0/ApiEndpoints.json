@@ -73,6 +73,16 @@
   },
   {
     "ContainingType": "InstrumentStore.API.Controllers.AdminController",
+    "Method": "FillProducts",
+    "RelativePath": "api/Admin/FillProducts",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "InstrumentStore.API.Controllers.AdminController",
     "Method": "Test",
     "RelativePath": "api/Admin/test",
     "HttpMethod": "GET",
@@ -489,6 +499,37 @@
     "ReturnTypes": [
       {
         "Type": "System.Guid",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "InstrumentStore.API.Controllers.ProductController",
+    "Method": "GetAllProductsByCategoryWithFilters",
+    "RelativePath": "api/Product/category/{category}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "category",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "filters",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[InstrumentStore.Domain.Contracts.Products.ProductCard, InstrumentStore.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

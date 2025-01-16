@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  width: 80%;
+  margin: 0 auto;
+}
+.left {
+  flex: 1;
+  background-color: lightblue;
+}
+.right {
+  flex: 3;
+  background-color: lightcoral;
+}
+
+.product-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-rows: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 16px;
+  padding: 24px 70px;
+}
+

@@ -4,6 +4,7 @@
     {
         public Guid ProductPropertyId { get; set; }
         public string Name { get; set; } = string.Empty;
+        public bool IsRanged { get; set; } = false;
 
         public required ProductCategory ProductCategory { get; set; }
     }

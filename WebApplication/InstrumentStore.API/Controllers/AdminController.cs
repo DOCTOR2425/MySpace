@@ -86,6 +86,273 @@ namespace InstrumentStore.API.Controllers
             return new StatusCodeResult(StatusCodes.Status400BadRequest);
         }
 
+        [HttpGet("FillProducts")]
+        public async Task<IActionResult> FillProducts()
+        {
+            Brand brand = new Brand()
+            {
+                BrandId = Guid.NewGuid(),
+                Name = "Bosch"
+            };
+            ProductCategory productCategory = new ProductCategory()
+            {
+                ProductCategoryId = Guid.NewGuid(),
+                Name = "Шуруповёрт"
+            };
+            Country country = new Country()
+            {
+                CountryId = Guid.NewGuid(),
+                Name = "Германия"
+            };
+            Product product = new Product()
+            {
+                ProductId = Guid.NewGuid(),
+                Name = "Аккумуляторная дрель-шуруповерт Bosch Easydrill",
+                Brand = brand,
+                Country = country,
+                ProductCategory = productCategory,
+                Description = "Аккумуляторная дрель-шуруповерт Bosch Easydrill 18V-40 06039D8005 " +
+                    "предназначена для закручивания и откручивания винтов, а также для сверления в " +
+                    "древесине, металле, керамике и пластмассе.\r\n\r\nУниверсальный 13 мм патрон с " +
+                    "одной втулкой – для легкой замены бит-насадок и сверл.\r\n\r\n2-ступенчатая коробка " +
+                    "передач и 20-уровневый крутящий момент обеспечивают оптимальный крутящий момент при " +
+                    "завинчивании и необходимую скорость при сверлении.\r\n\r\nУтонченная эргономичная " +
+                    "конструкция создает удобство в процессе работы.\r\n\r\nСветодиодная подсветка " +
+                    "позволяет работать в плохо освещенных местах.",
+                Price = 300,
+                Image = "шуруповёрт.png",
+                Quantity = 100
+            };
+            await _brandService.Create(brand);
+            await _countryService.Create(country);
+            await _productCategoryService.Create(productCategory);
+            await _productService.Create(product);
+
+            Brand brand2 = new Brand()
+            {
+                BrandId = Guid.NewGuid(),
+                Name = "Gigant"
+            };
+            ProductCategory productCategory2 = new ProductCategory()
+            {
+                ProductCategoryId = Guid.NewGuid(),
+                Name = "Отвёртка"
+            };
+            Country country2 = new Country()
+            {
+                CountryId = Guid.NewGuid(),
+                Name = "Россия"
+            };
+            Product product2 = new Product()
+            {
+                ProductId = Guid.NewGuid(),
+                Name = "Отвертка Gigant SL 3x75 с магнитным наконечником GS SL375",
+                Brand = brand2,
+                Country = country2,
+                ProductCategory = productCategory2,
+                Description = "Отвертка Gigant SL 3x75 с магнитным наконечником GS SL375 представляет" +
+                    " собой инструмент, который подойдет для использования с резьбовыми соединениями " +
+                    "с прямым шлицем. Длина стержня составляет 75 мм, размер шлица - 3 мм.\r\n\r\nСтержень " +
+                    "отвертки выполнен из хромованадиевой стали, которая отличается прочностью, " +
+                    "износоустойчивостью, долговечностью и стойкостью к коррозии.\r\nЭргономичная" +
+                    " рукоятка выполнена из двухкомпонентного материала, это обеспечивает надежный" +
+                    " захват и снижает нагрузку на руку.\r\nОтвертка с магнитным наконечником " +
+                    "облегчает работу с небольшим крепежом, так как надежно фиксируется и не проскальзывает в пазу.",
+                Price = 10,
+                Image = "screwdriver.jpg",
+                Quantity = 100
+            };
+            await _brandService.Create(brand2);
+            await _countryService.Create(country2);
+            await _productCategoryService.Create(productCategory2);
+            await _productService.Create(product2);
+
+            Brand brand3 = new Brand()
+            {
+                BrandId = Guid.NewGuid(),
+                Name = "Inforce"
+            };
+            ProductCategory productCategory3 = new ProductCategory()
+            {
+                ProductCategoryId = Guid.NewGuid(),
+                Name = "Топор"
+            };
+            Country country3 = new Country()
+            {
+                CountryId = Guid.NewGuid(),
+                Name = "Россия"
+            };
+            Product product3 = new Product()
+            {
+                ProductId = Guid.NewGuid(),
+                Name = "Универсальный топор 710 г Inforce 06-12-19",
+                Brand = brand3,
+                Country = country3,
+                ProductCategory = productCategory3,
+                Description = "Универсальный топор 710 г Inforce 06-12-19 подойдет для " +
+                    "рубки веток и стволов деревьев. Качественная заточка в течение " +
+                    "длительного времени позволяет работать с высокой скоростью.\r\n\r\nУдобная " +
+                    "рукоять не скользит в ладонях, что позволяет замахиваться для рубки с " +
+                    "максимальной энергией. Надежное соединение обуха и рукояти обеспечивает" +
+                    " длительный срок службы.\r\n\r\nПредназначен для эксплуатации в бытовых " +
+                    "условиях: в саду и в хозяйстве.",
+                Price = 68,
+                Image = "топор.png",
+                Quantity = 100
+            };
+            await _brandService.Create(brand3);
+            await _countryService.Create(country3);
+            await _productCategoryService.Create(productCategory3);
+            await _productService.Create(product3);
+
+
+            //Product propperty
+            ProductProperty productProperty11 = new ProductProperty()
+            {
+                ProductPropertyId = Guid.NewGuid(),
+                ProductCategory = productCategory,
+                Name = "Тип двигателя"
+            };
+            ProductProperty productProperty12 = new ProductProperty()
+            {
+                ProductPropertyId = Guid.NewGuid(),
+                ProductCategory = productCategory,
+                Name = "Max крутящий момент"
+            };
+            ProductProperty productProperty13 = new ProductProperty()
+            {
+                ProductPropertyId = Guid.NewGuid(),
+                ProductCategory = productCategory,
+                Name = "Тип аккумулятора"
+            };
+
+            ProductProperty productProperty21 = new ProductProperty()
+            {
+                ProductPropertyId = Guid.NewGuid(),
+                ProductCategory = productCategory2,
+                Name = "Длина стержня"
+            };
+            ProductProperty productProperty22 = new ProductProperty()
+            {
+                ProductPropertyId = Guid.NewGuid(),
+                ProductCategory = productCategory2,
+                Name = "Общая длина"
+            };
+            ProductProperty productProperty23 = new ProductProperty()
+            {
+                ProductPropertyId = Guid.NewGuid(),
+                ProductCategory = productCategory2,
+                Name = "Материал рукояти"
+            };
+
+            ProductProperty productProperty31 = new ProductProperty()
+            {
+                ProductPropertyId = Guid.NewGuid(),
+                ProductCategory = productCategory3,
+                Name = "Материал рукояти"
+            };
+            ProductProperty productProperty32 = new ProductProperty()
+            {
+                ProductPropertyId = Guid.NewGuid(),
+                ProductCategory = productCategory3,
+                Name = "Материал лезвия"
+            };
+            ProductProperty productProperty33 = new ProductProperty()
+            {
+                ProductPropertyId = Guid.NewGuid(),
+                ProductCategory = productCategory3,
+                Name = "Общая длина"
+            };
+
+            await _productPropertyService.CreateProperty(productProperty11);
+            await _productPropertyService.CreateProperty(productProperty12);
+            await _productPropertyService.CreateProperty(productProperty13);
+            await _productPropertyService.CreateProperty(productProperty21);
+            await _productPropertyService.CreateProperty(productProperty22);
+            await _productPropertyService.CreateProperty(productProperty23);
+            await _productPropertyService.CreateProperty(productProperty31);
+            await _productPropertyService.CreateProperty(productProperty32);
+            await _productPropertyService.CreateProperty(productProperty33);
+
+            ProductPropertyValue value11 = new ProductPropertyValue()
+            {
+                ProductPropertyValueId = Guid.NewGuid(),
+                Product = product,
+                ProductProperty = productProperty11,
+                Value = "щеточный"
+            };
+            ProductPropertyValue value12 = new ProductPropertyValue()
+            {
+                ProductPropertyValueId = Guid.NewGuid(),
+                Product = product,
+                ProductProperty = productProperty12,
+                Value = "40"
+            };
+            ProductPropertyValue value13 = new ProductPropertyValue()
+            {
+                ProductPropertyValueId = Guid.NewGuid(),
+                Product = product,
+                ProductProperty = productProperty13,
+                Value = "Li-Ion"
+            };
+
+            ProductPropertyValue value21 = new ProductPropertyValue()
+            {
+                ProductPropertyValueId = Guid.NewGuid(),
+                Product = product2,
+                ProductProperty = productProperty21,
+                Value = "75"
+            };
+            ProductPropertyValue value22 = new ProductPropertyValue()
+            {
+                ProductPropertyValueId = Guid.NewGuid(),
+                Product = product2,
+                ProductProperty = productProperty22,
+                Value = "155"
+            };
+            ProductPropertyValue value23 = new ProductPropertyValue()
+            {
+                ProductPropertyValueId = Guid.NewGuid(),
+                Product = product2,
+                ProductProperty = productProperty23,
+                Value = "2-х компонентный"
+            };
+
+            ProductPropertyValue value31 = new ProductPropertyValue()
+            {
+                ProductPropertyValueId = Guid.NewGuid(),
+                Product = product3,
+                ProductProperty = productProperty31,
+                Value = "фиберглас"
+            };
+            ProductPropertyValue value32 = new ProductPropertyValue()
+            {
+                ProductPropertyValueId = Guid.NewGuid(),
+                Product = product3,
+                ProductProperty = productProperty32,
+                Value = "закаленная сталь"
+            };
+            ProductPropertyValue value33 = new ProductPropertyValue()
+            {
+                ProductPropertyValueId = Guid.NewGuid(),
+                Product = product3,
+                ProductProperty = productProperty33,
+                Value = "490"
+            };
+
+            await _productPropertyService.CreatePropertyValue(value11);
+            await _productPropertyService.CreatePropertyValue(value12);
+            await _productPropertyService.CreatePropertyValue(value13);
+            await _productPropertyService.CreatePropertyValue(value21);
+            await _productPropertyService.CreatePropertyValue(value22);
+            await _productPropertyService.CreatePropertyValue(value23);
+            await _productPropertyService.CreatePropertyValue(value31);
+            await _productPropertyService.CreatePropertyValue(value32);
+            await _productPropertyService.CreatePropertyValue(value33);
+
+            return Ok();
+        }
+
         [HttpGet("FillAll")]
         public async Task<ActionResult> FillOneProduct()
         {

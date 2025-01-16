@@ -3,6 +3,8 @@ using InstrumentStore.Domain.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using InstrumentStore.Domain.Contracts.Products;
 using AutoMapper;
+using InstrumentStore.Domain.Contracts.Filters;
+using Newtonsoft.Json;
 
 namespace InstrumentStore.API.Controllers
 {
@@ -33,6 +35,35 @@ namespace InstrumentStore.API.Controllers
                 productsCards.Add(_mapper.Map<ProductCard>(p));
 
             return Ok(productsCards);
+        }
+
+        [HttpGet("category/{category}")]
+        public async Task<ActionResult<List<ProductCard>>> GetAllProductsByCategoryWithFilters(
+            [FromRoute] string category,
+            [FromQuery] string? filters)
+        {
+            List<Product> products = await _productService.GetAllByCategory(category);
+
+            FilterRequest filterRequest = null;
+            if (!string.IsNullOrEmpty(filters))
+            {
+                filterRequest = JsonConvert.DeserializeObject<FilterRequest>(filters);
+
+                products = await _productService.GetAllWithFilters(filterRequest, products);
+            }
+
+            List<ProductCard> productsCards = new List<ProductCard>();
+
+            foreach (var p in products)
+                productsCards.Add(_mapper.Map<ProductCard>(p));
+
+            return Ok(productsCards);
+        }
+
+        [HttpGet("category-filters/{category}")]
+        public async Task<ActionResult> GetCategoryFilters([FromRoute] string category)
+        {
+            return Ok(await _productPropertyService.GetCategoryFilters(category));
         }
 
         [HttpGet("{id:guid}")]

@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="left">
+    <table>
+      <tr>
+        <td>
+          <label for="priceFrom">От</label>
+          <input
+            class="form-control"
+            id="priceFrom"
+            placeholder="Цена от"
+            formControlName="priceFrom"
+            (input)="onInputChange($event)"
+          />
+        </td>
+        <td>
+          <label for="priceTo">До</label>
+          <input
+            class="form-control"
+            id="priceTo"
+            placeholder="Цена До"
+            formControlName="priceTo"
+            (input)="onInputChange($event)"
+          />
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="right">
+    <div class="product-cards">
+      <app-product-card
+        *ngFor="let product of products"
+        [product]="product"
+      ></app-product-card>
+    </div>
+  </div>
+</div>
