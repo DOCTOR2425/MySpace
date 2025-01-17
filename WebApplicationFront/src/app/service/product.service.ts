@@ -37,8 +37,6 @@ export class ProductService {
   ): Observable<ProductCard[]> {
     let serializedFilter = encodeURIComponent(JSON.stringify(filter));
     let url = `category/${categoryName}?filters=${serializedFilter}`;
-    console.log(serializedFilter);
-
     return this.http.get<ProductCard[]>(`${this.baseApiUrl}${url}`);
   }
 

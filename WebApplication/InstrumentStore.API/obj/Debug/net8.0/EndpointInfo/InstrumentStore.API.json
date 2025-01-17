@@ -5,6 +5,30 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/Admin/print1": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Admin/print2": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Admin/create-delivery-method": {
       "post": {
         "tags": [
@@ -819,6 +843,28 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/Product/category-filters/{category}": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "parameters": [
+          {
+            "name": "category",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }

@@ -10,5 +10,6 @@ namespace InstrumentStore.Domain.Abstractions
         Task<Dictionary<string, string>> GetProductProperties(Guid productId);
         Task<CategoryFilters> GetCategoryFilters(string categoryName);
         Task<RangePropertyForFilter[]> GetRangeProperties(Guid categoryId);
+        Task<List<ProductPropertyValue>> GetValuesByCategoryName(string categoryName);
     }
 }

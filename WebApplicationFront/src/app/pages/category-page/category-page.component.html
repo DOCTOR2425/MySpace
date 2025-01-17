@@ -1,29 +1,47 @@
-<div class="container">
+<div class="container" *ngIf="categoryFilters">
   <div class="left">
-    <table>
-      <tr>
-        <td>
-          <label for="priceFrom">От</label>
-          <input
-            class="form-control"
-            id="priceFrom"
-            placeholder="Цена от"
-            formControlName="priceFrom"
-            (input)="onInputChange($event)"
-          />
-        </td>
-        <td>
-          <label for="priceTo">До</label>
-          <input
-            class="form-control"
-            id="priceTo"
-            placeholder="Цена До"
-            formControlName="priceTo"
-            (input)="onInputChange($event)"
-          />
-        </td>
-      </tr>
-    </table>
+    <div *ngFor="let rangeFilter of categoryFilters.rangePropertyForFilters">
+      <label>{{ rangeFilter.propertyName }}</label>
+
+      <div>
+        <span>Текущее значение: {{ rangeFilter.currentMinValue }}</span>
+        <input
+          type="range"
+          [min]="rangeFilter.minValue"
+          [max]="rangeFilter.maxValue"
+          [(ngModel)]="rangeFilter.currentMinValue"
+          (change)="onFilterChange()"
+          #rangeInputMin
+          [attr.data-property]="rangeFilter.propertyName"
+        />
+      </div>
+      <div>
+        <span>Текущее значение: {{ rangeFilter.currentMaxValue }}</span>
+        <input
+          type="range"
+          [min]="rangeFilter.minValue"
+          [max]="rangeFilter.maxValue"
+          [(ngModel)]="rangeFilter.currentMaxValue"
+          (change)="onFilterChange()"
+          #rangeInputMax
+          [attr.data-property]="rangeFilter.propertyName"
+        />
+      </div>
+    </div>
+
+    <div *ngFor="let collectionFilter of categoryFilters.collectionPropertyForFilters">
+      <label>{{ collectionFilter.propertyName }}</label>
+      <div *ngFor="let value of collectionFilter.uniqueValues">
+        <input
+          type="checkbox"
+          [value]="value"
+          (change)="onFilterChange()"
+          #collectionInput
+          [attr.data-property]="collectionFilter.propertyName"
+        />
+        {{ value }}
+      </div>
+    </div>
   </div>
   <div class="right">
     <div class="product-cards">

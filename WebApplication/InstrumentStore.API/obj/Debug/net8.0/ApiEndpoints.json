@@ -83,6 +83,26 @@
   },
   {
     "ContainingType": "InstrumentStore.API.Controllers.AdminController",
+    "Method": "print1",
+    "RelativePath": "api/Admin/print1",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "InstrumentStore.API.Controllers.AdminController",
+    "Method": "print2",
+    "RelativePath": "api/Admin/print2",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "InstrumentStore.API.Controllers.AdminController",
     "Method": "Test",
     "RelativePath": "api/Admin/test",
     "HttpMethod": "GET",
@@ -507,6 +527,22 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "InstrumentStore.API.Controllers.ProductController",
+    "Method": "GetCategoryFilters",
+    "RelativePath": "api/Product/category-filters/{category}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "category",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "InstrumentStore.API.Controllers.ProductController",

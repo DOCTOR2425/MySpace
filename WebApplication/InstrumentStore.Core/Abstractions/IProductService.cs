@@ -14,6 +14,9 @@ namespace InstrumentStore.Domain.Abstractions
         Task<Guid> Update(Guid oldId, Product newProduct);
         Task<Guid> Update(Guid oldId, ProductRequest newProduct);
         Task<List<Product>> GetAllByCategory(string categoryName);
-        Task<List<Product>> GetAllWithFilters(FilterRequest filter, List<Product> productsForFilter);
+        Task<List<Product>> GetAllWithFilters(
+            string categoryName,
+            FilterRequest filter,
+            List<Product> productsForFilter);
     }
 }

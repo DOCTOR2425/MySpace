@@ -1,4 +1,4 @@
 export interface CollectionFilter {
-  propertyId: string;
+  property: string;
   propertyValue: string;
 }

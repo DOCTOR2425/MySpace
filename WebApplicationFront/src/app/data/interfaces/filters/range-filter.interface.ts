@@ -1,5 +1,5 @@
 export interface RangeFilter {
-  valueTo: number;
-  valueFrom: number;
+  minValue: number;
+  maxValue: number;
   property: string;
 }

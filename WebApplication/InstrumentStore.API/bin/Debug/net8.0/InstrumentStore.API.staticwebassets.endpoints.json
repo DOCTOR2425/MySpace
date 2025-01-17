@@ -165,6 +165,88 @@
           "Value": "Images/шуруповёрт.png"
         }
       ]
+    },
+    {
+      "Route": "Images/шуруповёрт2.24bxjl7l3u.png",
+      "AssetFile": "Images/шуруповёрт2.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "195292"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"fjISMbLNESbmO8KvxccJT0HYk9h/ShDO+N7NnN/gfPY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 17 Jan 2025 14:05:45 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "24bxjl7l3u"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-fjISMbLNESbmO8KvxccJT0HYk9h/ShDO+N7NnN/gfPY="
+        },
+        {
+          "Name": "label",
+          "Value": "Images/шуруповёрт2.png"
+        }
+      ]
+    },
+    {
+      "Route": "Images/шуруповёрт2.png",
+      "AssetFile": "Images/шуруповёрт2.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "195292"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"fjISMbLNESbmO8KvxccJT0HYk9h/ShDO+N7NnN/gfPY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 17 Jan 2025 14:05:45 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-fjISMbLNESbmO8KvxccJT0HYk9h/ShDO+N7NnN/gfPY="
+        }
+      ]
     }
   ]
 }

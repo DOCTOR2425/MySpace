@@ -3,29 +3,16 @@ using InstrumentStore.Domain.Contracts.Filters;
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace InstrumentStore.Domain.Services
 {
     public class ProductPropertyService : IProductPropertyService
     {
         private readonly InstrumentStoreDBContext _dbContext;
-        private readonly IBrandService _brandService;
-        private readonly ICountryService _countryService;
-        private readonly IProductCategoryService _productCategoryService;
-        private readonly IProductService _productService;
 
-        public ProductPropertyService(InstrumentStoreDBContext dbContext,
-            IBrandService brandService,
-            ICountryService countryService,
-            IProductCategoryService productCategoryService,
-            IProductService productService)
+        public ProductPropertyService(InstrumentStoreDBContext dbContext)
         {
             _dbContext = dbContext;
-            _brandService = brandService;
-            _countryService = countryService;
-            _productCategoryService = productCategoryService;
-            _productService = productService;
         }
 
         public async Task<Guid> CreateProperty(ProductProperty productProperty)
@@ -93,7 +80,7 @@ namespace InstrumentStore.Domain.Services
             foreach (var property in productProperty)
             {
                 string[] uniqueValues = await _dbContext.ProductPropertyValue
-                    .Where(pv => 
+                    .Where(pv =>
                         pv.ProductProperty.ProductCategory.ProductCategoryId == categoryId &&
                         pv.ProductProperty.Name == property.Name)
                     .Select(pv => pv.Value)
@@ -104,8 +91,28 @@ namespace InstrumentStore.Domain.Services
                     property.Name,
                     uniqueValues));
             }
+            collectionPropertyForFilter.AddRange(await GetStaticsPropertiesToCollectionProperties(categoryId));
 
             return collectionPropertyForFilter.ToArray();
+        }
+
+        private async Task<List<CollectionPropertyForFilter>> GetStaticsPropertiesToCollectionProperties(
+            Guid categoryId)
+        {
+            List<CollectionPropertyForFilter> collectionPropertyForFilter
+                = new List<CollectionPropertyForFilter>();
+
+            string[] uniqueValues = await _dbContext.Product
+                    .Where(p => p.ProductCategory.ProductCategoryId == categoryId)
+                    .Select(p => p.Brand.Name)
+                    .Distinct()
+                    .ToArrayAsync();
+
+            collectionPropertyForFilter.Add(new CollectionPropertyForFilter(
+                "Бренд",
+                uniqueValues));
+
+            return collectionPropertyForFilter;
         }
 
         public async Task<RangePropertyForFilter[]> GetRangeProperties(Guid categoryId)
@@ -127,8 +134,36 @@ namespace InstrumentStore.Domain.Services
                     targetPropertyValues.Max(pv => decimal.Parse(pv.Value)),
                     targetPropertyValues.Min(pv => decimal.Parse(pv.Value))));
             }
+            rangePropertyForFilters.AddRange(await GetStaticsPropertiesToRangeProperties(categoryId));
 
             return rangePropertyForFilters.ToArray();
+        }
+
+        private async Task<List<RangePropertyForFilter>> GetStaticsPropertiesToRangeProperties(
+            Guid categoryId)
+        {
+            List<RangePropertyForFilter> rangePropertyForFilters
+                = new List<RangePropertyForFilter>();
+
+            List<decimal> productPrices = await _dbContext.Product
+                    .Where(p => p.ProductCategory.ProductCategoryId == categoryId)
+                    .Select(p => p.Price).ToListAsync();
+
+            rangePropertyForFilters.Add(new RangePropertyForFilter(
+                "Цена",
+                productPrices.Max(),
+                productPrices.Min()));
+
+            return rangePropertyForFilters;
+        }
+
+        public async Task<List<ProductPropertyValue>> GetValuesByCategoryName(string categoryName)
+        {
+            return await _dbContext.ProductPropertyValue
+                .Where(v => v.ProductProperty.ProductCategory.Name == categoryName)
+                .Include(v => v.Product)
+                .Include(v => v.ProductProperty)
+                .ToListAsync();
         }
     }
 }

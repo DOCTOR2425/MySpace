@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "rFl42aRl6wxgo5dHUt5erZkkIhT8cVUZ/KSP+H/NjUk=",
+  "Hash": "g6WEOOcUToMix94ZbH6oVkqGNFCyVKG8xoWb6f++XSg=",
   "Source": "InstrumentStore.API",
   "BasePath": "_content/InstrumentStore.API",
   "Mode": "Default",
@@ -57,6 +57,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Images\\шуруповёрт.png"
+    },
+    {
+      "Identity": "D:\\MySpace\\WebApplication\\InstrumentStore.API\\wwwroot\\Images\\шуруповёрт2.png",
+      "SourceId": "InstrumentStore.API",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\MySpace\\WebApplication\\InstrumentStore.API\\wwwroot\\",
+      "BasePath": "_content/InstrumentStore.API",
+      "RelativePath": "Images/шуруповёрт2#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "24bxjl7l3u",
+      "Integrity": "fjISMbLNESbmO8KvxccJT0HYk9h/ShDO+N7NnN/gfPY=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Images\\шуруповёрт2.png"
     }
   ],
   "Endpoints": [
@@ -221,6 +242,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-V5IzoPj69ucIsU+xf985PdZRaGWJiUlrAsFJ+rI+lZk="
+        }
+      ]
+    },
+    {
+      "Route": "Images/шуруповёрт2.24bxjl7l3u.png",
+      "AssetFile": "D:\\MySpace\\WebApplication\\InstrumentStore.API\\wwwroot\\Images\\шуруповёрт2.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "195292"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"fjISMbLNESbmO8KvxccJT0HYk9h/ShDO+N7NnN/gfPY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 17 Jan 2025 14:05:45 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "24bxjl7l3u"
+        },
+        {
+          "Name": "label",
+          "Value": "Images/шуруповёрт2.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-fjISMbLNESbmO8KvxccJT0HYk9h/ShDO+N7NnN/gfPY="
+        }
+      ]
+    },
+    {
+      "Route": "Images/шуруповёрт2.png",
+      "AssetFile": "D:\\MySpace\\WebApplication\\InstrumentStore.API\\wwwroot\\Images\\шуруповёрт2.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "195292"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"fjISMbLNESbmO8KvxccJT0HYk9h/ShDO+N7NnN/gfPY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 17 Jan 2025 14:05:45 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-fjISMbLNESbmO8KvxccJT0HYk9h/ShDO+N7NnN/gfPY="
         }
       ]
     }

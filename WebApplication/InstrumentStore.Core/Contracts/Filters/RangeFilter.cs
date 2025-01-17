@@ -1,7 +1,7 @@
 ﻿namespace InstrumentStore.Domain.Contracts.Filters
 {
     public record RangeFilter(
-        decimal ValueFrom,
-        decimal ValueTo,
+        decimal MinValue,
+        decimal MaxValue,
         string Property);
 }

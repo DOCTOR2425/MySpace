@@ -13,16 +13,19 @@ namespace InstrumentStore.Domain.Service
         private readonly IBrandService _brandService;
         private readonly ICountryService _countryService;
         private readonly IProductCategoryService _productCategoryService;
+        private readonly IProductPropertyService _productPropertyService;
 
         public ProductService(InstrumentStoreDBContext dbContext,
             IBrandService brandService,
             ICountryService countryService,
-            IProductCategoryService productCategoryService)
+            IProductCategoryService productCategoryService,
+            IProductPropertyService productPropertyService)
         {
             _dbContext = dbContext;
             _brandService = brandService;
             _countryService = countryService;
             _productCategoryService = productCategoryService;
+            _productPropertyService = productPropertyService;
         }
 
         public async Task<List<Product>> GetAll()
@@ -49,18 +52,136 @@ namespace InstrumentStore.Domain.Service
                 .ToListAsync();
         }
 
-        public async Task<List<Product>> GetAllWithFilters(FilterRequest filter, List<Product> productsForFilter)
+        public async Task<List<Product>> GetAllWithFilters(
+            string categoryName,
+            FilterRequest filter,
+            List<Product> productsForFilter)
         {
             List<Product> products = await FilterByStaticProperties(filter, productsForFilter);
-
-            products = await FilterByUnStaticProperties(filter, products);
+            products = await FilterByUnStaticProperties(categoryName, filter, products);
 
             return products;
         }
 
-        private async Task<List<Product>> FilterByUnStaticProperties(FilterRequest filter, List<Product> productsForFilter)
+        private async Task<List<Product>> FilterByUnStaticProperties(
+            string categoryName,
+            FilterRequest filter,
+            List<Product> productsForFilter)
         {
+            FilterRequest unStaticFilter = DeleteStaticFilters(filter);
+
+            productsForFilter = await FilterByUnStaticRanges(
+                categoryName,
+                unStaticFilter.RangeFilters,
+                productsForFilter);
+
+            productsForFilter = await FilterByUnStaticCollection(
+                categoryName,
+                unStaticFilter.CollectionFilters,
+                productsForFilter);
+
             return productsForFilter;
+        }
+
+        private FilterRequest DeleteStaticFilters(FilterRequest filter)
+        {
+            RangeFilter[] rangeFilters = (from rf in filter.RangeFilters
+                                          where rf.Property.ToLower() != "цена"
+                                          select rf).ToArray();
+
+            CollectionFilter[] collectionFilters = (from cf in filter.CollectionFilters
+                                                    where cf.Property.ToLower() != "бренд" &&
+                                                        cf.Property.ToLower() != "страна"
+                                                    select cf).ToArray();
+
+            return new FilterRequest(rangeFilters, collectionFilters);
+        }
+
+        private async Task<List<Product>> FilterByUnStaticCollection(
+            string categoryName,
+            CollectionFilter[] collectionFilters,
+            List<Product> productsForFilter)
+        {
+            if (collectionFilters.Length == 0)
+                return productsForFilter;
+
+            List<ProductPropertyValue> values =
+                await _productPropertyService.GetValuesByCategoryName(categoryName);
+            List<Product> filteredProducts = new List<Product>();
+
+            var filtersGroupedByProperty = collectionFilters
+                .GroupBy(f => f.Property)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            foreach (var product in productsForFilter)
+            {
+                bool matchesAllFilters = true;
+
+                foreach (var property in filtersGroupedByProperty.Keys)
+                {
+                    var filtersForProperty = filtersGroupedByProperty[property];
+                    var allValuesForProperty = values
+                        .Where(v => v.ProductProperty.Name == property)
+                        .Select(v => v.Value)
+                        .Distinct()
+                        .ToList();
+
+                    bool allFiltersSelected = filtersForProperty
+                        .Select(f => f.PropertyValue)
+                        .OrderBy(v => v)
+                        .SequenceEqual(allValuesForProperty.OrderBy(v => v));
+
+                    if (allFiltersSelected)
+                        continue;
+
+                    bool matchesCurrentProperty = filtersForProperty.Any(filter =>
+                        values.Any(v =>
+                            v.Product.ProductId == product.ProductId &&
+                            v.ProductProperty.Name == filter.Property &&
+                            v.Value == filter.PropertyValue));
+
+                    if (!matchesCurrentProperty)
+                    {
+                        matchesAllFilters = false;
+                        break;
+                    }
+                }
+
+                if (matchesAllFilters)
+                    filteredProducts.Add(product);
+            }
+
+            return filteredProducts.DistinctBy(p => p.ProductId).ToList();
+        }
+
+        private async Task<List<Product>> FilterByUnStaticRanges(
+            string categoryName,
+            RangeFilter[] rangeFilters,
+            List<Product> productsForFilter)
+        {
+            if (rangeFilters.Length == 0)
+                return productsForFilter;
+
+            List<ProductPropertyValue> values =
+                await _productPropertyService.GetValuesByCategoryName(categoryName);
+            List<Product> products = new List<Product>();
+
+            foreach (var f in rangeFilters)
+            {
+                foreach (var v in values)
+                {
+                    if (v.ProductProperty.Name == f.Property &&
+                        decimal.Parse(v.Value) >= f.MinValue &&
+                        decimal.Parse(v.Value) <= f.MaxValue &&
+                        productsForFilter.FirstOrDefault(
+                            p => p.ProductId == v.Product.ProductId) != null)
+                    {
+                        products.Add(v.Product);
+                        break;
+                    }
+                }
+            }
+            return products.DistinctBy(p => p.ProductId).ToList();
         }
 
         private async Task<List<Product>> FilterByStaticProperties(FilterRequest filter, List<Product> productsForFilter)
@@ -75,19 +196,16 @@ namespace InstrumentStore.Domain.Service
         private async Task<List<Product>> FilterByPrice(FilterRequest filter, List<Product> productsForFilter)
         {
             RangeFilter? priceRange = filter.RangeFilters
-                .FirstOrDefault(f => f.Property.ToLower() == "price");
+                .FirstOrDefault(f => f.Property.ToLower() == "цена");
 
             if (priceRange == null)
                 return productsForFilter;
 
             List<Product> products = new List<Product>();
             foreach (var product in productsForFilter)
-                if (product.Price >= priceRange.ValueFrom &&
-                        product.Price <= priceRange.ValueTo)
-                {
+                if (product.Price >= priceRange.MinValue &&
+                        product.Price <= priceRange.MaxValue)
                     products.Add(product);
-                    Console.WriteLine(product.Price);
-                }
 
             return products;
         }
@@ -95,7 +213,7 @@ namespace InstrumentStore.Domain.Service
         private async Task<List<Product>> FilterByBrand(FilterRequest filter, List<Product> productsForFilter)
         {
             List<CollectionFilter> collectionFilters = filter.CollectionFilters
-                .Where(f => f.PropertyId.ToLower() == "brand")
+                .Where(f => f.Property.ToLower() == "бренд")
                 .ToList();
 
             if (collectionFilters.Count == 0)
@@ -114,7 +232,7 @@ namespace InstrumentStore.Domain.Service
         private async Task<List<Product>> FilterByCountry(FilterRequest filter, List<Product> productsForFilter)
         {
             List<CollectionFilter> collectionFilters = filter.CollectionFilters
-                .Where(f => f.PropertyId.ToLower() == "country")
+                .Where(f => f.Property.ToLower() == "country")
                 .ToList();
 
             if (collectionFilters.Count == 0)

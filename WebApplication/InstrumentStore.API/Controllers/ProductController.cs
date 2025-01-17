@@ -16,8 +16,8 @@ namespace InstrumentStore.API.Controllers
         private readonly IProductPropertyService _productPropertyService;
         private readonly IMapper _mapper;
 
-        public ProductController(IProductService productService, 
-            IProductPropertyService productPropertyService, 
+        public ProductController(IProductService productService,
+            IProductPropertyService productPropertyService,
             IMapper mapper)
         {
             _productService = productService;
@@ -49,7 +49,7 @@ namespace InstrumentStore.API.Controllers
             {
                 filterRequest = JsonConvert.DeserializeObject<FilterRequest>(filters);
 
-                products = await _productService.GetAllWithFilters(filterRequest, products);
+                products = await _productService.GetAllWithFilters(category, filterRequest, products);
             }
 
             List<ProductCard> productsCards = new List<ProductCard>();
