@@ -16,6 +16,7 @@ import { FormsModule } from '@angular/forms';
 import { RangeFilter } from '../../data/interfaces/filters/range-filter.interface';
 import { CollectionFilter } from '../../data/interfaces/filters/collection-filter.interface';
 import { CategoryFilters } from '../../data/interfaces/filters/category-filters.intervace';
+import { RangePropertyForFilter } from '../../data/interfaces/filters/range-property-for-filter.intervace';
 
 @Component({
   selector: 'app-category-page',
@@ -73,21 +74,19 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
   }
 
   private getRangeFilters(): RangeFilter[] {
-    if (
-      this.categoryFilters.rangePropertyForFilters.every(
-        (filter) =>
-          filter.minValue === filter.currentMinValue &&
-          filter.maxValue === filter.currentMaxValue
-      )
-    ) {
-      return [];
-    }
-    return this.rangeInputsMin.map((input, index) => ({
-      minValue: input.nativeElement.value,
-      maxValue: this.rangeInputsMax.toArray()[index].nativeElement.value,
-      property: input.nativeElement.getAttribute('data-property'),
+    let rangesForFilter: RangePropertyForFilter[] = this.categoryFilters.rangePropertyForFilters.filter(
+      (filter) =>
+        filter.minValue != filter.currentMinValue ||
+        filter.maxValue != filter.currentMaxValue
+    );
+
+    return rangesForFilter.map((filter) => ({
+      minValue: filter.currentMinValue ?? 0,
+      maxValue: filter.currentMaxValue ?? 0,
+      property: filter.propertyName,
     }));
   }
+
 
   private getCollectionFilters(): CollectionFilter[] {
     const collectionFilters = this.collectionInputs
@@ -97,7 +96,7 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
         propertyValue: input.nativeElement.value,
       }));
 
-    if (collectionFilters.length === 0) return [];
+    if (collectionFilters.length == 0) return [];
 
     return collectionFilters;
   }

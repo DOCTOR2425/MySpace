@@ -2,7 +2,7 @@
   {
     "ContainingType": "InstrumentStore.API.Controllers.AdminController",
     "Method": "ClearDatabase",
-    "RelativePath": "api/Admin/clearDataBase",
+    "RelativePath": "api/Admin/ClearDataBase",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -63,7 +63,27 @@
   },
   {
     "ContainingType": "InstrumentStore.API.Controllers.AdminController",
-    "Method": "FillOneProduct",
+    "Method": "CreateAdminInfo",
+    "RelativePath": "api/Admin/CreateAdminInfo",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "InstrumentStore.API.Controllers.AdminController",
+    "Method": "FillAll",
     "RelativePath": "api/Admin/FillAll",
     "HttpMethod": "GET",
     "IsController": true,
@@ -83,33 +103,63 @@
   },
   {
     "ContainingType": "InstrumentStore.API.Controllers.AdminController",
-    "Method": "print1",
-    "RelativePath": "api/Admin/print1",
+    "Method": "GetAdminInfo",
+    "RelativePath": "api/Admin/GetAdminInfo",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "InstrumentStore.API.Controllers.AdminController",
-    "Method": "print2",
-    "RelativePath": "api/Admin/print2",
+    "Method": "TestAdminAuth",
+    "RelativePath": "api/Admin/TestAdminAuth",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "InstrumentStore.API.Controllers.AdminController",
-    "Method": "Test",
-    "RelativePath": "api/Admin/test",
+    "Method": "TestUserAuth",
+    "RelativePath": "api/Admin/TestUserAuth",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "InstrumentStore.API.Controllers.BrandController",
@@ -635,7 +685,17 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "InstrumentStore.API.Controllers.UserController",

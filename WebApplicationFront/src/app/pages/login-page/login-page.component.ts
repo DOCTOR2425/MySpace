@@ -9,6 +9,7 @@ import { AuthService } from '../../service/auth/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { ToastService } from '../../service/toast/toast.service';
+import { AdminService } from '../../service/admin/admin.service';
 
 @Component({
   selector: 'app-login-page',
@@ -25,6 +26,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
+    private adminService: AdminService,
     private toastService: ToastService
   ) {}
 
@@ -54,7 +56,14 @@ export class LoginPageComponent implements OnInit, OnDestroy {
       };
       this.authService.login(formValue).subscribe({
         next: (response) => {
-          this.router.navigate([`/${this.returnUrl}`]);
+          if (response.role === 'admin') {
+            this.adminService.isAdmin = true;
+            console.log('LogIn as Admin');
+            this.router.navigate([`admin`]);
+          } else {
+            this.authService.userEMail = formValue.eMail;
+            this.router.navigate([`${this.returnUrl}`]);
+          }
         },
         error: (error) => {
           console.log(error.status);

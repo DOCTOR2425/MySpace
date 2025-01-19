@@ -9,6 +9,7 @@ import { catchError, Observable, throwError } from 'rxjs';
 })
 export class AuthService {
   private baseApiUrl = environment.apiUrl;
+  public userEMail: string = '';
 
   constructor(
     private http: HttpClient,
@@ -18,10 +19,14 @@ export class AuthService {
   public login(payload: {
     eMail: string;
     password: string;
-  }): Observable<Object> {
-    return this.http.post(`${this.baseApiUrl}/login`, payload, {
-      withCredentials: true,
-    });
+  }): Observable<{ role: string }> {
+    return this.http.post<{ role: string }>(
+      `${this.baseApiUrl}/login`,
+      payload,
+      {
+        withCredentials: true,
+      }
+    );
   }
 
   public isLoggedIn(): boolean {
@@ -29,11 +34,5 @@ export class AuthService {
       return true;
     }
     return false;
-  }
-
-  public test(): Observable<Object> {
-    return this.http.get(`${this.baseApiUrl}/api/Admin/test`, {
-      withCredentials: true,
-    });
   }
 }

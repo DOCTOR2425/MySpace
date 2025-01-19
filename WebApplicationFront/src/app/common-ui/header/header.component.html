@@ -8,17 +8,39 @@
     </div>
   </nav>
   <div class="middleMenu d-inline-flex">
-    <h1 routerLink="/" style="cursor: pointer;">MySpace</h1>
+    <h1 routerLink="/" style="cursor: pointer">MySpace</h1>
     <input />
     <span class="buttons d-flex">
       <span>
         <img src="https://cdn-icons-png.flaticon.com/128/994/994414.png" />
         <a>Сравнение</a>
       </span>
-      <span data-bs-toggle="modal" data-bs-target="#exampleModal" [routerLink]="['/login']" [queryParams]="{ returnUrl: this.router.url }">
+
+      <!-- <span
+        [routerLink]="['/login']"
+        [queryParams]="{ returnUrl: this.router.url }"
+      >
         <img src="https://cdn-icons-png.flaticon.com/128/1828/1828453.png" />
         <a>Войти</a>
-      </span>
+      </span> -->
+      <ng-container *ngIf="authService.isLoggedIn(); else loginButton">
+        <span *ngIf="adminService.isAdmin; else userTemplate">
+          <button>Админ</button>
+        </span>
+        <ng-template #userTemplate>
+          <button>{{ authService.userEMail }}</button>
+        </ng-template>
+      </ng-container>
+      <ng-template #loginButton>
+        <span
+          [routerLink]="['/login']"
+          [queryParams]="{ returnUrl: this.router.url }"
+        >
+          <img src="https://cdn-icons-png.flaticon.com/128/1828/1828453.png" />
+          <a>Войти</a>
+        </span>
+      </ng-template>
+
       <span routerLink="cart">
         <img src="https://cdn-icons-png.flaticon.com/128/481/481384.png" />
         <a>Корзина</a>
@@ -26,7 +48,7 @@
     </span>
   </div>
   <div class="lowMenu d-inline-flex mt-3">
-    <a [routerLink]="['/category/шуруповёрты']">Шуруповерты</a>
+    <a [routerLink]="['/category/шуруповёрты']">Шуруповёрты</a>
     <a [routerLink]="['/category/топоры']">Топоры</a>
     <a [routerLink]="['/category/отвёртки']">Отвертки</a>
     <a [routerLink]="['/category/string']">Пилы</a>
