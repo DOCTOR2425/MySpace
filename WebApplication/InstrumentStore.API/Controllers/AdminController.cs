@@ -12,7 +12,7 @@ namespace InstrumentStore.API.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class AdminController : ControllerBase
+	public class AdminController : ControllerBase// отвечает за все действия админа
 	{
 		private readonly IDeliveryMethodService _deliveryMethodService;
 		private readonly IPaymentMethodService _paymentMethodService;
@@ -111,7 +111,7 @@ namespace InstrumentStore.API.Controllers
 			return adminInfo;
 		}
 
-		[HttpPost("create-delivery-method")]
+		[HttpPost("create-delivery-method")]//добавление способа доставки товара
 		public async Task<ActionResult<Guid>> CreateDeliveryMethod(
 			[FromBody] CreateDeliveryMethodRequest request)
 		{
@@ -125,8 +125,8 @@ namespace InstrumentStore.API.Controllers
 			return Ok(await _deliveryMethodService.Create(deliveryMethod));
 		}
 
-		[HttpPost("create-payment-method")]
-		public async Task<ActionResult<Guid>> CreatePaymentMethod([FromBody] string paymentMethodName)
+		[HttpPost("create-payment-method")]//добавление способа оплаты заказа
+        public async Task<ActionResult<Guid>> CreatePaymentMethod([FromBody] string paymentMethodName)
 		{
 			PaymentMethod paymentMethod = new PaymentMethod()
 			{

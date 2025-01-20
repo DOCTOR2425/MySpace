@@ -760,7 +760,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CartItem"
+                    "$ref": "#/components/schemas/PaidOrderItem"
                   }
                 }
               },
@@ -768,7 +768,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CartItem"
+                    "$ref": "#/components/schemas/PaidOrderItem"
                   }
                 }
               },
@@ -776,7 +776,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CartItem"
+                    "$ref": "#/components/schemas/PaidOrderItem"
                   }
                 }
               }
@@ -1307,26 +1307,6 @@
         },
         "additionalProperties": false
       },
-      "CartItem": {
-        "type": "object",
-        "properties": {
-          "cartItemId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "user": {
-            "$ref": "#/components/schemas/User"
-          },
-          "product": {
-            "$ref": "#/components/schemas/Product"
-          },
-          "quantity": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
       "CartItemResponse": {
         "type": "object",
         "properties": {
@@ -1480,6 +1460,54 @@
           "paymentMethodId": {
             "type": "string",
             "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PaidOrder": {
+        "required": [
+          "deliveryMethod",
+          "paymentMethod",
+          "user"
+        ],
+        "type": "object",
+        "properties": {
+          "paidOrderId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "paymentDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deliveryMethod": {
+            "$ref": "#/components/schemas/DeliveryMethod"
+          },
+          "paymentMethod": {
+            "$ref": "#/components/schemas/PaymentMethod"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PaidOrderItem": {
+        "type": "object",
+        "properties": {
+          "paidOrderItemId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "paidOrder": {
+            "$ref": "#/components/schemas/PaidOrder"
+          },
+          "product": {
+            "$ref": "#/components/schemas/Product"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

@@ -37,16 +37,16 @@ namespace InstrumentStore.API.Controllers
             return Ok(productsCards);
         }
 
-        [HttpGet("category/{category}")]
+        [HttpGet("category/{category}")]// функция получения товаров с фильтрацией
         public async Task<ActionResult<List<ProductCard>>> GetAllProductsByCategoryWithFilters(
             [FromRoute] string category,
             [FromQuery] string? filters)
-        {
+        {// получени товаров выбранной котегории
             List<Product> products = await _productService.GetAllByCategory(category);
 
             FilterRequest filterRequest = null;
             if (!string.IsNullOrEmpty(filters))
-            {
+            {// фильтрация если она выбранна
                 filterRequest = JsonConvert.DeserializeObject<FilterRequest>(filters);
 
                 products = await _productService.GetAllWithFilters(category, filterRequest, products);

@@ -22,7 +22,7 @@ namespace InstrumentStore.API.Controllers
 
 		[Authorize]
 		[HttpGet]
-		public async Task<ActionResult<List<CartItem>>> GetUserCart()
+		public async Task<ActionResult<List<PaidOrderItem>>> GetUserCart()
 		{
 			return Ok(await _cartService.GetAllOrders(
 				await _jwtProvider.GetUserIdFromToken(

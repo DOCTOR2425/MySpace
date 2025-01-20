@@ -22,14 +22,14 @@ namespace InstrumentStore.API.Controllers
 			_adminService = adminService;
 		}
 
-		[HttpPost("/register")]
+		[HttpPost("/register")]// функция регистрации пользователя
 		public async Task<ActionResult<Guid>> Register([FromBody] RegisterUserRequest request)
 		{
 			return Ok(await _usersService.Register(request));
 		}
 
-		[HttpPost("/login")]
-		public async Task<ActionResult<string>> Login([FromBody] LoginUserRequest request)
+		[HttpPost("/login")]// функция входа пользователя в аккаунт
+        public async Task<ActionResult<string>> Login([FromBody] LoginUserRequest request)
 		{
 			string token = "";
 
@@ -47,7 +47,7 @@ namespace InstrumentStore.API.Controllers
 			}
 
 			HttpContext.Response.Cookies.Append(JwtProvider.AccessCookiesName, token, new CookieOptions()
-			{
+			{// выдача пользователю токена в куки файлы
 				Secure = true,
 				SameSite = SameSiteMode.Lax,
 				Expires = DateTime.Now.Add(JwtProvider.CookiesLifeTime)
