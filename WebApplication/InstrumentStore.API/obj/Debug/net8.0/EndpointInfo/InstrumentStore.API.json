@@ -5,6 +5,35 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/Admin/TestDB": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Admin/GetAdminInfo": {
       "get": {
         "tags": [
@@ -1527,11 +1556,6 @@
         "additionalProperties": false
       },
       "Product": {
-        "required": [
-          "brand",
-          "country",
-          "productCategory"
-        ],
         "type": "object",
         "properties": {
           "productId": {

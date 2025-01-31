@@ -1,4 +1,5 @@
 ﻿using InstrumentStore.Domain.DataBase.Models;
+using InstrumentStore.Domain.DataBase.ProcedureResultModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -17,9 +18,25 @@ namespace InstrumentStore.Domain.DataBase
 		{
 			optionsBuilder.UseSqlServer(@$"Server=WSA-195-74-BY;Database=MySpaceDB;
 				Trusted_Connection=True;Encrypt=False;TrustServerCertificate=True;");
+				//.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information); TODO log db queries in console
 		}
 
-		public required DbSet<Brand> Brand { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Product>()
+                .HasOne(c => c.ProductCategory)
+                .WithMany()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ProductProperty>()
+                .HasOne(c => c.ProductCategory)
+                .WithMany()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ProductSearchResult>().HasNoKey();
+        }
+
+        public required DbSet<Brand> Brand { get; set; }
 		public required DbSet<CartItem> CartItem { get; set; }
 		public required DbSet<Country> Country { get; set; }
 		public required DbSet<DeliveryMethod> DeliveryMethod { get; set; }
@@ -34,18 +51,5 @@ namespace InstrumentStore.Domain.DataBase
 		public required DbSet<User> User { get; set; }
 		public required DbSet<UserAdress> UserAdresses { get; set; }
 		public required DbSet<UserRegistrInfo> UserRegistrInfos { get; set; }
-
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
-		{
-			modelBuilder.Entity<Product>()
-				.HasOne(c => c.ProductCategory)
-				.WithMany()
-				.OnDelete(DeleteBehavior.NoAction);
-
-			modelBuilder.Entity<ProductProperty>()
-				.HasOne(c => c.ProductCategory)
-				.WithMany()
-				.OnDelete(DeleteBehavior.NoAction);
-		}
-	}
+    }
 }

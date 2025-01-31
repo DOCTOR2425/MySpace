@@ -53,6 +53,11 @@ namespace InstrumentStore.Domain.Service
 				.ToListAsync();
 		}
 
+		public async Task<List<Product>> SearchByName(string input, int pakage)
+		{
+			throw new NotImplementedException();
+		}
+
 		public async Task<List<Product>> GetAllWithFilters(
 			string categoryName,
 			FilterRequest filter,

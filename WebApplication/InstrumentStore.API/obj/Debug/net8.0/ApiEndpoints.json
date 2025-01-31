@@ -143,6 +143,26 @@
   },
   {
     "ContainingType": "InstrumentStore.API.Controllers.AdminController",
+    "Method": "TestDB",
+    "RelativePath": "api/Admin/TestDB",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "InstrumentStore.Domain.DataBase.Models.Product",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "InstrumentStore.API.Controllers.AdminController",
     "Method": "TestUserAuth",
     "RelativePath": "api/Admin/TestUserAuth",
     "HttpMethod": "GET",
