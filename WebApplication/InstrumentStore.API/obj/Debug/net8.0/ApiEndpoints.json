@@ -143,26 +143,6 @@
   },
   {
     "ContainingType": "InstrumentStore.API.Controllers.AdminController",
-    "Method": "TestDB",
-    "RelativePath": "api/Admin/TestDB",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "InstrumentStore.Domain.DataBase.Models.Product",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "InstrumentStore.API.Controllers.AdminController",
     "Method": "TestUserAuth",
     "RelativePath": "api/Admin/TestUserAuth",
     "HttpMethod": "GET",
@@ -629,6 +609,37 @@
       },
       {
         "Name": "filters",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[InstrumentStore.Domain.Contracts.Products.ProductCard, InstrumentStore.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "InstrumentStore.API.Controllers.ProductController",
+    "Method": "SearchByName",
+    "RelativePath": "api/Product/search/page{page}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "input",
         "Type": "System.String",
         "IsRequired": false
       }

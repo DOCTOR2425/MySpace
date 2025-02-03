@@ -25,10 +25,10 @@ namespace InstrumentStore.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<ProductCard>>> GetAllProductsCards()
+        [HttpGet("page{page}")]
+        public async Task<ActionResult<List<ProductCard>>> GetAllProductsCards([FromRoute] int page)
         {
-            List<Product> products = await _productService.GetAll();
+            List<Product> products = await _productService.GetAll(page);
             List<ProductCard> productsCards = new List<ProductCard>();
 
             foreach (var p in products)
@@ -37,19 +37,20 @@ namespace InstrumentStore.API.Controllers
             return Ok(productsCards);
         }
 
-        [HttpGet("category/{category}")]// функция получения товаров с фильтрацией
+        [HttpGet("category/{category}/page{page}")]// функция получения товаров с фильтрацией
         public async Task<ActionResult<List<ProductCard>>> GetAllProductsByCategoryWithFilters(
             [FromRoute] string category,
+            [FromRoute] int page,
             [FromQuery] string? filters)
         {// получени товаров выбранной котегории
-            List<Product> products = await _productService.GetAllByCategory(category);
+            List<Product> products = await _productService.GetAllByCategory(category, page);
 
             FilterRequest filterRequest = null;
             if (!string.IsNullOrEmpty(filters))
             {// фильтрация если она выбранна
                 filterRequest = JsonConvert.DeserializeObject<FilterRequest>(filters);
 
-                products = await _productService.GetAllWithFilters(category, filterRequest, products);
+                products = await _productService.GetAllWithFilters(category, filterRequest, products, page);
             }
 
             List<ProductCard> productsCards = new List<ProductCard>();
@@ -64,6 +65,22 @@ namespace InstrumentStore.API.Controllers
         public async Task<ActionResult> GetCategoryFilters([FromRoute] string category)
         {
             return Ok(await _productPropertyService.GetCategoryFilters(category));
+        }
+
+        [HttpGet("search/page{page}")]// функция поиска товаров по имени
+        public async Task<ActionResult<List<ProductCard>>> SearchByName(
+            [FromRoute] int page,
+            [FromQuery] string? input)
+        {
+            Console.WriteLine(input);
+            var products = await _productService.SearchByName(input, page);
+
+            List<ProductCard> productsCards = new List<ProductCard>();
+
+            foreach (var p in products)
+                productsCards.Add(_mapper.Map<ProductCard>(p));
+
+            return Ok(productsCards);
         }
 
         [HttpGet("{id:guid}")]
