@@ -471,26 +471,6 @@
   },
   {
     "ContainingType": "InstrumentStore.API.Controllers.ProductController",
-    "Method": "GetAllProductsCards",
-    "RelativePath": "api/Product",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[InstrumentStore.Domain.Contracts.Products.ProductCard, InstrumentStore.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "InstrumentStore.API.Controllers.ProductController",
     "Method": "CreateProduct",
     "RelativePath": "api/Product",
     "HttpMethod": "POST",
@@ -617,7 +597,7 @@
   {
     "ContainingType": "InstrumentStore.API.Controllers.ProductController",
     "Method": "GetAllProductsByCategoryWithFilters",
-    "RelativePath": "api/Product/category/{category}",
+    "RelativePath": "api/Product/category/{category}/page{page}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -628,7 +608,69 @@
         "IsRequired": true
       },
       {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
         "Name": "filters",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[InstrumentStore.Domain.Contracts.Products.ProductCard, InstrumentStore.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "InstrumentStore.API.Controllers.ProductController",
+    "Method": "GetAllProductsCards",
+    "RelativePath": "api/Product/page{page}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[InstrumentStore.Domain.Contracts.Products.ProductCard, InstrumentStore.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "InstrumentStore.API.Controllers.ProductController",
+    "Method": "SearchByName",
+    "RelativePath": "api/Product/search/page{page}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "input",
         "Type": "System.String",
         "IsRequired": false
       }

@@ -58,8 +58,8 @@ namespace InstrumentStore.Domain.Services
 			try
 			{
 				Guid categoryId = (await _dbContext.ProductCategory
-				.FirstOrDefaultAsync(c => c.Name.ToLower() == categoryName.ToLower()))
-				.ProductCategoryId;
+					.FirstOrDefaultAsync(c => c.Name.ToLower() == categoryName.ToLower()))
+					.ProductCategoryId;
 
 				RangePropertyForFilter[] rangePropertyForFilters = await GetRangeProperties(categoryId);
 				CollectionPropertyForFilter[] collectionPropertyForFilters = await GetCollectionProperties(categoryId);

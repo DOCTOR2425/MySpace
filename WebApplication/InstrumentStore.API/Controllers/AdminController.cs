@@ -23,20 +23,20 @@ namespace InstrumentStore.API.Controllers
 		private readonly IAdminService _adminService;
 		private readonly IMapper _mapper;
 		private readonly IConfiguration _config;
-		private readonly InstrumentStoreDBContext _dBContext;
+		private readonly InstrumentStoreDBContext _dbContext;
 
 		public AdminController(IUsersService usersService,
 			IDeliveryMethodService deliveryMethodService,
 			IPaymentMethodService paymentMethodService,
 			IMapper mapper,
-			InstrumentStoreDBContext dBContext,
+			InstrumentStoreDBContext dbContext,
 			IFillDataBaseService fillDataBaseService,
 			IConfiguration config,
 			IAdminService adminService)
 		{
 			_deliveryMethodService = deliveryMethodService;
 			_paymentMethodService = paymentMethodService;
-			_dBContext = dBContext;
+			_dbContext = dbContext;
 			_fillDataBaseService = fillDataBaseService;
 			_config = config;
 			_adminService = adminService;
@@ -45,7 +45,7 @@ namespace InstrumentStore.API.Controllers
 		[HttpGet("TestDB")]
 		public ActionResult<ProductSearchResult> TestDB()
 		{
-			List<ProductSearchResult> list = _dBContext.Set<ProductSearchResult>()
+			List<ProductSearchResult> list = _dbContext.Set<ProductSearchResult>()
 					.FromSqlRaw("EXEC SearchByName @p0", "АККУ").ToList();
 
 			//List<Product> products = new List<Product>(list.Count);

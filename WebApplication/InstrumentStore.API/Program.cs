@@ -28,17 +28,18 @@ namespace InstrumentStore.API
 			builder.Services.AddScoped<ICountryService, CountryService>();
 			builder.Services.AddScoped<IDeliveryMethodService, DeliveryMethodService>();
 			builder.Services.AddScoped<IEmailService, EmailService>();
+			builder.Services.AddScoped<IFillDataBaseService, FillDataBaseService>();
+			builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 			builder.Services.AddScoped<IPaidOrderService, PaidOrderService>();
 			builder.Services.AddScoped<IPaymentMethodService, PaymentMethodService>();
+			builder.Services.AddScoped<IProductCategoryService, ProduCtategoryService>();
+			builder.Services.AddScoped<IProductFilterService, ProductFilterService>();
 			builder.Services.AddScoped<IProductPropertyService, ProductPropertyService>();
 			builder.Services.AddScoped<IProductService, ProductService>();
-			builder.Services.AddScoped<IProductCategoryService, ProduCtategoryService>();
 			builder.Services.AddScoped<IUsersService, UsersService>();
 
-			builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 			builder.Services.AddAutoMapper(typeof(AppMappingProfile));
 			builder.Services.AddScoped<CustomJwtBearerEvents>();
-			builder.Services.AddScoped<IFillDataBaseService, FillDataBaseService>();
 
 			builder.Services.AddAuthorization();
 			builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

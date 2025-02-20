@@ -36,23 +36,6 @@ namespace InstrumentStore.Domain.Mapper
             //    .ForPath(dest => dest.Country.CountryId, opt => opt.MapFrom(src => src.CountryId2))
             //    .ForPath(dest => dest.Country.Name, opt => opt.MapFrom(src => src.CountryName));
 
-            CreateMap<ProductSearchResult, Product>()
-                .ForPath(dest => dest.ProductCategory, opt => opt.MapFrom(src => new ProductCategory
-                {
-                    ProductCategoryId = src.ProductCategoryId2,
-                    Name = src.ProductCategoryName
-                }))
-                .ForPath(dest => dest.Brand, opt => opt.MapFrom(src => new Brand
-                {
-                    BrandId = src.BrandId2,
-                    Name = src.BrandName
-                }))
-                .ForMember(dest => dest.Country, opt => opt.MapFrom(src => new Country
-                {
-                    CountryId = src.CountryId2,
-                    Name = src.CountryName
-                }));
-
 
             CreateMap<CartItem, CartItemResponse>()
                 .ForPath(dest => dest.Product, opt => opt.MapFrom(src => src.Product))
