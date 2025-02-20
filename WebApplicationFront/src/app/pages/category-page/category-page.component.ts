@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { ProductService } from '../../service/product.service';
 import { ActivatedRoute } from '@angular/router';
-import { debounceTime, forkJoin, Subject, takeUntil } from 'rxjs';
+import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { ProductData } from '../../data/interfaces/product/product-data.interface';
 import { CommonModule } from '@angular/common';
 import { ProductCardComponent } from '../../common-ui/product-card/product-card.component';
@@ -74,11 +74,12 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
   }
 
   private getRangeFilters(): RangeFilter[] {
-    let rangesForFilter: RangePropertyForFilter[] = this.categoryFilters.rangePropertyForFilters.filter(
-      (filter) =>
-        filter.minValue != filter.currentMinValue ||
-        filter.maxValue != filter.currentMaxValue
-    );
+    let rangesForFilter: RangePropertyForFilter[] =
+      this.categoryFilters.rangePropertyForFilters.filter(
+        (filter) =>
+          filter.minValue != filter.currentMinValue ||
+          filter.maxValue != filter.currentMaxValue
+      );
 
     return rangesForFilter.map((filter) => ({
       minValue: filter.currentMinValue ?? 0,
@@ -86,7 +87,6 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
       property: filter.propertyName,
     }));
   }
-
 
   private getCollectionFilters(): CollectionFilter[] {
     const collectionFilters = this.collectionInputs

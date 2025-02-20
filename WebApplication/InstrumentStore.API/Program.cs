@@ -68,7 +68,7 @@ namespace InstrumentStore.API
 			{
 				MinimumSameSitePolicy = SameSiteMode.Lax,
 				//HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always,
-				Secure = CookieSecurePolicy.Always,
+				//Secure = CookieSecurePolicy.Always,
 			});
 
 			app.UseCors(x =>
@@ -86,8 +86,6 @@ namespace InstrumentStore.API
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
 			app.UseRouting();
-
-			//app.UseMiddleware<TokenMiddleware>();
 
 			app.UseAuthentication();
 			app.UseAuthorization();

@@ -16,17 +16,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Product"
+                  "$ref": "#/components/schemas/ProductSearchResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Product"
+                  "$ref": "#/components/schemas/ProductSearchResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Product"
+                  "$ref": "#/components/schemas/ProductSearchResult"
                 }
               }
             }
@@ -1737,6 +1737,72 @@
             "additionalProperties": {
               "type": "string"
             },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProductSearchResult": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "brandId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "countryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
+          },
+          "productCategoryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "productCategoryId2": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "productCategoryName": {
+            "type": "string",
+            "nullable": true
+          },
+          "brandId2": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "brandName": {
+            "type": "string",
+            "nullable": true
+          },
+          "countryId2": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "countryName": {
+            "type": "string",
             "nullable": true
           }
         },

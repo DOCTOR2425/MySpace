@@ -1,40 +1,115 @@
 .cart-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-
-  padding: 10px;
+  gap: 15px;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
   background-color: #fff;
-  margin: 10px;
-  border-radius: 5px;
-  width: auto;
-  height: auto;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 150px;
+  /* Фиксированная высота */
+  overflow: hidden;
+  /* Обрезаем контент, который не влезает */
+  box-sizing: border-box;
+}
 
-  .cart-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
+.cart-item img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
 
-    div {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 15%;
-    }
-  }
+.cart-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}
 
-  img {
-    max-width: 130px;
+.product-name {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+  word-wrap: break-word;
+  /* Перенос слов */
+}
+
+.price-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.price,
+.total-price {
+  font-size: 14px;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.number-control {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.number-control button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.number-control button:hover {
+  background-color: #0056b3;
+}
+
+.number-control button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.remove-btn {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #dc3545;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.remove-btn:hover {
+  background-color: #c82333;
+}
+
+@media (max-width: 600px) {
+  .cart-item {
     height: auto;
-    margin-right: 20px;
-    border: 1px solid black;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  .number-control{
-    button{
-      margin-left: 10px;
-      margin-right: 10px;
-    }
+  .cart-item img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .price-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .number-control {
+    gap: 5px;
   }
 }

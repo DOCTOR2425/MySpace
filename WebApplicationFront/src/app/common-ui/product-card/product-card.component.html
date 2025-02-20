@@ -1,18 +1,25 @@
-<div class="card" style="width: 240px; height: auto; cursor: pointer">
-  <img
-    [src]="product.image"
-    [alt]="product.image"
-    class="card-img-top"
-    style="width: 100%; height: auto"
-    [routerLink]="['/product/' + product.productId]"
-  />
-  <div class="card-body">
-    <p class="card-text">{{ product.price }} руб.</p>
-    <h5 class="card-title">
-      {{ product.name }}
-    </h5>
-    <a [id]="product.productId" class="btn btn-primary" (click)="addToCart()"
-      >В корзину</a
-    >
+<div class="card h-100" style="cursor: pointer">
+  <div class="card-body d-flex flex-column">
+    <img
+      [src]="product.image"
+      [alt]="product.image"
+      class="card-img-top img-fluid rounded"
+      style="width: 100%; aspect-ratio: 1 / 1; object-fit: cover"
+      [routerLink]="['/product/' + product.productId]"
+    />
+    <p class="card-text mt-2">{{ product.price }} руб.</p>
+    <p class="card-title text-center">
+      {{ product.name.slice(0, 50) }}{{ product.name.length > 50 ? "..." : "" }}
+    </p>
+    <div class="mt-auto">
+      <!-- Контейнер для кнопки с mt-auto -->
+      <a
+        [id]="product.productId"
+        class="btn btn-primary w-100"
+        (click)="addToCart()"
+      >
+        В корзину
+      </a>
+    </div>
   </div>
 </div>

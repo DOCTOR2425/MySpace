@@ -1,4 +1,8 @@
-import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  provideZoneChangeDetection,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -14,9 +18,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(
-      withInterceptors([authInterceptor])
-    ),
-    importProvidersFrom(FormsModule, ToastrModule.forRoot())
+    provideHttpClient(withInterceptors([authInterceptor])),
+    importProvidersFrom(FormsModule, ToastrModule.forRoot()),
   ],
 };

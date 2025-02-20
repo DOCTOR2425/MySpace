@@ -1,20 +1,24 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { effect, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { CookiesManagerService } from '../cookies-manager/cookies-manager.service';
-import { catchError, Observable, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
+import { RegisterUser } from '../../data/interfaces/user/register-user.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private baseApiUrl = environment.apiUrl;
-  public userEMail: string = '';
+  public userEMail?: string;
+  public userEMailKey: string = 'userEmail';
 
   constructor(
     private http: HttpClient,
     private cookiesManager: CookiesManagerService
-  ) {}
+  ) {
+    this.userEMail = localStorage.getItem(this.userEMailKey)?.toString();
+  }
 
   public login(payload: {
     eMail: string;
@@ -34,5 +38,11 @@ export class AuthService {
       return true;
     }
     return false;
+  }
+
+  public register(payload: RegisterUser): Observable<any> {
+    return this.http.post<any>(`${this.baseApiUrl}/register`, payload, {
+      withCredentials: true,
+    });
   }
 }

@@ -1,94 +1,97 @@
-:host {
-  display: flex;
-  font-family: Arial, sans-serif;
-  padding-left: 100px;
-  padding-right: 100px;
+.cart-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  padding: 20px;
   background-color: rgb(231, 230, 230);
+  box-sizing: border-box;
+  min-height: 100vh;
+  overflow-y: auto;
 }
 
-.cart {
-  display: flex;
-
-  .cart-catalog {
-    min-width: 1300px;
-    max-width: 1300px;
-    margin-top: 10px;
-
-    .total {
-      text-align: right;
-      margin: 10px;
-      padding: 10px;
-      background-color: #fff;
-      border-radius: 5px;
-
-      button {
-        background-color: #333;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        &:hover {
-          background-color: #555;
-        }
-      }
-    }
-  }
+.cart-catalog {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
 }
 
 .registration-form {
   background-color: #fff;
+  padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 480px;
-  height: 600px;
-  margin-top: 20px;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.form-group {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+}
 
-  form {
-    display: flex;
-    flex-wrap: wrap;
+.form-group label {
+  margin-bottom: 5px;
+}
 
-    .line {
-      display: flex;
-      flex-wrap: wrap;
-      width: 100%;
+.form-group input,
+.form-group select {
+  width: 100%;
+  box-sizing: border-box;
+}
 
-      .form-group {
-        flex-grow: 1;
-        flex-basis: 240px;
-        width: 100%;
-        display: flex;
-        flex-wrap: wrap;
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+}
 
-        padding: 10px;
+button:hover {
+  background-color: #0056b3;
+}
 
-        label {
-          display: block;
-          margin-bottom: 5px;
-        }
+@media (min-width: 768px) {
+  .cart-container {
+    grid-template-columns: 2fr 1fr;
+  }
+}
 
-        input {
-          flex-grow: 1;
-          width: 100%;
-          padding: 8px;
-          box-sizing: border-box;
-          // height: 40px;
-        }
-      }
-    }
+@media (max-width: 600px) {
+  .cart-container {
+    grid-template-columns: 1fr;
+  }
 
-    button {
-      flex-grow: 1;
-      margin: 20px;
-      padding: 10px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      &:hover {
-        background-color: #0056b3;
-      }
-    }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cart-item img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .price-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .number-control {
+    gap: 5px;
   }
 }

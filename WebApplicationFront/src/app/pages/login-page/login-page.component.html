@@ -1,30 +1,162 @@
-<form 
-  class="ms-5 mt-3" 
-  [formGroup]="form"
-  (ngSubmit)="onSubmit()"
->
-  <div class="form-group">
-    <label for="exampleInputEmail1">Email address</label>
-    <input
-      class="form-control"
-      id="exampleInputEmail1"
-      aria-describedby="emailHelp"
-      placeholder="Enter email"
-      formControlName="eMail"
-    />
-    <small id="emailHelp" class="form-text text-muted">
-      We'll never share your email with anyone else.
-    </small>
-  </div>
-  <div class="form-group">
-    <label for="exampleInputPassword1">Password</label>
-    <input
-      type="password"
-      class="form-control"
-      id="exampleInputPassword1"
-      placeholder="Password"
-      formControlName="password"
-    />
-  </div>
-  <button type="submit" class="btn btn-primary mt-1">Submit</button>
-</form>
+<div class="form-container">
+  <form
+    class="ms-5 mt-3"
+    [formGroup]="isLoginMode ? loginForm : registerForm"
+    (ngSubmit)="onSubmit()"
+    [ngClass]="{ 'register-form': !isLoginMode }"
+  >
+    <div class="btn-group" role="group">
+      <button
+        type="button"
+        class="btn btn-outline-primary btn-lg"
+        [ngClass]="{ active: isLoginMode }"
+        (click)="setMode('login')"
+      >
+        Войти
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-primary btn-lg"
+        [ngClass]="{ active: !isLoginMode }"
+        (click)="setMode('register')"
+      >
+        Зарегистрироваться
+      </button>
+    </div>
+
+    <div *ngIf="isLoginMode">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        <input
+          class="form-control"
+          id="exampleInputEmail1"
+          aria-describedby="emailHelp"
+          placeholder="Enter email"
+          formControlName="eMail"
+        />
+        <small id="emailHelp" class="form-text text-muted">
+          We'll never share your email with anyone else.
+        </small>
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          id="exampleInputPassword1"
+          placeholder="Password"
+          formControlName="password"
+        />
+      </div>
+    </div>
+
+    <div *ngIf="!isLoginMode">
+      <div class="form-row">
+        <div class="col">
+          <label for="firstName">First Name</label>
+          <input
+            class="form-control"
+            id="firstName"
+            placeholder="First Name"
+            formControlName="firstName"
+          />
+        </div>
+        <div class="col">
+          <label for="surname">Surname</label>
+          <input
+            class="form-control"
+            id="surname"
+            placeholder="Surname"
+            formControlName="surname"
+          />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="telephone">Telephone</label>
+        <input
+          class="form-control"
+          id="telephone"
+          placeholder="Telephone"
+          formControlName="telephone"
+        />
+      </div>
+
+      <hr />
+
+      <div class="form-row">
+        <div class="col">
+          <label for="city">City</label>
+          <input
+            class="form-control"
+            id="city"
+            placeholder="City"
+            formControlName="city"
+          />
+        </div>
+        <div class="col">
+          <label for="street">Street</label>
+          <input
+            class="form-control"
+            id="street"
+            placeholder="Street"
+            formControlName="street"
+          />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col">
+          <label for="houseNumber">House Number</label>
+          <input
+            class="form-control"
+            id="houseNumber"
+            placeholder="House Number"
+            formControlName="houseNumber"
+          />
+        </div>
+        <div class="col">
+          <label for="entrance">Entrance</label>
+          <input
+            class="form-control"
+            id="entrance"
+            placeholder="Entrance"
+            formControlName="entrance"
+          />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="flat">Flat</label>
+        <input
+          class="form-control"
+          id="flat"
+          placeholder="Flat"
+          formControlName="flat"
+        />
+      </div>
+
+      <hr />
+
+      <div class="form-group">
+        <label for="exampleInputEmail1">Email</label>
+        <input
+          class="form-control"
+          id="exampleInputEmail1"
+          aria-describedby="emailHelp"
+          placeholder="Enter email"
+          formControlName="eMail"
+        />
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          id="exampleInputPassword1"
+          placeholder="Password"
+          formControlName="password"
+        />
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-1">Submit</button>
+  </form>
+</div>

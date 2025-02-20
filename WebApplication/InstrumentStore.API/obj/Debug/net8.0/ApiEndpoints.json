@@ -151,7 +151,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "InstrumentStore.Domain.DataBase.Models.Product",
+        "Type": "InstrumentStore.Domain.DataBase.ProcedureResultModels.ProductSearchResult",
         "MediaTypes": [
           "text/plain",
           "application/json",

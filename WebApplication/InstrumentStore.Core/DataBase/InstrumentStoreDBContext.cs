@@ -16,27 +16,27 @@ namespace InstrumentStore.Domain.DataBase
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			optionsBuilder.UseSqlServer(@$"Server=WSA-195-74-BY;Database=MySpaceDB;
+			optionsBuilder.UseSqlServer(@$"Server=DESKTOP-0MK8KC9\MSSQLSERVER01;Database=MySpaceDB;
 				Trusted_Connection=True;Encrypt=False;TrustServerCertificate=True;");
-				//.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information); TODO log db queries in console
+			//.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information); TODO log db queries in console
 		}
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Product>()
-                .HasOne(c => c.ProductCategory)
-                .WithMany()
-                .OnDelete(DeleteBehavior.NoAction);
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.Entity<Product>()
+				.HasOne(c => c.ProductCategory)
+				.WithMany()
+				.OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<ProductProperty>()
-                .HasOne(c => c.ProductCategory)
-                .WithMany()
-                .OnDelete(DeleteBehavior.NoAction);
+			modelBuilder.Entity<ProductProperty>()
+				.HasOne(c => c.ProductCategory)
+				.WithMany()
+				.OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<ProductSearchResult>().HasNoKey();
-        }
+			modelBuilder.Entity<ProductSearchResult>().HasNoKey();
+		}
 
-        public required DbSet<Brand> Brand { get; set; }
+		public required DbSet<Brand> Brand { get; set; }
 		public required DbSet<CartItem> CartItem { get; set; }
 		public required DbSet<Country> Country { get; set; }
 		public required DbSet<DeliveryMethod> DeliveryMethod { get; set; }
@@ -51,5 +51,5 @@ namespace InstrumentStore.Domain.DataBase
 		public required DbSet<User> User { get; set; }
 		public required DbSet<UserAdress> UserAdresses { get; set; }
 		public required DbSet<UserRegistrInfo> UserRegistrInfos { get; set; }
-    }
+	}
 }

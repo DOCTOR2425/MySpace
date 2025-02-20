@@ -1,33 +1,31 @@
-<div class="cart-item" [attr.data-id]="item.cartItemId">
+<div class="cart-item">
   <img
     [src]="item.product.image"
-    [alt]="item.product.image"
-    class="img-top"
-    style="width: 100%; height: auto"
+    [alt]="item.product.name"
     [routerLink]="['/product/' + item.product.productId]"
   />
   <div class="cart-info">
-    <p>{{ item.product.price }} руб.</p>
-    <h5 [routerLink]="['/product/' + item.product.productId]">
+    <h5
+      [routerLink]="['/product/' + item.product.productId]"
+      class="product-name"
+    >
       {{ item.product.name }}
     </h5>
-    <div class="number-control">
-      <button
-        [id]="'decBtn' + item.cartItemId"
-        (click)="changeQuantity(false)"
-        [disabled]="item.quantity <= 1"
-        [style.backgroundColor]="item.quantity <= 1 ? 'grey' : ''"
-      >
-        -
-      </button>
-      <p [id]="'counter' + item.cartItemId">{{ item.quantity }}</p>
-      <button [id]="'incBtn' + item.cartItemId" (click)="changeQuantity(true)">
-        +
-      </button>
-      <button [id]="'removeBtn' + item.cartItemId" (click)="removeItem()">
-        Удалить
-      </button>
+    <div class="price-controls">
+      <p class="price">{{ item.product.price }} руб.</p>
+      <div class="number-control">
+        <button
+          (click)="changeQuantity(false)"
+          [disabled]="item.quantity <= 1"
+          [style.backgroundColor]="item.quantity <= 1 ? 'grey' : ''"
+        >
+          -
+        </button>
+        <p>{{ item.quantity }}</p>
+        <button (click)="changeQuantity(true)">+</button>
+      </div>
+      <p class="total-price">{{ item.product.price * item.quantity }} руб.</p>
+      <button class="remove-btn" (click)="removeItem()">Удалить</button>
     </div>
-    <p>{{ item.product.price * item.quantity }} руб.</p>
   </div>
 </div>

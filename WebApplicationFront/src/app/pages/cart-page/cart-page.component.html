@@ -1,4 +1,4 @@
-<div class="cart">
+<div class="cart-container">
   <div class="cart-catalog">
     <app-cart-item
       *ngFor="let item of items"
@@ -11,17 +11,16 @@
     </div>
   </div>
 
-  <div class="registration-form modal-body">
+  <div class="registration-form">
     <form
       *ngIf="userOrderInfo"
       #orderForm="ngForm"
       (ngSubmit)="orderCart(orderForm)"
     >
-      <div class="line">
+      <div class="form-grid">
         <div class="form-group">
-          <label class="col-form-label" for="firstName">Имя:</label>
+          <label for="firstName">Имя:</label>
           <input
-            class="form-control"
             type="text"
             id="firstName"
             name="firstName"
@@ -30,9 +29,8 @@
           />
         </div>
         <div class="form-group">
-          <label class="col-form-label" for="telephone">Телефон:</label>
+          <label for="telephone">Телефон:</label>
           <input
-            class="form-control"
             type="tel"
             id="telephone"
             name="telephone"
@@ -41,9 +39,8 @@
           />
         </div>
         <div class="form-group">
-          <label class="col-form-label" for="email">Email:</label>
+          <label for="email">Email:</label>
           <input
-            class="form-control"
             type="email"
             id="email"
             name="email"
@@ -51,12 +48,9 @@
             required
           />
         </div>
-      </div>
-      <div class="line">
         <div class="form-group">
-          <label class="col-form-label" for="city">Город:</label>
+          <label for="city">Город:</label>
           <input
-            class="form-control"
             type="text"
             id="city"
             name="city"
@@ -65,9 +59,8 @@
           />
         </div>
         <div class="form-group">
-          <label class="col-form-label" for="street">Улица:</label>
+          <label for="street">Улица:</label>
           <input
-            class="form-control"
             type="text"
             id="street"
             name="street"
@@ -76,9 +69,8 @@
           />
         </div>
         <div class="form-group">
-          <label class="col-form-label" for="houseNumber">Номер дома:</label>
+          <label for="houseNumber">Номер дома:</label>
           <input
-            class="form-control"
             type="text"
             id="houseNumber"
             name="houseNumber"
@@ -87,37 +79,36 @@
           />
         </div>
         <div class="form-group">
-          <label class="col-form-label" for="flat">Квартира:</label>
+          <label for="flat">Квартира:</label>
           <input
-            class="form-control"
             type="text"
             id="flat"
             name="flat"
             [(ngModel)]="userOrderInfo.flat"
           />
         </div>
-      </div>
-      <div class="form-group">
-        <label class="col-form-label">Способ доставки:</label>
-        <select *ngIf="orderOptions" ngModel required name="deliveryMethodId">
-          <option
-            *ngFor="let deliveryMethod of orderOptions.deliveryMethods"
-            [value]="deliveryMethod.deliveryMethodId"
-          >
-            {{ deliveryMethod.name }} ({{ deliveryMethod.price }} руб.)
-          </option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="col-form-label">Способ оплаты:</label>
-        <select *ngIf="orderOptions" ngModel required name="paymentMethodId">
-          <option
-            *ngFor="let paymentMethod of orderOptions.paymentMethods"
-            [value]="paymentMethod.paymentMethodId"
-          >
-            {{ paymentMethod.name }}
-          </option>
-        </select>
+        <div class="form-group">
+          <label>Способ доставки:</label>
+          <select ngModel required name="deliveryMethodId">
+            <option
+              *ngFor="let deliveryMethod of orderOptions.deliveryMethods"
+              [value]="deliveryMethod.deliveryMethodId"
+            >
+              {{ deliveryMethod.name }} ({{ deliveryMethod.price }} руб.)
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Способ оплаты:</label>
+          <select ngModel required name="paymentMethodId">
+            <option
+              *ngFor="let paymentMethod of orderOptions.paymentMethods"
+              [value]="paymentMethod.paymentMethodId"
+            >
+              {{ paymentMethod.name }}
+            </option>
+          </select>
+        </div>
       </div>
       <button type="submit" [disabled]="orderForm.invalid">
         Оформить заказ
