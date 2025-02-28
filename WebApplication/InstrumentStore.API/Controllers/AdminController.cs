@@ -141,17 +141,11 @@ namespace InstrumentStore.API.Controllers
 			return Ok(await _deliveryMethodService.Create(deliveryMethod));
 		}
 
-		[HttpPost("create-payment-method")]//добавление способа оплаты заказа
-		public async Task<ActionResult<Guid>> CreatePaymentMethod([FromBody] string paymentMethodName)
-		{
-			PaymentMethod paymentMethod = new PaymentMethod()
-			{
-				PaymentMethodId = Guid.NewGuid(),
-				Name = paymentMethodName
-			};
-
-			return Ok(await _paymentMethodService.Create(paymentMethod));
-		}
+		//[HttpPost("create-payment-method")]//добавление способа оплаты заказа
+		//public async Task<ActionResult<Guid>> CreatePaymentMethod([FromBody] string paymentMethodName)
+		//{
+		//	return Ok(await _paymentMethodService.Create(paymentMethod));
+		//}
 
 		[HttpGet("FillProducts")]
 		public async Task<IActionResult> FillProducts()

@@ -2,7 +2,7 @@ export interface RegisterUserFromOrderRequest {
   firstName: string;
   surname: string;
   telephone: string;
-  eMail: string;
+  email: string;
 
   city: string;
   street: string;

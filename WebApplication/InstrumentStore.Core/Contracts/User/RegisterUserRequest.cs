@@ -4,7 +4,7 @@
         string FirstName,
         string Surname,
         string Telephone,
-        string EMail,
+        string Email,
         string Password,
 
         string City,

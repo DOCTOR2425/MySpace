@@ -1,12 +1,16 @@
 ﻿namespace InstrumentStore.Domain.Contracts.Products
 {
-    public record ProductCard(
-        Guid ProductId,
-        string Name,
-        decimal Price,
-        int Quantity,
-        string Image,
-        string ProductCategory,
-        string Brand,
-        string Country);
+	public class ProductCard
+	{
+		public Guid ProductId { get; set; }
+		public string Name { get; set; }
+		public decimal Price { get; set; }
+		public int Quantity { get; set; }
+		public string Image { get; set; }
+		public string ProductCategory { get; set; }
+		public string Brand { get; set; }
+		public string Country { get; set; }
+
+		public ProductCard() { }
+	}
 }

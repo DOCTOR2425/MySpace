@@ -61,6 +61,46 @@ namespace InstrumentStore.Domain.Migrations
                     b.ToTable("CartItem");
                 });
 
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.City", b =>
+                {
+                    b.Property<Guid>("CityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CityId");
+
+                    b.ToTable("City");
+                });
+
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Comment", b =>
+                {
+                    b.Property<Guid>("CommentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CommentId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comment");
+                });
+
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Country", b =>
                 {
                     b.Property<Guid>("CountryId")
@@ -94,6 +134,26 @@ namespace InstrumentStore.Domain.Migrations
                     b.ToTable("DeliveryMethod");
                 });
 
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Image", b =>
+                {
+                    b.Property<Guid>("ImageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ImageId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Image");
+                });
+
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.PaidOrder", b =>
                 {
                     b.Property<Guid>("PaidOrderId")
@@ -103,11 +163,12 @@ namespace InstrumentStore.Domain.Migrations
                     b.Property<Guid>("DeliveryMethodId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("PaymentDate")
+                    b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("PaymentMethodId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -115,8 +176,6 @@ namespace InstrumentStore.Domain.Migrations
                     b.HasKey("PaidOrderId");
 
                     b.HasIndex("DeliveryMethodId");
-
-                    b.HasIndex("PaymentMethodId");
 
                     b.HasIndex("UserId");
 
@@ -131,6 +190,9 @@ namespace InstrumentStore.Domain.Migrations
 
                     b.Property<Guid>("PaidOrderId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
@@ -147,21 +209,6 @@ namespace InstrumentStore.Domain.Migrations
                     b.ToTable("PaidOrderItem");
                 });
 
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.PaymentMethod", b =>
-                {
-                    b.Property<Guid>("PaymentMethodId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("PaymentMethodId");
-
-                    b.ToTable("PaymentMethod");
-                });
-
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Product", b =>
                 {
                     b.Property<Guid>("ProductId")
@@ -175,10 +222,6 @@ namespace InstrumentStore.Domain.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -212,23 +255,24 @@ namespace InstrumentStore.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BrandId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CountryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
+                    b.Property<string>("Brand")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Image")
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -239,13 +283,14 @@ namespace InstrumentStore.Domain.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("ProductArchiveId");
 
-                    b.HasIndex("BrandId");
-
-                    b.HasIndex("CountryId");
-
                     b.HasIndex("ProductCategoryId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("ProductArchive");
                 });
@@ -331,30 +376,24 @@ namespace InstrumentStore.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserAdressId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("UserRegistrInfoId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("UserId");
-
-                    b.HasIndex("UserAdressId");
 
                     b.HasIndex("UserRegistrInfoId");
 
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.UserAdress", b =>
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.UserAddress", b =>
                 {
-                    b.Property<Guid>("UserAdressId")
+                    b.Property<Guid>("UserAddressId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("CityId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Entrance")
                         .IsRequired()
@@ -372,9 +411,16 @@ namespace InstrumentStore.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserAdressId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.ToTable("UserAdresses");
+                    b.HasKey("UserAddressId");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserAddress");
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.UserRegistrInfo", b =>
@@ -383,7 +429,7 @@ namespace InstrumentStore.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("EMail")
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -397,7 +443,63 @@ namespace InstrumentStore.Domain.Migrations
 
                     b.HasKey("UserRegistrInfoId");
 
-                    b.ToTable("UserRegistrInfos");
+                    b.ToTable("UserRegistrInfo");
+                });
+
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.ProcedureResultModels.ProductSearchResult", b =>
+                {
+                    b.Property<Guid>("BrandId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BrandId2")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BrandName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CountryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CountryId2")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CountryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("ProductCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductCategoryId2")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ProductCategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.ToTable("ProductSearchResult");
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.CartItem", b =>
@@ -419,17 +521,41 @@ namespace InstrumentStore.Domain.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Comment", b =>
+                {
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Image", b =>
+                {
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.PaidOrder", b =>
                 {
                     b.HasOne("InstrumentStore.Domain.DataBase.Models.DeliveryMethod", "DeliveryMethod")
                         .WithMany()
                         .HasForeignKey("DeliveryMethodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("InstrumentStore.Domain.DataBase.Models.PaymentMethod", "PaymentMethod")
-                        .WithMany()
-                        .HasForeignKey("PaymentMethodId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -440,8 +566,6 @@ namespace InstrumentStore.Domain.Migrations
                         .IsRequired();
 
                     b.Navigation("DeliveryMethod");
-
-                    b.Navigation("PaymentMethod");
 
                     b.Navigation("User");
                 });
@@ -494,29 +618,21 @@ namespace InstrumentStore.Domain.Migrations
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.ProductArchive", b =>
                 {
-                    b.HasOne("InstrumentStore.Domain.DataBase.Models.Brand", "Brand")
-                        .WithMany()
-                        .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("InstrumentStore.Domain.DataBase.Models.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("InstrumentStore.Domain.DataBase.Models.ProductCategory", "ProductCategory")
                         .WithMany()
                         .HasForeignKey("ProductCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Brand");
-
-                    b.Navigation("Country");
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ProductCategory");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.ProductProperty", b =>
@@ -551,21 +667,32 @@ namespace InstrumentStore.Domain.Migrations
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.User", b =>
                 {
-                    b.HasOne("InstrumentStore.Domain.DataBase.Models.UserAdress", "UserAdress")
-                        .WithMany()
-                        .HasForeignKey("UserAdressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("InstrumentStore.Domain.DataBase.Models.UserRegistrInfo", "UserRegistrInfo")
                         .WithMany()
                         .HasForeignKey("UserRegistrInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("UserAdress");
-
                     b.Navigation("UserRegistrInfo");
+                });
+
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.UserAddress", b =>
+                {
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

@@ -83,9 +83,8 @@ export class CartService {
     quantity: number;
   }): void {
     const cartItems = this.getCartItemsFromLocalStorage();
-    let productData: ProductData;
     this.productService.getProductById(payload.productId).subscribe((val) => {
-      productData = val.productResponseData;
+      let productData = val.productResponseData;
       let cartItem = {
         cartItemId: uuidv4(),
         product: productData,
@@ -113,7 +112,7 @@ export class CartService {
 
   public orderCartForRegistered(payload: {
     deliveryMethodId: string;
-    paymentMethodId: string;
+    paymentMethod: string;
   }): Observable<Object> {
     return this.http.post(
       `${this.baseApiUrl}order-cart-for-registered`,
@@ -156,7 +155,7 @@ export class CartService {
     return {
       userId: '',
       firstName: '',
-      eMail: '',
+      email: '',
       telephone: '',
       city: '',
       street: '',

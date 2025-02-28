@@ -10,6 +10,7 @@ namespace InstrumentStore.Domain.Services
 	public class FillDataBaseService : IFillDataBaseService
 	{
 		private readonly IUsersService _usersService;
+		private readonly ICityService _cityService;
 		private readonly IProductService _productService;
 		private readonly IPaidOrderService _paidOrderService;
 		private readonly IDeliveryMethodService _deliveryMethodService;
@@ -19,6 +20,7 @@ namespace InstrumentStore.Domain.Services
 		private readonly IProductCategoryService _productCategoryService;
 		private readonly ICartService _cartService;
 		private IProductPropertyService _productPropertyService;
+		private IImageService _productImageService;
 		private readonly IMapper _mapper;
 		private readonly InstrumentStoreDBContext _dBContext;
 
@@ -33,7 +35,9 @@ namespace InstrumentStore.Domain.Services
 			IProductCategoryService productCategoryService,
 			ICartService cartService,
 			IProductPropertyService productPropertyService,
-			InstrumentStoreDBContext dBContext)
+			InstrumentStoreDBContext dBContext,
+			ICityService cityService,
+			IImageService productImageService)
 		{
 			_usersService = usersService;
 			_productService = productService;
@@ -47,6 +51,8 @@ namespace InstrumentStore.Domain.Services
 			_cartService = cartService;
 			_productPropertyService = productPropertyService;
 			_dBContext = dBContext;
+			_cityService = cityService;
+			_productImageService = productImageService;
 		}
 
 		public class FillResult
@@ -191,10 +197,16 @@ namespace InstrumentStore.Domain.Services
                     Поставляется в комплекте с двумя аккумуляторами(ёмкостью 1, 5 А),
                     кейсом и зарядным устройством.",
 				Price = 240,
-				Image = "шуруповёрт2.png",
 				Quantity = 100
 			};
 			await _productService.Create(product);
+			Image image = new Image()
+			{
+				ImageId = Guid.NewGuid(),
+				Product = product,
+				Name = "шуруповёрт2.png"
+			};
+			await _productImageService.Create(image);
 			ProductPropertyValue value11 = new ProductPropertyValue()
 			{
 				ProductPropertyValueId = Guid.NewGuid(),
@@ -228,15 +240,21 @@ namespace InstrumentStore.Domain.Services
 				Country = country,
 				ProductCategory = productCategory,
 				Description = @"Аккумуляторная дрель-шуруповерт Makita DDF485Z 
-					используется при сборке мебели, выполнении ремонтных и отделочных 
-					работ в зданиях и на улице. В зависимости от плотности материала, 
-					при заворачивании и выворачивании шурупов, можно выбрать одну из 
-					21-ой настройки муфты ограничения крутящего момента.",
+                    используется при сборке мебели, выполнении ремонтных и отделочных 
+                    работ в зданиях и на улице. В зависимости от плотности материала, 
+                    при заворачивании и выворачивании шурупов, можно выбрать одну из 
+                    21-ой настройки муфты ограничения крутящего момента.",
 				Price = 120,
-				Image = "шуруповёрт2.png",
 				Quantity = 100
 			};
 			await _productService.Create(product2);
+			Image image2 = new Image()
+			{
+				ImageId = Guid.NewGuid(),
+				Product = product2,
+				Name = "шуруповёрт2.png"
+			};
+			await _productImageService.Create(image2);
 			ProductPropertyValue value21 = new ProductPropertyValue()
 			{
 				ProductPropertyValueId = Guid.NewGuid(),
@@ -290,14 +308,20 @@ namespace InstrumentStore.Domain.Services
 				Country = country,
 				ProductCategory = productCategory,
 				Description = @"Аккумуляторная дрель-шуруповерт Bosch Easydrill 18V-40 06039D8005 
-					предназначена для закручивания и откручивания винтов, а также для 
-					сверления в древесине, металле, керамике и пластмассе.Универсальный 
-					13 мм патрон с одной втулкой – для легкой замены бит-насадок и сверл.",
+                    предназначена для закручивания и откручивания винтов, а также для 
+                    сверления в древесине, металле, керамике и пластмассе.Универсальный 
+                    13 мм патрон с одной втулкой – для легкой замены бит-насадок и сверл.",
 				Price = 200,
-				Image = "шуруповёрт.png",
 				Quantity = 100
 			};
 			await _productService.Create(product);
+			Image image = new Image()
+			{
+				ImageId = Guid.NewGuid(),
+				Product = product,
+				Name = "шуруповёрт.png"
+			};
+			await _productImageService.Create(image);
 			ProductPropertyValue value11 = new ProductPropertyValue()
 			{
 				ProductPropertyValueId = Guid.NewGuid(),
@@ -331,13 +355,19 @@ namespace InstrumentStore.Domain.Services
 				Country = country,
 				ProductCategory = productCategory,
 				Description = @"Аккумуляторная дрель-шуруповерт Bosch AdvancedDrill 
-					18 06039B5009 с интуитивно понятным управлением помогает 
-					решать различные задачи по обработке древесины, пластмассы и металла.",
+                    18 06039B5009 с интуитивно понятным управлением помогает 
+                    решать различные задачи по обработке древесины, пластмассы и металла.",
 				Price = 180,
-				Image = "шуруповёрт.png",
 				Quantity = 100
 			};
 			await _productService.Create(product2);
+			Image image2 = new Image()
+			{
+				ImageId = Guid.NewGuid(),
+				Product = product2,
+				Name = "шуруповёрт.png"
+			};
+			await _productImageService.Create(image2);
 			ProductPropertyValue value21 = new ProductPropertyValue()
 			{
 				ProductPropertyValueId = Guid.NewGuid(),
@@ -391,16 +421,22 @@ namespace InstrumentStore.Domain.Services
 				Country = country,
 				ProductCategory = productCategory,
 				Description = @"Бесщеточная дрель-шуруповерт Dewalt 18.0 В XR DCD777S2T 
-					используется для работ с крепежными элементами и сверления отверстий.
-					Быстрозажимной патрон обеспечивает простую замену насадок, что 
-					позволяет экономить время. В зависимости от плотности материала 
-					можно выбрать один из пятнадцати режимов крутящего момента. 
-					Кейс решает вопрос хранения и транспортировки. ",
+                    используется для работ с крепежными элементами и сверления отверстий.
+                    Быстрозажимной патрон обеспечивает простую замену насадок, что 
+                    позволяет экономить время. В зависимости от плотности материала 
+                    можно выбрать один из пятнадцати режимов крутящего момента. 
+                    Кейс решает вопрос хранения и транспортировки. ",
 				Price = 290,
-				Image = "шуруповёрт3.png",
 				Quantity = 100
 			};
 			await _productService.Create(product);
+			Image image = new Image()
+			{
+				ImageId = Guid.NewGuid(),
+				Product = product,
+				Name = "шуруповёрт3.png"
+			};
+			await _productImageService.Create(image);
 			ProductPropertyValue value11 = new ProductPropertyValue()
 			{
 				ProductPropertyValueId = Guid.NewGuid(),
@@ -434,16 +470,22 @@ namespace InstrumentStore.Domain.Services
 				Country = country,
 				ProductCategory = productCategory,
 				Description = @"Компактная дрель-шуруповерт Dewalt 12 В XR 
-					DCD701D2-QW предназначен для ремонтно-строительных работ.
-					Работа от аккумулятора позволяет использовать инструмент 
-					в местах, где нет возможности подключиться к сети.
-					Предусмотрена встроенная подсветка для работы в 
-					местах с плохим освещением",
+                    DCD701D2-QW предназначен для ремонтно-строительных работ.
+                    Работа от аккумулятора позволяет использовать инструмент 
+                    в местах, где нет возможности подключиться к сети.
+                    Предусмотрена встроенная подсветка для работы в 
+                    местах с плохим освещением",
 				Price = 215,
-				Image = "шуруповёрт3.png",
 				Quantity = 100
 			};
 			await _productService.Create(product2);
+			Image image2 = new Image()
+			{
+				ImageId = Guid.NewGuid(),
+				Product = product2,
+				Name = "шуруповёрт3.png"
+			};
+			await _productImageService.Create(image2);
 			ProductPropertyValue value21 = new ProductPropertyValue()
 			{
 				ProductPropertyValueId = Guid.NewGuid(),
@@ -502,22 +544,15 @@ namespace InstrumentStore.Domain.Services
 				Name = "Самовывоз",
 				Price = 0
 			};
-
-			PaymentMethod paymentMethod1 = new PaymentMethod()
+			City city = new City()
 			{
-				PaymentMethodId = Guid.NewGuid(),
-				Name = "Картой",
-			};
-			PaymentMethod paymentMethod2 = new PaymentMethod()
-			{
-				PaymentMethodId = Guid.NewGuid(),
-				Name = "Наличными",
+				CityId = Guid.NewGuid(),
+				Name = "Минск"
 			};
 
+			await _cityService.Create(city);
 			await _deliveryMethodService.Create(deliveryMethod1);
 			await _deliveryMethodService.Create(deliveryMethod2);
-			await _paymentMethodService.Create(paymentMethod1);
-			await _paymentMethodService.Create(paymentMethod2);
 
 
 			// User
@@ -541,7 +576,7 @@ namespace InstrumentStore.Domain.Services
 
 			await _cartService.OrderCartForLogined(userId,
 				deliveryMethod1.DeliveryMethodId,
-				paymentMethod2.PaymentMethodId);
+				PaymentMethodService.PaymentMethods[PaymentMethod.Cash]);
 
 			await _cartService.AddToCart(userId, products[1].ProductId, 3);
 			await _cartService.AddToCart(userId, products[3].ProductId, 4);
@@ -551,19 +586,21 @@ namespace InstrumentStore.Domain.Services
 		{
 			_dBContext.Brand.RemoveRange(_dBContext.Brand);
 			_dBContext.CartItem.RemoveRange(_dBContext.CartItem);
+			_dBContext.City.RemoveRange(_dBContext.City);
+			_dBContext.Comment.RemoveRange(_dBContext.Comment);
 			_dBContext.Country.RemoveRange(_dBContext.Country);
 			_dBContext.DeliveryMethod.RemoveRange(_dBContext.DeliveryMethod);
+			_dBContext.Image.RemoveRange(_dBContext.Image);
 			_dBContext.PaidOrder.RemoveRange(_dBContext.PaidOrder);
 			_dBContext.PaidOrderItem.RemoveRange(_dBContext.PaidOrderItem);
-			_dBContext.PaymentMethod.RemoveRange(_dBContext.PaymentMethod);
 			_dBContext.Product.RemoveRange(_dBContext.Product);
 			_dBContext.ProductArchive.RemoveRange(_dBContext.ProductArchive);
 			_dBContext.ProductCategory.RemoveRange(_dBContext.ProductCategory);
 			_dBContext.ProductProperty.RemoveRange(_dBContext.ProductProperty);
 			_dBContext.ProductPropertyValue.RemoveRange(_dBContext.ProductPropertyValue);
 			_dBContext.User.RemoveRange(_dBContext.User);
-			_dBContext.UserAdresses.RemoveRange(_dBContext.UserAdresses);
-			_dBContext.UserRegistrInfos.RemoveRange(_dBContext.UserRegistrInfos);
+			_dBContext.UserAddress.RemoveRange(_dBContext.UserAddress);
+			_dBContext.UserRegistrInfo.RemoveRange(_dBContext.UserRegistrInfo);
 
 			_dBContext.SaveChanges();
 		}

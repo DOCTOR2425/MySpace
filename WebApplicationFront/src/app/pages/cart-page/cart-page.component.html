@@ -44,7 +44,7 @@
             type="email"
             id="email"
             name="email"
-            [(ngModel)]="userOrderInfo.eMail"
+            [(ngModel)]="userOrderInfo.email"
             required
           />
         </div>
@@ -100,12 +100,12 @@
         </div>
         <div class="form-group">
           <label>Способ оплаты:</label>
-          <select ngModel required name="paymentMethodId">
+          <select ngModel required name="paymentMethod">
             <option
               *ngFor="let paymentMethod of orderOptions.paymentMethods"
-              [value]="paymentMethod.paymentMethodId"
+              [value]="paymentMethod"
             >
-              {{ paymentMethod.name }}
+              {{ paymentMethod }}
             </option>
           </select>
         </div>

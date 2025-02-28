@@ -1,7 +1,7 @@
 export interface UserOrderInfo {
   userId: string;
   firstName: string;
-  eMail: string;
+  email: string;
   telephone: string;
   city: string;
   street: string;

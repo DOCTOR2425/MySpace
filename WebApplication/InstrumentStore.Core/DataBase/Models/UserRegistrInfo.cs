@@ -3,7 +3,7 @@
 	public class UserRegistrInfo
 	{
 		public Guid UserRegistrInfoId { get; set; }
-		public string EMail { get; set; } = string.Empty;
+		public string Email { get; set; } = string.Empty;
 		public string PasswordHash { get; set; } = string.Empty;
 		public string RefreshToken { get; set; } = string.Empty;
 	}

@@ -11,6 +11,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { ToastService } from '../../service/toast/toast.service';
 import { AdminService } from '../../service/admin/admin.service';
 import { CommonModule } from '@angular/common';
+import { UserService } from '../../service/user/user.service';
 
 @Component({
   selector: 'app-login-page',
@@ -28,13 +29,14 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
+    private userService: UserService,
     private adminService: AdminService,
     private toastService: ToastService
   ) {}
 
   loginForm = new FormGroup({
-    // eMail: new FormControl('', [Validators.required, Validators.email]),
-    eMail: new FormControl('', [Validators.required]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    // email: new FormControl('', [Validators.required]),
     password: new FormControl('', Validators.required),
   });
 
@@ -42,7 +44,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     firstName: new FormControl('', Validators.required),
     surname: new FormControl('', Validators.required),
     telephone: new FormControl('', Validators.required),
-    eMail: new FormControl('', [Validators.required, Validators.email]),
+    email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', Validators.required),
     city: new FormControl('', Validators.required),
     street: new FormControl('', Validators.required),
@@ -72,13 +74,13 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     if (this.isLoginMode) {
       if (this.loginForm.valid) {
         const loginValue = this.loginForm.value as {
-          eMail: string;
+          email: string;
           password: string;
         };
 
         this.authService
           .login({
-            eMail: loginValue.eMail!,
+            email: loginValue.email!,
             password: loginValue.password!,
           })
           .subscribe({
@@ -89,10 +91,10 @@ export class LoginPageComponent implements OnInit, OnDestroy {
                 this.router.navigate(['admin']);
               } else {
                 localStorage.setItem(
-                  this.authService.userEMailKey,
-                  loginValue.eMail
+                  this.userService.userEMailKey,
+                  loginValue.email
                 );
-                this.authService.userEMail = loginValue.eMail;
+                this.userService.userEMail = loginValue.email;
                 this.router.navigate([`${this.returnUrl}`]);
               }
             },
@@ -108,7 +110,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
           firstName: string;
           surname: string;
           telephone: string;
-          eMail: string;
+          email: string;
           password: string;
           city: string;
           street: string;
@@ -122,7 +124,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
             firstName: registerValue.firstName!,
             surname: registerValue.surname!,
             telephone: registerValue.telephone!,
-            eMail: registerValue.eMail!,
+            email: registerValue.email!,
             password: registerValue.password!,
             city: registerValue.city!,
             street: registerValue.street!,

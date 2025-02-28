@@ -1,35 +1,37 @@
-﻿using InstrumentStore.Domain.DataBase.Models;
-using InstrumentStore.Domain.DataBase;
-using Microsoft.EntityFrameworkCore;
-using InstrumentStore.Domain.Abstractions;
+﻿using InstrumentStore.Domain.Abstractions;
 
 namespace InstrumentStore.Domain.Services
 {
-    public class PaymentMethodService : IPaymentMethodService
-    {
-        private readonly InstrumentStoreDBContext _dbContext;
+	public class PaymentMethodService : IPaymentMethodService
+	{
+		public static readonly Dictionary<PaymentMethod, string> PaymentMethods =
+			new Dictionary<PaymentMethod, string>()
+			{
+				{PaymentMethod.ERIP, "ERIP перевод" },
+				{PaymentMethod.Cash, "Наличными при получении" }
+			};
 
-        public PaymentMethodService(InstrumentStoreDBContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+		public async Task<Dictionary<PaymentMethod, string>> GetAll()
+		{
+			return new Dictionary<PaymentMethod, string>()
+			{
+				{PaymentMethod.ERIP, "ERIP перевод" },
+				{PaymentMethod.Cash, "Наличными при получении" }
+			};
+		}
 
-        public async Task<List<PaymentMethod>> GetAll()
-        {
-            return await _dbContext.PaymentMethod.AsNoTracking().ToListAsync();
-        }
-
-        public async Task<PaymentMethod> GetById(Guid id)
-        {
-            return await _dbContext.PaymentMethod.FindAsync(id);
-        }
-
-        public async Task<Guid> Create(PaymentMethod paymentMethod)
-        {
-            await _dbContext.PaymentMethod.AddAsync(paymentMethod);
-            await _dbContext.SaveChangesAsync();
-
-            return paymentMethod.PaymentMethodId;
-        }
-    }
+		public async Task<List<string>> GetAllToList()
+		{
+			return new List<string>()
+			{
+				"ERIP перевод",
+				"Наличными при получении"
+			};
+		}
+	}
+	public enum PaymentMethod
+	{
+		ERIP,
+		Cash
+	}
 }

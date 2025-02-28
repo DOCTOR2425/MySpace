@@ -38,18 +38,20 @@ namespace InstrumentStore.Domain.DataBase
 
 		public required DbSet<Brand> Brand { get; set; }
 		public required DbSet<CartItem> CartItem { get; set; }
+		public required DbSet<City> City { get; set; }
+		public required DbSet<Comment> Comment { get; set; }
 		public required DbSet<Country> Country { get; set; }
 		public required DbSet<DeliveryMethod> DeliveryMethod { get; set; }
+		public required DbSet<Image> Image { get; set; }
 		public required DbSet<PaidOrder> PaidOrder { get; set; }
 		public required DbSet<PaidOrderItem> PaidOrderItem { get; set; }
-		public required DbSet<PaymentMethod> PaymentMethod { get; set; }
 		public required DbSet<Product> Product { get; set; }
 		public required DbSet<ProductArchive> ProductArchive { get; set; }
 		public required DbSet<ProductCategory> ProductCategory { get; set; }
 		public required DbSet<ProductProperty> ProductProperty { get; set; }
 		public required DbSet<ProductPropertyValue> ProductPropertyValue { get; set; }
 		public required DbSet<User> User { get; set; }
-		public required DbSet<UserAdress> UserAdresses { get; set; }
-		public required DbSet<UserRegistrInfo> UserRegistrInfos { get; set; }
+		public required DbSet<UserAddress> UserAddress { get; set; }
+		public required DbSet<UserRegistrInfo> UserRegistrInfo { get; set; }
 	}
 }

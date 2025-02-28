@@ -2,7 +2,7 @@ export interface RegisterUser {
   firstName: string;
   surname: string;
   telephone: string;
-  eMail: string;
+  email: string;
   password: string;
 
   city: string;

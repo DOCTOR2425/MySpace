@@ -2,9 +2,11 @@
 using InstrumentStore.Domain.Abstractions;
 using InstrumentStore.Domain.Contracts.Cart;
 using InstrumentStore.Domain.Contracts.User;
+using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace InstrumentStore.API.Controllers
 {
@@ -19,13 +21,15 @@ namespace InstrumentStore.API.Controllers
 		private readonly IUsersService _usersService;
 		private readonly IJwtProvider _jwtProvider;
 		private readonly IMapper _mapper;
+		private readonly InstrumentStoreDBContext _dbContext;
 
 		public CartController(ICartService cartService,
 			IJwtProvider jwtProvider,
 			IMapper mapper,
 			IDeliveryMethodService deliveryMethodService,
 			IPaymentMethodService paymentMethodService,
-			IUsersService usersService)
+			IUsersService usersService,
+			InstrumentStoreDBContext dbContext)
 		{
 			_cartService = cartService;
 			_deliveryMethodService = deliveryMethodService;
@@ -33,6 +37,7 @@ namespace InstrumentStore.API.Controllers
 			_usersService = usersService;
 			_jwtProvider = jwtProvider;
 			_mapper = mapper;
+			_dbContext = dbContext;
 		}
 
 		private string GetToken()
@@ -50,7 +55,7 @@ namespace InstrumentStore.API.Controllers
 			List<CartItemResponse> result = new List<CartItemResponse>();
 
 			foreach (CartItem cartItem in cartItems)
-				result.Add(_mapper.Map<CartItemResponse>(cartItem));
+				result.Add(_mapper.Map<CartItemResponse>(cartItem, opt => opt.Items["DbContext"] = _dbContext));
 
 			return Ok(result);
 		}
@@ -85,7 +90,7 @@ namespace InstrumentStore.API.Controllers
 			return Ok(await _cartService.OrderCartForLogined(
 				await _jwtProvider.GetUserIdFromToken(GetToken()),
 				orderCartRequest.DeliveryMethodId,
-				orderCartRequest.PaymentMethodId));
+				orderCartRequest.PaymentMethod));
 		}
 
 		[AllowAnonymous]
@@ -106,7 +111,7 @@ namespace InstrumentStore.API.Controllers
 				orderProductRequest.ProductId,
 				orderProductRequest.Quantity,
 				orderProductRequest.DeliveryMethodId,
-				orderProductRequest.PaymentMethodId));
+				orderProductRequest.PaymentMethod));
 		}
 
 		[AllowAnonymous]
@@ -115,7 +120,7 @@ namespace InstrumentStore.API.Controllers
 		{
 			return Ok(new OrderOptionsResponse(
 				await _deliveryMethodService.GetAll(),
-				await _paymentMethodService.GetAll()));
+				await _paymentMethodService.GetAllToList()));
 		}
 
 		[HttpGet("get-user-order-info")]
@@ -124,7 +129,7 @@ namespace InstrumentStore.API.Controllers
 			User user = await _usersService.GetById(
 				await _jwtProvider.GetUserIdFromToken(GetToken()));
 
-			return Ok(_mapper.Map<UserOrderInfo>(user));
+			return Ok(_mapper.Map<UserOrderInfo>(user, opt => opt.Items["DbContext"] = _dbContext));
 		}
 	}
 }

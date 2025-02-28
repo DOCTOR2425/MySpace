@@ -15,8 +15,8 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  public getProductCards(): Observable<ProductCard[]> {
-    return this.http.get<ProductCard[]>(`${this.baseApiUrl}`);
+  public getProductCards(page: number = 1): Observable<ProductCard[]> {
+    return this.http.get<ProductCard[]>(`${this.baseApiUrl}page${page}`);
   }
 
   public getProductById(id: string): Observable<Product> {
@@ -24,19 +24,21 @@ export class ProductService {
   }
 
   public getAllProductsCardsByCategory(
-    categoryName: string
+    categoryName: string,
+    page: number = 1
   ): Observable<ProductCard[]> {
     return this.http.get<ProductCard[]>(
-      `${this.baseApiUrl}category/${categoryName}`
+      `${this.baseApiUrl}category/${categoryName}/page${page}`
     );
   }
 
   public getAllProductsCardsByCategoryWithFilters(
     categoryName: string,
-    filter: FilterRequest
+    filter: FilterRequest,
+    page: number = 1
   ): Observable<ProductCard[]> {
     let serializedFilter = encodeURIComponent(JSON.stringify(filter));
-    let url = `category/${categoryName}?filters=${serializedFilter}`;
+    let url = `category/${categoryName}/page${page}?filters=${serializedFilter}`;
     return this.http.get<ProductCard[]>(`${this.baseApiUrl}${url}`);
   }
 

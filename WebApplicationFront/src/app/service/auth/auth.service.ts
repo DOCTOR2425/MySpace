@@ -1,36 +1,42 @@
 import { HttpClient } from '@angular/common/http';
-import { effect, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { CookiesManagerService } from '../cookies-manager/cookies-manager.service';
 import { Observable } from 'rxjs';
 import { RegisterUser } from '../../data/interfaces/user/register-user.interface';
+import { UserService } from '../user/user.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private baseApiUrl = environment.apiUrl;
-  public userEMail?: string;
-  public userEMailKey: string = 'userEmail';
+  private baseApiUrl = environment.apiUrl + '/api/User/';
 
   constructor(
     private http: HttpClient,
-    private cookiesManager: CookiesManagerService
-  ) {
-    this.userEMail = localStorage.getItem(this.userEMailKey)?.toString();
-  }
+    private cookiesManager: CookiesManagerService,
+    private userService: UserService
+  ) {}
 
   public login(payload: {
-    eMail: string;
+    email: string;
     password: string;
   }): Observable<{ role: string }> {
     return this.http.post<{ role: string }>(
-      `${this.baseApiUrl}/login`,
+      `${this.baseApiUrl}login`,
       payload,
       {
         withCredentials: true,
       }
     );
+  }
+
+  public logout(): Observable<Object> {
+    this.userService.userEMail = '';
+
+    return this.http.get(`${this.baseApiUrl}logout`, {
+      withCredentials: true,
+    });
   }
 
   public isLoggedIn(): boolean {
@@ -41,7 +47,7 @@ export class AuthService {
   }
 
   public register(payload: RegisterUser): Observable<any> {
-    return this.http.post<any>(`${this.baseApiUrl}/register`, payload, {
+    return this.http.post<any>(`${this.baseApiUrl}register`, payload, {
       withCredentials: true,
     });
   }

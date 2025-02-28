@@ -6,147 +6,148 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InstrumentStore.Domain.Services
 {
-    public class CartService : ICartService
-    {
-        private readonly InstrumentStoreDBContext _dbContext;
-        private readonly IUsersService _usersService;
-        private readonly IProductService _productService;
-        private readonly IPaidOrderService _paidOrderService;
-        private readonly IAdminService _adminService;
+	public class CartService : ICartService
+	{
+		private readonly InstrumentStoreDBContext _dbContext;
+		private readonly IUsersService _usersService;
+		private readonly IProductService _productService;
+		private readonly IPaidOrderService _paidOrderService;
+		private readonly IAdminService _adminService;
 
-        public CartService(InstrumentStoreDBContext dbContext,
-            IUsersService usersService,
-            IProductService productService,
-            IPaidOrderService paidOrderService,
-            IAdminService adminService)
-        {
-            _dbContext = dbContext;
-            _usersService = usersService;
-            _productService = productService;
-            _paidOrderService = paidOrderService;
-            _adminService = adminService;
-        }
+		public CartService(InstrumentStoreDBContext dbContext,
+			IUsersService usersService,
+			IProductService productService,
+			IPaidOrderService paidOrderService,
+			IAdminService adminService)
+		{
+			_dbContext = dbContext;
+			_usersService = usersService;
+			_productService = productService;
+			_paidOrderService = paidOrderService;
+			_adminService = adminService;
+		}
 
-        public async Task<List<CartItem>> GetAllCart(Guid userId)
-        {
-            return await _dbContext.CartItem
-                .Include(c => c.User)
-                .Include(c => c.Product)
-                .Include(c => c.Product.Brand)
-                .Include(c => c.Product.Country)
-                .Include(c => c.Product.ProductCategory)
-                .Where(c => c.User.UserId == userId)
-                .AsNoTracking()
-                .ToListAsync();
-        }
+		public async Task<List<CartItem>> GetAllCart(Guid userId)
+		{
+			return await _dbContext.CartItem
+				.Include(c => c.User)
+				.Include(c => c.Product)
+				.Include(c => c.Product.Brand)
+				.Include(c => c.Product.Country)
+				.Include(c => c.Product.ProductCategory)
+				.Where(c => c.User.UserId == userId)
+				.AsNoTracking()
+				.ToListAsync();
+		}
 
-        public async Task<List<PaidOrderItem>> GetAllOrders(Guid userId)
-        {
-            return await _dbContext.PaidOrderItem
-                .Include(i => i.Product)
-                .Include(i => i.PaidOrder)
-                .Where(i => i.PaidOrder.User.UserId == userId)
-                .AsNoTracking()
-                .ToListAsync();
-        }
+		public async Task<List<PaidOrderItem>> GetAllOrders(Guid userId)
+		{
+			return await _dbContext.PaidOrderItem
+				.Include(i => i.Product)
+				.Include(i => i.PaidOrder)
+				.Where(i => i.PaidOrder.User.UserId == userId)
+				.AsNoTracking()
+				.ToListAsync();
+		}
 
-        public async Task<Guid> AddToCart(Guid userId, Guid productId, int quantity)
-        {
-            CartItem? targetCartItem = await _dbContext.CartItem
-                .Include(c => c.User)
-                .Include(c => c.Product)
-                .FirstOrDefaultAsync(c =>
-                    c.User.UserId == userId &&
-                    c.Product.ProductId == productId);
+		public async Task<Guid> AddToCart(Guid userId, Guid productId, int quantity)
+		{
+			CartItem? targetCartItem = await _dbContext.CartItem
+				.Include(c => c.User)
+				.Include(c => c.Product)
+				.FirstOrDefaultAsync(c =>
+					c.User.UserId == userId &&
+					c.Product.ProductId == productId);
 
-            if (targetCartItem != null)
-                return await ChangeItemQuantity(targetCartItem.CartItemId, quantity);
+			if (targetCartItem != null)
+				return await ChangeItemQuantity(targetCartItem.CartItemId, quantity);
 
-            CartItem cartItem = new CartItem()
-            {
-                CartItemId = Guid.NewGuid(),
-                User = await _usersService.GetById(userId),
-                Product = await _productService.GetById(productId),
-                Quantity = quantity
-            };
+			CartItem cartItem = new CartItem()
+			{
+				CartItemId = Guid.NewGuid(),
+				User = await _usersService.GetById(userId),
+				Product = await _productService.GetById(productId),
+				Quantity = quantity
+			};
 
-            await _dbContext.CartItem.AddAsync(cartItem);
-            await _dbContext.SaveChangesAsync();
+			await _dbContext.CartItem.AddAsync(cartItem);
+			await _dbContext.SaveChangesAsync();
 
-            return cartItem.CartItemId;
-        }
+			return cartItem.CartItemId;
+		}
 
-        public async Task<Guid> RemoveFromCart(Guid cartItemId)
-        {
-            await _dbContext.CartItem
-                .Where(c => c.CartItemId == cartItemId)
-                .ExecuteDeleteAsync();
+		public async Task<Guid> RemoveFromCart(Guid cartItemId)
+		{
+			await _dbContext.CartItem
+				.Where(c => c.CartItemId == cartItemId)
+				.ExecuteDeleteAsync();
 
-            return cartItemId;
-        }
+			return cartItemId;
+		}
 
-        public async Task<Guid> OrderCartForLogined(Guid userId, Guid deliveryMethodId, Guid paymentMethodId)
-        {
-            Guid paidOrderId = await _paidOrderService.Create(userId, deliveryMethodId, paymentMethodId);
+		public async Task<Guid> OrderCartForLogined(Guid userId, Guid deliveryMethodId, string paymentMethod)
+		{
+			Guid paidOrderId = await _paidOrderService.Create(userId, deliveryMethodId, paymentMethod);
 
-            foreach (CartItem i in await this.GetAllCart(userId))
-            {
-                await _dbContext.PaidOrderItem.AddAsync(new PaidOrderItem()
-                {
-                    PaidOrderItemId = Guid.NewGuid(),
-                    PaidOrder = await _dbContext.PaidOrder.FindAsync(paidOrderId),
-                    Product = await _productService.GetById(i.Product.ProductId),
-                    Quantity = i.Quantity
-                });
+			foreach (CartItem i in await GetAllCart(userId))
+			{
+				await _dbContext.PaidOrderItem.AddAsync(new PaidOrderItem()
+				{
+					PaidOrderItemId = Guid.NewGuid(),
+					PaidOrder = await _dbContext.PaidOrder.FindAsync(paidOrderId),
+					Product = await _productService.GetById(i.Product.ProductId),
+					Quantity = i.Quantity,
+					Price = i.Product.Price
+				});
 
-                await _dbContext.CartItem.Where(ci => ci == i).ExecuteDeleteAsync();
-            }
+				await _dbContext.CartItem.Where(ci => ci == i).ExecuteDeleteAsync();
+			}
 
-            await _dbContext.SaveChangesAsync();
+			await _dbContext.SaveChangesAsync();
 
-            await _adminService.SendAdminMailAboutOrder(paidOrderId);
+			await _adminService.SendAdminMailAboutOrder(paidOrderId);
 
-            return paidOrderId;
-        }
+			return paidOrderId;
+		}
 
-        public async Task<Guid> OrderCartForUnlogined(Guid userId, OrderCartOfUnregisteredRequest request)
-        {
-            foreach(var item in request.CartItems)
-                await AddToCart(userId, item.ProductId, item.Quantity);
+		public async Task<Guid> OrderCartForUnlogined(Guid userId, OrderCartOfUnregisteredRequest request)
+		{
+			foreach (var item in request.CartItems)
+				await AddToCart(userId, item.ProductId, item.Quantity);
 
-            return await OrderCartForLogined(userId, request.DeliveryMethodId, request.PaymentMethodId);
-        }
+			return await OrderCartForLogined(userId, request.DeliveryMethodId, request.PaymentMethod);
+		}
 
-        public async Task<Guid> OrderProduct(Guid userId,
-            Guid productId,
-            int quantity,
-            Guid deliveryMethodId,
-            Guid paymentMethodId)
-        {
-            Guid paidOrderId = await _paidOrderService.Create(userId, deliveryMethodId, paymentMethodId);
+		public async Task<Guid> OrderProduct(Guid userId,
+			Guid productId,
+			int quantity,
+			Guid deliveryMethodId,
+			string paymentMethod)
+		{
+			Guid paidOrderId = await _paidOrderService.Create(userId, deliveryMethodId, paymentMethod);
 
-            await _dbContext.PaidOrderItem.AddAsync(new PaidOrderItem()
-            {
-                PaidOrderItemId= Guid.NewGuid(),
-                PaidOrder = await _paidOrderService.GetById(paidOrderId),
-                Product = await _productService.GetById(productId),
-                Quantity = quantity,
-            });
+			await _dbContext.PaidOrderItem.AddAsync(new PaidOrderItem()
+			{
+				PaidOrderItemId = Guid.NewGuid(),
+				PaidOrder = await _paidOrderService.GetById(paidOrderId),
+				Product = await _productService.GetById(productId),
+				Quantity = quantity,
+			});
 
-            await _dbContext.SaveChangesAsync();
+			await _dbContext.SaveChangesAsync();
 
-            await _adminService.SendAdminMailAboutOrder(paidOrderId);
+			await _adminService.SendAdminMailAboutOrder(paidOrderId);
 
-            return paidOrderId;
-        }
+			return paidOrderId;
+		}
 
-        private async Task<Guid> ChangeItemQuantity(Guid cartItemId, int quantity)
-        {
-            (await _dbContext.CartItem.FindAsync(cartItemId)).Quantity = quantity;
+		private async Task<Guid> ChangeItemQuantity(Guid cartItemId, int quantity)
+		{
+			(await _dbContext.CartItem.FindAsync(cartItemId)).Quantity = quantity;
 
-            await _dbContext.SaveChangesAsync();
+			await _dbContext.SaveChangesAsync();
 
-            return cartItemId;
-        }
-    }
+			return cartItemId;
+		}
+	}
 }

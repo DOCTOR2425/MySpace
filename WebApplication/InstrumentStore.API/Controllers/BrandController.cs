@@ -5,34 +5,33 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InstrumentStore.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class BrandController : ControllerBase
-    {
-        private readonly IBrandService _brandService;
+	[Route("api/[controller]")]
+	[ApiController]
+	public class BrandController : ControllerBase
+	{
+		private readonly IBrandService _brandService;
 
-        public BrandController(IBrandService brandService)
-        {
-            _brandService = brandService;
-        }
+		public BrandController(IBrandService brandService)
+		{
+			_brandService = brandService;
+		}
 
-        [Authorize]
-        [HttpGet]
-        public async Task<ActionResult<List<Brand>>> GetAllBrands()
-        {
-            return await _brandService.GetAll();
-        }
+		[HttpGet]
+		public async Task<ActionResult<List<Brand>>> GetAllBrands()
+		{
+			return await _brandService.GetAll();
+		}
 
-        [HttpPost]
-        public async Task<ActionResult<Guid>> CreateBrand([FromBody] string brandName)
-        {
-            Brand brand = new Brand
-            {
-                BrandId = Guid.NewGuid(),
-                Name = brandName
-            };
+		[HttpPost]
+		public async Task<ActionResult<Guid>> CreateBrand([FromBody] string brandName)
+		{
+			Brand brand = new Brand
+			{
+				BrandId = Guid.NewGuid(),
+				Name = brandName
+			};
 
-            return Ok(await _brandService.Create(brand));
-        }
-    }
+			return Ok(await _brandService.Create(brand));
+		}
+	}
 }

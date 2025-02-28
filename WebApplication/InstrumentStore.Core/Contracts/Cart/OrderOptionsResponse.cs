@@ -2,8 +2,8 @@
 
 namespace InstrumentStore.Domain.Contracts.Cart
 {
-    public record OrderOptionsResponse(
-        List<DeliveryMethod> DeliveryMethods,
-        List<PaymentMethod> PaymentMethods
-    );
+	public record OrderOptionsResponse(
+		List<DeliveryMethod> DeliveryMethods,
+		List<string> PaymentMethods
+	);
 }

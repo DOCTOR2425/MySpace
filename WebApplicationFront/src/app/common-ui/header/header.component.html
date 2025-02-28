@@ -21,7 +21,7 @@
           <button>Админ</button>
         </span>
         <ng-template #userTemplate>
-          <button>{{ userEmail }}</button>
+          <button [routerLink]="['/user']">{{ userEmail }}</button>
         </ng-template>
       </ng-container>
       <ng-template #loginButton>
@@ -34,7 +34,7 @@
         </span>
       </ng-template>
 
-      <span routerLink="cart">
+      <span [routerLink]="['cart']">
         <img src="https://cdn-icons-png.flaticon.com/128/481/481384.png" />
         <a>Корзина</a>
       </span>

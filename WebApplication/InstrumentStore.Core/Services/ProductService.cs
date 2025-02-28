@@ -5,7 +5,6 @@ using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
 using InstrumentStore.Domain.DataBase.ProcedureResultModels;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 
 namespace InstrumentStore.Domain.Service
 {
@@ -17,6 +16,7 @@ namespace InstrumentStore.Domain.Service
 		private readonly IProductCategoryService _productCategoryService;
 		private readonly IProductPropertyService _productPropertyService;
 		private readonly IProductFilterService _productFilterService;
+		private readonly IImageService _imageService;
 		public const int pageSize = 10;
 
 		public ProductService(InstrumentStoreDBContext dbContext,
@@ -24,7 +24,8 @@ namespace InstrumentStore.Domain.Service
 			ICountryService countryService,
 			IProductCategoryService productCategoryService,
 			IProductPropertyService productPropertyService,
-			IProductFilterService productFilterService)
+			IProductFilterService productFilterService,
+			IImageService imageService)
 		{
 			_dbContext = dbContext;
 			_brandService = brandService;
@@ -32,6 +33,7 @@ namespace InstrumentStore.Domain.Service
 			_productCategoryService = productCategoryService;
 			_productPropertyService = productPropertyService;
 			_productFilterService = productFilterService;
+			_imageService = imageService;
 		}
 
 		public async Task<List<Product>> GetAll(int page)
@@ -41,9 +43,9 @@ namespace InstrumentStore.Domain.Service
 				.Include(p => p.Brand)
 				.Include(p => p.Country)
 				.OrderBy(p => p.Name)
-                .Skip((page - 1) * pageSize)
+				.Skip((page - 1) * pageSize)
 				.Take(pageSize)
-                .AsNoTracking()
+				.AsNoTracking()
 				.ToListAsync();
 		}
 
@@ -57,48 +59,47 @@ namespace InstrumentStore.Domain.Service
 				.Include(p => p.ProductCategory)
 				.Include(p => p.Brand)
 				.Include(p => p.Country)
-                .OrderBy(p => p.Name)
-                .Where(p => p.ProductCategory.ProductCategoryId == categoryId)
+				.OrderBy(p => p.Name)
+				.Where(p => p.ProductCategory.ProductCategoryId == categoryId)
 				.ToListAsync();
 		}
 
 		public async Task<List<Product>> SearchByName(string input, int page)
 		{
-            List<ProductSearchResult> list = _dbContext.Set<ProductSearchResult>()
-                    .FromSqlRaw("EXEC SearchByName @p0, @p1", input, page).ToList();
+			List<ProductSearchResult> list = _dbContext.Set<ProductSearchResult>()
+					.FromSqlRaw("EXEC SearchByName @p0, @p1", input, page).ToList();
 
-            var products = list.Select(item => new Product
-            {
-                ProductId = item.ProductId,
-                Description = item.Description,
-                Image = item.Image,
-                Name = item.Name,
-                Price = item.Price,
-                Quantity = item.Quantity,
-                ProductCategory = new ProductCategory
-                {
-                    ProductCategoryId = item.ProductCategoryId2,
-                    Name = item.ProductCategoryName
-                },
-                Brand = new Brand
-                {
-                    BrandId = item.BrandId2,
-                    Name = item.BrandName
-                },
-                Country = new Country
-                {
-                    CountryId = item.CountryId2,
-                    Name = item.CountryName
-                }
-            }).ToList();
+			var products = list.Select(item => new Product
+			{
+				ProductId = item.ProductId,
+				Description = item.Description,
+				Name = item.Name,
+				Price = item.Price,
+				Quantity = item.Quantity,
+				ProductCategory = new ProductCategory
+				{
+					ProductCategoryId = item.ProductCategoryId2,
+					Name = item.ProductCategoryName
+				},
+				Brand = new Brand
+				{
+					BrandId = item.BrandId2,
+					Name = item.BrandName
+				},
+				Country = new Country
+				{
+					CountryId = item.CountryId2,
+					Name = item.CountryName
+				}
+			}).ToList();
 
-            return products;
-        }
+			return products;
+		}
 
 		public async Task<List<Product>> GetAllWithFilters(
 			string categoryName,
 			FilterRequest filter,
-			List<Product> productsForFilter, 
+			List<Product> productsForFilter,
 			int page)
 		{
 			return await _productFilterService.GetAllWithFilters(categoryName, filter, productsForFilter, page);
@@ -130,17 +131,40 @@ namespace InstrumentStore.Domain.Service
 				Description = productRequest.Description,
 				Price = productRequest.Price,
 				Quantity = productRequest.Quantity,
-				Image = productRequest.Image,
 
-				ProductCategory = await _productCategoryService.GetById(productRequest.ProductTypeId),
+				ProductCategory = await _productCategoryService.GetById(productRequest.ProductCategoryId),
 				Brand = await _brandService.GetById(productRequest.BrandId),
 				Country = await _countryService.GetById(productRequest.CountryId)
 			};
+			_dbContext.Product.AddAsync(product);
+			_dbContext.SaveChangesAsync();
 
-			await _dbContext.Product.AddAsync(product);
-			await _dbContext.SaveChangesAsync();
+			await SaveImagesToProduct(product, productRequest);
 
 			return product.ProductId;
+		}
+
+		private async Task SaveImagesToProduct(
+			Product product,
+			ProductRequest productRequest)
+		{
+			FileStream stream;
+			string filePath = "";
+			foreach (var image in productRequest.Images)
+			{
+				_imageService.Create(new Image()
+				{
+					ImageId = Guid.NewGuid(),
+					Product = product,
+					Name = image.FileName
+				});
+
+				filePath = Path.Combine("wwwroot/images", image.FileName);
+				using (stream = new FileStream(filePath, FileMode.Create))
+				{
+					await image.CopyToAsync(stream);
+				};
+			}
 		}
 
 		public async Task<Guid> Update(Guid oldId, Product newProduct)
@@ -152,7 +176,6 @@ namespace InstrumentStore.Domain.Service
 			product.Brand = newProduct.Brand;
 			product.Country = newProduct.Country;
 			product.Description = newProduct.Description;
-			product.Image = newProduct.Image;
 			product.Price = newProduct.Price;
 			product.Quantity = newProduct.Quantity;
 
@@ -163,14 +186,13 @@ namespace InstrumentStore.Domain.Service
 
 		public async Task<Guid> Update(Guid oldId, ProductRequest newProduct)
 		{
-			Product product = await _dbContext.Product.FindAsync(oldId);
+			Product product = await GetById(oldId);
 
 			product.Name = newProduct.Name;
 			product.Description = newProduct.Description;
-			product.Image = newProduct.Image;
 			product.Price = newProduct.Price;
 			product.Quantity = newProduct.Quantity;
-			product.ProductCategory = await _productCategoryService.GetById(newProduct.ProductTypeId);
+			product.ProductCategory = await _productCategoryService.GetById(newProduct.ProductCategoryId);
 			product.Brand = await _brandService.GetById(newProduct.BrandId);
 			product.Country = await _countryService.GetById(newProduct.CountryId);
 
@@ -182,7 +204,7 @@ namespace InstrumentStore.Domain.Service
 		public async Task<Guid> Delete(Guid id)
 		{
 			await _dbContext.Product
-				.Where(p => p.ProductId == id)
+				.Where(p => p.ProductId == id)//триггер написать надо
 				.ExecuteDeleteAsync();
 
 			return id;

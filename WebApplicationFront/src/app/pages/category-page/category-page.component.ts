@@ -59,7 +59,6 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
             this.products = val.productsCardsByCategory;
             this.categoryFilters = val.categoryFilters;
 
-            // Установка начальных значений для range фильтров
             this.categoryFilters.rangePropertyForFilters.forEach((filter) => {
               filter.currentMinValue = filter.minValue;
               filter.currentMaxValue = filter.maxValue;

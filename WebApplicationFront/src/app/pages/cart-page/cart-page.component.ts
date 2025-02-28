@@ -89,7 +89,7 @@ export class CartPageComponent implements OnInit, OnDestroy {
     if (this.authService.isLoggedIn() == true) {
       let payload = {
         deliveryMethodId: form.value.deliveryMethodId,
-        paymentMethodId: form.value.paymentMethodId,
+        paymentMethod: form.value.paymentMethod,
       };
       this.cartService
         .orderCartForRegistered(payload)
@@ -105,14 +105,14 @@ export class CartPageComponent implements OnInit, OnDestroy {
   private orderCartForUnregistered(form: NgForm): void {
     let user: RegisterUserFromOrderRequest = {
       firstName: form.value.firstName,
-      surname: '',
+      surname: form.value.surname,
       telephone: form.value.telephone,
-      eMail: form.value.email,
+      email: form.value.email,
 
       city: form.value.city,
       street: form.value.street,
       houseNumber: form.value.houseNumber,
-      entrance: '',
+      entrance: form.value.entrance,
       flat: form.value.flat,
     };
 

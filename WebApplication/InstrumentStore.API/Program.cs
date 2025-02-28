@@ -25,6 +25,7 @@ namespace InstrumentStore.API
 			builder.Services.AddScoped<IAdminService, AdminService>();
 			builder.Services.AddScoped<IBrandService, BrandService>();
 			builder.Services.AddScoped<ICartService, CartService>();
+			builder.Services.AddScoped<ICityService, CityService>();
 			builder.Services.AddScoped<ICountryService, CountryService>();
 			builder.Services.AddScoped<IDeliveryMethodService, DeliveryMethodService>();
 			builder.Services.AddScoped<IEmailService, EmailService>();
@@ -34,6 +35,7 @@ namespace InstrumentStore.API
 			builder.Services.AddScoped<IPaymentMethodService, PaymentMethodService>();
 			builder.Services.AddScoped<IProductCategoryService, ProduCtategoryService>();
 			builder.Services.AddScoped<IProductFilterService, ProductFilterService>();
+			builder.Services.AddScoped<IImageService, ImageService>();
 			builder.Services.AddScoped<IProductPropertyService, ProductPropertyService>();
 			builder.Services.AddScoped<IProductService, ProductService>();
 			builder.Services.AddScoped<IUsersService, UsersService>();
@@ -69,7 +71,7 @@ namespace InstrumentStore.API
 			{
 				MinimumSameSitePolicy = SameSiteMode.Lax,
 				//HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always,
-				//Secure = CookieSecurePolicy.Always,
+				Secure = CookieSecurePolicy.Always,
 			});
 
 			app.UseCors(x =>

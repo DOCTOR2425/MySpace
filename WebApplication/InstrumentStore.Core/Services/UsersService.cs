@@ -11,18 +11,22 @@ namespace InstrumentStore.Domain.Services
 	public class UsersService : IUsersService
 	{
 		private readonly InstrumentStoreDBContext _dbContext;
+		private readonly ICityService _cityService;
 		private readonly IJwtProvider _jwtProvider;
 		private readonly IEmailService _emailService;
 
 		public UsersService(
 			InstrumentStoreDBContext dbContext,
 			IJwtProvider jwtProvider,
-			IEmailService emailService)
+			IEmailService emailService,
+			ICityService cityService)
 		{
 			_dbContext = dbContext;
 			_jwtProvider = jwtProvider;
 			_emailService = emailService;
+			_cityService = cityService;
 		}
+
 		public string GeneratePasswordHas(string password)
 		{
 			return BCrypt.Net.BCrypt.EnhancedHashPassword(password);
@@ -35,24 +39,14 @@ namespace InstrumentStore.Domain.Services
 
 		public async Task<Guid> Register(RegisterUserRequest registerUserRequest)
 		{
-			User? targetUser = await GetByEMail(registerUserRequest.EMail);
+			User? targetUser = await GetByEmail(registerUserRequest.Email);
 			if (targetUser != null)
 				throw new Exception("User with that email already exist");
-
-			UserAdress userAdress = new UserAdress
-			{
-				UserAdressId = Guid.NewGuid(),
-				City = registerUserRequest.City,
-				Street = registerUserRequest.Street,
-				HouseNumber = registerUserRequest.HouseNumber,
-				Entrance = registerUserRequest.Entrance,
-				Flat = registerUserRequest.Flat
-			};
 
 			UserRegistrInfo userRegistrInfo = new UserRegistrInfo
 			{
 				UserRegistrInfoId = Guid.NewGuid(),
-				EMail = registerUserRequest.EMail,
+				Email = registerUserRequest.Email,
 				PasswordHash = GeneratePasswordHas(registerUserRequest.Password)
 			};
 
@@ -62,14 +56,24 @@ namespace InstrumentStore.Domain.Services
 				FirstName = registerUserRequest.FirstName,
 				Surname = registerUserRequest.Surname,
 				Telephone = registerUserRequest.Telephone,
-				UserAdress = userAdress,
 				UserRegistrInfo = userRegistrInfo
+			};
+
+			UserAddress userAdress = new UserAddress
+			{
+				UserAddressId = Guid.NewGuid(),
+				City = await _cityService.GetByName(registerUserRequest.City),
+				Street = registerUserRequest.Street,
+				HouseNumber = registerUserRequest.HouseNumber,
+				Entrance = registerUserRequest.Entrance,
+				Flat = registerUserRequest.Flat,
+				User = user
 			};
 
 			userRegistrInfo.RefreshToken = await _jwtProvider.GenerateRefreshToken(user.UserId);
 
-			await _dbContext.UserAdresses.AddAsync(userAdress);
-			await _dbContext.UserRegistrInfos.AddAsync(userRegistrInfo);
+			await _dbContext.UserAddress.AddAsync(userAdress);
+			await _dbContext.UserRegistrInfo.AddAsync(userRegistrInfo);
 			await _dbContext.User.AddAsync(user);
 			await _dbContext.SaveChangesAsync();
 
@@ -78,7 +82,7 @@ namespace InstrumentStore.Domain.Services
 
 		public async Task<string> Login(string email, string password)
 		{
-			User? user = await GetByEMail(email);
+			User? user = await GetByEmail(email);
 			if (user == null)
 				throw new Exception("No user with that email");
 
@@ -115,13 +119,12 @@ namespace InstrumentStore.Domain.Services
 					.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
 		}
 
-		public async Task<User?> GetByEMail(string email)
+		public async Task<User?> GetByEmail(string email)
 		{
 			User? user = await _dbContext.User
-				.Include(u => u.UserAdress)
 				.Include(u => u.UserRegistrInfo)
 				.FirstOrDefaultAsync(
-				u => u.UserRegistrInfo.EMail == email);
+				u => u.UserRegistrInfo.Email == email);
 
 			return user;
 		}
@@ -129,7 +132,6 @@ namespace InstrumentStore.Domain.Services
 		public async Task<User> GetById(Guid id)
 		{
 			User? user = await _dbContext.User
-				.Include(u => u.UserAdress)
 				.Include(u => u.UserRegistrInfo)
 				.FirstOrDefaultAsync(u => u.UserId == id);
 
@@ -141,25 +143,15 @@ namespace InstrumentStore.Domain.Services
 
 		public async Task<Guid> RegisterUserFromOrder(RegisterUserFromOrderRequest registerUserRequest)
 		{
-			User? targetUser = await GetByEMail(registerUserRequest.EMail);
+			User? targetUser = await GetByEmail(registerUserRequest.Email);
 			if (targetUser != null)
 				return targetUser.UserId;
-
-			UserAdress userAdress = new UserAdress
-			{
-				UserAdressId = Guid.NewGuid(),
-				City = registerUserRequest.City,
-				Street = registerUserRequest.Street,
-				HouseNumber = registerUserRequest.HouseNumber,
-				Entrance = registerUserRequest.Entrance,
-				Flat = registerUserRequest.Flat
-			};
 
 			string userPassword = GenerateUserPassword();
 			UserRegistrInfo userRegistrInfo = new UserRegistrInfo
 			{
 				UserRegistrInfoId = Guid.NewGuid(),
-				EMail = registerUserRequest.EMail,
+				Email = registerUserRequest.Email,
 				PasswordHash = GeneratePasswordHas(userPassword)
 			};
 
@@ -169,18 +161,28 @@ namespace InstrumentStore.Domain.Services
 				FirstName = registerUserRequest.FirstName,
 				Surname = registerUserRequest.Surname,
 				Telephone = registerUserRequest.Telephone,
-				UserAdress = userAdress,
 				UserRegistrInfo = userRegistrInfo
+			};
+
+			UserAddress userAdress = new UserAddress
+			{
+				UserAddressId = Guid.NewGuid(),
+				City = await _cityService.GetByName(registerUserRequest.City),
+				Street = registerUserRequest.Street,
+				HouseNumber = registerUserRequest.HouseNumber,
+				Entrance = registerUserRequest.Entrance,
+				Flat = registerUserRequest.Flat,
+				User = user
 			};
 
 			userRegistrInfo.RefreshToken = await _jwtProvider.GenerateRefreshToken(user.UserId);
 
-			await _dbContext.UserAdresses.AddAsync(userAdress);
-			await _dbContext.UserRegistrInfos.AddAsync(userRegistrInfo);
+			await _dbContext.UserAddress.AddAsync(userAdress);
+			await _dbContext.UserRegistrInfo.AddAsync(userRegistrInfo);
 			await _dbContext.User.AddAsync(user);
 			await _dbContext.SaveChangesAsync();
 
-			SendPasswordToUser(userRegistrInfo.EMail, userPassword);
+			SendPasswordToUser(userRegistrInfo.Email, userPassword);
 
 			return user.UserId;
 		}
@@ -206,6 +208,41 @@ namespace InstrumentStore.Domain.Services
 				$"Моежте поменять его в любое время";
 
 			_emailService.SendMail(eMail, eMailText);
+		}
+
+		public async Task<User> GetUserFromToken(string token)
+		{
+			Guid userId = await _jwtProvider.GetUserIdFromToken(token);
+			User user = await GetById(userId);
+
+			return user;
+		}
+
+		public async Task<User> Update(Guid userId, UpdateUserRequest newUser)
+		{
+			User user = await GetById(userId);
+
+			user.FirstName = newUser.FirstName;
+			user.Surname = newUser.Surname;
+			user.Telephone = newUser.Telephone;
+			user.UserRegistrInfo.Email = newUser.Email;
+
+			UserAddress? address = await _dbContext.UserAddress
+				.Include(a => a.City)
+				.FirstOrDefaultAsync(
+				a => a.User.UserId == userId);
+
+			if (address != null)
+			{
+				address.City = await _cityService.GetByName(newUser.City);
+				address.Street = newUser.Street;
+				address.HouseNumber = newUser.HouseNumber;
+				address.Entrance = newUser.Entrance;
+				address.Flat = newUser.Flat;
+			}
+
+			await _dbContext.SaveChangesAsync();
+			return user;
 		}
 	}
 }

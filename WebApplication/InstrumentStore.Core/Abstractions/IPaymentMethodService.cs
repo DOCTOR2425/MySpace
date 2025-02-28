@@ -1,11 +1,10 @@
-﻿using InstrumentStore.Domain.DataBase.Models;
+﻿using InstrumentStore.Domain.Services;
 
 namespace InstrumentStore.Domain.Abstractions
 {
-    public interface IPaymentMethodService
-    {
-        Task<List<PaymentMethod>> GetAll();
-        Task<PaymentMethod> GetById(Guid id);
-        Task<Guid> Create(PaymentMethod paymentMethod);
-    }
+	public interface IPaymentMethodService
+	{
+		Task<Dictionary<PaymentMethod, string>> GetAll();
+		Task<List<string>> GetAllToList();
+	}
 }

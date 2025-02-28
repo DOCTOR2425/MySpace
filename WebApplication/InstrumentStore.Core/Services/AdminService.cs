@@ -2,6 +2,7 @@
 using InstrumentStore.Domain.Abstractions;
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -51,15 +52,16 @@ namespace InstrumentStore.Domain.Services
 
 			string mailText = string.Empty;
 
-			mailText += $"Заказ от {paidOrder.PaymentDate}\n";
+			mailText += $"Заказ от {paidOrder.OrderDate}\n";
 			mailText += $"Клиент - {paidOrder.User.Surname} {paidOrder.User.FirstName}\n";
 			mailText += $"Телефон клиента - {paidOrder.User.Telephone}\n";
-			mailText += $"EMail клиента - {paidOrder.User.UserRegistrInfo.EMail}\n";
-			mailText += $"Способ оплаты - {paidOrder.PaymentMethod.Name}\n";
+			mailText += $"Email клиента - {paidOrder.User.UserRegistrInfo.Email}\n";
+			mailText += $"Способ оплаты - {paidOrder.PaymentMethod}\n";
 			mailText += $"Способ доставки - {paidOrder.DeliveryMethod.Name} (стоимость - {paidOrder.DeliveryMethod.Price})\n";
 
 			if (await _deliveryMethodService.IsHomeDelivery(paidOrder.DeliveryMethod.DeliveryMethodId))
-				mailText += $"Адрес клиента - {paidOrder.User.UserAdress.ToString()}\n";
+				mailText += $"Адрес клиента - {_dbContext.UserAddress
+					.FirstOrDefaultAsync(a => a.User.UserId == paidOrder.User.UserId).ToString()}\n";
 
 			mailText += "\n\n   ---- Заказанные товары ----\n";
 			decimal summaryPrice = 0;
