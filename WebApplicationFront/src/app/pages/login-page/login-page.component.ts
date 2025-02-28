@@ -34,13 +34,13 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     private toastService: ToastService
   ) {}
 
-  loginForm = new FormGroup({
+  public loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     // email: new FormControl('', [Validators.required]),
     password: new FormControl('', Validators.required),
   });
 
-  registerForm = new FormGroup({
+  public registerForm = new FormGroup({
     firstName: new FormControl('', Validators.required),
     surname: new FormControl('', Validators.required),
     telephone: new FormControl('', Validators.required),
@@ -72,80 +72,96 @@ export class LoginPageComponent implements OnInit, OnDestroy {
 
   public onSubmit(): void {
     if (this.isLoginMode) {
-      if (this.loginForm.valid) {
-        const loginValue = this.loginForm.value as {
-          email: string;
-          password: string;
-        };
-
-        this.authService
-          .login({
-            email: loginValue.email!,
-            password: loginValue.password!,
-          })
-          .subscribe({
-            next: (response) => {
-              if (response.role === 'admin') {
-                this.adminService.isAdmin = true;
-                console.log('LogIn as Admin');
-                this.router.navigate(['admin']);
-              } else {
-                localStorage.setItem(
-                  this.userService.userEMailKey,
-                  loginValue.email
-                );
-                this.userService.userEMail = loginValue.email;
-                this.router.navigate([`${this.returnUrl}`]);
-              }
-            },
-            error: (error) => {
-              console.log(error.status);
-              this.toastService.showError(error.message, 'Ошибка');
-            },
-          });
+      if (this.loginForm.invalid) {
+        this.markFormGroupTouched(this.loginForm);
+        return;
       }
-    } else {
-      if (this.registerForm.valid) {
-        const registerValue = this.registerForm.value as {
-          firstName: string;
-          surname: string;
-          telephone: string;
-          email: string;
-          password: string;
-          city: string;
-          street: string;
-          houseNumber: string;
-          entrance: string;
-          flat: string;
-        };
-
-        this.authService
-          .register({
-            firstName: registerValue.firstName!,
-            surname: registerValue.surname!,
-            telephone: registerValue.telephone!,
-            email: registerValue.email!,
-            password: registerValue.password!,
-            city: registerValue.city!,
-            street: registerValue.street!,
-            houseNumber: registerValue.houseNumber!,
-            entrance: registerValue.entrance!,
-            flat: registerValue.flat!,
-          })
-          .subscribe({
-            next: () => {
-              this.toastService.showSuccess(
-                'Registration successful!',
-                'Success'
+  
+      const loginValue = this.loginForm.value as {
+        email: string;
+        password: string;
+      };
+  
+      this.authService
+        .login({
+          email: loginValue.email!,
+          password: loginValue.password!,
+        })
+        .subscribe({
+          next: (response) => {
+            if (response.role === 'admin') {
+              this.adminService.isAdmin = true;
+              console.log('LogIn as Admin');
+              this.router.navigate(['admin']);
+            } else {
+              localStorage.setItem(
+                this.userService.userEMailKey,
+                loginValue.email
               );
+              this.userService.userEMail = loginValue.email;
               this.router.navigate([`${this.returnUrl}`]);
-            },
-            error: (error) => {
-              console.log(error.status);
-              this.toastService.showError(error.message, 'Ошибка');
-            },
-          });
+            }
+          },
+          error: (error) => {
+            console.log(error.status);
+            this.toastService.showError(error.message, 'Ошибка');
+          },
+        });
+    } else {
+      if (this.registerForm.invalid) {
+        this.markFormGroupTouched(this.registerForm);
+        return;
       }
+  
+      const registerValue = this.registerForm.value as {
+        firstName: string;
+        surname: string;
+        telephone: string;
+        email: string;
+        password: string;
+        city: string;
+        street: string;
+        houseNumber: string;
+        entrance: string;
+        flat: string;
+      };
+  
+      this.authService
+        .register({
+          firstName: registerValue.firstName!,
+          surname: registerValue.surname!,
+          telephone: registerValue.telephone!,
+          email: registerValue.email!,
+          password: registerValue.password!,
+          city: registerValue.city!,
+          street: registerValue.street!,
+          houseNumber: registerValue.houseNumber!,
+          entrance: registerValue.entrance!,
+          flat: registerValue.flat!,
+        })
+        .subscribe({
+          next: () => {
+            this.toastService.showSuccess(
+              'Registration successful!',
+              'Success'
+            );
+            this.router.navigate([`${this.returnUrl}`]);
+          },
+          error: (error) => {
+            console.log(error.status);
+            this.toastService.showError(error.message, 'Ошибка');
+          },
+        });
     }
+  }
+  
+  private markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+  
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
   }
 }

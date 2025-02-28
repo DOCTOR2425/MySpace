@@ -10,38 +10,48 @@
 
   <button (click)="logout()">Выйти</button>
 
-  <h3>Редактировать профиль</h3>
-  <form [formGroup]="userForm" (ngSubmit)="updateUser()">
-    <div class="form-row">
-      <label for="firstName">Имя</label>
-      <input type="text" id="firstName" formControlName="firstName" />
-      <label for="surname">Фамилия</label>
-      <input type="text" id="surname" formControlName="surname" />
-    </div>
-    <div class="form-row">
-      <label for="telephone">Телефон</label>
-      <input type="text" id="telephone" formControlName="telephone" />
-      <label for="city">Город</label>
-      <input type="text" id="city" formControlName="city" />
-    </div>
-    <div class="form-row">
-      <label for="street">Улица</label>
-      <input type="text" id="street" formControlName="street" />
-      <label for="houseNumber">Дом</label>
-      <input type="text" id="houseNumber" formControlName="houseNumber" />
-    </div>
-    <div class="form-row">
-      <label for="entrance">Подъезд</label>
-      <input type="text" id="entrance" formControlName="entrance" />
-      <label for="flat">Квартира</label>
-      <input type="text" id="flat" formControlName="flat" />
-    </div>
-    <div class="form-row">
-      <label for="email">Email</label>
-      <input type="email" id="email" formControlName="email" />
-    </div>
-    <button type="submit" [disabled]="userForm.invalid">Обновить</button>
-  </form>
+  <div class="profile-edit-container">
+    <h3>Редактировать профиль</h3>
+    <form [formGroup]="userForm" (ngSubmit)="updateUser()">
+      <div class="form-row">
+        <label for="firstName">Имя</label>
+        <input type="text" id="firstName" formControlName="firstName" />
+      </div>
+      <div class="form-row">
+        <label for="surname">Фамилия</label>
+        <input type="text" id="surname" formControlName="surname" />
+      </div>
+      <div class="form-row">
+        <label for="telephone">Телефон</label>
+        <input type="text" id="telephone" formControlName="telephone" />
+      </div>
+      <div class="form-row">
+        <label for="city">Город</label>
+        <input type="text" id="city" formControlName="city" />
+      </div>
+      <div class="form-row">
+        <label for="street">Улица</label>
+        <input type="text" id="street" formControlName="street" />
+      </div>
+      <div class="form-row">
+        <label for="houseNumber">Дом</label>
+        <input type="text" id="houseNumber" formControlName="houseNumber" />
+      </div>
+      <div class="form-row">
+        <label for="entrance">Подъезд</label>
+        <input type="text" id="entrance" formControlName="entrance" />
+      </div>
+      <div class="form-row">
+        <label for="flat">Квартира</label>
+        <input type="text" id="flat" formControlName="flat" />
+      </div>
+      <div class="form-row">
+        <label for="email">Email</label>
+        <input type="email" id="email" formControlName="email" />
+      </div>
+      <button type="submit" [disabled]="userForm.invalid">Обновить</button>
+    </form> 
+  </div>
 
   <h3>История покупок</h3>
   <div class="order-card" *ngFor="let order of paidOrders">

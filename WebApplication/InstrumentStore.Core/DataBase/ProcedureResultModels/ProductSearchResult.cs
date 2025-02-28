@@ -1,5 +1,8 @@
-﻿namespace InstrumentStore.Domain.DataBase.ProcedureResultModels
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace InstrumentStore.Domain.DataBase.ProcedureResultModels
 {
+    [NotMapped]
     public class ProductSearchResult
     {
         public Guid ProductId { get; set; }

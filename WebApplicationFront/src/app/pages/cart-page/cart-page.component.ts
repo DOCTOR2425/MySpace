@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CartService } from '../../service/cart/cart.service';
 import { CartItem } from '../../data/interfaces/cart/cart-item.interface';
 import { CommonModule } from '@angular/common';
-import { CartItemComponent } from './cart-item/cart-item.component';
 import { FormsModule, NgForm } from '@angular/forms';
 import { OrderOptions } from '../../data/interfaces/order-options/order-options.interface';
 import { UserOrderInfo } from '../../data/interfaces/user/user-order-info.interface';
@@ -10,10 +9,11 @@ import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../service/auth/auth.service';
 import { RegisterUserFromOrderRequest } from '../../data/interfaces/user/register-user-from-order-request.interface';
 import { AddToCartRequest } from '../../data/interfaces/cart/add-to-cart-request.interface';
+import { CartItemComponent } from "./cart-item/cart-item.component";
 
 @Component({
   selector: 'app-cart-page',
-  imports: [CommonModule, CartItemComponent, FormsModule],
+  imports: [CommonModule, FormsModule, CartItemComponent],
   templateUrl: './cart-page.component.html',
   styleUrls: ['./cart-page.component.scss'],
 })

@@ -7,19 +7,26 @@ import { CartPageComponent } from './pages/cart-page/cart-page.component';
 import { CategoryPageComponent } from './pages/category-page/category-page.component';
 import { AdminMainPageComponent } from './pages/admin-pages/admin-main-page/admin-main-page.component';
 import { UserPageComponent } from './pages/user-page/user-page.component';
+import { AdminLayoutComponent } from './common-ui/admin-layout/admin-layout.component';
+import { CatalogManageComponent } from './pages/admin-pages/catalog-manage/catalog-manage.component';
 
 export const routes: Routes = [
   {
-    path: '',
-    component: LayoutComponent,
+    path: '', component: LayoutComponent,
     children: [
       { path: '', component: CatalogComponent },
       { path: 'product/:id', component: ProductComponent },
       { path: 'cart', component: CartPageComponent },
       { path: 'category/:categoryName', component: CategoryPageComponent },
-      { path: 'admin', component: AdminMainPageComponent },
       { path: 'user', component: UserPageComponent },
     ],
   },
   { path: 'login', component: LoginPageComponent },
+  {
+    path: 'admin', component: AdminLayoutComponent, 
+    children:[
+      { path: '', component: AdminMainPageComponent },
+      { path: 'catalog', component: CatalogManageComponent },
+    ]
+  },
 ];

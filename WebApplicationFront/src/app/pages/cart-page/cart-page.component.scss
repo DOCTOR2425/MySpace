@@ -44,6 +44,22 @@
 .form-group select {
   width: 100%;
   box-sizing: border-box;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.form-group input.ng-invalid.ng-touched,
+.form-group select.ng-invalid.ng-touched {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.form-group .text-danger {
+  color: #dc3545;
+  font-size: 14px;
+  margin-top: 5px;
 }
 
 button {
@@ -55,6 +71,7 @@ button {
   cursor: pointer;
   width: 100%;
   box-sizing: border-box;
+  font-size: 16px;
 }
 
 button:hover {

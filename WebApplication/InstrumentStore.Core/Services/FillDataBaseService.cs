@@ -562,7 +562,7 @@ namespace InstrumentStore.Domain.Services
 				"+375445555555",
 				"aboba",
 				"aboba",
-				"Minsk",
+				"Минск",
 				"Matusevicha",
 				"100",
 				"10",

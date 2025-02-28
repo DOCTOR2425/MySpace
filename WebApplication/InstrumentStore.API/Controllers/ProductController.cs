@@ -80,7 +80,6 @@ namespace InstrumentStore.API.Controllers
 			[FromRoute] int page,
 			[FromQuery] string? input)
 		{
-			Console.WriteLine(input);
 			var products = await _productService.SearchByName(input, page);
 
 			List<ProductCard> productsCards = new List<ProductCard>();

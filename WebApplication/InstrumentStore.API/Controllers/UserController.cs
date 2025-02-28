@@ -119,12 +119,8 @@ namespace InstrumentStore.API.Controllers
 			List<PaidOrderResponse> orderResponses = new List<PaidOrderResponse>();
 
 			foreach (PaidOrder order in paidOrders)
-			{
 				orderResponses.Add(_mapper.Map<PaidOrderResponse>(order,
 					opt => opt.Items["DbContext"] = _dbContext));
-
-				Console.WriteLine(orderResponses.Last().PaidOrderItems.Last().Price);
-			}
 
 			return Ok(orderResponses);
 		}

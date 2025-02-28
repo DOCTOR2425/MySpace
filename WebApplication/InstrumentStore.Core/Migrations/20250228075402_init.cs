@@ -101,7 +101,7 @@ namespace InstrumentStore.Domain.Migrations
                 columns: table => new
                 {
                     UserRegistrInfoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EMail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
