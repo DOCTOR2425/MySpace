@@ -574,7 +574,7 @@ namespace InstrumentStore.Domain.Services
 			await _cartService.AddToCart(userId, products[0].ProductId, 1);
 			await _cartService.AddToCart(userId, products[2].ProductId, 2);
 
-			await _cartService.OrderCartForLogined(userId,
+			await _cartService.OrderCartForRegistered(userId,
 				deliveryMethod1.DeliveryMethodId,
 				PaymentMethodService.PaymentMethods[PaymentMethod.Cash]);
 

@@ -9,10 +9,13 @@ import { AdminMainPageComponent } from './pages/admin-pages/admin-main-page/admi
 import { UserPageComponent } from './pages/user-page/user-page.component';
 import { AdminLayoutComponent } from './common-ui/admin-layout/admin-layout.component';
 import { CatalogManageComponent } from './pages/admin-pages/catalog-manage/catalog-manage.component';
+import { CreateProductComponent } from './pages/admin-pages/create-product/create-product.component';
+import { ReportsPageComponent } from './pages/admin-pages/reports-page/reports-page.component';
 
 export const routes: Routes = [
   {
-    path: '', component: LayoutComponent,
+    path: '',
+    component: LayoutComponent,
     children: [
       { path: '', component: CatalogComponent },
       { path: 'product/:id', component: ProductComponent },
@@ -23,10 +26,13 @@ export const routes: Routes = [
   },
   { path: 'login', component: LoginPageComponent },
   {
-    path: 'admin', component: AdminLayoutComponent, 
-    children:[
+    path: 'admin',
+    component: AdminLayoutComponent,
+    children: [
       { path: '', component: AdminMainPageComponent },
       { path: 'catalog', component: CatalogManageComponent },
-    ]
+      { path: 'create-product', component: CreateProductComponent },
+      { path: 'reports', component: ReportsPageComponent },
+    ],
   },
 ];

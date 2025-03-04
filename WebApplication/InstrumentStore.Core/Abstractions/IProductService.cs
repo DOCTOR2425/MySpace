@@ -7,12 +7,12 @@ namespace InstrumentStore.Domain.Abstractions
     public interface IProductService
     {
         Task<Guid> Create(Product product);
-        Task<Guid> Create(ProductRequest productRequest);
+        Task<Guid> Create(CreateProductRequest productRequest);
         Task<Guid> Delete(Guid id);
         Task<List<Product>> GetAll(int page);
         Task<Product> GetById(Guid id);
         Task<Guid> Update(Guid oldId, Product newProduct);
-        Task<Guid> Update(Guid oldId, ProductRequest newProduct);
+        Task<Guid> Update(Guid oldId, CreateProductRequest newProduct);
         Task<List<Product>> GetAllByCategory(string categoryName, int page);
         Task<List<Product>> GetAllWithFilters(
             string categoryName,

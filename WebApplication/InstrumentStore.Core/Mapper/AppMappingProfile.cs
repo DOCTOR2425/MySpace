@@ -6,7 +6,6 @@ using InstrumentStore.Domain.Contracts.User;
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
 using Microsoft.EntityFrameworkCore;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace InstrumentStore.Domain.Mapper
 {
@@ -100,7 +99,7 @@ namespace InstrumentStore.Domain.Mapper
 					dest.Flat = address.Flat;
 				});
 
-			CreateMap<PaidOrder, PaidOrderResponse>()
+			CreateMap<PaidOrder, UserPaidOrderResponse>()
 				.AfterMap((src, dest, context) =>
 				{
 					var dbContext = (InstrumentStoreDBContext)context.Items["DbContext"];
@@ -140,6 +139,50 @@ namespace InstrumentStore.Domain.Mapper
 							}
 						});
 					}
+				});
+
+			CreateMap<PaidOrder, AdminPaidOrderResponse>()
+				.AfterMap((src, dest, context) =>
+				{
+					var dbContext = (InstrumentStoreDBContext)context.Items["DbContext"];
+
+					dest.PaidOrderItems = new List<PaidOrderItemResponse>();
+
+					List<PaidOrderItem> paidOrderItems = dbContext.PaidOrderItem
+						.Include(i => i.Product)
+						.Include(i => i.Product.Brand)
+						.Include(i => i.Product.Country)
+						.Include(i => i.Product.ProductCategory)
+						.Where(i => i.PaidOrder.PaidOrderId == src.PaidOrderId)
+						.ToList();
+
+					foreach (var item in paidOrderItems)
+					{
+						dest.PaidOrderItems.Add(new PaidOrderItemResponse()
+						{
+							PaidOrderItemId = item.PaidOrderItemId,
+							Price = item.Price,
+							Quantity = item.Quantity,
+
+							ProductData = new ProductData()
+							{
+								ProductId = item.Product.ProductId,
+								Name = item.Product.Name,
+								Description = item.Product.Description,
+								Brand = item.Product.Brand.Name,
+								Country = item.Product.Country.Name,
+								Price = item.Product.Price,
+								Quantity = item.Quantity,
+								ProductCategory = item.Product.ProductCategory.Name,
+
+								Image = "https://localhost:7295/images/" +
+								dbContext.Image.First(i =>
+								i.Product.ProductId == item.Product.ProductId).Name
+							}
+						});
+					}
+
+					dest.UserOrderInfo = context.Mapper.Map<UserOrderInfo>(src.User);
 				});
 		}
 	}

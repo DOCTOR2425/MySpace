@@ -8,7 +8,7 @@ namespace InstrumentStore.Domain.Abstractions
 	{
 		Task<Guid> AddToCart(Guid userId, Guid productId, int quantity);
 		Task<List<CartItem>> GetAllCart(Guid userId);
-		Task<Guid> OrderCartForLogined(Guid userId, Guid deliveryMethodId, string paymentMethod);
+		Task<Guid> OrderCartForRegistered(Guid userId, Guid deliveryMethodId, string paymentMethod);
 		Task<Guid> OrderProduct(Guid userId,
 			Guid productId,
 			int quantity,
@@ -16,6 +16,6 @@ namespace InstrumentStore.Domain.Abstractions
 			string paymentMethod);
 		Task<Guid> RemoveFromCart(Guid cartItemId);
 		Task<List<PaidOrderItem>> GetAllOrders(Guid userId);
-		Task<Guid> OrderCartForUnlogined(Guid userId, OrderCartOfUnregisteredRequest request);
+		Task<Guid> OrderCartForUnregistered(Guid userId, OrderCartOfUnregisteredRequest request);
 	}
 }

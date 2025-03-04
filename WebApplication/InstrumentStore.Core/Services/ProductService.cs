@@ -122,7 +122,7 @@ namespace InstrumentStore.Domain.Service
 			return product.ProductId;
 		}
 
-		public async Task<Guid> Create(ProductRequest productRequest)
+		public async Task<Guid> Create(CreateProductRequest productRequest)
 		{
 			Product product = new Product
 			{
@@ -146,7 +146,7 @@ namespace InstrumentStore.Domain.Service
 
 		private async Task SaveImagesToProduct(
 			Product product,
-			ProductRequest productRequest)
+			CreateProductRequest productRequest)
 		{
 			FileStream stream;
 			string filePath = "";
@@ -184,7 +184,7 @@ namespace InstrumentStore.Domain.Service
 			return oldId;
 		}
 
-		public async Task<Guid> Update(Guid oldId, ProductRequest newProduct)
+		public async Task<Guid> Update(Guid oldId, CreateProductRequest newProduct)
 		{
 			Product product = await GetById(oldId);
 

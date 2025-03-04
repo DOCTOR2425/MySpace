@@ -55,7 +55,8 @@ namespace InstrumentStore.API.Controllers
 			List<CartItemResponse> result = new List<CartItemResponse>();
 
 			foreach (CartItem cartItem in cartItems)
-				result.Add(_mapper.Map<CartItemResponse>(cartItem, opt => opt.Items["DbContext"] = _dbContext));
+				result.Add(_mapper.Map<CartItemResponse>(cartItem
+					, opt => opt.Items["DbContext"] = _dbContext));
 
 			return Ok(result);
 		}
@@ -87,7 +88,7 @@ namespace InstrumentStore.API.Controllers
 		[HttpPost("order-cart-for-registered")]
 		public async Task<ActionResult<Guid>> OrderCartForRegistered([FromBody] OrderCartRequest orderCartRequest)
 		{
-			return Ok(await _cartService.OrderCartForLogined(
+			return Ok(await _cartService.OrderCartForRegistered(
 				await _jwtProvider.GetUserIdFromToken(GetToken()),
 				orderCartRequest.DeliveryMethodId,
 				orderCartRequest.PaymentMethod));
@@ -98,7 +99,7 @@ namespace InstrumentStore.API.Controllers
 		public async Task<ActionResult> OrderCartForUnregistered([FromBody] OrderCartOfUnregisteredRequest request)
 		{
 			Guid userId = await _usersService.RegisterUserFromOrder(request.User);
-			Guid orderId = await _cartService.OrderCartForUnlogined(userId, request);
+			Guid orderId = await _cartService.OrderCartForUnregistered(userId, request);
 
 			return Ok(orderId);
 		}

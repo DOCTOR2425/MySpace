@@ -10,17 +10,14 @@ namespace InstrumentStore.Domain.Services
 		private readonly InstrumentStoreDBContext _dbContext;
 		private readonly IUsersService _usersService;
 		private readonly IDeliveryMethodService _deliveryMethodService;
-		private readonly IPaymentMethodService _paymentMethodService;
 
 		public PaidOrderService(InstrumentStoreDBContext dbContext,
 			IUsersService usersService,
-			IDeliveryMethodService deliveryMethodService,
-			IPaymentMethodService paymentMethodService)
+			IDeliveryMethodService deliveryMethodService)
 		{
 			_dbContext = dbContext;
 			_usersService = usersService;
 			_deliveryMethodService = deliveryMethodService;
-			_paymentMethodService = paymentMethodService;
 		}
 
 		public async Task<List<PaidOrder>> GetAll(Guid userId)
@@ -68,6 +65,32 @@ namespace InstrumentStore.Domain.Services
 			await _dbContext.SaveChangesAsync();
 
 			return paidOrder.PaidOrderId;
+		}
+
+		public async Task<Guid> CloseOrder(Guid orderId)
+		{
+			(await GetById(orderId)).ReceiptDate = DateTime.Now;
+			await _dbContext.SaveChangesAsync();
+
+			return orderId;
+		}
+
+		public async Task<Guid> CancelOrder(Guid orderId)
+		{
+			(await GetById(orderId)).ReceiptDate = DateTime.MaxValue;
+			await _dbContext.SaveChangesAsync();
+
+			return orderId;
+		}
+
+		public async Task<List<PaidOrder>> GetProcessingOrders()
+		{
+			return await _dbContext.PaidOrder
+				.Include(o => o.User)
+				.Include(o => o.User.UserRegistrInfo)
+				.Include(o => o.DeliveryMethod)
+				.Where(o => o.ReceiptDate == DateTime.MinValue)
+				.ToListAsync();
 		}
 	}
 }

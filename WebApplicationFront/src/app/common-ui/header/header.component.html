@@ -17,12 +17,7 @@
       </span>
 
       <ng-container *ngIf="authService.isLoggedIn(); else loginButton">
-        <span *ngIf="adminService.isAdmin; else userTemplate">
-          <button>Админ</button>
-        </span>
-        <ng-template #userTemplate>
-          <button [routerLink]="['/user']">{{ userEmail }}</button>
-        </ng-template>
+        <button [routerLink]="['/user']">{{ userEmail }}</button>
       </ng-container>
       <ng-template #loginButton>
         <span

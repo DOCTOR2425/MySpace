@@ -3,10 +3,9 @@ div {
   margin: 20px auto;
   padding: 30px;
   max-width: 1200px;
-  border: 1px solid #e0e0e0;
   border-radius: 15px;
   background-color: #ffffff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  // box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Стили для заголовков */
@@ -71,27 +70,28 @@ button[disabled] {
 .profile-edit-container {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Центрирование по горизонтали */
-  justify-content: center; /* Центрирование по вертикали */
+  align-items: center;
+  justify-content: center;
   padding: 20px;
   box-sizing: border-box;
   margin-top: 20px;
 
-  h3{
+  h3 {
     margin: 0px
   }
 }
 
-/* Стили для формы редактирования профиля */
 form {
   margin: 0;
+  margin-top: 12px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 8px; /* Минимальное расстояние между полями */
+  gap: 8px;
   width: 100%;
   padding: 20px;
   border-radius: 12px;
   background-color: #fafafa;
+  border: 1px solid #e0e0e0;
 }
 
 .form-row {
@@ -99,23 +99,24 @@ form {
   padding: 10px;
   display: flex;
   flex-direction: column;
-  gap: 4px; /* Минимальное расстояние между label и input */
+  gap: 4px;
+  /* Минимальное расстояние между label и input */
 }
 
 label {
   font-size: 14px;
   color: #555;
   font-weight: 500;
-  margin-bottom: 2px; /* Минимальный отступ снизу для label */
+  margin-bottom: 2px;
+  /* Минимальный отступ снизу для label */
 }
 
 input {
-  padding: 10px;
+  padding: 8px;
   border: 1px solid #ddd;
   border-radius: 8px;
-  font-size: 14px;
-  width: 100%; /* Поля растянуты на всю ширину */
-  // max-width: 300px; /* Увеличение длины полей */
+  font-size: 16px;
+  width: 100%;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 

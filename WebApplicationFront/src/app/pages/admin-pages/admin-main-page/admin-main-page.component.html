@@ -1,36 +1,42 @@
-  <!-- Основной контент -->
-  <div class="content">
-    <h1>Заказы в обработке</h1>
+<div class="content">
+  <h1>Заказы в обработке</h1>
 
-    <table class="orders-table">
-      <thead>
-        <tr>
-          <th>Дата</th>
-          <th>Покупатель</th>
-          <th>Данные для связи</th>
-          <th>Сумма</th>
-          <th>Действия</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let order of pendingOrders">
-          <td>{{ order.date }}</td>
-          <td>{{ order.customer }}</td>
-          <td>
-            <div>{{ order.contact.phone }}</div>
-            <div>{{ order.contact.email }}</div>
-          </td>
-          <td>{{ order.total }} руб.</td>
-          <td>
-            <button class="action-button" (click)="closeOrder(order.id)">Закрыть заказ</button>
-            <div class="dropdown">
-              <button class="action-button dropdown-toggle">Отменить</button>
-              <div class="dropdown-content">
-                <a (click)="cancelOrder(order.id)">Подтвердить отмену</a>
-              </div>
+  <table class="orders-table">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Дата</th>
+        <th>Покупатель</th>
+        <th>Данные для связи</th>
+        <th>Сумма</th>
+        <th>Действия</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of paidOrders">
+        <td>{{ order.paidOrderId | slice : 0 : 8 }}</td>
+        <td>{{ order.orderDate | date : "dd.MM.yyyy" }}</td>
+        <td>
+          {{ order.userOrderInfo.firstName }}<br />
+          {{ order.userOrderInfo.surname }}
+        </td>
+        <td>
+          <div>{{ order.userOrderInfo.telephone }}</div>
+          <div>{{ order.userOrderInfo.email }}</div>
+        </td>
+        <td>{{ getTotalPrice(order) }} руб.</td>
+        <td>
+          <button class="action-button" (click)="closeOrder(order.paidOrderId)">
+            Закрыть заказ
+          </button>
+          <div class="dropdown">
+            <button class="action-button dropdown-toggle">Отменить</button>
+            <div class="dropdown-content">
+              <a (click)="cancelOrder(order.paidOrderId)">Подтвердить отмену</a>
             </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

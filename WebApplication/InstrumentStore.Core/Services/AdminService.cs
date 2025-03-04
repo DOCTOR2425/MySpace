@@ -88,7 +88,6 @@ namespace InstrumentStore.Domain.Services
 
 		public async Task<string> Login(string email, string password)
 		{
-			Console.WriteLine("Admin Login called");
 			if (await IsAdminEmail(email) == false)
 				throw new Exception("Invalid admin email");
 

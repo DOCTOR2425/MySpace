@@ -5,6 +5,7 @@ using InstrumentStore.Domain.Mapper;
 using InstrumentStore.Domain.Service;
 using InstrumentStore.Domain.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -16,7 +17,12 @@ namespace InstrumentStore.API
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
-			builder.Services.AddControllers();
+			builder.Services.AddControllers(options =>
+			{
+				options.Filters.Add<ExceptionFilter>();
+			});
+
+			//builder.Services.AddControllers();
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
 

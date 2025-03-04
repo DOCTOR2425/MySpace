@@ -4,6 +4,7 @@
 	{
 		public Guid PaidOrderId { get; set; }
 		public DateTime OrderDate { get; set; }
+		public DateTime ReceiptDate { get; set; } = DateTime.MinValue;
 		public string PaymentMethod { get; set; } = string.Empty;
 
 		public required DeliveryMethod DeliveryMethod { get; set; }

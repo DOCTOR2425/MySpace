@@ -16,8 +16,8 @@ namespace InstrumentStore.API.Controllers
 	{
 		private readonly InstrumentStoreDBContext _dbContext;
 		private readonly IProductService _productService;
-		private readonly IProductPropertyService _productPropertyService;
 		private readonly IImageService _imageService;
+		private readonly IProductPropertyService _productPropertyService;
 		private readonly IMapper _mapper;
 
 		public ProductController(IProductService productService,
@@ -118,9 +118,21 @@ namespace InstrumentStore.API.Controllers
 }
 		*/
 
+		[HttpPut("{id:guid}")]
+		public async Task<ActionResult<Guid>> UpdateProduct(Guid id, [FromBody] CreateProductRequest productRequest)
+		{
+			return Ok(await _productService.Update(id, productRequest));
+		}
+
+		[HttpDelete("{id:guid}")]
+		public async Task<ActionResult<Guid>> DeleteProduct(Guid id)
+		{
+			return Ok(await _productService.Delete(id));
+		}
+
 		[HttpPost]
 		public async Task<ActionResult<Guid>> CreateProduct(
-			[FromForm] ProductRequest productRequest)
+			[FromForm] CreateProductRequest productRequest)
 		{
 			if (productRequest.Images != null && productRequest.Images.Any())
 			{
@@ -133,18 +145,6 @@ namespace InstrumentStore.API.Controllers
 			}
 
 			return Ok(await _productService.Create(productRequest));
-		}
-
-		[HttpPut("{id:guid}")]
-		public async Task<ActionResult<Guid>> UpdateProduct(Guid id, [FromBody] ProductRequest productRequest)
-		{
-			return Ok(await _productService.Update(id, productRequest));
-		}
-
-		[HttpDelete("{id:guid}")]
-		public async Task<ActionResult<Guid>> DeleteProduct(Guid id)
-		{
-			return Ok(await _productService.Delete(id));
 		}
 	}
 }

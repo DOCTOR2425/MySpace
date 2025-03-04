@@ -32,7 +32,6 @@ namespace InstrumentStore.API.Authentication
 			else
 			{
 				await base.AuthenticationFailed(context);
-				Console.WriteLine("\nUserAuthenticate \t после await base.AuthenticationFailed(context)\n");
 				return new JwtSecurityTokenHandler().WriteToken(token);
 			}
 		}
@@ -52,7 +51,6 @@ namespace InstrumentStore.API.Authentication
 			else
 			{
 				await base.AuthenticationFailed(context);
-				Console.WriteLine("\nUserAuthenticate \t после await base.AuthenticationFailed(context)\n");
 				return new JwtSecurityTokenHandler().WriteToken(token);
 			}
 		}
@@ -62,9 +60,9 @@ namespace InstrumentStore.API.Authentication
 			if (context.Exception is SecurityTokenExpiredException)
 			{
 				string strToken = context.Request.Headers["Authorization"]
-					.ToString()
-					.Substring("Bearer ".Length)
-					.Trim();
+				.ToString()
+				.Substring("Bearer ".Length)
+				.Trim();
 
 				string newAccessToken = "";
 
@@ -94,6 +92,7 @@ namespace InstrumentStore.API.Authentication
 			}
 			else
 			{
+				Console.WriteLine(context.Exception.GetType().FullName);
 				await base.AuthenticationFailed(context);
 			}
 		}

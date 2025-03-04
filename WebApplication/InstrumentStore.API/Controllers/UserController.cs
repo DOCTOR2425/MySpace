@@ -110,16 +110,16 @@ namespace InstrumentStore.API.Controllers
 		}
 
 		[HttpGet("get-paid-orders")]
-		public async Task<ActionResult<List<PaidOrderResponse>>> GetPaidOrders()
+		public async Task<ActionResult<List<UserPaidOrderResponse>>> GetPaidOrders()
 		{
 			User user = await _usersService.GetUserFromToken(GetToken());
 
 			List<PaidOrder> paidOrders = await _paidOrderService.GetAll(user.UserId);
 
-			List<PaidOrderResponse> orderResponses = new List<PaidOrderResponse>();
+			List<UserPaidOrderResponse> orderResponses = new List<UserPaidOrderResponse>();
 
 			foreach (PaidOrder order in paidOrders)
-				orderResponses.Add(_mapper.Map<PaidOrderResponse>(order,
+				orderResponses.Add(_mapper.Map<UserPaidOrderResponse>(order,
 					opt => opt.Items["DbContext"] = _dbContext));
 
 			return Ok(orderResponses);

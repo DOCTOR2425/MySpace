@@ -85,7 +85,7 @@ namespace InstrumentStore.Domain.Services
 			return cartItemId;
 		}
 
-		public async Task<Guid> OrderCartForLogined(Guid userId, Guid deliveryMethodId, string paymentMethod)
+		public async Task<Guid> OrderCartForRegistered(Guid userId, OrderCartRequest orderCartRequest)
 		{
 			Guid paidOrderId = await _paidOrderService.Create(userId, deliveryMethodId, paymentMethod);
 
@@ -110,12 +110,12 @@ namespace InstrumentStore.Domain.Services
 			return paidOrderId;
 		}
 
-		public async Task<Guid> OrderCartForUnlogined(Guid userId, OrderCartOfUnregisteredRequest request)
+		public async Task<Guid> OrderCartForUnregistered(Guid userId, OrderCartOfUnregisteredRequest request)
 		{
 			foreach (var item in request.CartItems)
 				await AddToCart(userId, item.ProductId, item.Quantity);
 
-			return await OrderCartForLogined(userId, request.DeliveryMethodId, request.PaymentMethod);
+			return await OrderCartForRegistered(userId, request.DeliveryMethodId, request.PaymentMethod);
 		}
 
 		public async Task<Guid> OrderProduct(Guid userId,

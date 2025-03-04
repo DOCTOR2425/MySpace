@@ -17,13 +17,13 @@ import { AddToCartRequest } from '../../data/interfaces/cart/add-to-cart-request
 })
 export class CartService {
   private cartKey = 'cart';
+  private baseApiUrl = environment.apiUrl + '/api/Cart/';
+
   constructor(
     private http: HttpClient,
     private authService: AuthService,
     private productService: ProductService
   ) {}
-
-  baseApiUrl = environment.apiUrl + '/api/Cart/';
 
   public getCartItems(): Observable<CartItem[]> {
     if (this.authService.isLoggedIn() == true) {
@@ -155,6 +155,7 @@ export class CartService {
     return {
       userId: '',
       firstName: '',
+      surname: '',
       email: '',
       telephone: '',
       city: '',

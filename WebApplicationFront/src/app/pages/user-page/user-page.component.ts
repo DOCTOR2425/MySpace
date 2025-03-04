@@ -12,7 +12,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { UpdateUserRequest } from '../../data/interfaces/user/update-user.interface';
 import { Router } from '@angular/router';
-import { PaidOrder } from '../../data/interfaces/paid-order/paid-order.interface';
+import { UserPaidOrder } from '../../data/interfaces/paid-order/user-paid-order.interface';
 
 @Component({
   selector: 'app-user-page',
@@ -23,7 +23,7 @@ import { PaidOrder } from '../../data/interfaces/paid-order/paid-order.interface
 export class UserPageComponent implements OnInit, OnDestroy {
   public user!: UserProfile;
   public userForm!: FormGroup;
-  public paidOrders: PaidOrder[] = [];
+  public paidOrders: UserPaidOrder[] = [];
   private unsubscribe$ = new Subject<void>();
 
   constructor(
@@ -75,7 +75,7 @@ export class UserPageComponent implements OnInit, OnDestroy {
       .subscribe((paidOrders) => (this.paidOrders = paidOrders));
   }
 
-  public getOrderTotal(order: PaidOrder): number {
+  public getOrderTotal(order: UserPaidOrder): number {
     return order.paidOrderItems.reduce(
       (total, item) => total + item.price * item.quantity,
       0

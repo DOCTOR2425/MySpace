@@ -1,49 +1,68 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AdminService } from '../../../service/admin/admin.service';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AdminPaidOrder } from '../../../data/interfaces/paid-order/admin-paid-order.interface';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-admin-main-page',
   imports: [CommonModule, RouterModule],
   templateUrl: './admin-main-page.component.html',
-  styleUrl: './admin-main-page.component.scss'
+  styleUrl: './admin-main-page.component.scss',
 })
-export class AdminMainPageComponent {
-  constructor(private adminService: AdminService){}
-  pendingOrders = [
-    { 
-      id: '#12345', 
-      date: '2023-10-01', 
-      customer: 'Иван Иванов', 
-      contact: { phone: '+375 29 123 45 67', email: 'ivan@mail.ru' }, 
-      total: 1500 
-    },
-    { 
-      id: '#12346', 
-      date: '2023-10-02', 
-      customer: 'Петр Петров', 
-      contact: { phone: '+375 29 234 56 78', email: 'petr@mail.ru' }, 
-      total: 2300 
-    },
-    { 
-      id: '#12347', 
-      date: '2023-10-03', 
-      customer: 'Сергей Сергеев', 
-      contact: { phone: '+375 29 345 67 89', email: 'sergey@mail.ru' }, 
-      total: 1800 
-    }
-  ];
+export class AdminMainPageComponent implements OnInit, OnDestroy {
+  public paidOrders: AdminPaidOrder[] = [];
+  private unsubscribe$ = new Subject<void>();
 
-  // Метод для закрытия заказа
-  closeOrder(orderId: string) {
-    console.log(`Закрыть заказ: ${orderId}`);
-    // Здесь можно добавить логику для закрытия заказа
+  constructor(private adminService: AdminService) {}
+
+  public ngOnInit(): void {
+    this.adminService
+      .getProcessingOrders()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((val) => {
+        this.paidOrders = val;
+      });
   }
 
-  // Метод для отмены заказа
-  cancelOrder(orderId: string) {
-    console.log(`Отменить заказ: ${orderId}`);
-    // Здесь можно добавить логику для отмены заказа
+  public ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  public getTotalPrice(order: AdminPaidOrder): number {
+    let amount = 0;
+    for (let item of order.paidOrderItems) {
+      amount += item.price;
+    }
+
+    return amount;
+  }
+
+  public closeOrder(orderId: string): void {
+    this.adminService
+      .closeOrder(orderId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: () => {
+          this.paidOrders = this.paidOrders.filter(
+            (o) => o.paidOrderId !== orderId
+          );
+        },
+      });
+  }
+
+  public cancelOrder(orderId: string): void {
+    this.adminService
+      .cancelOrder(orderId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: () => {
+          this.paidOrders = this.paidOrders.filter(
+            (o) => o.paidOrderId !== orderId
+          );
+        },
+      });
   }
 }

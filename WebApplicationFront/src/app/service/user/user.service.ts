@@ -4,13 +4,13 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment.development';
 import { UpdateUserRequest } from '../../data/interfaces/user/update-user.interface';
-import { PaidOrder } from '../../data/interfaces/paid-order/paid-order.interface';
+import { UserPaidOrder } from '../../data/interfaces/paid-order/user-paid-order.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  baseApiUrl = environment.apiUrl + '/api/User/';
+  private baseApiUrl = environment.apiUrl + '/api/User/';
   public userEMail?: string;
   public userEMailKey: string = 'userEmail';
 
@@ -28,8 +28,8 @@ export class UserService {
     });
   }
 
-  public getPaidOrders(): Observable<PaidOrder[]> {
-    return this.http.get<PaidOrder[]>(`${this.baseApiUrl}get-paid-orders`, {
+  public getPaidOrders(): Observable<UserPaidOrder[]> {
+    return this.http.get<UserPaidOrder[]>(`${this.baseApiUrl}get-paid-orders`, {
       withCredentials: true,
     });
   }

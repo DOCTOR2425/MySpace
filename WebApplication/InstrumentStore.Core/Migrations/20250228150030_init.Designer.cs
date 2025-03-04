@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InstrumentStore.Domain.Migrations
 {
     [DbContext(typeof(InstrumentStoreDBContext))]
-    [Migration("20250228075402_init")]
+    [Migration("20250228150030_init")]
     partial class init
     {
         /// <inheritdoc />

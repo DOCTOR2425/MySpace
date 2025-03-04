@@ -76,12 +76,12 @@ export class LoginPageComponent implements OnInit, OnDestroy {
         this.markFormGroupTouched(this.loginForm);
         return;
       }
-  
+
       const loginValue = this.loginForm.value as {
         email: string;
         password: string;
       };
-  
+
       this.authService
         .login({
           email: loginValue.email!,
@@ -91,6 +91,10 @@ export class LoginPageComponent implements OnInit, OnDestroy {
           next: (response) => {
             if (response.role === 'admin') {
               this.adminService.isAdmin = true;
+
+              this.userService.userEMail = '';
+              localStorage.setItem(this.userService.userEMailKey, '');
+
               console.log('LogIn as Admin');
               this.router.navigate(['admin']);
             } else {
@@ -112,7 +116,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
         this.markFormGroupTouched(this.registerForm);
         return;
       }
-  
+
       const registerValue = this.registerForm.value as {
         firstName: string;
         surname: string;
@@ -125,7 +129,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
         entrance: string;
         flat: string;
       };
-  
+
       this.authService
         .register({
           firstName: registerValue.firstName!,
@@ -154,11 +158,11 @@ export class LoginPageComponent implements OnInit, OnDestroy {
         });
     }
   }
-  
+
   private markFormGroupTouched(formGroup: FormGroup) {
-    Object.values(formGroup.controls).forEach(control => {
+    Object.values(formGroup.controls).forEach((control) => {
       control.markAsTouched();
-  
+
       if (control instanceof FormGroup) {
         this.markFormGroupTouched(control);
       }
