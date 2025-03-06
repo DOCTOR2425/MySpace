@@ -2,9 +2,14 @@
 
 namespace InstrumentStore.Domain.Contracts.Cart
 {
-	public record OrderCartOfUnregisteredRequest(
-		RegisterUserFromOrderRequest User,
-		AddToCartRequest[] CartItems,
-		Guid DeliveryMethodId,
-		string PaymentMethod);
+	public class OrderCartOfUnregisteredRequest
+	{
+		public Guid DeliveryMethodId { get; set; }
+		public string PaymentMethod { get; set; } = string.Empty;
+		public required RegisterUserFromOrderRequest User { get; set; }
+		public required AddToCartRequest[] CartItems { get; set; }
+
+		public UserDeliveryAddress? UserDelivaryAdress { get; set; }
+	}
+
 }

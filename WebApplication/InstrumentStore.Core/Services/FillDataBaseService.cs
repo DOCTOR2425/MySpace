@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using InstrumentStore.Domain.Abstractions;
+using InstrumentStore.Domain.Contracts.Cart;
 using InstrumentStore.Domain.Contracts.User;
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
@@ -555,18 +556,13 @@ namespace InstrumentStore.Domain.Services
 			await _deliveryMethodService.Create(deliveryMethod2);
 
 
-			// User
+			//User
 			RegisterUserRequest registerUserRequest = new RegisterUserRequest(
 				"Egor",
 				"Dudkin",
 				"+375445555555",
-				"aboba",
-				"aboba",
-				"Минск",
-				"Matusevicha",
-				"100",
-				"10",
-				"10"
+				"stayler425@yandex.com",
+				"stayler425@yandex.com"
 			);
 			Guid userId = await _usersService.Register(registerUserRequest);
 
@@ -574,9 +570,21 @@ namespace InstrumentStore.Domain.Services
 			await _cartService.AddToCart(userId, products[0].ProductId, 1);
 			await _cartService.AddToCart(userId, products[2].ProductId, 2);
 
-			await _cartService.OrderCartForRegistered(userId,
-				deliveryMethod1.DeliveryMethodId,
-				PaymentMethodService.PaymentMethods[PaymentMethod.Cash]);
+			OrderRequest orderCartRequest = new OrderRequest()
+			{
+				DeliveryMethodId = deliveryMethod1.DeliveryMethodId,
+				PaymentMethod = PaymentMethodService.PaymentMethods[PaymentMethod.Cash],
+				UserDelivaryAdress = new UserDeliveryAddress()
+				{
+					City = city.Name,
+					Street = "Матусевича",
+					HouseNumber = "10",
+					Entrance = "1",
+					Flat = "10"
+				}
+			};
+
+			await _cartService.OrderCartForRegistered(userId, orderCartRequest);
 
 			await _cartService.AddToCart(userId, products[1].ProductId, 3);
 			await _cartService.AddToCart(userId, products[3].ProductId, 4);
@@ -599,7 +607,7 @@ namespace InstrumentStore.Domain.Services
 			_dBContext.ProductProperty.RemoveRange(_dBContext.ProductProperty);
 			_dBContext.ProductPropertyValue.RemoveRange(_dBContext.ProductPropertyValue);
 			_dBContext.User.RemoveRange(_dBContext.User);
-			_dBContext.UserAddress.RemoveRange(_dBContext.UserAddress);
+			_dBContext.DeliveryAddress.RemoveRange(_dBContext.DeliveryAddress);
 			_dBContext.UserRegistrInfo.RemoveRange(_dBContext.UserRegistrInfo);
 
 			_dBContext.SaveChanges();

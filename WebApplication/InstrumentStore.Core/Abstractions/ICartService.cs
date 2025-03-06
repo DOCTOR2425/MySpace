@@ -1,6 +1,5 @@
 ﻿using InstrumentStore.Domain.Contracts.Cart;
 using InstrumentStore.Domain.DataBase.Models;
-using InstrumentStore.Domain.Services;
 
 namespace InstrumentStore.Domain.Abstractions
 {
@@ -8,12 +7,11 @@ namespace InstrumentStore.Domain.Abstractions
 	{
 		Task<Guid> AddToCart(Guid userId, Guid productId, int quantity);
 		Task<List<CartItem>> GetAllCart(Guid userId);
-		Task<Guid> OrderCartForRegistered(Guid userId, Guid deliveryMethodId, string paymentMethod);
+		Task<Guid> OrderCartForRegistered(Guid userId, OrderRequest orderCartRequest);
 		Task<Guid> OrderProduct(Guid userId,
 			Guid productId,
 			int quantity,
-			Guid deliveryMethodId,
-			string paymentMethod);
+			OrderRequest orderRequest);
 		Task<Guid> RemoveFromCart(Guid cartItemId);
 		Task<List<PaidOrderItem>> GetAllOrders(Guid userId);
 		Task<Guid> OrderCartForUnregistered(Guid userId, OrderCartOfUnregisteredRequest request);

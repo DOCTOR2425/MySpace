@@ -3,7 +3,6 @@
 	public record OrderProductRequest(
 		Guid ProductId,
 		int Quantity,
-		Guid DeliveryMethodId,
-		string PaymentMethod
+		OrderRequest OrderCartRequest
 	);
 }

@@ -34,12 +34,6 @@
           placeholder="Enter email"
           formControlName="email"
         />
-        <small
-          *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
-          class="text-danger"
-        >
-          Please enter a valid email address.
-        </small>
       </div>
       <div class="form-group">
         <label for="exampleInputPassword1">Password</label>
@@ -50,18 +44,12 @@
           placeholder="Password"
           formControlName="password"
         />
-        <small
-          *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-          class="text-danger"
-        >
-          Password is required.
-        </small>
       </div>
     </div>
 
     <div *ngIf="!isLoginMode">
       <div class="form-row">
-        <div class="col">
+        <div class="form-group">
           <label for="firstName">First Name</label>
           <input
             class="form-control"
@@ -69,14 +57,8 @@
             placeholder="First Name"
             formControlName="firstName"
           />
-          <small
-            *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched"
-            class="text-danger"
-          >
-            First Name is required.
-          </small>
         </div>
-        <div class="col">
+        <div class="form-group">
           <label for="surname">Surname</label>
           <input
             class="form-control"
@@ -84,12 +66,6 @@
             placeholder="Surname"
             formControlName="surname"
           />
-          <small
-            *ngIf="registerForm.get('surname')?.invalid && registerForm.get('surname')?.touched"
-            class="text-danger"
-          >
-            Surname is required.
-          </small>
         </div>
       </div>
       <div class="form-group">
@@ -100,98 +76,8 @@
           placeholder="Telephone"
           formControlName="telephone"
         />
-        <small
-          *ngIf="registerForm.get('telephone')?.invalid && registerForm.get('telephone')?.touched"
-          class="text-danger"
-        >
-          Telephone is required.
-        </small>
       </div>
-
       <hr />
-
-      <div class="form-row">
-        <div class="col">
-          <label for="city">City</label>
-          <input
-            class="form-control"
-            id="city"
-            placeholder="City"
-            formControlName="city"
-          />
-          <small
-            *ngIf="registerForm.get('city')?.invalid && registerForm.get('city')?.touched"
-            class="text-danger"
-          >
-            City is required.
-          </small>
-        </div>
-        <div class="col">
-          <label for="street">Street</label>
-          <input
-            class="form-control"
-            id="street"
-            placeholder="Street"
-            formControlName="street"
-          />
-          <small
-            *ngIf="registerForm.get('street')?.invalid && registerForm.get('street')?.touched"
-            class="text-danger"
-          >
-            Street is required.
-          </small>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="col">
-          <label for="houseNumber">House Number</label>
-          <input
-            class="form-control"
-            id="houseNumber"
-            placeholder="House Number"
-            formControlName="houseNumber"
-          />
-          <small
-            *ngIf="registerForm.get('houseNumber')?.invalid && registerForm.get('houseNumber')?.touched"
-            class="text-danger"
-          >
-            House Number is required.
-          </small>
-        </div>
-        <div class="col">
-          <label for="entrance">Entrance</label>
-          <input
-            class="form-control"
-            id="entrance"
-            placeholder="Entrance"
-            formControlName="entrance"
-          />
-          <small
-            *ngIf="registerForm.get('entrance')?.invalid && registerForm.get('entrance')?.touched"
-            class="text-danger"
-          >
-            Entrance is required.
-          </small>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="flat">Flat</label>
-        <input
-          class="form-control"
-          id="flat"
-          placeholder="Flat"
-          formControlName="flat"
-        />
-        <small
-          *ngIf="registerForm.get('flat')?.invalid && registerForm.get('flat')?.touched"
-          class="text-danger"
-        >
-          Flat is required.
-        </small>
-      </div>
-
-      <hr />
-
       <div class="form-group">
         <label for="exampleInputEmail1">Email</label>
         <input
@@ -201,12 +87,6 @@
           placeholder="Enter email"
           formControlName="email"
         />
-        <small
-          *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
-          class="text-danger"
-        >
-          Please enter a valid email address.
-        </small>
       </div>
       <div class="form-group">
         <label for="exampleInputPassword1">Password</label>
@@ -217,15 +97,8 @@
           placeholder="Password"
           formControlName="password"
         />
-        <small
-          *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
-          class="text-danger"
-        >
-          Password is required.
-        </small>
       </div>
     </div>
-
     <button type="submit" class="btn btn-primary mt-1">Submit</button>
   </form>
 </div>

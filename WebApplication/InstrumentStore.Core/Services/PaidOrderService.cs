@@ -1,4 +1,5 @@
 ﻿using InstrumentStore.Domain.Abstractions;
+using InstrumentStore.Domain.Contracts.Cart;
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
 using Microsoft.EntityFrameworkCore;
@@ -9,15 +10,18 @@ namespace InstrumentStore.Domain.Services
 	{
 		private readonly InstrumentStoreDBContext _dbContext;
 		private readonly IUsersService _usersService;
+		private readonly ICityService _cityService;
 		private readonly IDeliveryMethodService _deliveryMethodService;
 
 		public PaidOrderService(InstrumentStoreDBContext dbContext,
 			IUsersService usersService,
-			IDeliveryMethodService deliveryMethodService)
+			IDeliveryMethodService deliveryMethodService,
+			ICityService cityService)
 		{
 			_dbContext = dbContext;
 			_usersService = usersService;
 			_deliveryMethodService = deliveryMethodService;
+			_cityService = cityService;
 		}
 
 		public async Task<List<PaidOrder>> GetAll(Guid userId)
@@ -50,16 +54,32 @@ namespace InstrumentStore.Domain.Services
 			return itemsInOrder;
 		}
 
-		public async Task<Guid> Create(Guid userId, Guid deliveryMethodId, string paymentMethod)
+		public async Task<Guid> Create(Guid userId, OrderRequest orderCartRequest)
 		{
 			PaidOrder paidOrder = new PaidOrder()
 			{
 				PaidOrderId = Guid.NewGuid(),
 				OrderDate = DateTime.Now,
 				User = await _usersService.GetById(userId),
-				DeliveryMethod = await _deliveryMethodService.GetById(deliveryMethodId),
-				PaymentMethod = paymentMethod,
+				DeliveryMethod = await _deliveryMethodService.GetById(orderCartRequest.DeliveryMethodId),
+				PaymentMethod = orderCartRequest.PaymentMethod,
 			};
+
+			if (orderCartRequest.UserDelivaryAdress != null)
+			{
+				DeliveryAddress deliveryAddress = new DeliveryAddress()
+				{
+					DeliveryAddressId = Guid.NewGuid(),
+					PaidOrder = paidOrder,
+					City = await _cityService.GetByName(orderCartRequest.UserDelivaryAdress.City),
+					Street = orderCartRequest.UserDelivaryAdress.Street,
+					HouseNumber = orderCartRequest.UserDelivaryAdress.HouseNumber,
+					Entrance = orderCartRequest.UserDelivaryAdress.Entrance,
+					Flat = orderCartRequest.UserDelivaryAdress.Flat
+				};
+
+				await _dbContext.DeliveryAddress.AddAsync(deliveryAddress);
+			}
 
 			await _dbContext.PaidOrder.AddAsync(paidOrder);
 			await _dbContext.SaveChangesAsync();
@@ -91,6 +111,13 @@ namespace InstrumentStore.Domain.Services
 				.Include(o => o.DeliveryMethod)
 				.Where(o => o.ReceiptDate == DateTime.MinValue)
 				.ToListAsync();
+		}
+
+		public async Task<DeliveryAddress?> GetDeliveryAddressByOrderId(Guid orderId)
+		{
+			return await _dbContext.DeliveryAddress
+				.Include(a => a.City)
+				.FirstOrDefaultAsync(a => a.PaidOrder.PaidOrderId == orderId);
 		}
 	}
 }

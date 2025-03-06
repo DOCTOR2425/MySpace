@@ -14,82 +14,76 @@
   <div class="registration-form">
     <form
       *ngIf="userOrderInfo"
-      #orderForm="ngForm"
-      (ngSubmit)="orderCart(orderForm)"
+      [formGroup]="orderForm"
+      (ngSubmit)="orderCart()"
     >
       <div class="form-grid">
         <div class="form-group">
           <label for="firstName">Имя:</label>
           <input
+            class="form-control"
             type="text"
             id="firstName"
-            name="firstName"
-            [(ngModel)]="userOrderInfo.firstName"
-            required
+            formControlName="firstName"
           />
         </div>
         <div class="form-group">
           <label for="telephone">Телефон:</label>
           <input
+            class="form-control"
             type="tel"
             id="telephone"
-            name="telephone"
-            [(ngModel)]="userOrderInfo.telephone"
-            required
+            formControlName="telephone"
           />
         </div>
         <div class="form-group">
           <label for="email">Email:</label>
           <input
+            class="form-control"
             type="email"
             id="email"
-            name="email"
-            [(ngModel)]="userOrderInfo.email"
-            required
+            formControlName="email"
           />
         </div>
         <div class="form-group">
           <label for="city">Город:</label>
           <input
+            class="form-control"
             type="text"
             id="city"
-            name="city"
-            [(ngModel)]="userOrderInfo.city"
-            required
+            formControlName="city"
           />
         </div>
         <div class="form-group">
           <label for="street">Улица:</label>
           <input
+            class="form-control"
             type="text"
             id="street"
-            name="street"
-            [(ngModel)]="userOrderInfo.street"
-            required
+            formControlName="street"
           />
         </div>
         <div class="form-group">
           <label for="houseNumber">Номер дома:</label>
           <input
+            class="form-control"
             type="text"
             id="houseNumber"
-            name="houseNumber"
-            [(ngModel)]="userOrderInfo.houseNumber"
-            required
+            formControlName="houseNumber"
           />
         </div>
         <div class="form-group">
           <label for="flat">Квартира:</label>
           <input
+            class="form-control"
             type="text"
             id="flat"
-            name="flat"
-            [(ngModel)]="userOrderInfo.flat"
+            formControlName="flat"
           />
         </div>
         <div class="form-group">
           <label>Способ доставки:</label>
-          <select ngModel required name="deliveryMethodId">
+          <select formControlName="deliveryMethodId">
             <option
               *ngFor="let deliveryMethod of orderOptions.deliveryMethods"
               [value]="deliveryMethod.deliveryMethodId"
@@ -100,7 +94,7 @@
         </div>
         <div class="form-group">
           <label>Способ оплаты:</label>
-          <select ngModel required name="paymentMethod">
+          <select formControlName="paymentMethod">
             <option
               *ngFor="let paymentMethod of orderOptions.paymentMethods"
               [value]="paymentMethod"
@@ -110,9 +104,7 @@
           </select>
         </div>
       </div>
-      <button type="submit" [disabled]="orderForm.invalid">
-        Оформить заказ
-      </button>
+      <button type="submit">Оформить заказ</button>
     </form>
   </div>
 </div>

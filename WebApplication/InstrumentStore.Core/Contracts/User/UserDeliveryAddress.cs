@@ -1,6 +1,6 @@
 ﻿namespace InstrumentStore.Domain.Contracts.User
 {
-	public class UserDelivaryAdress
+	public class UserDeliveryAddress
 	{
 		public string City { get; set; } = string.Empty;
 		public string Street { get; set; } = string.Empty;

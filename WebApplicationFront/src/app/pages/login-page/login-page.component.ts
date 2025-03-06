@@ -36,21 +36,18 @@ export class LoginPageComponent implements OnInit, OnDestroy {
 
   public loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
-    // email: new FormControl('', [Validators.required]),
     password: new FormControl('', Validators.required),
   });
 
   public registerForm = new FormGroup({
     firstName: new FormControl('', Validators.required),
     surname: new FormControl('', Validators.required),
-    telephone: new FormControl('', Validators.required),
+    telephone: new FormControl('', [
+      Validators.required,
+      Validators.pattern(/^\+375\s\d{2}\s\d{3}-\d{2}-\d{2}$/),
+    ]),
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', Validators.required),
-    city: new FormControl('', Validators.required),
-    street: new FormControl('', Validators.required),
-    houseNumber: new FormControl('', Validators.required),
-    entrance: new FormControl('', Validators.required),
-    flat: new FormControl('', Validators.required),
   });
 
   ngOnInit(): void {
@@ -70,13 +67,31 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     this.isLoginMode = mode === 'login';
   }
 
+  private login(
+    response: { role: string },
+    loginValue: { email: string; password: string }
+  ) {
+    if (response.role === 'admin') {
+      this.adminService.isAdmin = true;
+
+      this.userService.userEMail = '';
+      localStorage.setItem(this.userService.userEMailKey, '');
+
+      console.log('LogIn as Admin');
+      this.router.navigate(['admin']);
+    } else {
+      localStorage.setItem(this.userService.userEMailKey, loginValue.email);
+      this.userService.userEMail = loginValue.email;
+      this.router.navigate([`${this.returnUrl}`]);
+    }
+  }
+
   public onSubmit(): void {
     if (this.isLoginMode) {
       if (this.loginForm.invalid) {
         this.markFormGroupTouched(this.loginForm);
         return;
       }
-
       const loginValue = this.loginForm.value as {
         email: string;
         password: string;
@@ -89,22 +104,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
         })
         .subscribe({
           next: (response) => {
-            if (response.role === 'admin') {
-              this.adminService.isAdmin = true;
-
-              this.userService.userEMail = '';
-              localStorage.setItem(this.userService.userEMailKey, '');
-
-              console.log('LogIn as Admin');
-              this.router.navigate(['admin']);
-            } else {
-              localStorage.setItem(
-                this.userService.userEMailKey,
-                loginValue.email
-              );
-              this.userService.userEMail = loginValue.email;
-              this.router.navigate([`${this.returnUrl}`]);
-            }
+            this.login(response, loginValue);
           },
           error: (error) => {
             console.log(error.status);
@@ -116,18 +116,12 @@ export class LoginPageComponent implements OnInit, OnDestroy {
         this.markFormGroupTouched(this.registerForm);
         return;
       }
-
       const registerValue = this.registerForm.value as {
         firstName: string;
         surname: string;
         telephone: string;
         email: string;
         password: string;
-        city: string;
-        street: string;
-        houseNumber: string;
-        entrance: string;
-        flat: string;
       };
 
       this.authService
@@ -137,19 +131,13 @@ export class LoginPageComponent implements OnInit, OnDestroy {
           telephone: registerValue.telephone!,
           email: registerValue.email!,
           password: registerValue.password!,
-          city: registerValue.city!,
-          street: registerValue.street!,
-          houseNumber: registerValue.houseNumber!,
-          entrance: registerValue.entrance!,
-          flat: registerValue.flat!,
         })
         .subscribe({
-          next: () => {
-            this.toastService.showSuccess(
-              'Registration successful!',
-              'Success'
-            );
-            this.router.navigate([`${this.returnUrl}`]);
+          next: (response) => {
+            this.login(response, {
+              email: registerValue.email!,
+              password: registerValue.password!,
+            });
           },
           error: (error) => {
             console.log(error.status);

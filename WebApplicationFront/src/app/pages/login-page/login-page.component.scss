@@ -24,19 +24,17 @@ form {
   margin-bottom: 10px;
 }
 
+.form-group input.ng-invalid.ng-touched,
+.form-group select.ng-invalid.ng-touched {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
 .form-row {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
-}
-
-.form-row .col {
-  flex: 1;
-  margin-right: 10px;
-}
-
-.form-row .col:last-child {
-  margin-right: 0;
+  gap: 16px;
 }
 
 .btn-group {

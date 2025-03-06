@@ -2,18 +2,25 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CartService } from '../../service/cart/cart.service';
 import { CartItem } from '../../data/interfaces/cart/cart-item.interface';
 import { CommonModule } from '@angular/common';
-import { FormsModule, NgForm } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  NgForm,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { OrderOptions } from '../../data/interfaces/order-options/order-options.interface';
 import { UserOrderInfo } from '../../data/interfaces/user/user-order-info.interface';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../service/auth/auth.service';
 import { RegisterUserFromOrderRequest } from '../../data/interfaces/user/register-user-from-order-request.interface';
 import { AddToCartRequest } from '../../data/interfaces/cart/add-to-cart-request.interface';
-import { CartItemComponent } from "./cart-item/cart-item.component";
+import { CartItemComponent } from './cart-item/cart-item.component';
 
 @Component({
   selector: 'app-cart-page',
-  imports: [CommonModule, FormsModule, CartItemComponent],
+  imports: [CommonModule, FormsModule, CartItemComponent, ReactiveFormsModule],
   templateUrl: './cart-page.component.html',
   styleUrls: ['./cart-page.component.scss'],
 })
@@ -22,12 +29,32 @@ export class CartPageComponent implements OnInit, OnDestroy {
   public totalPrice: number = 0;
   public orderOptions!: OrderOptions;
   public userOrderInfo!: UserOrderInfo;
+  public orderForm: FormGroup;
   private unsubscribe$ = new Subject<void>();
 
   constructor(
+    private fb: FormBuilder,
     private cartService: CartService,
     private authService: AuthService
-  ) {}
+  ) {
+    this.orderForm = this.fb.group({
+      firstName: ['', Validators.required],
+      telephone: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^\+375\s\d{2}\s\d{3}-\d{2}-\d{2}$/),
+        ],
+      ],
+      email: ['', [Validators.required, Validators.email]],
+      city: [''],
+      street: [''],
+      houseNumber: [''],
+      flat: [''],
+      deliveryMethodId: ['', Validators.required],
+      paymentMethod: ['', Validators.required],
+    });
+  }
 
   public ngOnInit(): void {
     forkJoin({
@@ -41,6 +68,7 @@ export class CartPageComponent implements OnInit, OnDestroy {
         this.updateTotalPrice();
         this.orderOptions = val.orderOptions;
         this.userOrderInfo = val.userOrderInfo;
+        this.orderForm.patchValue(this.userOrderInfo);
       });
   }
 
@@ -85,56 +113,54 @@ export class CartPageComponent implements OnInit, OnDestroy {
     this.updateTotalPrice();
   }
 
-  public orderCart(form: NgForm): void {
-    if (this.authService.isLoggedIn() == true) {
-      let payload = {
-        deliveryMethodId: form.value.deliveryMethodId,
-        paymentMethod: form.value.paymentMethod,
+  public orderCart(): void {
+    if (this.orderForm.invalid) {
+      this.orderForm.markAllAsTouched();
+      return;
+    }
+
+    if (this.authService.isLoggedIn()) {
+      const payload = {
+        deliveryMethodId: this.orderForm.value.deliveryMethodId,
+        paymentMethod: this.orderForm.value.paymentMethod,
       };
       this.cartService
         .orderCartForRegistered(payload)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe();
     } else {
-      this.orderCartForUnregistered(form);
+      this.orderCartForUnregistered();
     }
     this.items = [];
     this.updateTotalPrice();
   }
 
-  private orderCartForUnregistered(form: NgForm): void {
-    let user: RegisterUserFromOrderRequest = {
-      firstName: form.value.firstName,
-      surname: form.value.surname,
-      telephone: form.value.telephone,
-      email: form.value.email,
-
-      city: form.value.city,
-      street: form.value.street,
-      houseNumber: form.value.houseNumber,
-      entrance: form.value.entrance,
-      flat: form.value.flat,
+  private orderCartForUnregistered(): void {
+    const user: RegisterUserFromOrderRequest = {
+      firstName: this.orderForm.value.firstName,
+      surname: this.orderForm.value.surname,
+      telephone: this.orderForm.value.telephone,
+      email: this.orderForm.value.email,
+      city: this.orderForm.value.city,
+      street: this.orderForm.value.street,
+      houseNumber: this.orderForm.value.houseNumber,
+      entrance: this.orderForm.value.entrance,
+      flat: this.orderForm.value.flat,
     };
 
-    let cartItems: AddToCartRequest[] = [];
-    this.cartService.getCartItems().subscribe((val) => {
-      val.forEach((item) => {
-        let newItem: AddToCartRequest = {
-          productId: item.product.productId,
-          quantity: item.quantity,
-        };
-        cartItems.push(newItem);
-      });
+    const cartItems: AddToCartRequest[] = this.items.map((item) => ({
+      productId: item.product.productId,
+      quantity: item.quantity,
+    }));
 
-      let payload = {
-        user,
-        cartItems,
-        deliveryMethodId: form.value.deliveryMethodId,
-        paymentMethodId: form.value.paymentMethodId,
-      };
+    const payload = {
+      user,
+      cartItems,
+      deliveryMethodId: this.orderForm.value.deliveryMethodId,
+      paymentMethodId: this.orderForm.value.paymentMethod,
+    };
 
-      this.cartService.orderCartForUnregistered(payload).subscribe();
-      this.cartService.clearLocalCart();
-    });
+    this.cartService.orderCartForUnregistered(payload).subscribe();
+    this.cartService.clearLocalCart();
   }
 }

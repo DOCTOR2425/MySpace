@@ -16,7 +16,7 @@ namespace InstrumentStore.Domain.DataBase
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{//DESKTOP-0MK8KC9\MSSQLSERVER01
-			optionsBuilder.UseSqlServer(@$"Server=DESKTOP-0MK8KC9\MSSQLSERVER01;Database=MySpaceDB;
+			optionsBuilder.UseSqlServer(@$"Server=DESKTOP-0MK8KC9;Database=MySpaceDB;
 				Trusted_Connection=True;Encrypt=False;TrustServerCertificate=True;");
 			//.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
 			//TODO log db queries in console
@@ -52,7 +52,7 @@ namespace InstrumentStore.Domain.DataBase
 		public required DbSet<ProductProperty> ProductProperty { get; set; }
 		public required DbSet<ProductPropertyValue> ProductPropertyValue { get; set; }
 		public required DbSet<User> User { get; set; }
-		public required DbSet<UserAddress> UserAddress { get; set; }
+		public required DbSet<DeliveryAddress> DeliveryAddress { get; set; }
 		public required DbSet<UserRegistrInfo> UserRegistrInfo { get; set; }
 	}
 }

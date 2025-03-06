@@ -12,7 +12,7 @@ namespace InstrumentStore.Domain.Services
 		public static string JwtKey = "secretkeysecretkeysecretkeysecretkeysecretkeysecretkey";//6
 		public static string AccessCookiesName = "token-cookies";
 		public static string RefreshCookiesName = "refresh-token";
-		public static TimeSpan AccessTokenLifeTime = TimeSpan.FromMinutes(10);
+		public static TimeSpan AccessTokenLifeTime = TimeSpan.FromMinutes(1);
 		public static TimeSpan RefreshTokenLifeTime = TimeSpan.FromDays(10);
 		public static TimeSpan CookiesLifeTime = RefreshTokenLifeTime;
 

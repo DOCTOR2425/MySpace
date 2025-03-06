@@ -23,7 +23,12 @@
       </div>
       <div class="form-row">
         <label for="telephone">Телефон</label>
-        <input type="text" id="telephone" formControlName="telephone" />
+        <input
+          type="text"
+          id="telephone"
+          formControlName="telephone"
+          placeholder="+375 11 111-11-11"
+        />
       </div>
       <div class="form-row">
         <label for="city">Город</label>
@@ -49,7 +54,7 @@
         <label for="email">Email</label>
         <input type="email" id="email" formControlName="email" />
       </div>
-      <button type="submit" [disabled]="userForm.invalid">Обновить</button>
+      <button type="submit">Обновить</button>
     </form>
   </div>
 

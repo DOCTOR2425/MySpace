@@ -7,6 +7,7 @@ using InstrumentStore.Domain.DataBase.Models;
 using InstrumentStore.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Authentication;
 using System.Security.Claims;
 
 namespace InstrumentStore.API.Controllers
@@ -41,28 +42,21 @@ namespace InstrumentStore.API.Controllers
 				.ToString().Substring("Bearer ".Length).Trim();
 		}
 
-		[HttpPost("register")]// функция регистрации пользователя
-		public async Task<ActionResult<Guid>> Register([FromBody] RegisterUserRequest request)
-		{
-			return Ok(await _usersService.Register(request));
-		}
-
-		[HttpPost("login")]// функция входа пользователя в аккаунт
-		public async Task<ActionResult<string>> Login([FromBody] LoginUserRequest request)
+		private async Task<string> ClientLogin(string email, string password)
 		{
 			string token = "";
 
 			try
 			{
-				if (await _adminService.IsAdminEmail(request.Email))
-					token = await _adminService.Login(request.Email, request.Password);
+				if (await _adminService.IsAdminEmail(email))
+					token = await _adminService.Login(email, password);
 				else
-					token = await _usersService.Login(request.Email, request.Password);
+					token = await _usersService.Login(email, password);
 			}
 			catch (Exception ex)
 			{
 				Console.WriteLine(ex.Message);
-				return Unauthorized();
+				throw new AuthenticationException();
 			}
 
 			HttpContext.Response.Cookies.Append(JwtProvider.AccessCookiesName, token, new CookieOptions()
@@ -72,6 +66,24 @@ namespace InstrumentStore.API.Controllers
 
 			string role = (new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken)
 				.Claims.First(c => c.Type == ClaimTypes.Role).Value;
+
+			return role;
+		}
+
+		[HttpPost("register")]// функция регистрации пользователя
+		public async Task<ActionResult<string>> Register([FromBody] RegisterUserRequest request)
+		{
+			Guid userId = await _usersService.Register(request);
+
+			string role = await ClientLogin(request.Email, request.Password);
+
+			return Ok(new { role });
+		}
+
+		[HttpPost("login")]// функция входа пользователя в аккаунт
+		public async Task<ActionResult<string>> Login([FromBody] LoginUserRequest request)
+		{
+			string role = await ClientLogin(request.Email, request.Password);
 
 			return Ok(new { role });
 		}

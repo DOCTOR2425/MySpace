@@ -158,11 +158,13 @@ export class CartService {
       surname: '',
       email: '',
       telephone: '',
-      city: '',
-      street: '',
-      houseNumber: '',
-      entrance: '',
-      flat: '',
+      userDeliveryAddress: {
+        city: '',
+        street: '',
+        houseNumber: '',
+        entrance: '',
+        flat: '',
+      },
     };
   }
 

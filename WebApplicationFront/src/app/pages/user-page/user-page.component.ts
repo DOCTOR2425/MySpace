@@ -48,12 +48,18 @@ export class UserPageComponent implements OnInit, OnDestroy {
     this.userForm = this.fb.group({
       firstName: ['', Validators.required],
       surname: ['', Validators.required],
-      telephone: ['', Validators.required],
-      city: ['', Validators.required],
-      street: ['', Validators.required],
-      houseNumber: ['', Validators.required],
-      entrance: ['', Validators.required],
-      flat: ['', Validators.required],
+      telephone: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^\+375\s\d{2}\s\d{3}-\d{2}-\d{2}$/),
+        ],
+      ],
+      city: [''],
+      street: [''],
+      houseNumber: [''],
+      entrance: [''],
+      flat: [''],
       email: ['', [Validators.required, Validators.email]],
     });
   }
@@ -83,27 +89,29 @@ export class UserPageComponent implements OnInit, OnDestroy {
   }
 
   public updateUser(): void {
-    if (this.userForm.valid) {
-      let updatedUser: UpdateUserRequest = {
-        firstName: this.userForm.value.firstName,
-        surname: this.userForm.value.surname,
-        telephone: this.userForm.value.telephone,
-        email: this.userForm.value.email,
-        city: this.userForm.value.city,
-        street: this.userForm.value.street,
-        houseNumber: this.userForm.value.houseNumber,
-        entrance: this.userForm.value.entrance,
-        flat: this.userForm.value.flat,
-      };
-
-      this.userService
-        .updateUser(updatedUser)
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((user) => {
-          this.user = user;
-          this.userForm.patchValue(this.user);
-        });
+    if (this.userForm.invalid) {
+      this.userForm.markAllAsTouched();
+      return;
     }
+    let updatedUser: UpdateUserRequest = {
+      firstName: this.userForm.value.firstName,
+      surname: this.userForm.value.surname,
+      telephone: this.userForm.value.telephone,
+      email: this.userForm.value.email,
+      city: this.userForm.value.city,
+      street: this.userForm.value.street,
+      houseNumber: this.userForm.value.houseNumber,
+      entrance: this.userForm.value.entrance,
+      flat: this.userForm.value.flat,
+    };
+
+    this.userService
+      .updateUser(updatedUser)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((user) => {
+        this.user = user;
+        this.userForm.patchValue(this.user);
+      });
   }
 
   public logout(): void {

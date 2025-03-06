@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment.development';
 import { Product } from '../data/interfaces/product/product.interface';
 import { FilterRequest } from '../data/interfaces/filters/filter-request.interface';
 import { CategoryFilters } from '../data/interfaces/filters/category-filters.intervace';
+import { ProductToUpdateResponse } from '../data/interfaces/product/product-toupdate-response.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -45,6 +46,15 @@ export class ProductService {
   public getCategoryFilters(categoryName: string): Observable<CategoryFilters> {
     return this.http.get<CategoryFilters>(
       `${this.baseApiUrl}category-filters/${categoryName}`
+    );
+  }
+
+  public getProductToUpdate(
+    productId: string
+  ): Observable<ProductToUpdateResponse> {
+    return this.http.get<ProductToUpdateResponse>(
+      `${this.baseApiUrl}get-product-to-update/${productId}`,
+      { withCredentials: true }
     );
   }
 }

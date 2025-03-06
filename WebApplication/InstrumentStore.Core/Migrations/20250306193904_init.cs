@@ -288,6 +288,7 @@ namespace InstrumentStore.Domain.Migrations
                 {
                     PaidOrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ReceiptDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DeliveryMethodId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -342,31 +343,31 @@ namespace InstrumentStore.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserAddress",
+                name: "DeliveryAddress",
                 columns: table => new
                 {
-                    UserAddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DeliveryAddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     HouseNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Entrance = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Flat = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    PaidOrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserAddress", x => x.UserAddressId);
+                    table.PrimaryKey("PK_DeliveryAddress", x => x.DeliveryAddressId);
                     table.ForeignKey(
-                        name: "FK_UserAddress_City_CityId",
+                        name: "FK_DeliveryAddress_City_CityId",
                         column: x => x.CityId,
                         principalTable: "City",
                         principalColumn: "CityId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserAddress_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "UserId",
+                        name: "FK_DeliveryAddress_PaidOrder_PaidOrderId",
+                        column: x => x.PaidOrderId,
+                        principalTable: "PaidOrder",
+                        principalColumn: "PaidOrderId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -416,6 +417,16 @@ namespace InstrumentStore.Domain.Migrations
                 name: "IX_Comment_UserId",
                 table: "Comment",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DeliveryAddress_CityId",
+                table: "DeliveryAddress",
+                column: "CityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DeliveryAddress_PaidOrderId",
+                table: "DeliveryAddress",
+                column: "PaidOrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Image_ProductId",
@@ -486,16 +497,6 @@ namespace InstrumentStore.Domain.Migrations
                 name: "IX_User_UserRegistrInfoId",
                 table: "User",
                 column: "UserRegistrInfoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserAddress_CityId",
-                table: "UserAddress",
-                column: "CityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserAddress_UserId",
-                table: "UserAddress",
-                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -506,6 +507,9 @@ namespace InstrumentStore.Domain.Migrations
 
             migrationBuilder.DropTable(
                 name: "Comment");
+
+            migrationBuilder.DropTable(
+                name: "DeliveryAddress");
 
             migrationBuilder.DropTable(
                 name: "Image");
@@ -523,7 +527,7 @@ namespace InstrumentStore.Domain.Migrations
                 name: "ProductSearchResult");
 
             migrationBuilder.DropTable(
-                name: "UserAddress");
+                name: "City");
 
             migrationBuilder.DropTable(
                 name: "PaidOrder");
@@ -533,9 +537,6 @@ namespace InstrumentStore.Domain.Migrations
 
             migrationBuilder.DropTable(
                 name: "Product");
-
-            migrationBuilder.DropTable(
-                name: "City");
 
             migrationBuilder.DropTable(
                 name: "DeliveryMethod");

@@ -53,7 +53,15 @@ namespace InstrumentStore.Domain.Services
 			return id;
 		}
 
-		public async Task<List<ProductProperty>> GetProductPropertiesByCategoryId(Guid categoryId)
+		public async Task<List<ProductProperty>> GetProductPropertiesByCategory(string category)
+		{
+			return await _dbContext.ProductProperty
+				.Include(p => p.ProductCategory)
+				.Where(p => p.ProductCategory.Name == category)
+				.ToListAsync();
+		}
+
+		public async Task<List<ProductProperty>> GetProductPropertiesByCategory(Guid categoryId)
 		{
 			return await _dbContext.ProductProperty
 				.Include(p => p.ProductCategory)

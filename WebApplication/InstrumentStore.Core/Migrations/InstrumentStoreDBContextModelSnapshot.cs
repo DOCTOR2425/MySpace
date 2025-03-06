@@ -116,6 +116,43 @@ namespace InstrumentStore.Domain.Migrations
                     b.ToTable("Country");
                 });
 
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.DeliveryAddress", b =>
+                {
+                    b.Property<Guid>("DeliveryAddressId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Entrance")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Flat")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HouseNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PaidOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("DeliveryAddressId");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("PaidOrderId");
+
+                    b.ToTable("DeliveryAddress");
+                });
+
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.DeliveryMethod", b =>
                 {
                     b.Property<Guid>("DeliveryMethodId")
@@ -389,43 +426,6 @@ namespace InstrumentStore.Domain.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.UserAddress", b =>
-                {
-                    b.Property<Guid>("UserAddressId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CityId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Entrance")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Flat")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("HouseNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("UserAddressId");
-
-                    b.HasIndex("CityId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserAddress");
-                });
-
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.UserRegistrInfo", b =>
                 {
                     b.Property<Guid>("UserRegistrInfoId")
@@ -541,6 +541,25 @@ namespace InstrumentStore.Domain.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.DeliveryAddress", b =>
+                {
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.PaidOrder", "PaidOrder")
+                        .WithMany()
+                        .HasForeignKey("PaidOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
+
+                    b.Navigation("PaidOrder");
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Image", b =>
@@ -677,25 +696,6 @@ namespace InstrumentStore.Domain.Migrations
                         .IsRequired();
 
                     b.Navigation("UserRegistrInfo");
-                });
-
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.UserAddress", b =>
-                {
-                    b.HasOne("InstrumentStore.Domain.DataBase.Models.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("InstrumentStore.Domain.DataBase.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("City");
-
-                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

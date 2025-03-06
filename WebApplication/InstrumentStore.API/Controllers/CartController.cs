@@ -86,12 +86,11 @@ namespace InstrumentStore.API.Controllers
 		}
 
 		[HttpPost("order-cart-for-registered")]
-		public async Task<ActionResult<Guid>> OrderCartForRegistered([FromBody] OrderCartRequest orderCartRequest)
+		public async Task<ActionResult<Guid>> OrderCartForRegistered([FromBody] OrderRequest orderCartRequest)
 		{
 			return Ok(await _cartService.OrderCartForRegistered(
 				await _jwtProvider.GetUserIdFromToken(GetToken()),
-				orderCartRequest.DeliveryMethodId,
-				orderCartRequest.PaymentMethod));
+				orderCartRequest));
 		}
 
 		[AllowAnonymous]
@@ -111,8 +110,7 @@ namespace InstrumentStore.API.Controllers
 				await _jwtProvider.GetUserIdFromToken(GetToken()),
 				orderProductRequest.ProductId,
 				orderProductRequest.Quantity,
-				orderProductRequest.DeliveryMethodId,
-				orderProductRequest.PaymentMethod));
+				orderProductRequest.OrderCartRequest));
 		}
 
 		[AllowAnonymous]
@@ -130,7 +128,14 @@ namespace InstrumentStore.API.Controllers
 			User user = await _usersService.GetById(
 				await _jwtProvider.GetUserIdFromToken(GetToken()));
 
-			return Ok(_mapper.Map<UserOrderInfo>(user, opt => opt.Items["DbContext"] = _dbContext));
+			UserOrderInfo userOrderInfo = _mapper.Map<UserOrderInfo>(user, opt => opt.Items["DbContext"] = _dbContext);
+			DeliveryAddress? address = await _usersService.GetLastUserDeliveryAdress(user.UserId);
+			if (address == null)
+				userOrderInfo.UserDeliveryAddress = new UserDeliveryAddress();
+			else
+				userOrderInfo.UserDeliveryAddress = _mapper.Map<UserDeliveryAddress>(address);
+
+			return Ok(userOrderInfo);
 		}
 	}
 }

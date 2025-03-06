@@ -9,7 +9,7 @@ namespace InstrumentStore.Domain.Abstractions
 		Task<List<ProductCategory>> GetAll();
 		Task<ProductCategory> GetById(Guid id);
 		Task<Guid> Update(Guid oldId, ProductCategory newProductType);
-		Task<List<ProductProperty>> GetProductPropertiesByCategoryId(Guid categoryId);
-
+		Task<List<ProductProperty>> GetProductPropertiesByCategory(string category);
+		Task<List<ProductProperty>> GetProductPropertiesByCategory(Guid categoryId);
 	}
 }

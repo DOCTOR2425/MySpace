@@ -85,9 +85,9 @@ namespace InstrumentStore.Domain.Services
 			return cartItemId;
 		}
 
-		public async Task<Guid> OrderCartForRegistered(Guid userId, OrderCartRequest orderCartRequest)
+		public async Task<Guid> OrderCartForRegistered(Guid userId, OrderRequest orderCartRequest)
 		{
-			Guid paidOrderId = await _paidOrderService.Create(userId, deliveryMethodId, paymentMethod);
+			Guid paidOrderId = await _paidOrderService.Create(userId, orderCartRequest);
 
 			foreach (CartItem i in await GetAllCart(userId))
 			{
@@ -115,16 +115,22 @@ namespace InstrumentStore.Domain.Services
 			foreach (var item in request.CartItems)
 				await AddToCart(userId, item.ProductId, item.Quantity);
 
-			return await OrderCartForRegistered(userId, request.DeliveryMethodId, request.PaymentMethod);
+			OrderRequest orderCartRequest = new OrderRequest()
+			{
+				DeliveryMethodId = request.DeliveryMethodId,
+				PaymentMethod = request.PaymentMethod,
+				UserDelivaryAdress = request.UserDelivaryAdress
+			};
+
+			return await OrderCartForRegistered(userId, orderCartRequest);
 		}
 
 		public async Task<Guid> OrderProduct(Guid userId,
 			Guid productId,
 			int quantity,
-			Guid deliveryMethodId,
-			string paymentMethod)
+			OrderRequest orderRequest)
 		{
-			Guid paidOrderId = await _paidOrderService.Create(userId, deliveryMethodId, paymentMethod);
+			Guid paidOrderId = await _paidOrderService.Create(userId, orderRequest);
 
 			await _dbContext.PaidOrderItem.AddAsync(new PaidOrderItem()
 			{

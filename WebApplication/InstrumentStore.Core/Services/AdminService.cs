@@ -59,9 +59,11 @@ namespace InstrumentStore.Domain.Services
 			mailText += $"Способ оплаты - {paidOrder.PaymentMethod}\n";
 			mailText += $"Способ доставки - {paidOrder.DeliveryMethod.Name} (стоимость - {paidOrder.DeliveryMethod.Price})\n";
 
-			if (await _deliveryMethodService.IsHomeDelivery(paidOrder.DeliveryMethod.DeliveryMethodId))
-				mailText += $"Адрес клиента - {_dbContext.UserAddress
-					.FirstOrDefaultAsync(a => a.User.UserId == paidOrder.User.UserId).ToString()}\n";
+			DeliveryAddress? deliveryAddress = await _paidOrderService.GetDeliveryAddressByOrderId(paidOrderId);
+
+			if (deliveryAddress != null &&
+				await _deliveryMethodService.IsHomeDelivery(paidOrder.DeliveryMethod.DeliveryMethodId))
+				mailText += $"Адрес клиента - {deliveryAddress.ToString()}\n";
 
 			mailText += "\n\n   ---- Заказанные товары ----\n";
 			decimal summaryPrice = 0;

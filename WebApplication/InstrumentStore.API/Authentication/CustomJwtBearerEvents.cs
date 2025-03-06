@@ -93,6 +93,7 @@ namespace InstrumentStore.API.Authentication
 			else
 			{
 				Console.WriteLine(context.Exception.GetType().FullName);
+				Console.WriteLine(context.Exception.Message);
 				await base.AuthenticationFailed(context);
 			}
 		}

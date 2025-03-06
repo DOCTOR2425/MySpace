@@ -17,12 +17,12 @@ namespace InstrumentStore.API
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
-			builder.Services.AddControllers(options =>
-			{
-				options.Filters.Add<ExceptionFilter>();
-			});
+			//builder.Services.AddControllers(options =>
+			//{
+			//	options.Filters.Add<ExceptionFilter>();
+			//});
 
-			//builder.Services.AddControllers();
+			builder.Services.AddControllers();
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
 

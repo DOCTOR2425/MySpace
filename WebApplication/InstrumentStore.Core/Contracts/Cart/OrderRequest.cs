@@ -2,10 +2,10 @@
 
 namespace InstrumentStore.Domain.Contracts.Cart
 {
-	public class OrderCartRequest
+	public class OrderRequest
 	{
-		public Guid DeliveryMethodId;
+		public Guid DeliveryMethodId { get; set; }
 		public string PaymentMethod { get; set; } = string.Empty;
-		public UserDelivaryAdress? UserDelivaryAdress { get; set; }
+		public UserDeliveryAddress? UserDelivaryAdress { get; set; }
 	}
 }

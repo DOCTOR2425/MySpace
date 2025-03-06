@@ -1,4 +1,6 @@
-﻿namespace InstrumentStore.Domain.DataBase.Models
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace InstrumentStore.Domain.DataBase.Models
 {
 	public class PaidOrder
 	{

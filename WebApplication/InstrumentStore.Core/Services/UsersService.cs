@@ -59,20 +59,8 @@ namespace InstrumentStore.Domain.Services
 				UserRegistrInfo = userRegistrInfo
 			};
 
-			UserAddress userAdress = new UserAddress
-			{
-				UserAddressId = Guid.NewGuid(),
-				City = await _cityService.GetByName(registerUserRequest.City),
-				Street = registerUserRequest.Street,
-				HouseNumber = registerUserRequest.HouseNumber,
-				Entrance = registerUserRequest.Entrance,
-				Flat = registerUserRequest.Flat,
-				User = user
-			};
-
 			userRegistrInfo.RefreshToken = await _jwtProvider.GenerateRefreshToken(user.UserId);
 
-			await _dbContext.UserAddress.AddAsync(userAdress);
 			await _dbContext.UserRegistrInfo.AddAsync(userRegistrInfo);
 			await _dbContext.User.AddAsync(user);
 			await _dbContext.SaveChangesAsync();
@@ -164,20 +152,8 @@ namespace InstrumentStore.Domain.Services
 				UserRegistrInfo = userRegistrInfo
 			};
 
-			UserAddress userAdress = new UserAddress
-			{
-				UserAddressId = Guid.NewGuid(),
-				City = await _cityService.GetByName(registerUserRequest.City),
-				Street = registerUserRequest.Street,
-				HouseNumber = registerUserRequest.HouseNumber,
-				Entrance = registerUserRequest.Entrance,
-				Flat = registerUserRequest.Flat,
-				User = user
-			};
-
 			userRegistrInfo.RefreshToken = await _jwtProvider.GenerateRefreshToken(user.UserId);
 
-			await _dbContext.UserAddress.AddAsync(userAdress);
 			await _dbContext.UserRegistrInfo.AddAsync(userRegistrInfo);
 			await _dbContext.User.AddAsync(user);
 			await _dbContext.SaveChangesAsync();
@@ -227,22 +203,32 @@ namespace InstrumentStore.Domain.Services
 			user.Telephone = newUser.Telephone;
 			user.UserRegistrInfo.Email = newUser.Email;
 
-			UserAddress? address = await _dbContext.UserAddress
-				.Include(a => a.City)
-				.FirstOrDefaultAsync(
-				a => a.User.UserId == userId);
-
-			if (address != null)
-			{
-				address.City = await _cityService.GetByName(newUser.City);
-				address.Street = newUser.Street;
-				address.HouseNumber = newUser.HouseNumber;
-				address.Entrance = newUser.Entrance;
-				address.Flat = newUser.Flat;
-			}
-
 			await _dbContext.SaveChangesAsync();
 			return user;
+		}
+
+		public async Task<DeliveryAddress?> GetLastUserDeliveryAdress(Guid userId)
+		{
+			User user = await GetById(userId);
+
+			List<PaidOrder> paidOrders = await _dbContext.PaidOrder
+				.Include(o => o.DeliveryMethod)
+				.Where(o => o.User.UserId == user.UserId)
+				.OrderByDescending(o => o.OrderDate)
+				.ToListAsync();
+
+			DeliveryAddress? address = null;
+			foreach (var order in paidOrders)
+			{
+				address = _dbContext.DeliveryAddress
+					.Include(a => a.City)
+					.FirstOrDefault(a => a.PaidOrder.PaidOrderId == order.PaidOrderId);
+
+				if (address != null)
+					break;
+			}
+
+			return address;
 		}
 	}
 }

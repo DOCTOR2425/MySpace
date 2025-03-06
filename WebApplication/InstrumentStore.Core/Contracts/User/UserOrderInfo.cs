@@ -3,17 +3,16 @@
 	public class UserOrderInfo
 	{
 		public Guid UserId { get; set; }
-		public string FirstName { get; set; }
-		public string Surname { get; set; }
-		public string Telephone { get; set; }
-		public string Email { get; set; }
-		public string City { get; set; }
-		public string Street { get; set; }
-		public string HouseNumber { get; set; }
-		public string Entrance { get; set; }
-		public string Flat { get; set; }
+		public string FirstName { get; set; } = string.Empty;
+		public string Surname { get; set; } = string.Empty;
+		public string Telephone { get; set; } = string.Empty;
+		public string Email { get; set; } = string.Empty;
+		public UserDeliveryAddress UserDeliveryAddress { get; set; }
 
-		public UserOrderInfo() { }
+		public UserOrderInfo()
+		{
+			UserDeliveryAddress = new UserDeliveryAddress();
+		}
 
 		public UserOrderInfo(
 			Guid userId,
@@ -30,11 +29,13 @@
 			FirstName = firstName;
 			Telephone = telephone;
 			Email = eMail;
-			City = city;
-			Street = street;
-			HouseNumber = houseNumber;
-			Entrance = entrance;
-			Flat = flat;
+
+			UserDeliveryAddress = new UserDeliveryAddress();
+			UserDeliveryAddress.City = city;
+			UserDeliveryAddress.Street = street;
+			UserDeliveryAddress.HouseNumber = houseNumber;
+			UserDeliveryAddress.Entrance = entrance;
+			UserDeliveryAddress.Flat = flat;
 		}
 	}
 }

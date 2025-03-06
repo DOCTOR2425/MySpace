@@ -21,6 +21,10 @@ namespace InstrumentStore.API.Controllers
 		private readonly IFillDataBaseService _fillDataBaseService;
 		private readonly IPaidOrderService _paidOrderService;
 		private readonly IProductService _productService;
+		private readonly IProductPropertyService _productPropertyService;
+		private readonly IProductCategoryService _productCategoryService;
+		private readonly IBrandService _brandService;
+		private readonly ICountryService _countryService;
 		private readonly IImageService _imageService;
 		private readonly IAdminService _adminService;
 		private readonly IMapper _mapper;
@@ -36,7 +40,11 @@ namespace InstrumentStore.API.Controllers
 			IConfiguration config,
 			IAdminService adminService,
 			IPaidOrderService paidOrderService,
-			IImageService imageService)
+			IImageService imageService,
+			IBrandService brandService,
+			ICountryService countryService,
+			IProductPropertyService productPropertyService,
+			IProductCategoryService productCategoryService)
 		{
 			_deliveryMethodService = deliveryMethodService;
 			_paymentMethodService = paymentMethodService;
@@ -48,6 +56,10 @@ namespace InstrumentStore.API.Controllers
 			_dbContext = dbContext;
 			_paidOrderService = paidOrderService;
 			_imageService = imageService;
+			_brandService = brandService;
+			_countryService = countryService;
+			_productPropertyService = productPropertyService;
+			_productCategoryService = productCategoryService;
 		}
 
 		[HttpPost("create-delivery-method")]//добавление способа доставки товара
@@ -89,5 +101,24 @@ namespace InstrumentStore.API.Controllers
 			return Ok(await _paidOrderService.CancelOrder(orderId));
 		}
 
+		[HttpGet("get-options-for-product")]
+		public async Task<ActionResult<OptionsForProduct>> GetOptionsForProduct()
+		{
+			List<Brand> brands = await _brandService.GetAll();
+			List<Country> countries = await _countryService.GetAll();
+			List<ProductCategory> productCategories = await _productCategoryService.GetAll();
+
+			OptionsForProduct options = new OptionsForProduct();
+
+			foreach (Brand brand in brands)
+				options.Brands.Add(_mapper.Map<BrandResponse>(brand));
+			foreach (Country country in countries)
+				options.Countries.Add(_mapper.Map<CountryResponse>(country));
+			foreach (ProductCategory productCategory in productCategories)
+				options.ProductCategories.Add(
+					_mapper.Map<ProductCategoryResponse>(productCategory));
+
+			return Ok(options);
+		}
 	}
 }

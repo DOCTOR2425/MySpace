@@ -103,25 +103,18 @@ namespace InstrumentStore.API.Controllers
 			return Ok(response);
 		}
 
-		/*
-		{
-  "name": "string",
-  "description": "string",
-  "price": 10,
-  "quantity": 10,
-  "images": [
-	"D:\модели и рисунки\КисаСЖемчужиной.jpg"
-  ],
-  "productCategoryId": "AD93A450-E2B4-4DB0-BB0B-37864E96D00A",
-  "brandId": "76FCE919-BADD-4E2B-816B-89D60D325181",
-  "countryId": "CF70DB7F-B55B-414B-A724-A9820C938CE5"
-}
-		*/
-
-		[HttpPut("{id:guid}")]
+		[HttpPut("update-product{id:guid}")]
 		public async Task<ActionResult<Guid>> UpdateProduct(Guid id, [FromBody] CreateProductRequest productRequest)
 		{
 			return Ok(await _productService.Update(id, productRequest));
+		}
+
+		[HttpGet("get-product-to-update{id:guid}")]
+		public async Task<ActionResult<ProductToUpdateResponse>> GetProductToUpdate(Guid id)
+		{
+			Product product = await _productService.GetById(id);
+
+			return Ok(_mapper.Map<ProductToUpdateResponse>(product));
 		}
 
 		[HttpDelete("{id:guid}")]
@@ -130,7 +123,7 @@ namespace InstrumentStore.API.Controllers
 			return Ok(await _productService.Delete(id));
 		}
 
-		[HttpPost]
+		[HttpPost("create-product")]
 		public async Task<ActionResult<Guid>> CreateProduct(
 			[FromForm] CreateProductRequest productRequest)
 		{

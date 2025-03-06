@@ -4,10 +4,4 @@ export interface RegisterUser {
   telephone: string;
   email: string;
   password: string;
-
-  city: string;
-  street: string;
-  houseNumber: string;
-  entrance: string;
-  flat: string;
 }
