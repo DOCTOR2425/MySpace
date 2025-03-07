@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -14,6 +20,7 @@ import { ProductProperty } from '../../../data/interfaces/product/product-proper
 import { ProductService } from '../../../service/product.service';
 import { ProductToUpdateResponse } from '../../../data/interfaces/product/product-toupdate-response.interface';
 import { OptionsForProduct } from '../../../data/interfaces/some/options-for-order.interface';
+import { CreateProductRequest } from '../../../data/interfaces/product/create-product-request.interface';
 
 @Component({
   selector: 'app-create-product',
@@ -21,19 +28,21 @@ import { OptionsForProduct } from '../../../data/interfaces/some/options-for-ord
   templateUrl: './create-product.component.html',
   styleUrl: './create-product.component.scss',
 })
-export class CreateProductComponent implements OnInit {
+export class CreateProductComponent implements OnInit, OnDestroy {
   @Input() productToUpdateId: string = '';
   public productToUpdate: ProductToUpdateResponse | null = null;
   public productProperties: ProductProperty[] = [];
   public optionsForProduct!: OptionsForProduct;
-  public photos: string[] = [];
+  public photos: File[] = [];
+  public photosToView: string[] = [];
   public productForm!: FormGroup;
   public propertiesForm!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private adminService: AdminService,
-    private productService: ProductService
+    private productService: ProductService,
+    private cdr: ChangeDetectorRef
   ) {
     this.productForm = fb.group({
       name: [this.productToUpdate?.name || '', Validators.required],
@@ -73,8 +82,34 @@ export class CreateProductComponent implements OnInit {
     if (this.productToUpdateId) {
       console.log('Редактирование товара:', this.productToUpdate); //Нужно собрать товар и на бэке его принять
     } else {
-      console.log('Добавление товара:', this.productToUpdate);
+      let product: CreateProductRequest = {
+        name: this.productForm.value.name,
+        description: this.productForm.value.description,
+        price: this.productForm.value.price,
+        quantity: this.productForm.value.quantity,
+        images: this.photos,
+        propertyValues: this.getPropertyValues(),
+        productCategoryId: this.productForm.value.category,
+        brandId: this.productForm.value.brand,
+        countryId: this.productForm.value.country,
+      };
+
+      console.log('Добавление товара:', product);
+      this.productService.createProduct(product);
     }
+  }
+
+  public getPropertyValues(): { [key: string]: string } {
+    const propertyValues: { [key: string]: string } = {};
+
+    this.productProperties.forEach((property) => {
+      const control = this.propertiesForm.get(property.name);
+      if (control) {
+        propertyValues[property.productPropertyId] = control.value;
+      }
+    });
+
+    return propertyValues;
   }
 
   public getCategoryProperty(event: Event) {
@@ -84,10 +119,13 @@ export class CreateProductComponent implements OnInit {
     this.adminService
       .getProductPropertiesByCategory(categoryId)
       .subscribe((val) => {
+        console.log(val);
+
         this.productProperties = val;
         this.initPropertiesForm();
       });
   }
+
   private initPropertiesForm() {
     const controls: { [key: string]: FormControl } = {};
 
@@ -98,25 +136,35 @@ export class CreateProductComponent implements OnInit {
     this.propertiesForm = this.fb.group(controls);
   }
 
-  public onPhotosAdd(event: Event): void {
+  public onPhotosChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const files = Array.from(input.files).slice(0, 4 - this.photos.length);
-      files.forEach((file) => this.readFile(file));
-    }
-  }
-
-  private readFile(file: File): void {
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.photos.push(reader.result as string);
+      this.photos.push(...files);
       this.productForm.patchValue({ photos: this.photos });
-    };
-    reader.readAsDataURL(file);
+      this.photosToView = [];
+      for (let file of this.photos) {
+        this.photosToView.push(this.getPhotoUrl(file));
+      }
+      console.log(this.photosToView);
+    }
   }
 
   public onPhotoDelete(index: number): void {
     this.photos.splice(index, 1);
+    this.photosToView.splice(index, 1);
     this.productForm.patchValue({ photos: this.photos });
+    // this.cdr.detectChanges();
+  }
+
+  public getPhotoUrl(file: File): string {
+    return URL.createObjectURL(file);
+  }
+
+  public ngOnDestroy(): void {
+    // Освобождаем память, занятую blob: URL
+    this.photos.forEach((photo) => {
+      URL.revokeObjectURL(this.getPhotoUrl(photo));
+    });
   }
 }

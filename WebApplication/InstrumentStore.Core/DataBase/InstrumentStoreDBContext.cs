@@ -15,8 +15,8 @@ namespace InstrumentStore.Domain.DataBase
 		//}
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-		{//DESKTOP-0MK8KC9\MSSQLSERVER01
-			optionsBuilder.UseSqlServer(@$"Server=DESKTOP-0MK8KC9;Database=MySpaceDB;
+		{//DESKTOP-0MK8KC9
+			optionsBuilder.UseSqlServer(@$"Server=WSA-195-74-BY;Database=MySpaceDB;
 				Trusted_Connection=True;Encrypt=False;TrustServerCertificate=True;");
 			//.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
 			//TODO log db queries in console

@@ -57,7 +57,11 @@ namespace InstrumentStore.API.Authentication
 
 		public override async Task AuthenticationFailed(AuthenticationFailedContext context)
 		{
-			if (context.Exception is SecurityTokenExpiredException)
+            Console.WriteLine(context.Exception.GetType().FullName);
+            Console.WriteLine(context.Exception.Message);
+            Console.WriteLine("\n" + context.Request.Headers["Authorization"]);
+
+            if (context.Exception is SecurityTokenExpiredException)
 			{
 				string strToken = context.Request.Headers["Authorization"]
 				.ToString()
@@ -92,15 +96,14 @@ namespace InstrumentStore.API.Authentication
 			}
 			else
 			{
-				Console.WriteLine(context.Exception.GetType().FullName);
-				Console.WriteLine(context.Exception.Message);
 				await base.AuthenticationFailed(context);
 			}
 		}
 
 		public override async Task TokenValidated(TokenValidatedContext context)
 		{
-			await base.TokenValidated(context);
+            Console.WriteLine("\n" + context.Request.Headers["Authorization"]);
+            await base.TokenValidated(context);
 		}
 	}
 }

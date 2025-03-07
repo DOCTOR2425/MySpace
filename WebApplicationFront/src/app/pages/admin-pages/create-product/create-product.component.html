@@ -17,7 +17,7 @@
         <select id="brand" formControlName="brand">
           <option
             *ngFor="let brand of optionsForProduct.brands"
-            [value]="brand"
+            [value]="brand.barndId"
           >
             {{ brand.name }}
           </option>
@@ -29,7 +29,7 @@
         <select id="country" formControlName="country">
           <option
             *ngFor="let country of optionsForProduct.countries"
-            [value]="country"
+            [value]="country.countryId"
           >
             {{ country.name }}
           </option>
@@ -75,7 +75,7 @@
             id="photos"
             accept="image/*"
             multiple
-            (change)="onPhotosAdd($event)"
+            (change)="onPhotosChange($event)"
             style="display: none"
           />
           <label for="photos" class="upload-button">
@@ -83,7 +83,8 @@
           </label>
           <div class="photos-preview">
             <div *ngFor="let photo of photos; let i = index" class="photo-item">
-              <img [src]="photo" alt="Фото товара" />
+              <!-- <img [src]="getPhotoUrl(photo)" alt="Фото товара" /> -->
+              <img [src]="[photosToView[i]]" alt="Фото товара" />
               <button
                 type="button"
                 class="delete-button"
@@ -119,14 +120,14 @@
         <input
           *ngIf="property.isRanged"
           type="number"
-          [id]="property.name"
+          [id]="property.productPropertyId"
           [formControlName]="property.name"
           placeholder="Введите число"
         />
         <input
           *ngIf="!property.isRanged"
           type="text"
-          [id]="property.name"
+          [id]="property.productPropertyId"
           [formControlName]="property.name"
           placeholder="Введите текст"
         />

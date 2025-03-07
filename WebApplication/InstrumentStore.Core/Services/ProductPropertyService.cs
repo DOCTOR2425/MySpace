@@ -32,6 +32,13 @@ namespace InstrumentStore.Domain.Services
 			return propertyValue.ProductPropertyValueId;
 		}
 
+		public async Task<ProductProperty> GetById(Guid id)
+		{
+			return await _dbContext.ProductProperty
+				.Include(p => p.ProductCategory)
+				.FirstOrDefaultAsync(p => p.ProductPropertyId == id);
+		}
+
 		public async Task<Dictionary<string, string>> GetProductProperties(Guid productId)
 		{
 			Dictionary<string, string> properties = new Dictionary<string, string>();

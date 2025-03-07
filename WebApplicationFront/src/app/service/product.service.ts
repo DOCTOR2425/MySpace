@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProductCard } from '../data/interfaces/product/product-card.interface';
@@ -7,6 +7,7 @@ import { Product } from '../data/interfaces/product/product.interface';
 import { FilterRequest } from '../data/interfaces/filters/filter-request.interface';
 import { CategoryFilters } from '../data/interfaces/filters/category-filters.intervace';
 import { ProductToUpdateResponse } from '../data/interfaces/product/product-toupdate-response.interface';
+import { CreateProductRequest } from '../data/interfaces/product/create-product-request.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -56,5 +57,9 @@ export class ProductService {
       `${this.baseApiUrl}get-product-to-update/${productId}`,
       { withCredentials: true }
     );
+  }
+
+  public createProduct(product: CreateProductRequest):Observable<object> {
+    return this.http.post(`${this.baseApiUrl}create-product`, product, {withCredentials: true});
   }
 }

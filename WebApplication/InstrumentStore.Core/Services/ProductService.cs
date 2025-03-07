@@ -140,8 +140,26 @@ namespace InstrumentStore.Domain.Service
 			_dbContext.SaveChangesAsync();
 
 			await SaveImagesToProduct(product, productRequest);
+			await SaveProductPropertiesValues(product, productRequest);
 
 			return product.ProductId;
+		}
+
+		private async Task SaveProductPropertiesValues(
+			Product product,
+            CreateProductRequest productRequest)
+		{
+			foreach (Guid propertyId in productRequest.PropertyValues.Keys)
+			{
+				ProductPropertyValue propertyValue = new ProductPropertyValue()
+				{
+					ProductPropertyValueId = Guid.NewGuid(),
+					Product = product,
+					ProductProperty = await _productPropertyService.GetById(propertyId),
+					Value = productRequest.PropertyValues[propertyId]
+                };
+				await _productPropertyService.CreatePropertyValue(propertyValue);
+			}
 		}
 
 		private async Task SaveImagesToProduct(

@@ -8,7 +8,7 @@ namespace InstrumentStore.Domain.Contracts.Products
 		decimal Price,
 		int Quantity,
 		List<IFormFile> Images,
-		Dictionary<string, string> PropertyValues,
+		Dictionary<Guid, string> PropertyValues,
 		Guid ProductCategoryId,
 		Guid BrandId,
 		Guid CountryId);
