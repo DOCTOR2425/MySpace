@@ -1,11 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -15,12 +9,12 @@ import {
   Validators,
 } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { AdminService } from '../../../service/admin/admin.service';
-import { ProductProperty } from '../../../data/interfaces/product/product-property.interface';
-import { ProductService } from '../../../service/product.service';
-import { ProductToUpdateResponse } from '../../../data/interfaces/product/product-toupdate-response.interface';
-import { OptionsForProduct } from '../../../data/interfaces/some/options-for-order.interface';
-import { CreateProductRequest } from '../../../data/interfaces/product/create-product-request.interface';
+import { AdminService } from '../../../../service/admin/admin.service';
+import { ProductProperty } from '../../../../data/interfaces/product/product-property.interface';
+import { ProductService } from '../../../../service/product.service';
+import { OptionsForProduct } from '../../../../data/interfaces/some/options-for-order.interface';
+import { CreateProductRequest } from '../../../../data/interfaces/product/create-product-request.interface';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-create-product',
@@ -29,41 +23,27 @@ import { CreateProductRequest } from '../../../data/interfaces/product/create-pr
   styleUrl: './create-product.component.scss',
 })
 export class CreateProductComponent implements OnInit, OnDestroy {
-  @Input() productToUpdateId: string = '';
-  public productToUpdate: ProductToUpdateResponse | null = null;
   public productProperties: ProductProperty[] = [];
   public optionsForProduct!: OptionsForProduct;
   public photos: File[] = [];
   public photosToView: string[] = [];
   public productForm!: FormGroup;
   public propertiesForm!: FormGroup;
+  private unsubscribe$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
     private adminService: AdminService,
-    private productService: ProductService,
-    private cdr: ChangeDetectorRef
+    private productService: ProductService
   ) {
     this.productForm = fb.group({
-      name: [this.productToUpdate?.name || '', Validators.required],
-      category: [
-        this.productToUpdate?.productCategory || '',
-        Validators.required,
-      ],
-      brand: [this.productToUpdate?.brand || '', Validators.required],
-      country: [this.productToUpdate?.country || '', Validators.required],
-      price: [
-        this.productToUpdate?.price || '',
-        [Validators.required, Validators.min(0)],
-      ],
-      quantity: [
-        this.productToUpdate?.quantity || '',
-        [Validators.required, Validators.min(0)],
-      ],
-      description: [
-        this.productToUpdate?.description || '',
-        Validators.required,
-      ],
+      name: ['', Validators.required],
+      category: ['', Validators.required],
+      brand: ['', Validators.required],
+      country: ['', Validators.required],
+      price: ['', [Validators.required, Validators.min(0)]],
+      quantity: ['', [Validators.required, Validators.min(0)]],
+      description: ['', Validators.required],
       photos: [[]],
     });
 
@@ -71,32 +51,42 @@ export class CreateProductComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.adminService.getOptionsForProduct().subscribe((opt) => {
-      this.optionsForProduct = opt;
-    });
+    this.adminService
+      .getOptionsForProduct()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((opt) => {
+        this.optionsForProduct = opt;
+      });
   }
 
   public onSubmit(): void {
     this.productForm.markAllAsTouched();
     this.propertiesForm.markAllAsTouched();
-    if (this.productToUpdateId) {
-      console.log('Редактирование товара:', this.productToUpdate); //Нужно собрать товар и на бэке его принять
-    } else {
-      let product: CreateProductRequest = {
-        name: this.productForm.value.name,
-        description: this.productForm.value.description,
-        price: this.productForm.value.price,
-        quantity: this.productForm.value.quantity,
-        images: this.photos,
-        propertyValues: this.getPropertyValues(),
-        productCategoryId: this.productForm.value.category,
-        brandId: this.productForm.value.brand,
-        countryId: this.productForm.value.country,
-      };
+    let product: CreateProductRequest = {
+      name: this.productForm.value.name,
+      description: this.productForm.value.description,
+      price: this.productForm.value.price,
+      quantity: this.productForm.value.quantity,
+      images: this.photos,
+      propertyValues: this.getPropertyValues(),
+      productCategoryId: this.productForm.value.category,
+      brandId: this.productForm.value.brand,
+      countryId: this.productForm.value.country,
+    };
 
-      console.log('Добавление товара:', product);
-      this.productService.createProduct(product);
-    }
+    const formData = new FormData();
+    formData.append('productDto', JSON.stringify(product));
+    product.images.forEach((image, index) => {
+      formData.append('images', image, image.name);
+    });
+
+    this.productService
+      .createProduct(formData)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (response) => {},
+        error: () => {},
+      });
   }
 
   public getPropertyValues(): { [key: string]: string } {
@@ -118,9 +108,8 @@ export class CreateProductComponent implements OnInit, OnDestroy {
 
     this.adminService
       .getProductPropertiesByCategory(categoryId)
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe((val) => {
-        console.log(val);
-
         this.productProperties = val;
         this.initPropertiesForm();
       });
@@ -146,7 +135,6 @@ export class CreateProductComponent implements OnInit, OnDestroy {
       for (let file of this.photos) {
         this.photosToView.push(this.getPhotoUrl(file));
       }
-      console.log(this.photosToView);
     }
   }
 
@@ -154,7 +142,6 @@ export class CreateProductComponent implements OnInit, OnDestroy {
     this.photos.splice(index, 1);
     this.photosToView.splice(index, 1);
     this.productForm.patchValue({ photos: this.photos });
-    // this.cdr.detectChanges();
   }
 
   public getPhotoUrl(file: File): string {
@@ -162,7 +149,9 @@ export class CreateProductComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    // Освобождаем память, занятую blob: URL
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+
     this.photos.forEach((photo) => {
       URL.revokeObjectURL(this.getPhotoUrl(photo));
     });

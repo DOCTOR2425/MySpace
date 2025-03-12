@@ -9,7 +9,21 @@
   </nav>
   <div class="middleMenu d-inline-flex">
     <h1 routerLink="/" style="cursor: pointer">MySpace</h1>
-    <input />
+
+    <div class="search-container">
+      <input
+        type="text"
+        placeholder="Поиск товаров..."
+        [(ngModel)]="searchQuery"
+      />
+      <button (click)="searchByName()">
+        <img
+          src="https://cdn-icons-png.flaticon.com/128/622/622669.png"
+          alt="Поиск"
+        />
+      </button>
+    </div>
+
     <span class="buttons d-flex">
       <span>
         <img src="https://cdn-icons-png.flaticon.com/128/994/994414.png" />

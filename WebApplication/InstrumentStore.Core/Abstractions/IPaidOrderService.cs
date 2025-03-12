@@ -6,7 +6,7 @@ namespace InstrumentStore.Domain.Abstractions
 	public interface IPaidOrderService
 	{
 		Task<Guid> Create(Guid userId, OrderRequest orderCartRequest);
-		Task<List<PaidOrder>> GetAll(Guid userId);
+		Task<List<PaidOrder>> GetAllByUserId(Guid userId);
 		Task<PaidOrder> GetById(Guid orderId);
 		Task<List<PaidOrderItem>> GetAllItemsByOrder(Guid paidOrderId);
 		Task<Guid> CloseOrder(Guid orderId);

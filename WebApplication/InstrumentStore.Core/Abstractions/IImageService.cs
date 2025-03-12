@@ -9,5 +9,6 @@ namespace InstrumentStore.Domain.Abstractions
 		Task<City> GetById(Guid cityId);
 		Task<List<Image>> GetByProductId(Guid productId);
 		Task<bool> IsImage(IFormFile file);
+		Task DeleteImagesByProductId(Guid productId);
 	}
 }

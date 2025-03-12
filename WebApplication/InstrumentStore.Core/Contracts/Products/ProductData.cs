@@ -11,5 +11,6 @@
 		public string ProductCategory { get; set; } = string.Empty;
 		public string Brand { get; set; } = string.Empty;
 		public string Country { get; set; } = string.Empty;
+		public bool IsArchive { get; set; } = false;
 	}
 }

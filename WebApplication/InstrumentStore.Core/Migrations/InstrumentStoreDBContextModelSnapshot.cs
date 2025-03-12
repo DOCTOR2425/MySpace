@@ -265,6 +265,9 @@ namespace InstrumentStore.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsArchive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -287,52 +290,6 @@ namespace InstrumentStore.Domain.Migrations
                     b.HasIndex("ProductCategoryId");
 
                     b.ToTable("Product");
-                });
-
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.ProductArchive", b =>
-                {
-                    b.Property<Guid>("ProductArchiveId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Brand")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("ProductCategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ProductArchiveId");
-
-                    b.HasIndex("ProductCategoryId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ProductArchive");
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.ProductCategory", b =>
@@ -636,25 +593,6 @@ namespace InstrumentStore.Domain.Migrations
                     b.Navigation("Country");
 
                     b.Navigation("ProductCategory");
-                });
-
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.ProductArchive", b =>
-                {
-                    b.HasOne("InstrumentStore.Domain.DataBase.Models.ProductCategory", "ProductCategory")
-                        .WithMany()
-                        .HasForeignKey("ProductCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("InstrumentStore.Domain.DataBase.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ProductCategory");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.ProductProperty", b =>

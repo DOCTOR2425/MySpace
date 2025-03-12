@@ -1,0 +1,126 @@
+<h1>Добавление товара</h1>
+
+<div class="product-form-container">
+  <div *ngIf="optionsForProduct" class="product-form">
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="name">Название товара:</label>
+        <input type="text" id="name" formControlName="name" />
+      </div>
+
+      <div class="form-group">
+        <label for="brand">Бренд:</label>
+        <select id="brand" formControlName="brand">
+          <option
+            *ngFor="let brand of optionsForProduct.brands"
+            [value]="brand.brandId"
+          >
+            {{ brand.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="country">Страна производства:</label>
+        <select id="country" formControlName="country">
+          <option
+            *ngFor="let country of optionsForProduct.countries"
+            [value]="country.countryId"
+          >
+            {{ country.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="category">Категория:</label>
+        <select
+          id="category"
+          formControlName="category"
+          (change)="getCategoryProperty($event)"
+        >
+          <option
+            *ngFor="let category of optionsForProduct.productCategories"
+            [value]="category.productCategoryId"
+          >
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="price">Цена:</label>
+        <input type="number" id="price" formControlName="price" />
+      </div>
+
+      <div class="form-group">
+        <label for="quantity">Количество на складе:</label>
+        <input type="number" id="quantity" formControlName="quantity" />
+      </div>
+
+      <div class="form-group">
+        <label for="description">Описание:</label>
+        <textarea id="description" formControlName="description"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="photos">Фото товара (максимум 4):</label>
+        <div class="photos-upload">
+          <input
+            type="file"
+            id="photos"
+            accept="image/*"
+            multiple
+            (change)="onPhotosChange($event)"
+            style="display: none"
+          />
+          <label for="photos" class="upload-button">
+            {{ photos.length < 4 ? "Добавить фото" : "Максимум 4 фото" }}
+          </label>
+          <div class="photos-preview">
+            <div *ngFor="let photo of photos; let i = index" class="photo-item">
+              <img [src]="[photosToView[i]]" alt="Фото товара" />
+              <button
+                type="button"
+                class="delete-button"
+                (click)="onPhotoDelete(i)"
+              >
+                Удалить
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="save-button">Добавить товар</button>
+        <button type="button" class="cancel-button" routerLink="/admin/catalog">
+          Отмена
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="productProperties.length > 0" class="properties-form">
+    <h2>Свойства товара</h2>
+    <form [formGroup]="propertiesForm">
+      <div *ngFor="let property of productProperties" class="form-group">
+        <label [for]="property.name">{{ property.name }}:</label>
+        <input
+          *ngIf="property.isRanged"
+          type="number"
+          [id]="property.productPropertyId"
+          [formControlName]="property.name"
+          placeholder="Введите число"
+        />
+        <input
+          *ngIf="!property.isRanged"
+          type="text"
+          [id]="property.productPropertyId"
+          [formControlName]="property.name"
+          placeholder="Введите текст"
+        />
+      </div>
+    </form>
+  </div>
+</div>

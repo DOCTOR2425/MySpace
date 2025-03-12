@@ -50,8 +50,7 @@ namespace InstrumentStore.Domain.Services
 			var token = new JwtSecurityToken(
 				claims: claims,
 				signingCredentials: signingCredentials,
-				expires: DateTime.UtcNow.Add(RefreshTokenLifeTime)
-				);
+				expires: DateTime.UtcNow.Add(RefreshTokenLifeTime));
 
 			return new JwtSecurityTokenHandler().WriteToken(token);
 		}

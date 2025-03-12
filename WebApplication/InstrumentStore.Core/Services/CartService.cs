@@ -89,21 +89,21 @@ namespace InstrumentStore.Domain.Services
 		{
 			Guid paidOrderId = await _paidOrderService.Create(userId, orderCartRequest);
 
-			foreach (CartItem i in await GetAllCart(userId))
-			{
-				await _dbContext.PaidOrderItem.AddAsync(new PaidOrderItem()
-				{
-					PaidOrderItemId = Guid.NewGuid(),
-					PaidOrder = await _dbContext.PaidOrder.FindAsync(paidOrderId),
-					Product = await _productService.GetById(i.Product.ProductId),
-					Quantity = i.Quantity,
-					Price = i.Product.Price
-				});
+			//foreach (CartItem i in await GetAllCart(userId))
+			//{
+			//	await _dbContext.PaidOrderItem.AddAsync(new PaidOrderItem()
+			//	{
+			//		PaidOrderItemId = Guid.NewGuid(),
+			//		PaidOrder = await _dbContext.PaidOrder.FindAsync(paidOrderId),
+			//		Product = await _productService.GetById(i.Product.ProductId),
+			//		Quantity = i.Quantity,
+			//		Price = i.Product.Price
+			//	});
 
-				await _dbContext.CartItem.Where(ci => ci == i).ExecuteDeleteAsync();
-			}
+			//	await _dbContext.CartItem.Where(ci => ci == i).ExecuteDeleteAsync();
+			//}
 
-			await _dbContext.SaveChangesAsync();
+			//await _dbContext.SaveChangesAsync();
 
 			await _adminService.SendAdminMailAboutOrder(paidOrderId);
 

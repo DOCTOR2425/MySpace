@@ -1,4 +1,5 @@
-﻿using InstrumentStore.Domain.DataBase.Models;
+﻿using InstrumentStore.Domain.Contracts.Products;
+using InstrumentStore.Domain.DataBase.Models;
 using InstrumentStore.Domain.DataBase.ProcedureResultModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -16,7 +17,7 @@ namespace InstrumentStore.Domain.DataBase
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{//DESKTOP-0MK8KC9
-			optionsBuilder.UseSqlServer(@$"Server=WSA-195-74-BY;Database=MySpaceDB;
+			optionsBuilder.UseSqlServer(@$"Server=DESKTOP-0MK8KC9;Database=MySpaceDB;
 				Trusted_Connection=True;Encrypt=False;TrustServerCertificate=True;");
 			//.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
 			//TODO log db queries in console
@@ -34,7 +35,8 @@ namespace InstrumentStore.Domain.DataBase
 				.WithMany()
 				.OnDelete(DeleteBehavior.NoAction);
 
-			modelBuilder.Entity<ProductSearchResult>().HasNoKey();
+			modelBuilder.Entity<ProductCard>()
+				.HasKey(c => c.ProductId);
 		}
 
 		public required DbSet<Brand> Brand { get; set; }
@@ -47,7 +49,6 @@ namespace InstrumentStore.Domain.DataBase
 		public required DbSet<PaidOrder> PaidOrder { get; set; }
 		public required DbSet<PaidOrderItem> PaidOrderItem { get; set; }
 		public required DbSet<Product> Product { get; set; }
-		public required DbSet<ProductArchive> ProductArchive { get; set; }
 		public required DbSet<ProductCategory> ProductCategory { get; set; }
 		public required DbSet<ProductProperty> ProductProperty { get; set; }
 		public required DbSet<ProductPropertyValue> ProductPropertyValue { get; set; }

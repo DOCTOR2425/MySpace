@@ -1,349 +1,62 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ProductData } from '../../../data/interfaces/product/product-data.interface';
+import { ProductService } from '../../../service/product.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
+  standalone: true,
   selector: 'app-catalog-manage',
   imports: [CommonModule, RouterModule],
   templateUrl: './catalog-manage.component.html',
   styleUrl: './catalog-manage.component.scss',
 })
-export class CatalogManageComponent {
-  products = [
-    {
-      id: 1,
-      name: 'Молоток',
-      category: 'Ручные инструменты',
-      price: 500,
-      stock: 10,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 2,
-      name: 'Отвертка',
-      category: 'Ручные инструменты',
-      price: 300,
-      stock: 25,
-    },
-    {
-      id: 3,
-      name: 'Дрель',
-      category: 'Электроинструменты',
-      price: 2500,
-      stock: 5,
-    },
-  ];
+export class CatalogManageComponent implements OnDestroy {
+  public products: ProductData[] = [];
+  public page = 1;
+  public loading = false;
+  public hasMoreData = true;
+  private unsubscribe$ = new Subject<void>();
 
-  deleteProduct(productId: number) {
-    this.products = this.products.filter((product) => product.id !== productId);
-    console.log(`Товар с ID ${productId} удален`);
+  constructor(private productService: ProductService) {}
+
+  public ngOnInit(): void {
+    this.loadProducts();
   }
 
-  editProduct(productId: number) {
-    console.log(`Редактировать товар с ID ${productId}`);
+  public ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
-  addProduct() {
-    console.log('Добавить новый товар');
+  public loadProducts(): void {
+    if (this.loading || this.hasMoreData == false) {
+      console.log('this.loading || this.hasMoreData');
+      console.log(this.loading, this.hasMoreData);
+
+      return;
+    }
+    this.loading = true;
+
+    this.productService
+      .getProductsForAdmin(this.page)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data) => {
+          if (data.length === 0) {
+            this.hasMoreData = false;
+            console.log('this.hasMoreData = false');
+          } else {
+            this.products = this.products.concat(data);
+            this.page++;
+          }
+          this.loading = false;
+        },
+        error: () => {
+          console.error('Error loading products');
+          this.loading = false;
+        },
+      });
   }
 }

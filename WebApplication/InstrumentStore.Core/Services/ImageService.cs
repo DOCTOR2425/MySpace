@@ -51,5 +51,12 @@ namespace InstrumentStore.Domain.Services
 
 			return true;
 		}
+
+		public async Task DeleteImagesByProductId(Guid productId)
+		{
+			await _dbContext.Image
+				.Where(i => i.Product.ProductId == productId)
+				.ExecuteDeleteAsync();
+		}
 	}
 }

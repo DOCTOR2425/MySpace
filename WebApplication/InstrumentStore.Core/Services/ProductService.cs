@@ -4,6 +4,7 @@ using InstrumentStore.Domain.Contracts.Products;
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
 using InstrumentStore.Domain.DataBase.ProcedureResultModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace InstrumentStore.Domain.Service
@@ -17,7 +18,6 @@ namespace InstrumentStore.Domain.Service
 		private readonly IProductPropertyService _productPropertyService;
 		private readonly IProductFilterService _productFilterService;
 		private readonly IImageService _imageService;
-		public const int pageSize = 10;
 
 		public ProductService(InstrumentStoreDBContext dbContext,
 			IBrandService brandService,
@@ -43,8 +43,8 @@ namespace InstrumentStore.Domain.Service
 				.Include(p => p.Brand)
 				.Include(p => p.Country)
 				.OrderBy(p => p.Name)
-				.Skip((page - 1) * pageSize)
-				.Take(pageSize)
+				.Skip((page - 1) * IProductService.pageSize)
+				.Take(IProductService.pageSize)
 				.AsNoTracking()
 				.ToListAsync();
 		}
@@ -64,36 +64,11 @@ namespace InstrumentStore.Domain.Service
 				.ToListAsync();
 		}
 
-		public async Task<List<Product>> SearchByName(string input, int page)
+		public async Task<List<ProductCard>> SearchByName(string input, int page)
 		{
-			List<ProductSearchResult> list = _dbContext.Set<ProductSearchResult>()
-					.FromSqlRaw("EXEC SearchByName @p0, @p1", input, page).ToList();
-
-			var products = list.Select(item => new Product
-			{
-				ProductId = item.ProductId,
-				Description = item.Description,
-				Name = item.Name,
-				Price = item.Price,
-				Quantity = item.Quantity,
-				ProductCategory = new ProductCategory
-				{
-					ProductCategoryId = item.ProductCategoryId2,
-					Name = item.ProductCategoryName
-				},
-				Brand = new Brand
-				{
-					BrandId = item.BrandId2,
-					Name = item.BrandName
-				},
-				Country = new Country
-				{
-					CountryId = item.CountryId2,
-					Name = item.CountryName
-				}
-			}).ToList();
-
-			return products;
+			Console.WriteLine(input);
+			return await _dbContext.Set<ProductCard>()
+					.FromSqlRaw("EXEC SearchByName @p0, @p1", input, page).ToListAsync();
 		}
 
 		public async Task<List<Product>> GetAllWithFilters(
@@ -122,7 +97,7 @@ namespace InstrumentStore.Domain.Service
 			return product.ProductId;
 		}
 
-		public async Task<Guid> Create(CreateProductRequest productRequest)
+		public async Task<Guid> Create(CreateProductRequest productRequest, List<IFormFile> images)
 		{
 			Product product = new Product
 			{
@@ -139,7 +114,7 @@ namespace InstrumentStore.Domain.Service
 			_dbContext.Product.AddAsync(product);
 			_dbContext.SaveChangesAsync();
 
-			await SaveImagesToProduct(product, productRequest);
+			await SaveImagesToProduct(product, images);
 			await SaveProductPropertiesValues(product, productRequest);
 
 			return product.ProductId;
@@ -147,7 +122,7 @@ namespace InstrumentStore.Domain.Service
 
 		private async Task SaveProductPropertiesValues(
 			Product product,
-            CreateProductRequest productRequest)
+			CreateProductRequest productRequest)
 		{
 			foreach (Guid propertyId in productRequest.PropertyValues.Keys)
 			{
@@ -157,18 +132,18 @@ namespace InstrumentStore.Domain.Service
 					Product = product,
 					ProductProperty = await _productPropertyService.GetById(propertyId),
 					Value = productRequest.PropertyValues[propertyId]
-                };
+				};
 				await _productPropertyService.CreatePropertyValue(propertyValue);
 			}
 		}
 
 		private async Task SaveImagesToProduct(
 			Product product,
-			CreateProductRequest productRequest)
+			List<IFormFile> images)
 		{
 			FileStream stream;
 			string filePath = "";
-			foreach (var image in productRequest.Images)
+			foreach (var image in images)
 			{
 				_imageService.Create(new Image()
 				{
@@ -185,45 +160,35 @@ namespace InstrumentStore.Domain.Service
 			}
 		}
 
-		public async Task<Guid> Update(Guid oldId, Product newProduct)
-		{
-			Product product = await _dbContext.Product.FindAsync(oldId);
-
-			product.Name = newProduct.Name;
-			product.ProductCategory = newProduct.ProductCategory;
-			product.Brand = newProduct.Brand;
-			product.Country = newProduct.Country;
-			product.Description = newProduct.Description;
-			product.Price = newProduct.Price;
-			product.Quantity = newProduct.Quantity;
-
-			await _dbContext.SaveChangesAsync();
-
-			return oldId;
-		}
-
-		public async Task<Guid> Update(Guid oldId, CreateProductRequest newProduct)
+		public async Task<Guid> Update(
+			Guid oldId,
+			CreateProductRequest productRequest,
+			List<IFormFile> images)
 		{
 			Product product = await GetById(oldId);
 
-			product.Name = newProduct.Name;
-			product.Description = newProduct.Description;
-			product.Price = newProduct.Price;
-			product.Quantity = newProduct.Quantity;
-			product.ProductCategory = await _productCategoryService.GetById(newProduct.ProductCategoryId);
-			product.Brand = await _brandService.GetById(newProduct.BrandId);
-			product.Country = await _countryService.GetById(newProduct.CountryId);
+			product.Name = productRequest.Name;
+			product.Description = productRequest.Description;
+			product.Price = productRequest.Price;
+			product.Quantity = productRequest.Quantity;
+			product.ProductCategory = await _productCategoryService.GetById(productRequest.ProductCategoryId);
+			product.Brand = await _brandService.GetById(productRequest.BrandId);
+			product.Country = await _countryService.GetById(productRequest.CountryId);
 
 			await _dbContext.SaveChangesAsync();
+
+			await _productPropertyService.DeleteProperiesValuesByProductId(oldId);
+			await _imageService.DeleteImagesByProductId(oldId);
+			await SaveImagesToProduct(product, images);
+			await SaveProductPropertiesValues(product, productRequest);
 
 			return oldId;
 		}
 
 		public async Task<Guid> Delete(Guid id)
 		{
-			await _dbContext.Product
-				.Where(p => p.ProductId == id)//триггер написать надо
-				.ExecuteDeleteAsync();
+			(await _dbContext.Product
+				.FindAsync(id)).IsArchive = true;
 
 			return id;
 		}

@@ -16,6 +16,7 @@ namespace InstrumentStore.API.Controllers
 	[Authorize(Roles = "admin")]
 	public class AdminController : ControllerBase// отвечает за все действия админа
 	{
+		private readonly InstrumentStoreDBContext _dbContext;
 		private readonly IDeliveryMethodService _deliveryMethodService;
 		private readonly IPaymentMethodService _paymentMethodService;
 		private readonly IFillDataBaseService _fillDataBaseService;
@@ -29,7 +30,7 @@ namespace InstrumentStore.API.Controllers
 		private readonly IAdminService _adminService;
 		private readonly IMapper _mapper;
 		private readonly IConfiguration _config;
-		private readonly InstrumentStoreDBContext _dbContext;
+		private readonly IReportService _reportService;
 
 		public AdminController(IUsersService usersService,
 			IDeliveryMethodService deliveryMethodService,
@@ -44,7 +45,8 @@ namespace InstrumentStore.API.Controllers
 			IBrandService brandService,
 			ICountryService countryService,
 			IProductPropertyService productPropertyService,
-			IProductCategoryService productCategoryService)
+			IProductCategoryService productCategoryService,
+			IReportService reportService)
 		{
 			_deliveryMethodService = deliveryMethodService;
 			_paymentMethodService = paymentMethodService;
@@ -60,6 +62,7 @@ namespace InstrumentStore.API.Controllers
 			_countryService = countryService;
 			_productPropertyService = productPropertyService;
 			_productCategoryService = productCategoryService;
+			_reportService = reportService;
 		}
 
 		[HttpPost("create-delivery-method")]//добавление способа доставки товара
@@ -119,6 +122,34 @@ namespace InstrumentStore.API.Controllers
 					_mapper.Map<ProductCategoryResponse>(productCategory));
 
 			return Ok(options);
+		}
+
+		[HttpGet("generate-word-report")]
+		public async Task<ActionResult> generateWordReport(
+			[FromQuery] DateTime from,
+			[FromQuery] DateTime to)
+		{
+			string filePath = await _reportService.GenerateWordReport(from, to);
+
+			var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+
+			string mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+
+			return File(fileBytes, mimeType, Path.GetFileName(filePath));
+		}
+
+		[HttpGet("generate-report-sales-by-category-over-time")]
+		public async Task<ActionResult> GenerateReportSalesByCategoryOverTime(
+			[FromQuery] DateTime from,
+			[FromQuery] DateTime to)
+		{
+			string filePath = await _reportService.GenerateReportSalesByCategoryOverTime(from, to);
+
+			var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+
+			string mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+			return File(fileBytes, mimeType, Path.GetFileName(filePath));
 		}
 	}
 }

@@ -8,7 +8,6 @@ import {
 import { ProductService } from '../../service/product.service';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
-import { ProductData } from '../../data/interfaces/product/product-data.interface';
 import { CommonModule } from '@angular/common';
 import { ProductCardComponent } from '../../common-ui/product-card/product-card.component';
 import { FilterRequest } from '../../data/interfaces/filters/filter-request.interface';
@@ -17,6 +16,7 @@ import { RangeFilter } from '../../data/interfaces/filters/range-filter.interfac
 import { CollectionFilter } from '../../data/interfaces/filters/collection-filter.interface';
 import { CategoryFilters } from '../../data/interfaces/filters/category-filters.intervace';
 import { RangePropertyForFilter } from '../../data/interfaces/filters/range-property-for-filter.intervace';
+import { ProductCard } from '../../data/interfaces/product/product-card.interface';
 
 @Component({
   selector: 'app-category-page',
@@ -26,7 +26,7 @@ import { RangePropertyForFilter } from '../../data/interfaces/filters/range-prop
 })
 export class CategoryPageComponent implements OnInit, OnDestroy {
   public categoryName!: string;
-  public products: ProductData[] = [];
+  public products: ProductCard[] = [];
   public categoryFilters!: CategoryFilters;
 
   private unsubscribe$ = new Subject<void>();

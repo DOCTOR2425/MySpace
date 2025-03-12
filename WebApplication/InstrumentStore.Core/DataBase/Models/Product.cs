@@ -8,8 +8,10 @@
 		public decimal Price { get; set; }
 		public int Quantity { get; set; }
 
-		public Brand Brand { get; set; } = new Brand();
-		public Country Country { get; set; } = new Country();
-		public ProductCategory ProductCategory { get; set; } = new ProductCategory();
+		public bool IsArchive { get; set; } = false;
+
+		public Brand Brand { get; set; }
+		public Country Country { get; set; }
+		public ProductCategory ProductCategory { get; set; }
 	}
 }

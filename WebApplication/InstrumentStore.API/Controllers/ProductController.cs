@@ -4,6 +4,7 @@ using InstrumentStore.Domain.Contracts.Filters;
 using InstrumentStore.Domain.Contracts.Products;
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -36,6 +37,7 @@ namespace InstrumentStore.API.Controllers
 		public async Task<ActionResult<List<ProductCard>>> GetAllProductsCards([FromRoute] int page)
 		{
 			List<Product> products = await _productService.GetAll(page);
+			products = products.Where(p => p.IsArchive == false).ToList();
 			List<ProductCard> productsCards = new List<ProductCard>();
 
 			foreach (var p in products)
@@ -51,6 +53,7 @@ namespace InstrumentStore.API.Controllers
 			[FromQuery] string? filters)
 		{// получени товаров выбранной котегории
 			List<Product> products = await _productService.GetAllByCategory(category, page);
+			products = products.Where(p => p.IsArchive == false).ToList();
 
 			FilterRequest filterRequest = null;
 			if (!string.IsNullOrEmpty(filters))
@@ -77,9 +80,21 @@ namespace InstrumentStore.API.Controllers
 		[HttpGet("search/page{page}")]// функция поиска товаров по имени
 		public async Task<ActionResult<List<ProductCard>>> SearchByName(
 			[FromRoute] int page,
-			[FromQuery] string? input)
+			[FromQuery] string? name)
 		{
-			var products = await _productService.SearchByName(input, page);
+			List<ProductCard> productsCards = await _productService.SearchByName(name, page);
+			productsCards = productsCards.Where(p => p.IsArchive == false).ToList();
+
+			return Ok(productsCards);
+		}
+
+		[Authorize(Roles = "admin")]
+		[HttpGet("search-with-archive/page{page}")]// функция поиска товаров по имени включая архивные товары
+		public async Task<ActionResult<List<ProductCard>>> SearchByNameWithArchive(
+			[FromRoute] int page,
+			[FromQuery] string? name)
+		{
+			var products = await _productService.SearchByName(name, page);
 
 			List<ProductCard> productsCards = new List<ProductCard>();
 
@@ -102,18 +117,38 @@ namespace InstrumentStore.API.Controllers
 			return Ok(response);
 		}
 
-		[HttpPut("update-product{id:guid}")]
-		public async Task<ActionResult<Guid>> UpdateProduct(Guid id, [FromBody] CreateProductRequest productRequest)
+		[HttpPut("update-product/{id:guid}")]
+		public async Task<ActionResult<Guid>> UpdateProduct(
+			Guid id,
+			[FromForm] string productDto,
+			[FromForm] List<IFormFile> images)
 		{
-			return Ok(await _productService.Update(id, productRequest));
+			var productRequest = JsonConvert
+				.DeserializeObject<CreateProductRequest>(productDto);
+
+			if (images != null && images.Any())
+			{
+				foreach (var image in images)
+				{
+					if (await _imageService.IsImage(image) == false)
+						throw new BadImageFormatException(
+							$"Format {image.ContentType} is not available");
+				}
+			}
+
+			return Ok(await _productService.Update(id, productRequest, images));
 		}
 
-		[HttpGet("get-product-to-update{id:guid}")]
+		[HttpGet("get-product-to-update/{id:guid}")]
 		public async Task<ActionResult<ProductToUpdateResponse>> GetProductToUpdate(Guid id)
 		{
 			Product product = await _productService.GetById(id);
 
-			return Ok(_mapper.Map<ProductToUpdateResponse>(product));
+			if (product.IsArchive)
+				throw new ArgumentException();
+
+			return Ok(_mapper.Map<ProductToUpdateResponse>(product,
+				opt => opt.Items["DbContext"] = _dbContext));
 		}
 
 		[HttpDelete("{id:guid}")]
@@ -124,11 +159,15 @@ namespace InstrumentStore.API.Controllers
 
 		[HttpPost("create-product")]
 		public async Task<ActionResult<Guid>> CreateProduct(
-			[FromForm] CreateProductRequest productRequest)
+			[FromForm] string productDto,
+			[FromForm] List<IFormFile> images)
 		{
-			if (productRequest.Images != null && productRequest.Images.Any())
+			var productRequest = JsonConvert
+				.DeserializeObject<CreateProductRequest>(productDto);
+
+			if (images != null && images.Any())
 			{
-				foreach (var image in productRequest.Images)
+				foreach (var image in images)
 				{
 					if (await _imageService.IsImage(image) == false)
 						throw new BadImageFormatException(
@@ -136,7 +175,34 @@ namespace InstrumentStore.API.Controllers
 				}
 			}
 
-			return Ok(await _productService.Create(productRequest));
+			return Ok(await _productService.Create(productRequest, images));
+		}
+
+		[HttpGet("get-products-for-admin{page}")]
+		public async Task<ActionResult<List<ProductData>>> GetProductsForAdmin([FromRoute] int page)
+		{
+			List<Product> products = await _productService.GetAll(1);
+			List<ProductData> productsDatas = new List<ProductData>();
+
+			foreach (var p in products)
+			{
+				productsDatas.Add(_mapper.Map<ProductData>(p, opt => opt.Items["DbContext"] = _dbContext));
+				productsDatas.Last().Name += page;
+			}
+
+			productsDatas.AddRange(productsDatas);
+			productsDatas.AddRange(productsDatas);
+			productsDatas.AddRange(productsDatas);
+			productsDatas.AddRange(productsDatas);
+
+			Console.WriteLine("\n" + page + "\n" + productsDatas.Count);
+			productsDatas = productsDatas
+				.Skip((page - 1) * IProductService.pageSize)
+				.Take(IProductService.pageSize)
+				.ToList();
+			Console.WriteLine(productsDatas.Count);
+
+			return Ok(productsDatas);
 		}
 	}
 }

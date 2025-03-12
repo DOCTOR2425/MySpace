@@ -24,12 +24,13 @@ namespace InstrumentStore.Domain.Services
 			_cityService = cityService;
 		}
 
-		public async Task<List<PaidOrder>> GetAll(Guid userId)
+		public async Task<List<PaidOrder>> GetAllByUserId(Guid userId)
 		{
 			return await _dbContext.PaidOrder
 				.Include(o => o.User)
 				.Include(o => o.DeliveryMethod)
 				.Where(c => c.User.UserId == userId)
+				.OrderByDescending(o => o.OrderDate)
 				.AsNoTracking()
 				.ToListAsync();
 		}
@@ -45,13 +46,11 @@ namespace InstrumentStore.Domain.Services
 
 		public async Task<List<PaidOrderItem>> GetAllItemsByOrder(Guid paidOrderId)
 		{
-			List<PaidOrderItem> itemsInOrder = new List<PaidOrderItem>();
-
-			foreach (var i in await _dbContext.PaidOrderItem.Include(i => i.PaidOrder).ToListAsync())
-				if (i.PaidOrder.PaidOrderId == paidOrderId)
-					itemsInOrder.Add(i);
-
-			return itemsInOrder;
+			return await _dbContext.PaidOrderItem
+				.Include(i => i.PaidOrder)
+				.Include(i => i.Product)
+				.Where(i => i.PaidOrder.PaidOrderId == paidOrderId)
+				.ToListAsync();
 		}
 
 		public async Task<Guid> Create(Guid userId, OrderRequest orderCartRequest)

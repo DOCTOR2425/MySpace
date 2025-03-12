@@ -74,10 +74,8 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     if (response.role === 'admin') {
       this.adminService.isAdmin = true;
 
-      this.userService.userEMail = '';
+      this.userService.userEMail = undefined;
       localStorage.setItem(this.userService.userEMailKey, '');
-
-      console.log('LogIn as Admin');
       this.router.navigate(['admin']);
     } else {
       localStorage.setItem(this.userService.userEMailKey, loginValue.email);

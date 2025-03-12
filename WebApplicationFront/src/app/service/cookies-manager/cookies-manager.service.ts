@@ -20,4 +20,9 @@ export class CookiesManagerService {
   public getAuthCookie(): string | null {
     return this.getCookie('token-cookies');
   }
+
+  public deleteAuthCookie(): void {
+    document.cookie =
+      'token-cookies=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  }
 }

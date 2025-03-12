@@ -83,6 +83,13 @@ export class CartService {
     quantity: number;
   }): void {
     const cartItems = this.getCartItemsFromLocalStorage();
+    if (
+      cartItems.filter((i) => i.product.productId == payload.productId).length >
+      0
+    ) {
+      return;
+    }
+
     this.productService.getProductById(payload.productId).subscribe((val) => {
       let productData = val.productResponseData;
       let cartItem = {

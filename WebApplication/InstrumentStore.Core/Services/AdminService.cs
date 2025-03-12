@@ -82,7 +82,7 @@ namespace InstrumentStore.Domain.Services
 			_emailService.SendMail(_config["AdminSettings:AdminMail"], mailText, "Новый заказ");
 		}
 
-		public async Task<JwtSecurityToken> GetRefreshToken(JwtSecurityToken token)
+		public async Task<JwtSecurityToken> GetRefreshToken()
 		{
 			return new JwtSecurityTokenHandler()
 				.ReadToken(_config["AdminSettings:RefreshToken"]) as JwtSecurityToken;
@@ -112,8 +112,6 @@ namespace InstrumentStore.Domain.Services
 		public async Task<string> ReLogin(JwtSecurityToken token)
 		{
 			Guid adminId = await GetUserIdFromToken(token);
-
-			_config["AdminSettings:RefreshToken"] = await _jwtProvider.GenerateRefreshToken(adminId);
 
 			return await _jwtProvider.GenerateAccessToken(adminId);
 		}

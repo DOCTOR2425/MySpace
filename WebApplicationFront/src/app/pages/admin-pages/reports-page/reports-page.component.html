@@ -22,18 +22,13 @@
           type="date"
           id="start-date"
           name="start-date"
-          [(ngModel)]="startDate"
+          [(ngModel)]="from"
         />
       </div>
 
       <div class="form-group">
         <label for="end-date">Дата окончания:</label>
-        <input
-          type="date"
-          id="end-date"
-          name="end-date"
-          [(ngModel)]="endDate"
-        />
+        <input type="date" id="end-date" name="end-date" [(ngModel)]="to" />
       </div>
 
       <div class="form-actions">
@@ -45,11 +40,6 @@
           Сгенерировать отчет
         </button>
       </div>
-    </div>
-
-    <div *ngIf="reportData" class="report-results">
-      <h2>Результаты отчета</h2>
-      <pre>{{ reportData | json }}</pre>
     </div>
   </div>
 </div>

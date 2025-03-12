@@ -1,6 +1,6 @@
 import { ProductPropertyValuesResponse } from './product-property-value-respone.interface';
 
-export interface ProductToUpdateResponse {
+export interface ProductToUpdate {
   productId: string;
   name: string;
   description: string;

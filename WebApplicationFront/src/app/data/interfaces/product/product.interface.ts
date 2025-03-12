@@ -1,6 +1,6 @@
-import { ProductData } from "./product-data.interface";
+import { ProductData } from './product-data.interface';
 
 export interface Product {
-  productResponseData: ProductData,
+  productResponseData: ProductData;
   properties: { [key: string]: string };
 }

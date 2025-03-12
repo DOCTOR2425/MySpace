@@ -126,7 +126,7 @@ namespace InstrumentStore.API.Controllers
 		{
 			User user = await _usersService.GetUserFromToken(GetToken());
 
-			List<PaidOrder> paidOrders = await _paidOrderService.GetAll(user.UserId);
+			List<PaidOrder> paidOrders = await _paidOrderService.GetAllByUserId(user.UserId);
 
 			List<UserPaidOrderResponse> orderResponses = new List<UserPaidOrderResponse>();
 

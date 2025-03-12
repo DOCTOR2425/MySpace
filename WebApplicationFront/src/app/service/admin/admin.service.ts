@@ -17,7 +17,10 @@ export class AdminService {
 
   public getProcessingOrders(): Observable<AdminPaidOrder[]> {
     return this.http.get<AdminPaidOrder[]>(
-      `${this.baseApiUrl}/api/Admin/get-processing-orders`
+      `${this.baseApiUrl}/api/Admin/get-processing-orders`,
+      {
+        withCredentials: true,
+      }
     );
   }
 
@@ -50,6 +53,31 @@ export class AdminService {
       `${this.baseApiUrl}/api/ProductCategory/get-properties-by-category/${categoryId}`,
       {
         withCredentials: true,
+      }
+    );
+  }
+
+  public generateWordReport(from: Date, to: Date): Observable<Blob> {
+    return this.http.get(
+      `${this.baseApiUrl}/api/Admin/generate-word-report` +
+        `?from=${from}&to=${to}`,
+      {
+        withCredentials: true,
+        responseType: 'blob',
+      }
+    );
+  }
+
+  public generateReportSalesByCategoryOverTime(
+    from: Date,
+    to: Date
+  ): Observable<Blob> {
+    return this.http.get(
+      `${this.baseApiUrl}/api/Admin/generate-report-sales-by-category-over-time` +
+        `?from=${from}&to=${to}`,
+      {
+        withCredentials: true,
+        responseType: 'blob',
       }
     );
   }

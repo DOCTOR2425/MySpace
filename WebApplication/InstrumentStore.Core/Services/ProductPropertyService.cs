@@ -185,5 +185,12 @@ namespace InstrumentStore.Domain.Services
 				.Include(v => v.ProductProperty)
 				.ToListAsync();
 		}
+
+		public async Task DeleteProperiesValuesByProductId(Guid productId)
+		{
+			await _dbContext.ProductPropertyValue
+				.Where(p => p.Product.ProductId == productId)
+				.ExecuteDeleteAsync();
+		}
 	}
 }

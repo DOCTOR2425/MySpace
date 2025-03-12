@@ -119,6 +119,7 @@ namespace InstrumentStore.Domain.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
+                    IsArchive = table.Column<bool>(type: "bit", nullable: false),
                     BrandId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductCategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -311,38 +312,6 @@ namespace InstrumentStore.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductArchive",
-                columns: table => new
-                {
-                    ProductArchiveId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Brand = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ProductCategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductArchive", x => x.ProductArchiveId);
-                    table.ForeignKey(
-                        name: "FK_ProductArchive_ProductCategory_ProductCategoryId",
-                        column: x => x.ProductCategoryId,
-                        principalTable: "ProductCategory",
-                        principalColumn: "ProductCategoryId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductArchive_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "DeliveryAddress",
                 columns: table => new
                 {
@@ -469,16 +438,6 @@ namespace InstrumentStore.Domain.Migrations
                 column: "ProductCategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductArchive_ProductCategoryId",
-                table: "ProductArchive",
-                column: "ProductCategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductArchive_UserId",
-                table: "ProductArchive",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ProductProperty_ProductCategoryId",
                 table: "ProductProperty",
                 column: "ProductCategoryId");
@@ -516,9 +475,6 @@ namespace InstrumentStore.Domain.Migrations
 
             migrationBuilder.DropTable(
                 name: "PaidOrderItem");
-
-            migrationBuilder.DropTable(
-                name: "ProductArchive");
 
             migrationBuilder.DropTable(
                 name: "ProductPropertyValue");

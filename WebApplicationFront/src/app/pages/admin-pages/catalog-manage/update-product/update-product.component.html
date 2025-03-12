@@ -1,8 +1,4 @@
-<h1>
-  {{
-    productToUpdate?.productId ? "Редактирование товара" : "Добавление товара"
-  }}
-</h1>
+<h1>Изменение товара</h1>
 
 <div class="product-form-container">
   <div *ngIf="optionsForProduct" class="product-form">
@@ -14,10 +10,10 @@
 
       <div class="form-group">
         <label for="brand">Бренд:</label>
-        <select id="brand" formControlName="brand">
+        <select id="brand" formControlName="brand" #brandSelect>
           <option
             *ngFor="let brand of optionsForProduct.brands"
-            [value]="brand.barndId"
+            [value]="brand.brandId"
           >
             {{ brand.name }}
           </option>
@@ -83,7 +79,6 @@
           </label>
           <div class="photos-preview">
             <div *ngFor="let photo of photos; let i = index" class="photo-item">
-              <!-- <img [src]="getPhotoUrl(photo)" alt="Фото товара" /> -->
               <img [src]="[photosToView[i]]" alt="Фото товара" />
               <button
                 type="button"
@@ -98,14 +93,8 @@
       </div>
 
       <div class="form-actions">
-        <button type="submit" class="save-button">
-          {{
-            productToUpdate?.productId
-              ? "Сохранить изменения"
-              : "Добавить товар"
-          }}
-        </button>
-        <button type="button" class="cancel-button" routerLink="/admin/catalog">
+        <button type="submit" class="save-button">Обновить товар</button>
+        <button type="button" class="cancel-button" (click)="exit()">
           Отмена
         </button>
       </div>

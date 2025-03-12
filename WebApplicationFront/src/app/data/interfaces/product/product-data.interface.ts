@@ -5,7 +5,7 @@ export interface ProductData {
   price: number;
   quantity: number;
   image: string;
-  productType: string;
+  productCategory: string;
   brand: string;
   country: string;
 }

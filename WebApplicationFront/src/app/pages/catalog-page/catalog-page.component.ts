@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ProductCardComponent } from '../../common-ui/product-card/product-card.component';
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../../service/product.service';
-import { ProductData } from '../../data/interfaces/product/product-data.interface';
 import { Subject, takeUntil } from 'rxjs';
+import { ProductCard } from '../../data/interfaces/product/product-card.interface';
 
 @Component({
   selector: 'app-catalog',
@@ -13,7 +13,7 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class CatalogComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
-  products: ProductData[] = [];
+  products: ProductCard[] = [];
 
   constructor(private productService: ProductService) {}
 

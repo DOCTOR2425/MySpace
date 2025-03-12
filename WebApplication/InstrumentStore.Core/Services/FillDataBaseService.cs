@@ -602,7 +602,6 @@ namespace InstrumentStore.Domain.Services
 			_dBContext.PaidOrder.RemoveRange(_dBContext.PaidOrder);
 			_dBContext.PaidOrderItem.RemoveRange(_dBContext.PaidOrderItem);
 			_dBContext.Product.RemoveRange(_dBContext.Product);
-			_dBContext.ProductArchive.RemoveRange(_dBContext.ProductArchive);
 			_dBContext.ProductCategory.RemoveRange(_dBContext.ProductCategory);
 			_dBContext.ProductProperty.RemoveRange(_dBContext.ProductProperty);
 			_dBContext.ProductPropertyValue.RemoveRange(_dBContext.ProductPropertyValue);

@@ -10,6 +10,7 @@
 		public string ProductCategory { get; set; }
 		public string Brand { get; set; }
 		public string Country { get; set; }
+		public bool IsArchive { get; set; } = false;
 
 		public ProductCard() { }
 	}

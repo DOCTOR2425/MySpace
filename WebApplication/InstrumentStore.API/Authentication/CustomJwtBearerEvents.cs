@@ -2,6 +2,7 @@
 using InstrumentStore.Domain.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using NuGet.Common;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -43,10 +44,12 @@ namespace InstrumentStore.API.Authentication
 			var scope = _scopeFactory.CreateScope();
 			var adminService = scope.ServiceProvider.GetRequiredService<IAdminService>();
 
-			JwtSecurityToken oldRefreshToken = await adminService.GetRefreshToken(token);
+			JwtSecurityToken oldRefreshToken = await adminService.GetRefreshToken();
+			//Console.WriteLine(oldRefreshToken.ValidTo);
+			return await adminService.ReLogin(token);
 			if (oldRefreshToken.ValidTo > DateTime.UtcNow)
 			{
-				return await adminService.ReLogin(token);
+				return await adminService.ReLogin(token);// TODO сделать настройки админа в другом json
 			}
 			else
 			{
@@ -57,53 +60,56 @@ namespace InstrumentStore.API.Authentication
 
 		public override async Task AuthenticationFailed(AuthenticationFailedContext context)
 		{
-            Console.WriteLine(context.Exception.GetType().FullName);
-            Console.WriteLine(context.Exception.Message);
-            Console.WriteLine("\n" + context.Request.Headers["Authorization"]);
+			//Console.WriteLine(context.Exception.GetType().FullName);
 
-            if (context.Exception is SecurityTokenExpiredException)
-			{
-				string strToken = context.Request.Headers["Authorization"]
-				.ToString()
-				.Substring("Bearer ".Length)
-				.Trim();
+			//if (context.Exception is SecurityTokenExpiredException)
+			//{
+			string strToken = context.Request.Headers["Authorization"]
+			.ToString()
+			.Substring("Bearer ".Length)
+			.Trim();
 
-				string newAccessToken = "";
+			string newAccessToken = "";
 
-				var handler = new JwtSecurityTokenHandler();
-				JwtSecurityToken token = handler.ReadToken(strToken) as JwtSecurityToken;
+			var handler = new JwtSecurityTokenHandler();
+			JwtSecurityToken token = handler.ReadToken(strToken) as JwtSecurityToken;
 
-				if (token.Claims.First(c => c.Type == ClaimTypes.Role)?.Value.ToLower() == "user")
-					newAccessToken = await UserAuthenticate(token, context);
-				else
-					newAccessToken = await AdminAuthenticate(token, context);
-
-				context.Response.Cookies.Append(JwtProvider.AccessCookiesName,
-					newAccessToken,
-					new CookieOptions()
-					{
-						Secure = true,
-						SameSite = SameSiteMode.Lax,
-						Expires = DateTime.Now.Add(JwtProvider.RefreshTokenLifeTime)
-					});
-
-				context.Request.Headers["Authorization"] = "Bearer " + newAccessToken;
-
-				var newJwtToken = handler.ReadToken(newAccessToken) as JwtSecurityToken;
-				var identity = new ClaimsIdentity(newJwtToken.Claims, JwtBearerDefaults.AuthenticationScheme);
-				context.Principal = new ClaimsPrincipal(identity);
-				context.Success();
-			}
+			if (token.Claims.First(c => c.Type == ClaimTypes.Role)?.Value.ToLower() == "user")
+				newAccessToken = await UserAuthenticate(token, context);
 			else
-			{
-				await base.AuthenticationFailed(context);
-			}
+				newAccessToken = await AdminAuthenticate(token, context);
+
+			context.Response.Cookies.Append(JwtProvider.AccessCookiesName,
+				newAccessToken,
+				new CookieOptions()
+				{
+					Secure = true,
+					SameSite = SameSiteMode.Lax,
+					Expires = DateTime.Now.Add(JwtProvider.RefreshTokenLifeTime)
+				});
+
+			context.Request.Headers["Authorization"] = "Bearer " + newAccessToken;
+
+			var newJwtToken = handler.ReadToken(newAccessToken) as JwtSecurityToken;
+			var identity = new ClaimsIdentity(newJwtToken.Claims, JwtBearerDefaults.AuthenticationScheme);
+			context.Principal = new ClaimsPrincipal(identity);
+
+			//Console.WriteLine(newAccessToken);
+
+			context.Success();
+			//}
+			//else
+			//{
+			//	await base.AuthenticationFailed(context);
+			//}
 		}
 
 		public override async Task TokenValidated(TokenValidatedContext context)
 		{
-            Console.WriteLine("\n" + context.Request.Headers["Authorization"]);
-            await base.TokenValidated(context);
+			//var scope = _scopeFactory.CreateScope();
+			//var adminService = scope.ServiceProvider.GetRequiredService<IAdminService>();
+			//Console.WriteLine((await adminService.GetRefreshToken()).ValidTo);
+			await base.TokenValidated(context);
 		}
 	}
 }

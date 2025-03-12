@@ -1,79 +1,136 @@
 :host {
-  // padding: 20px;
+  display: block;
   background-color: #f4f4f4;
-  height: 100vh;
+  font-family: Arial, sans-serif;
+  margin: 0px;
+  padding: 0px;
+}
 
-  h1 {
-    margin-bottom: 20px;
-    color: #333;
-  }
+h1 {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: left; // Заголовок влево
+}
 
-  .actions {
-    margin-bottom: 20px;
+.actions {
+  margin-bottom: 20px;
+  text-align: left; // Кнопка "Добавить товар" влево
 
-    .add-button {
-      padding: 10px 20px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
+  .add-button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 
-      &:hover {
-        background-color: #218838;
-      }
+    &:hover {
+      background-color: #218838;
     }
   }
+}
 
-  .products-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.products-table {
+  max-height: calc(90vh - 195px); // Ограничиваем высоту таблицы
+  overflow-y: auto; // Включаем прокрутку, если контент не помещается
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
 
-    th, td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
+.table-header,
+.table-row {
+  display: flex;
+  width: 100%;
+  border-bottom: 1px solid #ddd;
+}
 
-    th {
-      background-color: #007bff;
-      color: white;
-    }
+.header-cell,
+.table-cell {
+  flex: 1;
+  padding: 8px; // Увеличиваем отступы для ячеек
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
 
-    tr:hover {
-      background-color: #f1f1f1;
-    }
+.table-header {
+  font-weight: bold;
+  background-color: #007bff;
+  color: white;
 
-    .edit-button {
-      padding: 5px 10px;
-      margin-right: 5px;
-      background-color: #ffc107;
-      color: black;
-      border: none;
-      border-radius: 3px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
+  .header-cell {
+    padding: 16px; // Увеличиваем отступы для заголовков
+  }
+}
 
-      &:hover {
-        background-color: #e0a800;
-      }
-    }
+.table-row:hover {
+  background-color: #f9f9f9;
+}
 
-    .delete-button {
-      padding: 5px 10px;
-      background-color: #dc3545;
-      color: white;
-      border: none;
-      border-radius: 3px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
+img {
+  max-width: 100px;
+  border-radius: 4px;
+}
 
-      &:hover {
-        background-color: #c82333;
-      }
-    }
+.edit-button {
+  padding: 8px 16px; // Увеличиваем размер кнопок
+  margin-right: 8px;
+  background-color: #ffc107;
+  color: black;
+  border: none;
+  border-radius: 5px; // Увеличиваем скругление
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #e0a800;
+  }
+}
+
+.delete-button {
+  padding: 8px 16px; // Увеличиваем размер кнопок
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px; // Увеличиваем скругление
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #c82333;
+  }
+}
+
+.loading-indicator,
+.no-more-data {
+  text-align: center;
+  padding: 16px;
+  font-size: 16px;
+  color: #666;
+}
+
+.load-more-button {
+  display: block;
+  width: 30%;
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  font-size: 16px;
+  margin-top: 20px;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+
+  &:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
   }
 }

@@ -44,6 +44,7 @@ namespace InstrumentStore.API
 			builder.Services.AddScoped<IImageService, ImageService>();
 			builder.Services.AddScoped<IProductPropertyService, ProductPropertyService>();
 			builder.Services.AddScoped<IProductService, ProductService>();
+			builder.Services.AddScoped<IReportService, ReportService>();
 			builder.Services.AddScoped<IUsersService, UsersService>();
 
 			builder.Services.AddAutoMapper(typeof(AppMappingProfile));
