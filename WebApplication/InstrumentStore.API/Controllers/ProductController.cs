@@ -151,6 +151,7 @@ namespace InstrumentStore.API.Controllers
 				opt => opt.Items["DbContext"] = _dbContext));
 		}
 
+		[Authorize(Roles = "admin")]
 		[HttpDelete("{id:guid}")]
 		public async Task<ActionResult<Guid>> DeleteProduct(Guid id)
 		{
@@ -190,17 +191,17 @@ namespace InstrumentStore.API.Controllers
 				productsDatas.Last().Name += page;
 			}
 
-			productsDatas.AddRange(productsDatas);
-			productsDatas.AddRange(productsDatas);
-			productsDatas.AddRange(productsDatas);
-			productsDatas.AddRange(productsDatas);
+			//productsDatas.AddRange(productsDatas);
+			//productsDatas.AddRange(productsDatas);
+			//productsDatas.AddRange(productsDatas);
+			//productsDatas.AddRange(productsDatas);
 
-			Console.WriteLine("\n" + page + "\n" + productsDatas.Count);
-			productsDatas = productsDatas
-				.Skip((page - 1) * IProductService.pageSize)
-				.Take(IProductService.pageSize)
-				.ToList();
-			Console.WriteLine(productsDatas.Count);
+			//Console.WriteLine("\n" + page + "\n" + productsDatas.Count);
+			//productsDatas = productsDatas
+			//	.Skip((page - 1) * IProductService.pageSize)
+			//	.Take(IProductService.pageSize)
+			//	.ToList();
+			//Console.WriteLine(productsDatas.Count);
 
 			return Ok(productsDatas);
 		}

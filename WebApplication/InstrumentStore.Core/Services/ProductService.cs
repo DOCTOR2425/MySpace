@@ -111,8 +111,8 @@ namespace InstrumentStore.Domain.Service
 				Brand = await _brandService.GetById(productRequest.BrandId),
 				Country = await _countryService.GetById(productRequest.CountryId)
 			};
-			_dbContext.Product.AddAsync(product);
-			_dbContext.SaveChangesAsync();
+			await _dbContext.Product.AddAsync(product);
+			await _dbContext.SaveChangesAsync();
 
 			await SaveImagesToProduct(product, images);
 			await SaveProductPropertiesValues(product, productRequest);
@@ -145,7 +145,7 @@ namespace InstrumentStore.Domain.Service
 			string filePath = "";
 			foreach (var image in images)
 			{
-				_imageService.Create(new Image()
+				await _imageService.Create(new Image()
 				{
 					ImageId = Guid.NewGuid(),
 					Product = product,

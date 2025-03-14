@@ -8,7 +8,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AdminService } from '../../../../service/admin/admin.service';
 import { ProductProperty } from '../../../../data/interfaces/product/product-property.interface';
 import { ProductService } from '../../../../service/product.service';
@@ -32,6 +32,7 @@ export class CreateProductComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
 
   constructor(
+    private router: Router,
     private fb: FormBuilder,
     private adminService: AdminService,
     private productService: ProductService
@@ -84,7 +85,9 @@ export class CreateProductComponent implements OnInit, OnDestroy {
       .createProduct(formData)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
-        next: (response) => {},
+        next: (response) => {
+          this.exit();
+        },
         error: () => {},
       });
   }
@@ -155,5 +158,9 @@ export class CreateProductComponent implements OnInit, OnDestroy {
     this.photos.forEach((photo) => {
       URL.revokeObjectURL(this.getPhotoUrl(photo));
     });
+  }
+
+  public exit(): void {
+    this.router.navigate(['/admin/catalog']);
   }
 }

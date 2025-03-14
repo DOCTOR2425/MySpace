@@ -24,12 +24,12 @@ namespace InstrumentStore.Domain.Services
 			return await _dbContext.ProductCategory.FirstOrDefaultAsync(x => x.ProductCategoryId == id);
 		}
 
-		public async Task<Guid> Create(ProductCategory brand)
+		public async Task<Guid> Create(ProductCategory productCategory)
 		{
-			await _dbContext.ProductCategory.AddAsync(brand);
+			await _dbContext.ProductCategory.AddAsync(productCategory);
 			await _dbContext.SaveChangesAsync();
 
-			return brand.ProductCategoryId;
+			return productCategory.ProductCategoryId;
 		}
 
 		public async Task<Guid> Update(Guid oldId, ProductCategory newProductType)
@@ -42,15 +42,6 @@ namespace InstrumentStore.Domain.Services
 			_dbContext.SaveChanges();
 
 			return oldId;
-		}
-
-		public async Task<Guid> Delete(Guid id)
-		{
-			await _dbContext.ProductCategory
-				.Where(p => p.ProductCategoryId == id)
-				.ExecuteDeleteAsync();
-
-			return id;
 		}
 
 		public async Task<List<ProductProperty>> GetProductPropertiesByCategory(string category)

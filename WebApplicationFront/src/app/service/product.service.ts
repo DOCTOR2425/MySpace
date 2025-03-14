@@ -100,4 +100,10 @@ export class ProductService {
       { withCredentials: true }
     );
   }
+
+  public deleteProduct(productId: string): Observable<object> {
+    return this.http.delete(`${this.baseApiUrl}${productId}`, {
+      withCredentials: true,
+    });
+  }
 }

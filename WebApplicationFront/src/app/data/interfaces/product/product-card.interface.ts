@@ -8,4 +8,5 @@ export interface ProductCard {
   productType: string;
   brand: string;
   country: string;
+  isArchive: boolean;
 }

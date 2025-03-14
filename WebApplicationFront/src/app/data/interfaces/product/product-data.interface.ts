@@ -8,4 +8,5 @@ export interface ProductData {
   productCategory: string;
   brand: string;
   country: string;
+  isArchive: boolean;
 }

@@ -59,4 +59,14 @@ export class CatalogManageComponent implements OnDestroy {
         },
       });
   }
+
+  public deleteProduct(productId: string): void {
+    this.productService
+      .deleteProduct(productId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: () => {},
+        error: () => {},
+      });
+  }
 }

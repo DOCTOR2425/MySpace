@@ -4,8 +4,7 @@ namespace InstrumentStore.Domain.Abstractions
 {
 	public interface IProductCategoryService
 	{
-		Task<Guid> Create(ProductCategory brand);
-		Task<Guid> Delete(Guid id);
+		Task<Guid> Create(ProductCategory productCategory);
 		Task<List<ProductCategory>> GetAll();
 		Task<ProductCategory> GetById(Guid id);
 		Task<Guid> Update(Guid oldId, ProductCategory newProductType);

@@ -588,6 +588,108 @@ namespace InstrumentStore.Domain.Services
 
 			await _cartService.AddToCart(userId, products[1].ProductId, 3);
 			await _cartService.AddToCart(userId, products[3].ProductId, 4);
+
+			await CreateCategories();
+		}
+
+		private async Task CreateCategories()
+		{
+			ProductCategory productCategory1 = new ProductCategory()
+			{
+				ProductCategoryId = Guid.NewGuid(),
+				Name = "Молотки"
+			};
+			ProductCategory productCategory2 = new ProductCategory()
+			{
+				ProductCategoryId = Guid.NewGuid(),
+				Name = "Отвёртки"
+			};
+			ProductCategory productCategory3 = new ProductCategory()
+			{
+				ProductCategoryId = Guid.NewGuid(),
+				Name = "Пилы"
+			};
+			await _productCategoryService.Create(productCategory1);
+			await _productCategoryService.Create(productCategory2);
+			await _productCategoryService.Create(productCategory3);
+
+			// 1 Молотки
+			ProductProperty productProperty11 = new ProductProperty()
+			{
+				ProductPropertyId = Guid.NewGuid(),
+				Name = "Вес",
+				IsRanged = true,
+				ProductCategory = productCategory1
+			};
+			ProductProperty productProperty12 = new ProductProperty()
+			{
+				ProductPropertyId = Guid.NewGuid(),
+				Name = "Материал рукояти",
+				IsRanged = false,
+				ProductCategory = productCategory1
+			};
+			ProductProperty productProperty13 = new ProductProperty()
+			{
+				ProductPropertyId = Guid.NewGuid(),
+				Name = "Материал головки",
+				IsRanged = false,
+				ProductCategory = productCategory1
+			};
+			await _productPropertyService.CreateProperty(productProperty11);
+			await _productPropertyService.CreateProperty(productProperty12);
+			await _productPropertyService.CreateProperty(productProperty13);
+
+			//2 Отвёртки
+			ProductProperty productProperty21 = new ProductProperty()
+			{
+				ProductPropertyId = Guid.NewGuid(),
+				Name = "Вес",
+				IsRanged = true,
+				ProductCategory = productCategory2
+			};
+			ProductProperty productProperty22 = new ProductProperty()
+			{
+				ProductPropertyId = Guid.NewGuid(),
+				Name = "Материал рукояти",
+				IsRanged = false,
+				ProductCategory = productCategory2
+			};
+			ProductProperty productProperty23 = new ProductProperty()
+			{
+				ProductPropertyId = Guid.NewGuid(),
+				Name = "Материал головки",
+				IsRanged = false,
+				ProductCategory = productCategory2
+			};
+			await _productPropertyService.CreateProperty(productProperty21);
+			await _productPropertyService.CreateProperty(productProperty22);
+			await _productPropertyService.CreateProperty(productProperty23);
+
+			//3 Пилы
+			ProductProperty productProperty31 = new ProductProperty()
+			{
+				ProductPropertyId = Guid.NewGuid(),
+				Name = "Длинна",
+				IsRanged = true,
+				ProductCategory = productCategory3
+			};
+			ProductProperty productProperty32 = new ProductProperty()
+			{
+				ProductPropertyId = Guid.NewGuid(),
+				Name = "Угол зубцов",
+				IsRanged = true,
+				ProductCategory = productCategory3
+			};
+			ProductProperty productProperty33 = new ProductProperty()
+			{
+				ProductPropertyId = Guid.NewGuid(),
+				Name = "Направление зубцов",
+				IsRanged = false,
+				ProductCategory = productCategory3
+			};
+			await _productPropertyService.CreateProperty(productProperty31);
+			await _productPropertyService.CreateProperty(productProperty32);
+			await _productPropertyService.CreateProperty(productProperty33);
 		}
 
 		public async Task ClearDatabase()
