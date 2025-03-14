@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../../service/admin/admin.service';
 import { Subject, takeUntil } from 'rxjs';
+import { ProductCategory } from '../../../data/interfaces/some/product-category.interface';
 
 @Component({
   selector: 'app-reports-page',
@@ -10,50 +11,46 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './reports-page.component.html',
   styleUrl: './reports-page.component.scss',
 })
-export class ReportsPageComponent implements OnDestroy {
-  selectedReportType: string = 'sales';
-  public from!: Date;
-  public to!: Date;
-  private unsubscribe$ = new Subject<void>();
+export class ReportsPageComponent implements OnInit, OnDestroy {
+  public selectedReportType: string = 'sales';
+  public from!: string;
+  public to!: string;
 
+  private unsubscribe$ = new Subject<void>();
   constructor(private adminService: AdminService) {}
 
+  public ngOnInit(): void {}
+
+  public ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   public generateReport(): void {
+    let from: string = '';
+    let to: string = '';
+    if (this.from == undefined) from = '1970-01-01';
+    else from = this.from;
+    if (this.to == undefined) {
+      to = new Date(new Date().setDate(new Date().getDate() + 1))
+        .toISOString()
+        .split('T')[0];
+    } else {
+      to = this.to;
+    }
     switch (this.selectedReportType) {
       case 'sales':
-        this.generateExcelProductSalaringReport();
+        this.generateExcelProductSalaringReport(from, to);
         break;
-      case 'popularity':
-        this.generateWordReport();
+      case 'stock':
+        this.generateExcelStockReport(from, to);
         break;
     }
   }
 
-  private generateWordReport() {
+  private generateExcelStockReport(from: string, to: string) {
     this.adminService
-      .generateWordReport(this.from, this.to)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: (blob: Blob) => {
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'report.docx';
-          document.body.appendChild(a);
-          a.click();
-          window.URL.revokeObjectURL(url);
-          document.body.removeChild(a);
-        },
-        error: (err) => {
-          console.error('Ошибка при генерации отчета:', err);
-          alert('Не удалось сгенерировать отчет. Попробуйте еще раз.');
-        },
-      });
-  }
-
-  private generateExcelProductSalaringReport() {
-    this.adminService
-      .generateReportSalesByCategoryOverTime(this.from, this.to)
+      .generateExcelStockReport(from, to)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (blob: Blob) => {
@@ -73,8 +70,25 @@ export class ReportsPageComponent implements OnDestroy {
       });
   }
 
-  public ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+  private generateExcelProductSalaringReport(from: string, to: string) {
+    this.adminService
+      .generateReportSalesByCategoryOverTime(from, to)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (blob: Blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'report.xlsx';
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        },
+        error: (err) => {
+          console.error('Ошибка при генерации отчета:', err);
+          alert('Не удалось сгенерировать отчет. Попробуйте еще раз.');
+        },
+      });
   }
 }

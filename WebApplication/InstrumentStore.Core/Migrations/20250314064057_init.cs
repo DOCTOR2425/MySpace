@@ -61,6 +61,25 @@ namespace InstrumentStore.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProductCard",
+                columns: table => new
+                {
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductCategory = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Brand = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsArchive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductCard", x => x.ProductId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductCategory",
                 columns: table => new
                 {
@@ -70,30 +89,6 @@ namespace InstrumentStore.Domain.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductCategory", x => x.ProductCategoryId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductSearchResult",
-                columns: table => new
-                {
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BrandId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ProductCategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    ProductCategoryId2 = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductCategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BrandId2 = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BrandName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CountryId2 = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CountryName = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
                 });
 
             migrationBuilder.CreateTable(
@@ -477,10 +472,10 @@ namespace InstrumentStore.Domain.Migrations
                 name: "PaidOrderItem");
 
             migrationBuilder.DropTable(
-                name: "ProductPropertyValue");
+                name: "ProductCard");
 
             migrationBuilder.DropTable(
-                name: "ProductSearchResult");
+                name: "ProductPropertyValue");
 
             migrationBuilder.DropTable(
                 name: "City");

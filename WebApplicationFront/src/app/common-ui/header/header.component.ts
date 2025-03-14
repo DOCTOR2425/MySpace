@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../service/auth/auth.service';
 import { AdminService } from '../../service/admin/admin.service';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../service/user/user.service';
 import { ProductService } from '../../service/product.service';
-import { Subject, takeUntil } from 'rxjs';
+import { filter, Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -29,6 +29,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.userEmail = this.userService.userEMail?.slice(0, 3).toUpperCase();
+
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe(() => {
+        this.searchQuery = '';
+      });
   }
 
   public ngOnDestroy(): void {
@@ -37,11 +46,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   public searchByName(): void {
-    this.productService
-      .searchByName(this.searchQuery, 1)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((val) => {
-        console.log(val);
-      });
+    if (this.searchQuery) {
+      this.productService
+        .searchByName(this.searchQuery, 1)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((val) => {
+          this.router.navigate([`/search/${this.searchQuery}`]);
+        });
+    }
   }
 }

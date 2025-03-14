@@ -1,4 +1,4 @@
-CREATE TRIGGER trg_MoveFromCartToPaidOrder
+CREATE OR ALTER TRIGGER trg_MoveFromCartToPaidOrder
 ON PaidOrder
 AFTER INSERT
 AS
@@ -22,6 +22,12 @@ BEGIN
         Product p ON ci.ProductId = p.ProductId
     WHERE
         ci.UserId = @UserId;
+
+	UPDATE p
+	SET p.Quantity = p.Quantity - ci.Quantity
+	FROM Product p
+	JOIN CartItem ci ON p.ProductId = ci.ProductId
+	WHERE ci.UserId = @UserId;
 
     DELETE FROM CartItem
     WHERE UserId = @UserId;

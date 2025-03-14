@@ -4,5 +4,7 @@
 	{
 		Task<string> GenerateReportSalesByCategoryOverTime(DateTime from, DateTime to);
 		Task<string> GenerateWordReport(DateTime from, DateTime to);
-	}
+		Task<string> GenerateStockReportOverTime(DateTime from, DateTime to);
+
+    }
 }

@@ -151,5 +151,19 @@ namespace InstrumentStore.API.Controllers
 
 			return File(fileBytes, mimeType, Path.GetFileName(filePath));
 		}
-	}
+
+        [HttpGet("generate-stock-report-over-time")]
+        public async Task<ActionResult> GenerateStockReportOverTime(
+            [FromQuery] DateTime from,
+            [FromQuery] DateTime to)
+        {
+            string filePath = await _reportService.GenerateStockReportOverTime(from, to);
+
+            var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+
+            string mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+            return File(fileBytes, mimeType, Path.GetFileName(filePath));
+        }
+    }
 }

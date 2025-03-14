@@ -12,6 +12,7 @@ import { CatalogManageComponent } from './pages/admin-pages/catalog-manage/catal
 import { CreateProductComponent } from './pages/admin-pages/catalog-manage/create-product/create-product.component';
 import { ReportsPageComponent } from './pages/admin-pages/reports-page/reports-page.component';
 import { UpdateProductComponent } from './pages/admin-pages/catalog-manage/update-product/update-product.component';
+import { SearchPageComponent } from './pages/search-page/search-page.component';
 
 export const routes: Routes = [
   {
@@ -23,6 +24,7 @@ export const routes: Routes = [
       { path: 'cart', component: CartPageComponent },
       { path: 'category/:categoryName', component: CategoryPageComponent },
       { path: 'user', component: UserPageComponent },
+      { path: 'search/:search', component: SearchPageComponent },
     ],
   },
   { path: 'login', component: LoginPageComponent },

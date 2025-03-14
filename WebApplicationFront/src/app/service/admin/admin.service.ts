@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment.development';
 import { AdminPaidOrder } from '../../data/interfaces/paid-order/admin-paid-order.interface';
 import { ProductProperty } from '../../data/interfaces/product/product-property.interface';
 import { OptionsForProduct } from '../../data/interfaces/some/options-for-order.interface';
+import { ProductCategory } from '../../data/interfaces/some/product-category.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -57,7 +58,7 @@ export class AdminService {
     );
   }
 
-  public generateWordReport(from: Date, to: Date): Observable<Blob> {
+  public generateWordReport(from: string, to: string): Observable<Blob> {
     return this.http.get(
       `${this.baseApiUrl}/api/Admin/generate-word-report` +
         `?from=${from}&to=${to}`,
@@ -69,8 +70,8 @@ export class AdminService {
   }
 
   public generateReportSalesByCategoryOverTime(
-    from: Date,
-    to: Date
+    from: string,
+    to: string
   ): Observable<Blob> {
     return this.http.get(
       `${this.baseApiUrl}/api/Admin/generate-report-sales-by-category-over-time` +
@@ -78,6 +79,26 @@ export class AdminService {
       {
         withCredentials: true,
         responseType: 'blob',
+      }
+    );
+  }
+
+  public generateExcelStockReport(from: string, to: string): Observable<Blob> {
+    return this.http.get(
+      `${this.baseApiUrl}/api/Admin/generate-stock-report-over-time` +
+        `?from=${from}&to=${to}`,
+      {
+        withCredentials: true,
+        responseType: 'blob',
+      }
+    );
+  }
+
+  public getAllCategories(): Observable<ProductCategory[]> {
+    return this.http.get<ProductCategory[]>(
+      `${this.baseApiUrl}/api/ProductCategory/get-all-categories`,
+      {
+        withCredentials: true,
       }
     );
   }

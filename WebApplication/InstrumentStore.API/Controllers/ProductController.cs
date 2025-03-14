@@ -55,10 +55,9 @@ namespace InstrumentStore.API.Controllers
 			List<Product> products = await _productService.GetAllByCategory(category, page);
 			products = products.Where(p => p.IsArchive == false).ToList();
 
-			FilterRequest filterRequest = null;
 			if (!string.IsNullOrEmpty(filters))
 			{// фильтрация если она выбранна
-				filterRequest = JsonConvert.DeserializeObject<FilterRequest>(filters);
+                FilterRequest filterRequest = JsonConvert.DeserializeObject<FilterRequest>(filters);
 
 				products = await _productService.GetAllWithFilters(category, filterRequest, products, page);
 			}
@@ -83,7 +82,9 @@ namespace InstrumentStore.API.Controllers
 			[FromQuery] string? name)
 		{
 			List<ProductCard> productsCards = await _productService.SearchByName(name, page);
-			productsCards = productsCards.Where(p => p.IsArchive == false).ToList();
+            productsCards = productsCards.Where(p => p.IsArchive == false).ToList();
+			foreach (var p in productsCards)
+				p.Image = "https://localhost:7295/images/" + p.Image;
 
 			return Ok(productsCards);
 		}
