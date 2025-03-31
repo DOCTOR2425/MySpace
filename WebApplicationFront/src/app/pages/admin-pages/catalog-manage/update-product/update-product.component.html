@@ -8,9 +8,9 @@
         <input type="text" id="name" formControlName="name" />
       </div>
 
-      <div class="form-group">
+      <div *ngIf="optionsForProduct.brands" class="form-group">
         <label for="brand">Бренд:</label>
-        <select id="brand" formControlName="brand" #brandSelect>
+        <select id="brand" formControlName="brand">
           <option
             *ngFor="let brand of optionsForProduct.brands"
             [value]="brand.brandId"
@@ -63,7 +63,7 @@
         <textarea id="description" formControlName="description"></textarea>
       </div>
 
-      <div class="form-group">
+      <div *ngIf="photos" class="form-group">
         <label for="photos">Фото товара (максимум 4):</label>
         <div class="photos-upload">
           <input
@@ -79,7 +79,7 @@
           </label>
           <div class="photos-preview">
             <div *ngFor="let photo of photos; let i = index" class="photo-item">
-              <img [src]="[photosToView[i]]" alt="Фото товара" />
+              <img [src]="[photosToView[i]]" [alt]="photosToView[i]" />
               <button
                 type="button"
                 class="delete-button"
@@ -101,7 +101,7 @@
     </form>
   </div>
 
-  <div *ngIf="productProperties.length > 0" class="properties-form">
+  <div *ngIf="productToUpdate" class="properties-form">
     <h2>Свойства товара</h2>
     <form [formGroup]="propertiesForm">
       <div *ngFor="let property of productProperties" class="form-group">
@@ -109,14 +109,12 @@
         <input
           *ngIf="property.isRanged"
           type="number"
-          [id]="property.productPropertyId"
           [formControlName]="property.name"
           placeholder="Введите число"
         />
         <input
           *ngIf="!property.isRanged"
           type="text"
-          [id]="property.productPropertyId"
           [formControlName]="property.name"
           placeholder="Введите текст"
         />

@@ -75,6 +75,8 @@ export class CreateProductComponent implements OnInit, OnDestroy {
       countryId: this.productForm.value.country,
     };
 
+    console.log(product.propertyValues);
+
     const formData = new FormData();
     formData.append('productDto', JSON.stringify(product));
     product.images.forEach((image, index) => {

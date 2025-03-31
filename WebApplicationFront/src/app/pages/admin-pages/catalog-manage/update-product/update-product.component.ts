@@ -16,6 +16,7 @@ import { ProductToUpdate } from '../../../../data/interfaces/product/product-to-
 import { OptionsForProduct } from '../../../../data/interfaces/some/options-for-order.interface';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { CreateProductRequest } from '../../../../data/interfaces/product/create-product-request.interface';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-update-product',
@@ -35,6 +36,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
 
   constructor(
+    private http: HttpClient,
     private router: Router,
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -45,19 +47,52 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
   private buildForms(productToUpdate: ProductToUpdate): void {
     this.productForm = this.fb.group({
       name: [productToUpdate.name, Validators.required],
-      category: [productToUpdate.productCategory, Validators.required],
-      brand: [productToUpdate.brand, Validators.required],
-      country: [productToUpdate.country, Validators.required],
+      brand: [
+        this.optionsForProduct.brands.find(
+          (b) => b.name == productToUpdate.brand
+        )?.brandId,
+        Validators.required,
+      ],
+      country: [
+        this.optionsForProduct.countries.find(
+          (c) => c.name == productToUpdate.country
+        )?.countryId,
+        Validators.required,
+      ],
+      category: [
+        this.optionsForProduct.productCategories.find(
+          (c) => c.name == productToUpdate.productCategory
+        )?.productCategoryId,
+        Validators.required,
+      ],
       price: [productToUpdate.price, [Validators.required, Validators.min(0)]],
       quantity: [
         productToUpdate.quantity,
         [Validators.required, Validators.min(0)],
       ],
       description: [productToUpdate.description, Validators.required],
-      photos: [[]],
     });
 
-    this.propertiesForm = this.fb.group({});
+    this.initPropertiesForm();
+    this.adminService
+      .getProductPropertiesByCategory(this.productForm.value.category)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((val) => {
+        this.productProperties = val;
+      });
+
+    const imageRequests = productToUpdate.images.map((image) =>
+      this.http.get(`https://localhost:7295/images/${image}`, {
+        responseType: 'blob',
+      })
+    );
+    forkJoin(imageRequests).subscribe((blobs) => {
+      this.photos = blobs.map(
+        (blob, index) =>
+          new File([blob], productToUpdate.images[index], { type: blob.type })
+      );
+      this.photosToView = this.photos.map((file) => this.getPhotoUrl(file));
+    });
   }
 
   public ngOnInit(): void {
@@ -136,13 +171,26 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
   }
 
   private initPropertiesForm() {
-    const controls: { [key: string]: FormControl } = {};
-
-    this.productProperties.forEach((property) => {
-      controls[property.name] = this.fb.control('', Validators.required);
-    });
-
-    this.propertiesForm = this.fb.group(controls);
+    const selectedValue = this.productForm.get('category')?.value;
+    const selectedOption = this.optionsForProduct.productCategories.find(
+      (category) => category.productCategoryId === selectedValue
+    );
+    if (selectedOption?.name == this.productToUpdate.productCategory) {
+      const controls: { [key: string]: FormControl } = {};
+      this.productToUpdate.productPropertyValues.forEach((property) => {
+        controls[property.name] = this.fb.control(
+          property.value,
+          Validators.required
+        );
+      });
+      this.propertiesForm = this.fb.group(controls);
+    } else {
+      const controls: { [key: string]: FormControl } = {};
+      this.productProperties.forEach((property) => {
+        controls[property.name] = this.fb.control('', Validators.required);
+      });
+      this.propertiesForm = this.fb.group(controls);
+    }
   }
 
   public onPhotosChange(event: Event): void {
@@ -150,7 +198,6 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
     if (input.files && input.files.length > 0) {
       const files = Array.from(input.files).slice(0, 4 - this.photos.length);
       this.photos.push(...files);
-      this.productForm.patchValue({ photos: this.photos });
       this.photosToView = [];
       for (let file of this.photos) {
         this.photosToView.push(this.getPhotoUrl(file));

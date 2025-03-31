@@ -1,0 +1,32 @@
+<tr class="order-row">
+  <td class="order-id">{{ order.paidOrderId | slice : 0 : 8 }}</td>
+  <td class="order-date">{{ order.orderDate | date : "dd.MM.yyyy" }}</td>
+  <td class="customer-info">
+    {{ order.userOrderInfo.firstName }} {{ order.userOrderInfo.surname }}
+  </td>
+  <td class="contact-info">
+    <div class="contact-phone">{{ order.userOrderInfo.telephone }}</div>
+    <div class="contact-email">{{ order.userOrderInfo.email }}</div>
+  </td>
+  <td class="order-amount">{{ getTotalPrice(order) }} ₽</td>
+  <td class="order-actions">
+    <div class="actions-container">
+      <button class="btn btn-complete" (click)="closeOrder(order.paidOrderId)">
+        <i class="fas fa-check"></i> Завершить
+      </button>
+      <div class="dropdown">
+        <button class="btn btn-cancel dropdown-toggle">
+          <i class="fas fa-times"></i> Отменить
+        </button>
+        <div class="dropdown-menu">
+          <button
+            class="dropdown-item"
+            (click)="cancelOrder(order.paidOrderId)"
+          >
+            Подтвердить отмену
+          </button>
+        </div>
+      </div>
+    </div>
+  </td>
+</tr>

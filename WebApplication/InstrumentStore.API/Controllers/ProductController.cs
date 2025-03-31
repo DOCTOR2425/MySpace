@@ -10,201 +10,203 @@ using Newtonsoft.Json;
 
 namespace InstrumentStore.API.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class ProductController : ControllerBase
-	{
-		private readonly InstrumentStoreDBContext _dbContext;
-		private readonly IProductService _productService;
-		private readonly IImageService _imageService;
-		private readonly IProductPropertyService _productPropertyService;
-		private readonly IMapper _mapper;
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ProductController : ControllerBase
+    {
+        private readonly InstrumentStoreDBContext _dbContext;
+        private readonly IProductService _productService;
+        private readonly IImageService _imageService;
+        private readonly IProductPropertyService _productPropertyService;
+        private readonly IMapper _mapper;
 
-		public ProductController(IProductService productService,
-			IProductPropertyService productPropertyService,
-			IMapper mapper,
-			InstrumentStoreDBContext dbContext,
-			IImageService imageService)
-		{
-			_productService = productService;
-			_productPropertyService = productPropertyService;
-			_mapper = mapper;
-			_dbContext = dbContext;
-			_imageService = imageService;
-		}
+        public ProductController(IProductService productService,
+            IProductPropertyService productPropertyService,
+            IMapper mapper,
+            InstrumentStoreDBContext dbContext,
+            IImageService imageService)
+        {
+            _productService = productService;
+            _productPropertyService = productPropertyService;
+            _mapper = mapper;
+            _dbContext = dbContext;
+            _imageService = imageService;
+        }
 
-		[HttpGet("page{page}")]
-		public async Task<ActionResult<List<ProductCard>>> GetAllProductsCards([FromRoute] int page)
-		{
-			List<Product> products = await _productService.GetAll(page);
-			products = products.Where(p => p.IsArchive == false).ToList();
-			List<ProductCard> productsCards = new List<ProductCard>();
+        [HttpGet("page{page}")]
+        public async Task<ActionResult<List<ProductCard>>> GetAllProductsCards([FromRoute] int page)
+        {
+            List<Product> products = await _productService.GetAll(page);
+            products = products.Where(p => p.IsArchive == false).ToList();
+            List<ProductCard> productsCards = new List<ProductCard>();
 
-			foreach (var p in products)
-				productsCards.Add(_mapper.Map<ProductCard>(p, opt => opt.Items["DbContext"] = _dbContext));
+            foreach (var p in products)
+                productsCards.Add(_mapper.Map<ProductCard>(p, opt => opt.Items["DbContext"] = _dbContext));
 
-			return Ok(productsCards);
-		}
+            return Ok(productsCards);
+        }
 
-		[HttpGet("category/{category}/page{page}")]// функция получения товаров с фильтрацией
-		public async Task<ActionResult<List<ProductCard>>> GetAllProductsByCategoryWithFilters(
-			[FromRoute] string category,
-			[FromRoute] int page,
-			[FromQuery] string? filters)
-		{// получени товаров выбранной котегории
-			List<Product> products = await _productService.GetAllByCategory(category, page);
-			products = products.Where(p => p.IsArchive == false).ToList();
+        [HttpGet("category/{category}/page{page}")]// функция получения товаров с фильтрацией
+        public async Task<ActionResult<List<ProductCard>>> GetAllProductsByCategoryWithFilters(
+            [FromRoute] string category,
+            [FromRoute] int page,
+            [FromQuery] string? filters)
+        {// получени товаров выбранной котегории
+            List<Product> products = await _productService.GetAllByCategory(category, page);
+            products = products.Where(p => p.IsArchive == false).ToList();
 
-			if (!string.IsNullOrEmpty(filters))
-			{// фильтрация если она выбранна
+            if (!string.IsNullOrEmpty(filters))
+            {// фильтрация если она выбранна
                 FilterRequest filterRequest = JsonConvert.DeserializeObject<FilterRequest>(filters);
 
-				products = await _productService.GetAllWithFilters(category, filterRequest, products, page);
-			}
+                products = await _productService.GetAllWithFilters(category, filterRequest, products, page);
+            }
 
-			List<ProductCard> productsCards = new List<ProductCard>();
+            List<ProductCard> productsCards = new List<ProductCard>();
 
-			foreach (var p in products)
-				productsCards.Add(_mapper.Map<ProductCard>(p, opt => opt.Items["DbContext"] = _dbContext));
+            foreach (var p in products)
+                productsCards.Add(_mapper.Map<ProductCard>(p, opt => opt.Items["DbContext"] = _dbContext));
 
-			return Ok(productsCards);
-		}
+            return Ok(productsCards);
+        }
 
-		[HttpGet("category-filters/{category}")]
-		public async Task<ActionResult> GetCategoryFilters([FromRoute] string category)
-		{
-			return Ok(await _productPropertyService.GetCategoryFilters(category));
-		}
+        [HttpGet("category-filters/{category}")]
+        public async Task<ActionResult> GetCategoryFilters([FromRoute] string category)
+        {
+            return Ok(await _productPropertyService.GetCategoryFilters(category));
+        }
 
-		[HttpGet("search/page{page}")]// функция поиска товаров по имени
-		public async Task<ActionResult<List<ProductCard>>> SearchByName(
-			[FromRoute] int page,
-			[FromQuery] string? name)
-		{
-			List<ProductCard> productsCards = await _productService.SearchByName(name, page);
+        [HttpGet("search/page{page}")]// функция поиска товаров по имени
+        public async Task<ActionResult<List<ProductCard>>> SearchByName(
+            [FromRoute] int page,
+            [FromQuery] string? name)
+        {
+            List<ProductCard> productsCards = await _productService.SearchByName(name, page);
             productsCards = productsCards.Where(p => p.IsArchive == false).ToList();
-			foreach (var p in productsCards)
-				p.Image = "https://localhost:7295/images/" + p.Image;
+            foreach (var p in productsCards)
+                p.Image = "https://localhost:7295/images/" + p.Image;
 
-			return Ok(productsCards);
-		}
+            return Ok(productsCards);
+        }
 
-		[Authorize(Roles = "admin")]
-		[HttpGet("search-with-archive/page{page}")]// функция поиска товаров по имени включая архивные товары
-		public async Task<ActionResult<List<ProductCard>>> SearchByNameWithArchive(
-			[FromRoute] int page,
-			[FromQuery] string? name)
-		{
-			var products = await _productService.SearchByName(name, page);
+        [Authorize(Roles = "admin")]
+        [HttpGet("search-with-archive/page{page}")]// функция поиска товаров по имени включая архивные товары
+        public async Task<ActionResult<List<ProductCard>>> SearchByNameWithArchive(
+            [FromRoute] int page,
+            [FromQuery] string? name)
+        {
+            var products = await _productService.SearchByName(name, page);
 
-			List<ProductCard> productsCards = new List<ProductCard>();
+            List<ProductCard> productsCards = new List<ProductCard>();
 
-			foreach (var p in products)
-				productsCards.Add(_mapper.Map<ProductCard>(p, opt => opt.Items["DbContext"] = _dbContext));
+            foreach (var p in products)
+                productsCards.Add(_mapper.Map<ProductCard>(p, opt => opt.Items["DbContext"] = _dbContext));
 
-			return Ok(productsCards);
-		}
+            return Ok(productsCards);
+        }
 
-		[HttpGet("{id:guid}")]
-		public async Task<ActionResult<ProductResponse>> GetProduct([FromRoute] Guid id)
-		{
-			var product = await _productService.GetById(id);
-			var productResponseData = _mapper.Map<ProductData>(product, opt => opt.Items["DbContext"] = _dbContext);
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<ProductResponse>> GetProduct([FromRoute] Guid id)
+        {
+            var product = await _productService.GetById(id);
+            var productResponseData = _mapper.Map<ProductData>(product, opt => opt.Items["DbContext"] = _dbContext);
 
-			ProductResponse response = new ProductResponse(
-				productResponseData,
-				await _productPropertyService.GetProductProperties(id));
+            ProductResponse response = new ProductResponse(
+                productResponseData,
+                await _productPropertyService.GetProductProperties(id));
 
-			return Ok(response);
-		}
+            return Ok(response);
+        }
 
-		[HttpPut("update-product/{id:guid}")]
-		public async Task<ActionResult<Guid>> UpdateProduct(
-			Guid id,
-			[FromForm] string productDto,
-			[FromForm] List<IFormFile> images)
-		{
-			var productRequest = JsonConvert
-				.DeserializeObject<CreateProductRequest>(productDto);
+        [HttpPut("update-product/{id:guid}")]
+        public async Task<ActionResult<Guid>> UpdateProduct(
+            Guid id,
+            [FromForm] string productDto,
+            [FromForm] List<IFormFile> images)
+        {
+            var productRequest = JsonConvert
+                .DeserializeObject<CreateProductRequest>(productDto);
 
-			if (images != null && images.Any())
-			{
-				foreach (var image in images)
-				{
-					if (await _imageService.IsImage(image) == false)
-						throw new BadImageFormatException(
-							$"Format {image.ContentType} is not available");
-				}
-			}
+            if (images != null && images.Any())
+            {
+                foreach (var image in images)
+                {
+                    if (await _imageService.IsImage(image) == false)
+                        throw new BadImageFormatException(
+                            $"Format {image.ContentType} is not available");
+                }
+            }
 
-			return Ok(await _productService.Update(id, productRequest, images));
-		}
+            return Ok(await _productService.Update(id, productRequest, images));
+        }
 
-		[HttpGet("get-product-to-update/{id:guid}")]
-		public async Task<ActionResult<ProductToUpdateResponse>> GetProductToUpdate(Guid id)
-		{
-			Product product = await _productService.GetById(id);
+        [HttpGet("get-product-to-update/{id:guid}")]
+        public async Task<ActionResult<ProductToUpdateResponse>> GetProductToUpdate(Guid id)
+        {
+            Product product = await _productService.GetById(id);
 
-			if (product.IsArchive)
-				throw new ArgumentException();
+            if (product.IsArchive)
+                throw new ArgumentException();
 
-			return Ok(_mapper.Map<ProductToUpdateResponse>(product,
-				opt => opt.Items["DbContext"] = _dbContext));
-		}
+            ProductToUpdateResponse productToUpdate = _mapper.Map<ProductToUpdateResponse>(product,
+                opt => opt.Items["DbContext"] = _dbContext);
 
-		[Authorize(Roles = "admin")]
-		[HttpDelete("{id:guid}")]
-		public async Task<ActionResult<Guid>> DeleteProduct(Guid id)
-		{
-			return Ok(await _productService.Delete(id));
-		}
+            return Ok(productToUpdate);
+        }
 
-		[HttpPost("create-product")]
-		public async Task<ActionResult<Guid>> CreateProduct(
-			[FromForm] string productDto,
-			[FromForm] List<IFormFile> images)
-		{
-			var productRequest = JsonConvert
-				.DeserializeObject<CreateProductRequest>(productDto);
+        [Authorize(Roles = "admin")]
+        [HttpDelete("{id:guid}")]
+        public async Task<ActionResult<Guid>> DeleteProduct(Guid id)
+        {
+            return Ok(await _productService.Delete(id));
+        }
 
-			if (images != null && images.Any())
-			{
-				foreach (var image in images)
-				{
-					if (await _imageService.IsImage(image) == false)
-						throw new BadImageFormatException(
-							$"Format {image.ContentType} is not available");
-				}
-			}
+        [HttpPost("create-product")]
+        public async Task<ActionResult<Guid>> CreateProduct(
+            [FromForm] string productDto,
+            [FromForm] List<IFormFile> images)
+        {
+            var productRequest = JsonConvert
+                .DeserializeObject<CreateProductRequest>(productDto);
 
-			return Ok(await _productService.Create(productRequest, images));
-		}
+            if (images != null && images.Any())
+            {
+                foreach (var image in images)
+                {
+                    if (await _imageService.IsImage(image) == false)
+                        throw new BadImageFormatException(
+                            $"Format {image.ContentType} is not available");
+                }
+            }
 
-		[HttpGet("get-products-for-admin{page}")]
-		public async Task<ActionResult<List<ProductData>>> GetProductsForAdmin([FromRoute] int page)
-		{
-			List<Product> products = await _productService.GetAll(1);
-			List<ProductData> productsDatas = new List<ProductData>();
+            return Ok(await _productService.Create(productRequest, images));
+        }
 
-			foreach (var p in products)
-			{
-				productsDatas.Add(_mapper.Map<ProductData>(p, opt => opt.Items["DbContext"] = _dbContext));
-				productsDatas.Last().Name += page;
-			}
+        [HttpGet("get-products-for-admin{page}")]
+        public async Task<ActionResult<List<ProductData>>> GetProductsForAdmin([FromRoute] int page)
+        {
+            List<Product> products = await _productService.GetAll(1);
+            List<ProductData> productsDatas = new List<ProductData>();
 
-			//productsDatas.AddRange(productsDatas);
-			//productsDatas.AddRange(productsDatas);
-			//productsDatas.AddRange(productsDatas);
-			//productsDatas.AddRange(productsDatas);
+            foreach (var p in products)
+            {
+                productsDatas.Add(_mapper.Map<ProductData>(p, opt => opt.Items["DbContext"] = _dbContext));
+                productsDatas.Last().Name += page;
+            }
 
-			//Console.WriteLine("\n" + page + "\n" + productsDatas.Count);
-			//productsDatas = productsDatas
-			//	.Skip((page - 1) * IProductService.pageSize)
-			//	.Take(IProductService.pageSize)
-			//	.ToList();
-			//Console.WriteLine(productsDatas.Count);
+            //productsDatas.AddRange(productsDatas);
+            //productsDatas.AddRange(productsDatas);
+            //productsDatas.AddRange(productsDatas);
+            //productsDatas.AddRange(productsDatas);
 
-			return Ok(productsDatas);
-		}
-	}
+            //Console.WriteLine("\n" + page + "\n" + productsDatas.Count);
+            //productsDatas = productsDatas
+            //	.Skip((page - 1) * IProductService.pageSize)
+            //	.Take(IProductService.pageSize)
+            //	.ToList();
+            //Console.WriteLine(productsDatas.Count);
+
+            return Ok(productsDatas);
+        }
+    }
 }

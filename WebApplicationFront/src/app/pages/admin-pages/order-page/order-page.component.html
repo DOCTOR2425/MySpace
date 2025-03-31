@@ -1,0 +1,159 @@
+<div class="order-container">
+  <h1>Оформление заказа</h1>
+
+  <div class="order-info">
+    <div class="order-date">Дата заказа: {{ currentDate }}</div>
+
+    <div class="order-items" *ngIf="orderItems.length">
+      <h2>Товары в заказе</h2>
+      <div class="items-list">
+        <div class="item" *ngFor="let item of orderItems">
+          <div class="item-name">{{ item.name }}</div>
+          <div class="item-quantity">× {{ item.quantity }}</div>
+          <div class="item-price">{{ item.price * item.quantity }} ₽</div>
+        </div>
+      </div>
+      <div class="total-price">Итого: {{ getTotalPrice() }} ₽</div>
+    </div>
+  </div>
+
+  <form [formGroup]="orderForm" class="order-form">
+    <h2>Данные покупателя</h2>
+
+    <div class="form-group">
+      <label for="phone">Телефон*</label>
+      <input
+        id="phone"
+        type="tel"
+        formControlName="phone"
+        placeholder="+7 (999) 123-45-67"
+      />
+      <div
+        *ngIf="
+          orderForm.get('phone')?.invalid && orderForm.get('phone')?.touched
+        "
+        class="error"
+      >
+        Введите корректный номер телефона
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="fullName">ФИО*</label>
+      <input
+        id="fullName"
+        type="text"
+        formControlName="fullName"
+        placeholder="Иванов Иван Иванович"
+      />
+      <div
+        *ngIf="
+          orderForm.get('fullName')?.invalid &&
+          orderForm.get('fullName')?.touched
+        "
+        class="error"
+      >
+        Введите ФИО
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email*</label>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        placeholder="example@mail.ru"
+      />
+      <div
+        *ngIf="
+          orderForm.get('email')?.invalid && orderForm.get('email')?.touched
+        "
+        class="error"
+      >
+        Введите корректный email
+      </div>
+    </div>
+
+    <h2>Способ доставки</h2>
+
+    <div class="form-group">
+      <label for="deliveryMethod">Способ доставки*</label>
+      <select id="deliveryMethod" formControlName="deliveryMethod">
+        <option value="" disabled>Выберите способ доставки</option>
+        <option *ngFor="let method of deliveryMethods" [value]="method.id">
+          {{ method.name }}
+        </option>
+      </select>
+      <div
+        *ngIf="
+          orderForm.get('deliveryMethod')?.invalid &&
+          orderForm.get('deliveryMethod')?.touched
+        "
+        class="error"
+      >
+        Выберите способ доставки
+      </div>
+    </div>
+
+    <div
+      class="form-group"
+      *ngIf="orderForm.get('deliveryMethod')?.value !== 2"
+    >
+      <label for="address">Адрес доставки*</label>
+      <input
+        id="address"
+        type="text"
+        formControlName="address"
+        placeholder="Город, улица, дом, квартира"
+      />
+      <div
+        *ngIf="
+          orderForm.get('address')?.invalid && orderForm.get('address')?.touched
+        "
+        class="error"
+      >
+        Введите адрес доставки
+      </div>
+    </div>
+
+    <h2>Способ оплаты</h2>
+
+    <div class="form-group">
+      <label for="paymentMethod">Способ оплаты*</label>
+      <select id="paymentMethod" formControlName="paymentMethod">
+        <option value="" disabled>Выберите способ оплаты</option>
+        <option *ngFor="let method of paymentMethods" [value]="method.id">
+          {{ method.name }}
+        </option>
+      </select>
+      <div
+        *ngIf="
+          orderForm.get('paymentMethod')?.invalid &&
+          orderForm.get('paymentMethod')?.touched
+        "
+        class="error"
+      >
+        Выберите способ оплаты
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="comment">Комментарий к заказу</label>
+      <textarea
+        id="comment"
+        formControlName="comment"
+        placeholder="Ваши пожелания к заказу"
+      ></textarea>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="cancel-button" (click)="cancelOrder()">
+        Отменить заказ
+      </button>
+      <button type="button" class="submit-button" (click)="completeOrder()">
+        Оформить заказ
+      </button>
+    </div>
+  </form>
+</div>

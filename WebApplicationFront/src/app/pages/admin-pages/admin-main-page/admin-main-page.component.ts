@@ -4,10 +4,11 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AdminPaidOrder } from '../../../data/interfaces/paid-order/admin-paid-order.interface';
 import { Subject, takeUntil } from 'rxjs';
+import { AdminOrderComponent } from '../../../common-ui/admin-order/admin-order.component';
 
 @Component({
   selector: 'app-admin-main-page',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, AdminOrderComponent],
   templateUrl: './admin-main-page.component.html',
   styleUrl: './admin-main-page.component.scss',
 })
@@ -38,31 +39,5 @@ export class AdminMainPageComponent implements OnInit, OnDestroy {
     }
 
     return amount;
-  }
-
-  public closeOrder(orderId: string): void {
-    this.adminService
-      .closeOrder(orderId)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: () => {
-          this.paidOrders = this.paidOrders.filter(
-            (o) => o.paidOrderId !== orderId
-          );
-        },
-      });
-  }
-
-  public cancelOrder(orderId: string): void {
-    this.adminService
-      .cancelOrder(orderId)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: () => {
-          this.paidOrders = this.paidOrders.filter(
-            (o) => o.paidOrderId !== orderId
-          );
-        },
-      });
   }
 }
