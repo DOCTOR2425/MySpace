@@ -100,7 +100,7 @@ namespace InstrumentStore.Domain.Services
             RegisterUserRequest registerUserRequest = new RegisterUserRequest(
                 "Egor",
                 "Dudkin",
-                "+375445555555",
+                "+375 44 111-11-11",
                 "stayler425@yandex.com",
                 "stayler425@yandex.com"
             );
@@ -114,7 +114,7 @@ namespace InstrumentStore.Domain.Services
             {
                 DeliveryMethodId = deliveryMethod1.DeliveryMethodId,
                 PaymentMethod = PaymentMethodService.PaymentMethods[PaymentMethod.Cash],
-                UserDelivaryAdress = new UserDeliveryAddress()
+                UserDelivaryAddress = new UserDeliveryAddress()
                 {
                     City = city.Name,
                     Street = "Матусевича",

@@ -37,18 +37,6 @@ namespace InstrumentStore.Domain.Mapper
                     dest.Image = "https://localhost:7295/images/" + image?.Name;
                 });
 
-            //CreateMap<ProductSearchResult, Product>()
-            //    .ForPath(dest => dest.ProductCategory, opt => opt.MapFrom(src => new ProductCategory()))
-            //    .ForPath(dest => dest.ProductCategory.ProductCategoryId, opt => opt.MapFrom(src => src.ProductCategoryId2))
-            //    .ForPath(dest => dest.ProductCategory.Name, opt => opt.MapFrom(src => src.ProductCategoryName))
-            //    .ForPath(dest => dest.Brand, opt => opt.MapFrom(src => new Brand()))
-            //    .ForPath(dest => dest.Brand.BrandId, opt => opt.MapFrom(src => src.BrandId2))
-            //    .ForPath(dest => dest.Brand.Name, opt => opt.MapFrom(src => src.BrandName))
-            //    .ForPath(dest => dest.Country, opt => opt.MapFrom(src => new Country()))
-            //    .ForPath(dest => dest.Country.CountryId, opt => opt.MapFrom(src => src.CountryId2))
-            //    .ForPath(dest => dest.Country.Name, opt => opt.MapFrom(src => src.CountryName));
-
-
             CreateMap<CartItem, CartItemResponse>()
                 .ForPath(dest => dest.Product, opt => opt.MapFrom(src => src.Product))
                 .ForPath(dest => dest.Product.ProductCategory, opt => opt.MapFrom(src => src.Product.ProductCategory.Name))

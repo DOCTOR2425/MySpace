@@ -37,7 +37,12 @@ export class AdminMainPageComponent implements OnInit, OnDestroy {
     for (let item of order.paidOrderItems) {
       amount += item.price;
     }
-
     return amount;
+  }
+
+  public onOrderRemoved(orderId: string): void {
+    this.paidOrders = this.paidOrders.filter(
+      (order) => order.paidOrderId !== orderId
+    );
   }
 }

@@ -25,6 +25,15 @@ export class AdminService {
     );
   }
 
+  public getOrderById(id: string): Observable<AdminPaidOrder> {
+    return this.http.get<AdminPaidOrder>(
+      `${this.baseApiUrl}/api/PaidOrder/get-order-by-id/${id}`,
+      {
+        withCredentials: true,
+      }
+    );
+  }
+
   public closeOrder(orderId: string): Observable<object> {
     return this.http.put(`${this.baseApiUrl}/api/Admin/close-order${orderId}`, {
       withCredentials: true,

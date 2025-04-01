@@ -1,159 +1,112 @@
-<div class="order-container">
-  <h1>Оформление заказа</h1>
-
-  <div class="order-info">
-    <div class="order-date">Дата заказа: {{ currentDate }}</div>
-
-    <div class="order-items" *ngIf="orderItems.length">
-      <h2>Товары в заказе</h2>
-      <div class="items-list">
-        <div class="item" *ngFor="let item of orderItems">
-          <div class="item-name">{{ item.name }}</div>
-          <div class="item-quantity">× {{ item.quantity }}</div>
-          <div class="item-price">{{ item.price * item.quantity }} ₽</div>
-        </div>
+<div *ngIf="order" class="admin-order-container clean">
+  <div class="order-header">
+    <h1>Заказ #{{ order.paidOrderId | slice : 0 : 8 }}</h1>
+    <div class="order-dates">
+      <div class="date-badge">
+        <span class="date-label">Создан</span>
+        <span class="date-value">{{
+          order.orderDate | date : "dd.MM.yyyy"
+        }}</span>
       </div>
-      <div class="total-price">Итого: {{ getTotalPrice() }} ₽</div>
+
+      <div
+        *ngIf="order.receiptDate == new; date: '0001-01-01'"
+        class="date-badge"
+      >
+        <span class="date-label">Доставка</span>
+        <span class="date-value">{{
+          order.receiptDate | date : "dd.MM.yyyy"
+        }}</span>
+      </div>
+      <div class="date-badge">
+        <span class="date-label">Доставка</span>
+        <span class="date-value">{{
+          order.receiptDate | date : "dd.MM.yyyy"
+        }}</span>
+      </div>
     </div>
   </div>
 
-  <form [formGroup]="orderForm" class="order-form">
-    <h2>Данные покупателя</h2>
-
-    <div class="form-group">
-      <label for="phone">Телефон*</label>
-      <input
-        id="phone"
-        type="tel"
-        formControlName="phone"
-        placeholder="+7 (999) 123-45-67"
-      />
-      <div
-        *ngIf="
-          orderForm.get('phone')?.invalid && orderForm.get('phone')?.touched
-        "
-        class="error"
-      >
-        Введите корректный номер телефона
+  <div class="order-grid">
+    <div class="customer-card">
+      <h2 class="section-title"><i class="icon-user"></i> Клиент</h2>
+      <div class="customer-details">
+        <div class="customer-name">
+          {{ order.userOrderInfo.firstName }} {{ order.userOrderInfo.surname }}
+        </div>
+        <div class="customer-contact">
+          <div class="contact-item">
+            <i class="icon-phone"></i> {{ order.userOrderInfo.telephone }}
+          </div>
+          <div class="contact-item">
+            <i class="icon-email"></i> {{ order.userOrderInfo.email }}
+          </div>
+        </div>
+        <div class="customer-address">
+          <i class="icon-location"></i>
+          {{ order.userOrderInfo.userDeliveryAddress.city }},
+          {{ order.userOrderInfo.userDeliveryAddress.street }}, д.{{
+            order.userOrderInfo.userDeliveryAddress.houseNumber
+          }}
+          {{
+            order.userOrderInfo.userDeliveryAddress.flat
+              ? ", кв." + order.userOrderInfo.userDeliveryAddress.flat
+              : ""
+          }}
+        </div>
       </div>
     </div>
 
-    <div class="form-group">
-      <label for="fullName">ФИО*</label>
-      <input
-        id="fullName"
-        type="text"
-        formControlName="fullName"
-        placeholder="Иванов Иван Иванович"
-      />
-      <div
-        *ngIf="
-          orderForm.get('fullName')?.invalid &&
-          orderForm.get('fullName')?.touched
-        "
-        class="error"
-      >
-        Введите ФИО
+    <div class="payment-card">
+      <h2 class="section-title">
+        <i class="icon-payment"></i> Оплата и доставка
+      </h2>
+      <div class="payment-details">
+        <div class="method">
+          <span class="method-label">Доставка:</span>
+          <span class="method-value">{{ order.deliveryMethod.name }}</span>
+        </div>
+        <div class="method">
+          <span class="method-label">Оплата:</span>
+          <span class="method-value">{{ order.paymentMethod }}</span>
+        </div>
       </div>
     </div>
+  </div>
 
-    <div class="form-group">
-      <label for="email">Email*</label>
-      <input
-        id="email"
-        type="email"
-        formControlName="email"
-        placeholder="example@mail.ru"
-      />
-      <div
-        *ngIf="
-          orderForm.get('email')?.invalid && orderForm.get('email')?.touched
-        "
-        class="error"
-      >
-        Введите корректный email
+  <div class="products-section">
+    <h2 class="section-title">
+      <i class="icon-cart"></i> Товары ({{ order.paidOrderItems.length }})
+    </h2>
+    <div class="products-list">
+      <div class="product-item" *ngFor="let item of order.paidOrderItems">
+        <img
+          [src]="item.productData.image"
+          [alt]="item.productData.name"
+          class="product-image"
+        />
+        <div class="product-info">
+          <div class="product-name">{{ item.productData.name }}</div>
+          <div class="product-quantity">
+            {{ item.quantity }} × {{ item.price | number }} руб.
+          </div>
+        </div>
+        <div class="product-total">
+          {{ item.quantity * item.price | number }} руб.
+        </div>
       </div>
     </div>
-
-    <h2>Способ доставки</h2>
-
-    <div class="form-group">
-      <label for="deliveryMethod">Способ доставки*</label>
-      <select id="deliveryMethod" formControlName="deliveryMethod">
-        <option value="" disabled>Выберите способ доставки</option>
-        <option *ngFor="let method of deliveryMethods" [value]="method.id">
-          {{ method.name }}
-        </option>
-      </select>
-      <div
-        *ngIf="
-          orderForm.get('deliveryMethod')?.invalid &&
-          orderForm.get('deliveryMethod')?.touched
-        "
-        class="error"
-      >
-        Выберите способ доставки
-      </div>
+    <div class="order-total">
+      Итого: <strong>{{ getTotalPrice() | number }} руб.</strong>
     </div>
+  </div>
 
-    <div
-      class="form-group"
-      *ngIf="orderForm.get('deliveryMethod')?.value !== 2"
-    >
-      <label for="address">Адрес доставки*</label>
-      <input
-        id="address"
-        type="text"
-        formControlName="address"
-        placeholder="Город, улица, дом, квартира"
-      />
-      <div
-        *ngIf="
-          orderForm.get('address')?.invalid && orderForm.get('address')?.touched
-        "
-        class="error"
-      >
-        Введите адрес доставки
-      </div>
-    </div>
-
-    <h2>Способ оплаты</h2>
-
-    <div class="form-group">
-      <label for="paymentMethod">Способ оплаты*</label>
-      <select id="paymentMethod" formControlName="paymentMethod">
-        <option value="" disabled>Выберите способ оплаты</option>
-        <option *ngFor="let method of paymentMethods" [value]="method.id">
-          {{ method.name }}
-        </option>
-      </select>
-      <div
-        *ngIf="
-          orderForm.get('paymentMethod')?.invalid &&
-          orderForm.get('paymentMethod')?.touched
-        "
-        class="error"
-      >
-        Выберите способ оплаты
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="comment">Комментарий к заказу</label>
-      <textarea
-        id="comment"
-        formControlName="comment"
-        placeholder="Ваши пожелания к заказу"
-      ></textarea>
-    </div>
-
-    <div class="form-actions">
-      <button type="button" class="cancel-button" (click)="cancelOrder()">
-        Отменить заказ
-      </button>
-      <button type="button" class="submit-button" (click)="completeOrder()">
-        Оформить заказ
-      </button>
-    </div>
-  </form>
+  <div class="action-buttons">
+    <button type="button" class="cancel-btn" (click)="cancelOrder()">
+      <i class="icon-cancel"></i> Отменить заказ
+    </button>
+    <button type="button" class="complete-btn" (click)="closeOrder()">
+      <i class="icon-check"></i> Завершить заказ
+    </button>
+  </div>
 </div>

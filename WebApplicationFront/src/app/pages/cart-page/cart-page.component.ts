@@ -6,7 +6,6 @@ import {
   FormBuilder,
   FormGroup,
   FormsModule,
-  NgForm,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -17,6 +16,7 @@ import { AuthService } from '../../service/auth/auth.service';
 import { RegisterUserFromOrderRequest } from '../../data/interfaces/user/register-user-from-order-request.interface';
 import { AddToCartRequest } from '../../data/interfaces/cart/add-to-cart-request.interface';
 import { CartItemComponent } from './cart-item/cart-item.component';
+import { UserDeliveryAddress } from '../../data/interfaces/user/user-delivery-address.interface';
 
 @Component({
   selector: 'app-cart-page',
@@ -123,6 +123,13 @@ export class CartPageComponent implements OnInit, OnDestroy {
       const payload = {
         deliveryMethodId: this.orderForm.value.deliveryMethodId,
         paymentMethod: this.orderForm.value.paymentMethod,
+        userDelivaryAddress: {
+          city: this.orderForm.value.city,
+          street: this.orderForm.value.street,
+          houseNumber: this.orderForm.value.houseNumber,
+          entrance: this.orderForm.value.entrance,
+          flat: this.orderForm.value.flat,
+        } as UserDeliveryAddress,
       };
       this.cartService
         .orderCartForRegistered(payload)

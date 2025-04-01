@@ -17,6 +17,6 @@ namespace InstrumentStore.Domain.Abstractions
 		Task<User> GetUserFromToken(string token);
 		Task<Guid> RegisterUserFromOrder(RegisterUserFromOrderRequest registerUserRequest);
 		Task<User> Update(Guid userId, UpdateUserRequest newUser);
-		Task<DeliveryAddress?> GetLastUserDeliveryAdress(Guid userId);
+		Task<DeliveryAddress?> GetLastUserDeliveryAddress(Guid userId);
 	}
 }

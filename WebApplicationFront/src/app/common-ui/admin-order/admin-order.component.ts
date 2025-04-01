@@ -1,18 +1,26 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+} from '@angular/core';
 import { AdminPaidOrder } from '../../data/interfaces/paid-order/admin-paid-order.interface';
 import { CommonModule } from '@angular/common';
 import { AdminService } from '../../service/admin/admin.service';
 import { Subject, takeUntil } from 'rxjs';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-admin-order',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './admin-order.component.html',
   styleUrl: './admin-order.component.scss',
 })
 export class AdminOrderComponent implements OnDestroy {
   private unsubscribe$ = new Subject<void>();
   @Input() order!: AdminPaidOrder;
+  @Output() removeOrder = new EventEmitter<string>();
 
   constructor(private adminService: AdminService) {}
 
@@ -22,7 +30,10 @@ export class AdminOrderComponent implements OnDestroy {
   }
 
   public getTotalPrice(order: AdminPaidOrder): number {
-    return order.paidOrderItems.reduce((sum, item) => sum + item.price, 0);
+    return order.paidOrderItems.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
   }
 
   public closeOrder(orderId: string): void {
@@ -30,7 +41,9 @@ export class AdminOrderComponent implements OnDestroy {
       .closeOrder(orderId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
-        next: () => {},
+        next: () => {
+          this.removeOrder.emit(orderId);
+        },
       });
   }
 
@@ -39,7 +52,9 @@ export class AdminOrderComponent implements OnDestroy {
       .cancelOrder(orderId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
-        next: () => {},
+        next: () => {
+          this.removeOrder.emit(orderId);
+        },
       });
   }
 }

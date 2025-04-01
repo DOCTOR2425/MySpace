@@ -207,7 +207,7 @@ namespace InstrumentStore.Domain.Services
 			return user;
 		}
 
-		public async Task<DeliveryAddress?> GetLastUserDeliveryAdress(Guid userId)
+		public async Task<DeliveryAddress?> GetLastUserDeliveryAddress(Guid userId)
 		{
 			User user = await GetById(userId);
 

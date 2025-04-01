@@ -1,4 +1,8 @@
-<tr class="order-row">
+<tr
+  [routerLink]="['/admin/order', order.paidOrderId]"
+  routerLinkActive="router-link-active"
+  class="order-row"
+>
   <td class="order-id">{{ order.paidOrderId | slice : 0 : 8 }}</td>
   <td class="order-date">{{ order.orderDate | date : "dd.MM.yyyy" }}</td>
   <td class="customer-info">
@@ -8,7 +12,7 @@
     <div class="contact-phone">{{ order.userOrderInfo.telephone }}</div>
     <div class="contact-email">{{ order.userOrderInfo.email }}</div>
   </td>
-  <td class="order-amount">{{ getTotalPrice(order) }} ₽</td>
+  <td class="order-amount">{{ getTotalPrice(order) }} руб.</td>
   <td class="order-actions">
     <div class="actions-container">
       <button class="btn btn-complete" (click)="closeOrder(order.paidOrderId)">

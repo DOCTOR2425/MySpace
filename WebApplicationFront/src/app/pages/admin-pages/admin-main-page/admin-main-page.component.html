@@ -1,4 +1,3 @@
-<!-- admin-main-page.component.html -->
 <div class="orders-container">
   <h1 class="page-title">Заказы в обработке</h1>
 
@@ -18,6 +17,7 @@
         <app-admin-order
           *ngFor="let order of paidOrders"
           [order]="order"
+          (removeOrder)="onOrderRemoved($event)"
         ></app-admin-order>
       </tbody>
     </table>

@@ -1,4 +1,4 @@
-import { UserDeliveryAddress } from './UserDeliveryAddress.interface';
+import { UserDeliveryAddress } from './user-delivery-address.interface';
 
 export interface UserOrderInfo {
   userId: string;

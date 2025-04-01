@@ -9,7 +9,7 @@ namespace InstrumentStore.Domain.Contracts.Cart
 		public required RegisterUserFromOrderRequest User { get; set; }
 		public required AddToCartRequest[] CartItems { get; set; }
 
-		public UserDeliveryAddress? UserDelivaryAdress { get; set; }
+		public UserDeliveryAddress? UserDelivaryAddress { get; set; }
 	}
 
 }

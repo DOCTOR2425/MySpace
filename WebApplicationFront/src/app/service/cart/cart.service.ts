@@ -7,10 +7,10 @@ import { UserOrderInfo } from '../../data/interfaces/user/user-order-info.interf
 import { environment } from '../../../environments/environment.development';
 import { AuthService } from '../auth/auth.service';
 import { ProductService } from '../product.service';
-import { ProductData } from '../../data/interfaces/product/product-data.interface';
 import { v4 as uuidv4 } from 'uuid';
 import { RegisterUserFromOrderRequest } from '../../data/interfaces/user/register-user-from-order-request.interface';
 import { AddToCartRequest } from '../../data/interfaces/cart/add-to-cart-request.interface';
+import { UserDeliveryAddress } from '../../data/interfaces/user/user-delivery-address.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -120,6 +120,7 @@ export class CartService {
   public orderCartForRegistered(payload: {
     deliveryMethodId: string;
     paymentMethod: string;
+    userDelivaryAddress: UserDeliveryAddress;
   }): Observable<Object> {
     return this.http.post(
       `${this.baseApiUrl}order-cart-for-registered`,
