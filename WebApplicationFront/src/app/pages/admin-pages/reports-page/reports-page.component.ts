@@ -3,7 +3,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../../service/admin/admin.service';
 import { Subject, takeUntil } from 'rxjs';
-import { ProductCategory } from '../../../data/interfaces/some/product-category.interface';
 
 @Component({
   selector: 'app-reports-page',

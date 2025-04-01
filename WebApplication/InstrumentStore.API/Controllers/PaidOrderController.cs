@@ -51,5 +51,21 @@ namespace InstrumentStore.API.Controllers
             return Ok(_mapper.Map<AdminPaidOrderResponse>(order,
                     opt => opt.Items["DbContext"] = _dbContext));
         }
+
+        [Authorize(Roles = "admin")]
+        [HttpGet("get-all-orders")]
+        public async Task<IActionResult> GetAllOrders([FromQuery] int page)
+        {
+            List<PaidOrder> orders = await _paidOrderService.GetAll(page);
+            List<AdminPaidOrderResponse> response = new List<AdminPaidOrderResponse>();
+
+            foreach (PaidOrder order in orders)
+            {
+                response.Add(_mapper.Map<AdminPaidOrderResponse>(order,
+                    opt => opt.Items["DbContext"] = _dbContext));
+            }
+
+            return Ok(response);
+        }
     }
 }

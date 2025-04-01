@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
-import { AdminService } from '../../../service/admin/admin.service';
-import { AdminPaidOrder } from '../../../data/interfaces/paid-order/admin-paid-order.interface';
 import { ActivatedRoute } from '@angular/router';
+import { AdminPaidOrder } from '../../../../data/interfaces/paid-order/admin-paid-order.interface';
+import { AdminService } from '../../../../service/admin/admin.service';
 
 @Component({
   selector: 'app-order-page',
@@ -56,6 +56,7 @@ export class OrderPageComponent implements OnInit {
         next: () => {},
       });
   }
+
   public getTotalPrice(): number {
     return (
       this.order?.paidOrderItems.reduce(
@@ -63,5 +64,9 @@ export class OrderPageComponent implements OnInit {
         0
       ) || 0
     );
+  }
+
+  public isReceiptDateDefault(): boolean {
+    return this.order.receiptDate == new Date('0001-01-01');
   }
 }

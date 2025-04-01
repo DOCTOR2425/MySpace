@@ -3,27 +3,24 @@
     <h1>Заказ #{{ order.paidOrderId | slice : 0 : 8 }}</h1>
     <div class="order-dates">
       <div class="date-badge">
-        <span class="date-label">Создан</span>
+        <span class="date-label">Оформлен</span>
         <span class="date-value">{{
           order.orderDate | date : "dd.MM.yyyy"
         }}</span>
       </div>
 
-      <div
-        *ngIf="order.receiptDate == new; date: '0001-01-01'"
-        class="date-badge"
-      >
+      <div *ngIf="isReceiptDateDefault()" class="date-badge">
         <span class="date-label">Доставка</span>
         <span class="date-value">{{
           order.receiptDate | date : "dd.MM.yyyy"
         }}</span>
       </div>
-      <div class="date-badge">
+      <!-- <div class="date-badge">
         <span class="date-label">Доставка</span>
         <span class="date-value">{{
           order.receiptDate | date : "dd.MM.yyyy"
         }}</span>
-      </div>
+      </div> -->
     </div>
   </div>
 

@@ -13,6 +13,8 @@ namespace InstrumentStore.Domain.Services
         private readonly ICityService _cityService;
         private readonly IDeliveryMethodService _deliveryMethodService;
 
+        private const int PageSize = 5;
+
         public PaidOrderService(InstrumentStoreDBContext dbContext,
             IUsersService usersService,
             IDeliveryMethodService deliveryMethodService,
@@ -117,6 +119,16 @@ namespace InstrumentStore.Domain.Services
             return await _dbContext.DeliveryAddress
                 .Include(a => a.City)
                 .FirstOrDefaultAsync(a => a.PaidOrder.PaidOrderId == orderId);
+        }
+
+        public async Task<List<PaidOrder>> GetAll(int page)
+        {
+            return await _dbContext.PaidOrder
+                .Take(PageSize)
+                .Include(o => o.User)
+                .Include(o => o.DeliveryMethod)
+                .OrderByDescending(o => o.OrderDate)
+                .ToListAsync();
         }
     }
 }

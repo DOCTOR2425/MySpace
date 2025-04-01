@@ -13,19 +13,29 @@
     <div class="contact-email">{{ order.userOrderInfo.email }}</div>
   </td>
   <td class="order-amount">{{ getTotalPrice(order) }} руб.</td>
+  <td class="order-status">
+    <span [class]="getStatusClass()">{{ getStatusText() }}</span>
+  </td>
   <td class="order-actions">
     <div class="actions-container">
-      <button class="btn btn-complete" (click)="closeOrder(order.paidOrderId)">
+      <button
+        class="btn btn-complete"
+        (click)="closeOrder(order.paidOrderId, $event)"
+        *ngIf="isOrderActive()"
+      >
         <i class="fas fa-check"></i> Завершить
       </button>
-      <div class="dropdown">
-        <button class="btn btn-cancel dropdown-toggle">
+      <div class="dropdown" *ngIf="isOrderActive()">
+        <button
+          class="btn btn-cancel dropdown-toggle"
+          (click)="$event.stopPropagation()"
+        >
           <i class="fas fa-times"></i> Отменить
         </button>
         <div class="dropdown-menu">
           <button
             class="dropdown-item"
-            (click)="cancelOrder(order.paidOrderId)"
+            (click)="cancelOrder(order.paidOrderId, $event)"
           >
             Подтвердить отмену
           </button>

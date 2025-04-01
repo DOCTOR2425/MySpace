@@ -111,4 +111,13 @@ export class AdminService {
       }
     );
   }
+
+  public getAllOrders(page: number): Observable<AdminPaidOrder[]> {
+    return this.http.get<AdminPaidOrder[]>(
+      `${this.baseApiUrl}/api/PaidOrder/get-all-orders?page=${page}`,
+      {
+        withCredentials: true,
+      }
+    );
+  }
 }

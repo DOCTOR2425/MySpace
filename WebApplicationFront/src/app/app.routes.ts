@@ -13,7 +13,8 @@ import { CreateProductComponent } from './pages/admin-pages/catalog-manage/creat
 import { ReportsPageComponent } from './pages/admin-pages/reports-page/reports-page.component';
 import { UpdateProductComponent } from './pages/admin-pages/catalog-manage/update-product/update-product.component';
 import { SearchPageComponent } from './pages/search-page/search-page.component';
-import { OrderPageComponent } from './pages/admin-pages/order-page/order-page.component';
+import { OrderPageComponent } from './pages/admin-pages/orders-page/order-page/order-page.component';
+import { OrdersPageComponent } from './pages/admin-pages/orders-page/orders-page.component';
 
 export const routes: Routes = [
   {
@@ -38,6 +39,7 @@ export const routes: Routes = [
       { path: 'create-product', component: CreateProductComponent },
       { path: 'update-product/:id', component: UpdateProductComponent },
       { path: 'reports', component: ReportsPageComponent },
+      { path: 'orders', component: OrdersPageComponent },
       { path: 'order/:id', component: OrderPageComponent },
     ],
   },
