@@ -226,6 +226,7 @@ namespace InstrumentStore.Domain.Mapper
                 });
 
             CreateMap<ProductPropertyValue, ProductPropertyValuesResponse>()
+                .ForPath(dest => dest.PropertyId, opt => opt.MapFrom(src => src.ProductProperty.ProductPropertyId))
                 .ForPath(dest => dest.Name, opt => opt.MapFrom(src => src.ProductProperty.Name))
                 .ForPath(dest => dest.IsRanged, opt => opt.MapFrom(src => src.ProductProperty.IsRanged));
 

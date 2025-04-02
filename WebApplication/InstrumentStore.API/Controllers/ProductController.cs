@@ -93,16 +93,14 @@ namespace InstrumentStore.API.Controllers
         [HttpGet("search-with-archive/page{page}")]// функция поиска товаров по имени включая архивные товары
         public async Task<ActionResult<List<ProductCard>>> SearchByNameWithArchive(
             [FromRoute] int page,
-            [FromQuery] string? name)
+            [FromQuery] string name = "")
         {
-            var products = await _productService.SearchByName(name, page);
+            List<ProductCard> products = await _productService.SearchByName(name, page);
 
-            List<ProductCard> productsCards = new List<ProductCard>();
+            for (int i = 0; i < products.Count; i++)
+                products[i].Image = "https://localhost:7295/images/" + products[i].Image;
 
-            foreach (var p in products)
-                productsCards.Add(_mapper.Map<ProductCard>(p, opt => opt.Items["DbContext"] = _dbContext));
-
-            return Ok(productsCards);
+            return Ok(products);
         }
 
         [HttpGet("{id:guid}")]
@@ -148,17 +146,20 @@ namespace InstrumentStore.API.Controllers
             if (product.IsArchive)
                 throw new ArgumentException();
 
-            ProductToUpdateResponse productToUpdate = _mapper.Map<ProductToUpdateResponse>(product,
-                opt => opt.Items["DbContext"] = _dbContext);
+            ProductToUpdateResponse productToUpdate =
+                _mapper.Map<ProductToUpdateResponse>(product,
+                    opt => opt.Items["DbContext"] = _dbContext);
 
             return Ok(productToUpdate);
         }
 
         [Authorize(Roles = "admin")]
-        [HttpDelete("{id:guid}")]
-        public async Task<ActionResult<Guid>> DeleteProduct(Guid id)
+        [HttpPut("change-archive-status/{id:guid}")]
+        public async Task<ActionResult<Guid>> ChangeArchiveStatus(
+            Guid id,
+            [FromQuery] bool archiveStatus)
         {
-            return Ok(await _productService.Delete(id));
+            return Ok(await _productService.ChangeArchiveStatus(id, archiveStatus));
         }
 
         [HttpPost("create-product")]
@@ -183,28 +184,15 @@ namespace InstrumentStore.API.Controllers
         }
 
         [HttpGet("get-products-for-admin{page}")]
-        public async Task<ActionResult<List<ProductData>>> GetProductsForAdmin([FromRoute] int page)
+        public async Task<ActionResult<List<ProductCard>>> GetProductsForAdmin([FromRoute] int page)
         {
-            List<Product> products = await _productService.GetAll(1);
-            List<ProductData> productsDatas = new List<ProductData>();
+            List<Product> products = await _productService.GetAll(page);
+            List<ProductCard> productsDatas = new List<ProductCard>();
 
             foreach (var p in products)
             {
-                productsDatas.Add(_mapper.Map<ProductData>(p, opt => opt.Items["DbContext"] = _dbContext));
-                productsDatas.Last().Name += page;
+                productsDatas.Add(_mapper.Map<ProductCard>(p, opt => opt.Items["DbContext"] = _dbContext));
             }
-
-            //productsDatas.AddRange(productsDatas);
-            //productsDatas.AddRange(productsDatas);
-            //productsDatas.AddRange(productsDatas);
-            //productsDatas.AddRange(productsDatas);
-
-            //Console.WriteLine("\n" + page + "\n" + productsDatas.Count);
-            //productsDatas = productsDatas
-            //	.Skip((page - 1) * IProductService.pageSize)
-            //	.Take(IProductService.pageSize)
-            //	.ToList();
-            //Console.WriteLine(productsDatas.Count);
 
             return Ok(productsDatas);
         }

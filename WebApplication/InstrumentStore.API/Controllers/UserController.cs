@@ -9,7 +9,6 @@ using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
 using InstrumentStore.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace InstrumentStore.API.Controllers
 {
@@ -104,25 +103,6 @@ namespace InstrumentStore.API.Controllers
 
             UserProfileResponse response = _mapper.Map<UserProfileResponse>(user,
                 opt => opt.Items["DbContext"] = _dbContext);
-
-            PaidOrder? paidOrder = _dbContext.PaidOrder
-                .Where(o => o.User.UserId == user.UserId)
-                .OrderBy(o => o.OrderDate)
-                .LastOrDefault();
-
-            if (paidOrder == null)
-                Console.WriteLine("paidOrder == null");
-            else
-                Console.WriteLine(paidOrder.PaidOrderId);
-
-            DeliveryAddress? address = _dbContext.DeliveryAddress
-                .Include(a => a.City)
-                .FirstOrDefault(a => a.PaidOrder.PaidOrderId == paidOrder.PaidOrderId);
-
-            if (address == null)
-                Console.WriteLine("address == null");
-            else
-                Console.WriteLine(address.DeliveryAddressId);
 
             return Ok(response);
         }

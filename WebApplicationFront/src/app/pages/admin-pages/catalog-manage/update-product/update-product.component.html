@@ -1,7 +1,7 @@
 <h1>Изменение товара</h1>
 
 <div class="product-form-container">
-  <div *ngIf="optionsForProduct" class="product-form">
+  <div *ngIf="productToUpdate" class="product-form">
     <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="name">Название товара:</label>
@@ -101,7 +101,7 @@
     </form>
   </div>
 
-  <div *ngIf="productToUpdate" class="properties-form">
+  <div *ngIf="productToUpdate && propertiesForm" class="properties-form">
     <h2>Свойства товара</h2>
     <form [formGroup]="propertiesForm">
       <div *ngFor="let property of productProperties" class="form-group">
@@ -109,13 +109,15 @@
         <input
           *ngIf="property.isRanged"
           type="number"
-          [formControlName]="property.name"
+          [formControlName]="property.productPropertyId"
+          [id]="property.productPropertyId"
           placeholder="Введите число"
         />
         <input
           *ngIf="!property.isRanged"
           type="text"
-          [formControlName]="property.name"
+          [formControlName]="property.productPropertyId"
+          [id]="property.productPropertyId"
           placeholder="Введите текст"
         />
       </div>

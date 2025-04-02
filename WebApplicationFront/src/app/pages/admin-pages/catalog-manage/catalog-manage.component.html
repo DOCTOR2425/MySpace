@@ -6,37 +6,71 @@
   </button>
 </div>
 
-<div class="table-header">
-  <div class="header-cell">Изображение</div>
-  <div class="header-cell">Название</div>
-  <div class="header-cell">Цена</div>
-  <div class="header-cell">Количество</div>
-  <div class="header-cell">Категория</div>
-  <div class="header-cell">Бренд</div>
-  <div class="header-cell">Страна</div>
-  <div class="header-cell">Действия</div>
+<div class="filters-container">
+  <div class="search-box">
+    <input
+      type="text"
+      [(ngModel)]="searchQuery"
+      placeholder="Поиск по названию..."
+      class="search-input"
+    />
+    <button class="search-button" (click)="searchProducts()">Поиск</button>
+  </div>
+
+  <div class="status-filter">
+    <label>Статус товара:</label>
+    <select
+      [(ngModel)]="archiveStatus"
+      (change)="applyFilters()"
+      class="status-select"
+    >
+      <option value="all">Все товары</option>
+      <option value="active">Только активные</option>
+      <option value="archived">Только архивные</option>
+    </select>
+  </div>
 </div>
-<div class="products-table">
-  <div class="table-row" *ngFor="let product of products">
-    <div class="table-cell">
-      <img [src]="product.image" alt="{{ product.name }}" />
-    </div>
-    <div class="table-cell">{{ product.name }}</div>
-    <div class="table-cell">{{ product.price }}</div>
-    <div class="table-cell">{{ product.quantity }}</div>
-    <div class="table-cell">{{ product.productCategory }}</div>
-    <div class="table-cell">{{ product.brand }}</div>
-    <div class="table-cell">{{ product.country }}</div>
-    <div class="table-cell">
-      <button
-        [routerLink]="['/admin/update-product', product.productId]"
-        class="edit-button"
-      >
-        Редактировать
-      </button>
-      <button class="delete-button" (click)="deleteProduct(product.productId)">
-        Удалить
-      </button>
+
+<div class="table-container">
+  <div class="table-header">
+    <div class="header-cell image-cell">Изображение</div>
+    <div class="header-cell name-cell">Название</div>
+    <div class="header-cell price-cell">Цена</div>
+    <div class="header-cell quantity-cell">Количество</div>
+    <div class="header-cell category-cell">Категория</div>
+    <div class="header-cell brand-cell">Бренд</div>
+    <div class="header-cell country-cell">Страна</div>
+    <div class="header-cell actions-cell">Действия</div>
+  </div>
+  <div class="products-table">
+    <div class="table-row" *ngFor="let product of filteredProducts">
+      <div class="table-cell image-cell">
+        <img [src]="product.image" alt="{{ product.name }}" />
+      </div>
+      <div class="table-cell name-cell">{{ product.name }}</div>
+      <div class="table-cell price-cell">{{ product.price }} руб.</div>
+      <div class="table-cell quantity-cell">{{ product.quantity }}</div>
+      <div class="table-cell category-cell">{{ product.productCategory }}</div>
+      <div class="table-cell brand-cell">{{ product.brand }}</div>
+      <div class="table-cell country-cell">{{ product.country }}</div>
+      <div class="table-cell actions-cell">
+        <button
+          [routerLink]="['/admin/update-product', product.productId]"
+          class="edit-button"
+        >
+          Редактировать
+        </button>
+        <button
+          class="delete-button"
+          (click)="
+            product.isArchive
+              ? changeArchiveStatusToProduct(product.productId, false)
+              : changeArchiveStatusToProduct(product.productId, true)
+          "
+        >
+          {{ product.isArchive ? "Восстановить" : "В архив" }}
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -48,7 +82,7 @@
 <button
   *ngIf="!loading && hasMoreData"
   class="load-more-button"
-  (click)="loadProducts()"
+  (click)="uploadProducts()"
 >
   Загрузить ещё
 </button>

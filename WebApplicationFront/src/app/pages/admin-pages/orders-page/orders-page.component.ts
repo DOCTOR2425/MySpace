@@ -115,6 +115,7 @@ export class OrdersPageComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (val) => {
           val.forEach((order) => this.allOrders.push(order));
+          this.applyFilter();
         },
       });
   }

@@ -1,12 +1,13 @@
 <div *ngIf="user">
   <h2>{{ user.firstName }} {{ user.surname }}</h2>
   <p>Телефон: {{ user.telephone }}</p>
+  <p>Email: {{ user.email }}</p>
+  <p>Адресс последней доставки</p>
   <p>Город: {{ user.city }}</p>
   <p>Улица: {{ user.street }}</p>
   <p>Дом: {{ user.houseNumber }}</p>
   <p>Подъезд: {{ user.entrance }}</p>
   <p>Квартира: {{ user.flat }}</p>
-  <p>Email: {{ user.email }}</p>
 
   <button (click)="logout()">Выйти</button>
 
@@ -29,26 +30,6 @@
           formControlName="telephone"
           placeholder="+375 11 111-11-11"
         />
-      </div>
-      <div class="form-row">
-        <label for="city">Город</label>
-        <input type="text" id="city" formControlName="city" />
-      </div>
-      <div class="form-row">
-        <label for="street">Улица</label>
-        <input type="text" id="street" formControlName="street" />
-      </div>
-      <div class="form-row">
-        <label for="houseNumber">Дом</label>
-        <input type="text" id="houseNumber" formControlName="houseNumber" />
-      </div>
-      <div class="form-row">
-        <label for="entrance">Подъезд</label>
-        <input type="text" id="entrance" formControlName="entrance" />
-      </div>
-      <div class="form-row">
-        <label for="flat">Квартира</label>
-        <input type="text" id="flat" formControlName="flat" />
       </div>
       <div class="form-row">
         <label for="email">Email</label>

@@ -73,12 +73,12 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
       description: [productToUpdate.description, Validators.required],
     });
 
-    this.initPropertiesForm();
     this.adminService
       .getProductPropertiesByCategory(this.productForm.value.category)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((val) => {
         this.productProperties = val;
+        this.initPropertiesForm();
       });
 
     const imageRequests = productToUpdate.images.map((image) =>
@@ -129,10 +129,9 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
 
     const formData = new FormData();
     formData.append('productDto', JSON.stringify(product));
-    product.images.forEach((image, index) => {
+    product.images.forEach((image) => {
       formData.append('images', image, image.name);
     });
-
     this.productService
       .updateProduct(this.productToUpdateId, formData)
       .pipe(takeUntil(this.unsubscribe$))
@@ -146,9 +145,9 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
 
   public getPropertyValues(): { [key: string]: string } {
     const propertyValues: { [key: string]: string } = {};
-
     this.productProperties.forEach((property) => {
-      const control = this.propertiesForm.get(property.name);
+      const control = this.propertiesForm.get(property.productPropertyId);
+
       if (control) {
         propertyValues[property.productPropertyId] = control.value;
       }
@@ -175,22 +174,26 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
     const selectedOption = this.optionsForProduct.productCategories.find(
       (category) => category.productCategoryId === selectedValue
     );
+    const controls: { [key: string]: FormControl } = {};
     if (selectedOption?.name == this.productToUpdate.productCategory) {
-      const controls: { [key: string]: FormControl } = {};
-      this.productToUpdate.productPropertyValues.forEach((property) => {
-        controls[property.name] = this.fb.control(
-          property.value,
+      this.productProperties.forEach((property) => {
+        controls[property.productPropertyId] = this.fb.control(
+          this.productToUpdate.productPropertyValues.find(
+            (prop) => prop.propertyId == property.productPropertyId
+          )?.value,
           Validators.required
         );
       });
-      this.propertiesForm = this.fb.group(controls);
     } else {
-      const controls: { [key: string]: FormControl } = {};
       this.productProperties.forEach((property) => {
-        controls[property.name] = this.fb.control('', Validators.required);
+        controls[property.productPropertyId] = this.fb.control(
+          '',
+          Validators.required
+        );
       });
-      this.propertiesForm = this.fb.group(controls);
     }
+
+    this.propertiesForm = this.fb.group(controls);
   }
 
   public onPhotosChange(event: Event): void {

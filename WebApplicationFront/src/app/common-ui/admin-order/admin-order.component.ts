@@ -3,7 +3,6 @@ import {
   EventEmitter,
   Input,
   OnDestroy,
-  OnInit,
   Output,
 } from '@angular/core';
 import { AdminPaidOrder } from '../../data/interfaces/paid-order/admin-paid-order.interface';
@@ -18,17 +17,12 @@ import { RouterLink } from '@angular/router';
   templateUrl: './admin-order.component.html',
   styleUrls: ['./admin-order.component.scss'],
 })
-export class AdminOrderComponent implements OnDestroy, OnInit {
+export class AdminOrderComponent implements OnDestroy {
   private unsubscribe$ = new Subject<void>();
   @Input() order!: AdminPaidOrder;
   @Output() removeOrder = new EventEmitter<string>();
 
   constructor(private adminService: AdminService) {}
-
-  public ngOnInit(): void {
-    console.log(this.order.receiptDate);
-    console.log(this.order.receiptDate.toString() == '0001-01-01T00:00:00');
-  }
 
   public ngOnDestroy(): void {
     this.unsubscribe$.next();

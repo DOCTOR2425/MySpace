@@ -44,7 +44,9 @@ export class OrderPageComponent implements OnInit {
       .closeOrder(this.order.paidOrderId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
-        next: () => {},
+        next: () => {
+          this.order.receiptDate = new Date();
+        },
       });
   }
 
@@ -53,7 +55,9 @@ export class OrderPageComponent implements OnInit {
       .cancelOrder(this.order.paidOrderId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
-        next: () => {},
+        next: () => {
+          this.order.receiptDate = new Date('9999-12-31T23:59:59.9999999');
+        },
       });
   }
 
@@ -66,7 +70,18 @@ export class OrderPageComponent implements OnInit {
     );
   }
 
-  public isReceiptDateDefault(): boolean {
-    return this.order.receiptDate == new Date('0001-01-01');
+  public isOrderActive(): boolean {
+    return this.order.receiptDate.toString() == '0001-01-01T00:00:00';
+  }
+
+  public isOrderCompleted(): boolean {
+    return (
+      this.order.receiptDate.toString() != '0001-01-01T00:00:00' &&
+      this.order.receiptDate.toString() != '9999-12-31T23:59:59.9999999'
+    );
+  }
+
+  public isOrderCancelled(): boolean {
+    return this.order.receiptDate.toString() == '9999-12-31T23:59:59.9999999';
   }
 }

@@ -9,18 +9,20 @@
         }}</span>
       </div>
 
-      <div *ngIf="isReceiptDateDefault()" class="date-badge">
-        <span class="date-label">Доставка</span>
+      <div *ngIf="isOrderActive()" class="date-badge">
+        <span class="date-label">В обработке</span>
+        <span class="date-value">Ёщё не доставлен</span>
+      </div>
+      <div *ngIf="isOrderCompleted()" class="date-badge">
+        <span class="date-label">Доставлен</span>
         <span class="date-value">{{
           order.receiptDate | date : "dd.MM.yyyy"
         }}</span>
       </div>
-      <!-- <div class="date-badge">
-        <span class="date-label">Доставка</span>
-        <span class="date-value">{{
-          order.receiptDate | date : "dd.MM.yyyy"
-        }}</span>
-      </div> -->
+      <div *ngIf="isOrderCancelled()" class="date-badge">
+        <span class="date-label">Отменён</span>
+        <span class="date-value"></span>
+      </div>
     </div>
   </div>
 
@@ -98,7 +100,7 @@
     </div>
   </div>
 
-  <div class="action-buttons">
+  <div *ngIf="isOrderActive()" class="action-buttons">
     <button type="button" class="cancel-btn" (click)="cancelOrder()">
       <i class="icon-cancel"></i> Отменить заказ
     </button>

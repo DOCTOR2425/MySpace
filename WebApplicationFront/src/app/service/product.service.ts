@@ -75,8 +75,8 @@ export class ProductService {
     });
   }
 
-  public getProductsForAdmin(page: number): Observable<ProductData[]> {
-    return this.http.get<ProductData[]>(
+  public getProductsForAdmin(page: number): Observable<ProductCard[]> {
+    return this.http.get<ProductCard[]>(
       `${this.baseApiUrl}get-products-for-admin${page}`
     );
   }
@@ -101,9 +101,25 @@ export class ProductService {
     );
   }
 
-  public deleteProduct(productId: string): Observable<object> {
-    return this.http.delete(`${this.baseApiUrl}${productId}`, {
-      withCredentials: true,
-    });
+  public searchByNameWithArchive(
+    name: string,
+    page: number
+  ): Observable<ProductCard[]> {
+    return this.http.get<ProductCard[]>(
+      `${this.baseApiUrl}search-with-archive/page${page}?name=${name}`,
+      { withCredentials: true }
+    );
+  }
+
+  public changeArchiveStatus(
+    productId: string,
+    archiveStatus: boolean
+  ): Observable<object> {
+    return this.http.put(
+      `${this.baseApiUrl}change-archive-status/${productId}?archiveStatus=${archiveStatus}`,
+      {
+        withCredentials: true,
+      }
+    );
   }
 }
