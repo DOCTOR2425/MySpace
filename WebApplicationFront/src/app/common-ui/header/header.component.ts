@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, effect, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../service/auth/auth.service';
 import { AdminService } from '../../service/admin/admin.service';
@@ -25,11 +25,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public userService: UserService,
     public adminService: AdminService,
     private productService: ProductService
-  ) {}
+  ) {
+    effect(() => {
+      console.log(this.userEmail);
+    });
+  }
 
   public ngOnInit(): void {
     this.userEmail = this.userService.userEMail?.slice(0, 3).toUpperCase();
-
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
@@ -50,7 +53,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.productService
         .searchByName(this.searchQuery, 1)
         .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((val) => {
+        .subscribe(() => {
           this.router.navigate([`/search/${this.searchQuery}`]);
         });
     }

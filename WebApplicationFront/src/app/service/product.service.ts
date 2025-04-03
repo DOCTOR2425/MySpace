@@ -8,6 +8,8 @@ import { FilterRequest } from '../data/interfaces/filters/filter-request.interfa
 import { CategoryFilters } from '../data/interfaces/filters/category-filters.intervace';
 import { ProductData } from '../data/interfaces/product/product-data.interface';
 import { ProductToUpdate } from '../data/interfaces/product/product-to-update-response.interface';
+import { CreateCommentRequest } from '../data/interfaces/Comment/create-comment-request.interface';
+import { CommentResponse } from '../data/interfaces/Comment/comment-response.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -120,6 +122,20 @@ export class ProductService {
       {
         withCredentials: true,
       }
+    );
+  }
+
+  public addComment(request: CreateCommentRequest): Observable<object> {
+    return this.http.post(`${this.baseApiUrl}add-comment`, request, {
+      withCredentials: true,
+    });
+  }
+  public getCommentsByProduct(
+    productId: string
+  ): Observable<CommentResponse[]> {
+    return this.http.get<CommentResponse[]>(
+      `${this.baseApiUrl}get-comments-by-product/${productId}`,
+      { withCredentials: true }
     );
   }
 }

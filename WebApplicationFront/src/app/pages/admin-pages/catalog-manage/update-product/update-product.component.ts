@@ -72,6 +72,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
       ],
       description: [productToUpdate.description, Validators.required],
     });
+    if (productToUpdate.isArchive) this.productForm.disable();
 
     this.adminService
       .getProductPropertiesByCategory(this.productForm.value.category)
@@ -194,6 +195,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
     }
 
     this.propertiesForm = this.fb.group(controls);
+    if (this.productToUpdate.isArchive) this.propertiesForm.disable();
   }
 
   public onPhotosChange(event: Event): void {
@@ -229,5 +231,24 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
 
   public exit(): void {
     this.router.navigate(['/admin/catalog']);
+  }
+
+  public changeArchiveStatus(status: boolean): void {
+    this.productService
+      .changeArchiveStatus(this.productToUpdateId, status)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: () => {
+          this.productToUpdate.isArchive = status;
+
+          if (this.productToUpdate.isArchive) {
+            this.productForm.disable();
+            this.propertiesForm?.disable();
+          } else {
+            this.productForm.enable();
+            this.propertiesForm?.enable();
+          }
+        },
+      });
   }
 }

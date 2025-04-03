@@ -27,6 +27,7 @@ import { UserDeliveryAddress } from '../../data/interfaces/user/user-delivery-ad
 export class CartPageComponent implements OnInit, OnDestroy {
   public items: CartItem[] = [];
   public totalPrice: number = 0;
+  public showAddressFields: boolean = false;
   public orderOptions!: OrderOptions;
   public userOrderInfo!: UserOrderInfo;
   public orderForm: FormGroup;
@@ -169,5 +170,34 @@ export class CartPageComponent implements OnInit, OnDestroy {
 
     this.cartService.orderCartForUnregistered(payload).subscribe();
     this.cartService.clearLocalCart();
+  }
+
+  public isFieldInvalid(fieldName: string): boolean {
+    const field = this.orderForm.get(fieldName);
+    return field ? field.invalid && (field.dirty || field.touched) : false;
+  }
+
+  public onDeliveryMethodChange(): void {
+    const deliveryMethodId = this.orderForm.get('deliveryMethodId')?.value;
+    const selectedMethod = this.orderOptions.deliveryMethods.find(
+      (method) => method.deliveryMethodId === deliveryMethodId
+    );
+
+    this.showAddressFields = selectedMethod!.name
+      .toLowerCase()
+      .includes('доставка');
+
+    const addressFields = ['city', 'street', 'houseNumber', 'flat'];
+    addressFields.forEach((field) => {
+      const control = this.orderForm.get(field);
+      if (control) {
+        if (this.showAddressFields) {
+          control.setValidators(Validators.required);
+        } else {
+          control.clearValidators();
+        }
+        control.updateValueAndValidity();
+      }
+    });
   }
 }

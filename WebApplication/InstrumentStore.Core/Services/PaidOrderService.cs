@@ -62,11 +62,13 @@ namespace InstrumentStore.Domain.Services
                 PaidOrderId = Guid.NewGuid(),
                 OrderDate = DateTime.Now,
                 User = await _usersService.GetById(userId),
-                DeliveryMethod = await _deliveryMethodService.GetById(orderCartRequest.DeliveryMethodId),
+                DeliveryMethod = await _deliveryMethodService
+                    .GetById(orderCartRequest.DeliveryMethodId),
                 PaymentMethod = orderCartRequest.PaymentMethod,
             };
 
-            if (orderCartRequest.UserDelivaryAddress != null)
+            if (await _deliveryMethodService.IsHomeDelivery(orderCartRequest.DeliveryMethodId)
+                && orderCartRequest.UserDelivaryAddress != null)
             {
                 DeliveryAddress deliveryAddress = new DeliveryAddress()
                 {

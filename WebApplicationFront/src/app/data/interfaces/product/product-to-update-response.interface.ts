@@ -9,6 +9,7 @@ export interface ProductToUpdate {
   productCategory: string;
   brand: string;
   country: string;
+  isArchive: boolean;
 
   images: string[];
   productPropertyValues: ProductPropertyValuesResponse[];

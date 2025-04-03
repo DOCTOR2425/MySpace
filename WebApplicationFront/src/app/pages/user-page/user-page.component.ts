@@ -111,6 +111,8 @@ export class UserPageComponent implements OnInit, OnDestroy {
       .subscribe((user) => {
         this.user = user;
         this.userForm.patchValue(this.user);
+        this.userService.userEMail = user.email;
+        localStorage.setItem(this.userService.userEMailKey, user.email);
       });
   }
 
@@ -119,6 +121,8 @@ export class UserPageComponent implements OnInit, OnDestroy {
       .logout()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(() => {
+        this.userService.userEMail = undefined;
+        localStorage.setItem(this.userService.userEMailKey, '');
         this.router.navigate(['']);
       });
   }

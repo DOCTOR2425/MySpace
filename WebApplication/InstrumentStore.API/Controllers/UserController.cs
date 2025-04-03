@@ -8,6 +8,7 @@ using InstrumentStore.Domain.Contracts.User;
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
 using InstrumentStore.Domain.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InstrumentStore.API.Controllers
@@ -36,10 +37,10 @@ namespace InstrumentStore.API.Controllers
             _paidOrderService = paidOrderService;
         }
 
-        private string GetToken()
+        private async Task<User> GetUserFromToken()
         {
-            return HttpContext.Request.Headers["Authorization"]
-                .ToString().Substring("Bearer ".Length).Trim();
+            return await _usersService.GetUserFromToken(HttpContext.Request.Headers["Authorization"]
+                .ToString().Substring("Bearer ".Length).Trim());
         }
 
         private async Task<string> ClientLogin(string email, string password)
@@ -96,10 +97,11 @@ namespace InstrumentStore.API.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpGet("get-user")]
         public async Task<ActionResult<UserProfileResponse>> GetUser()
         {
-            User user = await _usersService.GetUserFromToken(GetToken());
+            User user = await GetUserFromToken();
 
             UserProfileResponse response = _mapper.Map<UserProfileResponse>(user,
                 opt => opt.Items["DbContext"] = _dbContext);
@@ -107,11 +109,12 @@ namespace InstrumentStore.API.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpPost("update-user")]
         public async Task<ActionResult<UserProfileResponse>> UpdateUser(
             [FromBody] UpdateUserRequest updateUserRequest)
         {
-            User user = await _usersService.GetUserFromToken(GetToken());
+            User user = await GetUserFromToken();
 
             await _usersService.Update(user.UserId, updateUserRequest);
 
@@ -121,10 +124,11 @@ namespace InstrumentStore.API.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpGet("get-paid-orders")]
         public async Task<ActionResult<List<UserPaidOrderResponse>>> GetPaidOrders()
         {
-            User user = await _usersService.GetUserFromToken(GetToken());
+            User user = await GetUserFromToken();
 
             List<PaidOrder> paidOrders = await _paidOrderService.GetAllByUserId(user.UserId);
 

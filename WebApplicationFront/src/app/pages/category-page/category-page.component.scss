@@ -1,23 +1,66 @@
-.container {
+.page-layout {
   display: flex;
-  min-width: 90%;
-  max-width: 90%;
-  // width: 90%;
-  margin: 0 auto;
-}
-.left {
-  flex: 1;
-  // background-color: lightblue;
-}
-.right {
-  flex: 3;
-  // background-color: lightcoral;
+  width: 100%;
+  min-height: 100vh;
 }
 
-.product-cards {
+.filters-column {
+  flex: 0 0 250px; /* Фиксированная ширина 250px */
+  padding: 20px;
+  background-color: #f8f9fa;
+  overflow-y: auto;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+}
+
+.products-column {
+  flex: 1;
+  min-width: 0; /* Важно для правильного поведения flex-элементов */
+}
+
+.products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  grid-template-rows: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 16px;
-  padding: 24px 70px;
+  padding: 20px;
+  min-width: 400px; /* Минимальная ширина для 2 карточек (200px x 2) */
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 768px) {
+  .page-layout {
+    flex-direction: column;
+  }
+
+  .filters-column {
+    width: 100%;
+    height: auto;
+    position: relative;
+    flex: 0 0 auto;
+  }
+
+  .products-grid {
+    min-width: 100%;
+    grid-template-columns: repeat(2, 1fr); /* Всегда 2 колонки */
+  }
+}
+
+/* Дополнительные стили для фильтров */
+.filter-group {
+  margin-bottom: 20px;
+}
+
+.range-control {
+  margin: 10px 0;
+}
+
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+
+  input {
+    margin-right: 8px;
+  }
 }

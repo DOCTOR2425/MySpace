@@ -1,10 +1,12 @@
-<div class="container" *ngIf="categoryFilters">
-  <div class="left">
-    <div *ngFor="let rangeFilter of categoryFilters.rangePropertyForFilters">
+<div class="page-layout">
+  <div class="filters-column">
+    <div
+      *ngFor="let rangeFilter of categoryFilters.rangePropertyForFilters"
+      class="filter-group"
+    >
       <label>{{ rangeFilter.propertyName }}</label>
-
-      <div>
-        <span>Текущее значение: {{ rangeFilter.currentMinValue }}</span>
+      <div class="range-control">
+        <span>От: {{ rangeFilter.currentMinValue }}</span>
         <input
           type="range"
           [min]="rangeFilter.minValue"
@@ -15,8 +17,8 @@
           [attr.data-property]="rangeFilter.propertyName"
         />
       </div>
-      <div>
-        <span>Текущее значение: {{ rangeFilter.currentMaxValue }}</span>
+      <div class="range-control">
+        <span>До: {{ rangeFilter.currentMaxValue }}</span>
         <input
           type="range"
           [min]="rangeFilter.minValue"
@@ -29,9 +31,17 @@
       </div>
     </div>
 
-    <div *ngFor="let collectionFilter of categoryFilters.collectionPropertyForFilters">
+    <div
+      *ngFor="
+        let collectionFilter of categoryFilters.collectionPropertyForFilters
+      "
+      class="filter-group"
+    >
       <label>{{ collectionFilter.propertyName }}</label>
-      <div *ngFor="let value of collectionFilter.uniqueValues">
+      <div
+        *ngFor="let value of collectionFilter.uniqueValues"
+        class="checkbox-option"
+      >
         <input
           type="checkbox"
           [value]="value"
@@ -39,12 +49,13 @@
           #collectionInput
           [attr.data-property]="collectionFilter.propertyName"
         />
-        {{ value }}
+        <span>{{ value }}</span>
       </div>
     </div>
   </div>
-  <div class="right">
-    <div class="product-cards">
+
+  <div class="products-column">
+    <div class="products-grid">
       <app-product-card
         *ngFor="let product of products"
         [product]="product"

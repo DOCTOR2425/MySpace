@@ -4,10 +4,9 @@
   align-items: center;
   background-color: #f4f4f4;
   min-height: 100%;
-  padding: 20px;
 
   h1 {
-    margin: 0 0 20px 0;
+    margin: 0 0 10px 0;
     text-align: center;
   }
 }
@@ -115,7 +114,7 @@
   flex-direction: column;
   gap: 10px;
 
-  .upload-button {
+  .action-button {
     @extend .button;
     background-color: #007bff;
     text-align: center;
@@ -158,5 +157,14 @@
     right: 5px;
     padding: 5px 10px;
     background-color: #dc3545;
+  }
+}
+
+.archive-button {
+  @extend .button;
+  background-color: #007bff;
+
+  &:hover {
+    background-color: #0056b3;
   }
 }

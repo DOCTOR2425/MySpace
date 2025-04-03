@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using InstrumentStore.Domain.Contracts.Cart;
+using InstrumentStore.Domain.Contracts.Comment;
 using InstrumentStore.Domain.Contracts.PaidOrders;
 using InstrumentStore.Domain.Contracts.Products;
 using InstrumentStore.Domain.Contracts.Some;
@@ -196,7 +197,7 @@ namespace InstrumentStore.Domain.Mapper
             CreateMap<DeliveryAddress, UserDeliveryAddress>()
                 .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City.Name));
 
-            CreateMap<Product, ProductToUpdateResponse>()
+            CreateMap<Product, FullProductInfoResponse>()
                 .ForMember(dest => dest.ProductCategory, opt => opt.MapFrom(src => src.ProductCategory.Name))
                 .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand.Name))
                 .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country.Name))
@@ -234,6 +235,10 @@ namespace InstrumentStore.Domain.Mapper
             CreateMap<Country, CountryResponse>();
             CreateMap<ProductCategory, ProductCategoryResponse>();
             CreateMap<ProductProperty, ProductPropertyResponse>();
+
+
+            CreateMap<Comment, CommentResponse>()
+                 .ForPath(dest => dest.UserName, opt => opt.MapFrom(src => src.User.FirstName));
         }
     }
 }

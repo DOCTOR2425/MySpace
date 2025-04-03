@@ -74,13 +74,18 @@
             (change)="onPhotosChange($event)"
             style="display: none"
           />
-          <label for="photos" class="upload-button">
+          <label
+            *ngIf="!productToUpdate.isArchive"
+            for="photos"
+            class="action-button"
+          >
             {{ photos.length < 4 ? "Добавить фото" : "Максимум 4 фото" }}
           </label>
           <div class="photos-preview">
             <div *ngFor="let photo of photos; let i = index" class="photo-item">
               <img [src]="[photosToView[i]]" [alt]="photosToView[i]" />
               <button
+                *ngIf="!productToUpdate.isArchive"
                 type="button"
                 class="delete-button"
                 (click)="onPhotoDelete(i)"
@@ -93,6 +98,24 @@
       </div>
 
       <div class="form-actions">
+        <button
+          class="archive-button"
+          type="button"
+          (click)="
+            productToUpdate.isArchive
+              ? changeArchiveStatus(false)
+              : changeArchiveStatus(true)
+          "
+        >
+          {{
+            productToUpdate.isArchive
+              ? "Вернуть из архива"
+              : "Переместить в архив"
+          }}
+        </button>
+      </div>
+
+      <div *ngIf="!productToUpdate.isArchive" class="form-actions">
         <button type="submit" class="save-button">Обновить товар</button>
         <button type="button" class="cancel-button" (click)="exit()">
           Отмена

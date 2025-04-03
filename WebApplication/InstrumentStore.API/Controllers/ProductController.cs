@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using InstrumentStore.Domain.Abstractions;
+using InstrumentStore.Domain.Contracts.Comment;
 using InstrumentStore.Domain.Contracts.Filters;
 using InstrumentStore.Domain.Contracts.Products;
 using InstrumentStore.Domain.DataBase;
@@ -18,19 +19,25 @@ namespace InstrumentStore.API.Controllers
         private readonly IProductService _productService;
         private readonly IImageService _imageService;
         private readonly IProductPropertyService _productPropertyService;
+        private readonly ICommentService _commentService;
+        private readonly IUsersService _usersService;
         private readonly IMapper _mapper;
 
         public ProductController(IProductService productService,
             IProductPropertyService productPropertyService,
             IMapper mapper,
             InstrumentStoreDBContext dbContext,
-            IImageService imageService)
+            IImageService imageService,
+            ICommentService commentService,
+            IUsersService usersService)
         {
             _productService = productService;
             _productPropertyService = productPropertyService;
             _mapper = mapper;
             _dbContext = dbContext;
             _imageService = imageService;
+            _commentService = commentService;
+            _usersService = usersService;
         }
 
         [HttpGet("page{page}")]
@@ -139,15 +146,12 @@ namespace InstrumentStore.API.Controllers
         }
 
         [HttpGet("get-product-to-update/{id:guid}")]
-        public async Task<ActionResult<ProductToUpdateResponse>> GetProductToUpdate(Guid id)
+        public async Task<ActionResult<FullProductInfoResponse>> GetProductToUpdate(Guid id)
         {
             Product product = await _productService.GetById(id);
 
-            if (product.IsArchive)
-                throw new ArgumentException();
-
-            ProductToUpdateResponse productToUpdate =
-                _mapper.Map<ProductToUpdateResponse>(product,
+            FullProductInfoResponse productToUpdate =
+                _mapper.Map<FullProductInfoResponse>(product,
                     opt => opt.Items["DbContext"] = _dbContext);
 
             return Ok(productToUpdate);
@@ -195,6 +199,28 @@ namespace InstrumentStore.API.Controllers
             }
 
             return Ok(productsDatas);
+        }
+
+        [Authorize]
+        [HttpPost("add-comment")]
+        public async Task<IActionResult> AddComment([FromBody] CreateCommentRequest request)
+        {
+            return Ok(await _commentService.CreateCommentToProduct(
+                request.Text,
+                request.ProductId,
+                (await _usersService.GetUserFromToken(HttpContext.Request.Headers["Authorization"]
+                .ToString().Substring("Bearer ".Length).Trim())).UserId));
+        }
+
+        [HttpGet("get-comments-by-product/{id:guid}")]
+        public async Task<IActionResult> GetCommentsByProduct(Guid id)
+        {
+            List<CommentResponse> comments = new List<CommentResponse>();
+
+            foreach (var comment in await _commentService.GetAllCommentsByProduct(id))
+                comments.Add(_mapper.Map<CommentResponse>(comment));
+
+            return Ok(comments);
         }
     }
 }
