@@ -86,17 +86,23 @@ namespace InstrumentStore.Domain.Mapper
                 {
                     var dbContext = (InstrumentStoreDBContext)context.Items["DbContext"];
 
-                    PaidOrder? paidOrder = dbContext.PaidOrder
-                        .Where(o => o.User.UserId == src.UserId)
-                        .OrderBy(o => o.OrderDate)
-                        .LastOrDefault();
+                    List<PaidOrder> paidOrders = dbContext.PaidOrder
+                                .Where(o => o.User.UserId == src.UserId)
+                                .OrderByDescending(o => o.OrderDate)
+                                .ToList();
 
-                    if (paidOrder == null)
+                    if (paidOrders.Any() == false)
                         return;
 
-                    DeliveryAddress? address = dbContext.DeliveryAddress
-                        .Include(a => a.City)
-                        .FirstOrDefault(a => a.PaidOrder.PaidOrderId == paidOrder.PaidOrderId);
+                    DeliveryAddress? address = null;
+                    foreach (var order in paidOrders)
+                    {
+                        address = dbContext.DeliveryAddress
+                            .Include(a => a.City)
+                            .FirstOrDefault(a => a.PaidOrder == order);
+                        if (address != null)
+                            break;
+                    }
 
                     if (address == null)
                         return;

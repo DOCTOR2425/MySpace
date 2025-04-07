@@ -58,6 +58,10 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
           .subscribe((val) => {
             this.products = val.productsCardsByCategory;
             this.categoryFilters = val.categoryFilters;
+            this.categoryFilters.rangePropertyForFilters.forEach(console.log);
+            this.categoryFilters.collectionPropertyForFilters.forEach(
+              console.log
+            );
 
             this.categoryFilters.rangePropertyForFilters.forEach((filter) => {
               filter.currentMinValue = filter.minValue;

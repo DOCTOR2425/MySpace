@@ -1,4 +1,4 @@
-import { Component, effect, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../service/auth/auth.service';
 import { AdminService } from '../../service/admin/admin.service';
@@ -25,11 +25,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public userService: UserService,
     public adminService: AdminService,
     private productService: ProductService
-  ) {
-    effect(() => {
-      console.log(this.userEmail);
-    });
-  }
+  ) {}
 
   public ngOnInit(): void {
     this.userEmail = this.userService.userEMail?.slice(0, 3).toUpperCase();

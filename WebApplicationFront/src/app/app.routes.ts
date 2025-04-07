@@ -15,6 +15,7 @@ import { UpdateProductComponent } from './pages/admin-pages/catalog-manage/updat
 import { SearchPageComponent } from './pages/search-page/search-page.component';
 import { OrderPageComponent } from './pages/admin-pages/orders-page/order-page/order-page.component';
 import { OrdersPageComponent } from './pages/admin-pages/orders-page/orders-page.component';
+import { ProductComparisonComponent } from './pages/product-comparison/product-comparison.component';
 
 export const routes: Routes = [
   {
@@ -27,6 +28,7 @@ export const routes: Routes = [
       { path: 'category/:categoryName', component: CategoryPageComponent },
       { path: 'user', component: UserPageComponent },
       { path: 'search/:search', component: SearchPageComponent },
+      { path: 'comparison', component: ProductComparisonComponent },
     ],
   },
   { path: 'login', component: LoginPageComponent },

@@ -106,6 +106,9 @@ namespace InstrumentStore.API.Controllers
             UserProfileResponse response = _mapper.Map<UserProfileResponse>(user,
                 opt => opt.Items["DbContext"] = _dbContext);
 
+
+
+
             return Ok(response);
         }
 

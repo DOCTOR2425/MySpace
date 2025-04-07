@@ -16,7 +16,6 @@ export class UserService {
 
   constructor(private http: HttpClient) {
     this.userEMail = localStorage.getItem(this.userEMailKey)?.toString();
-    console.log(this.userEMail);
   }
 
   public getUser(): Observable<UserProfile> {

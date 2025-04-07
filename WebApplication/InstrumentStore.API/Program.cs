@@ -16,12 +16,12 @@ namespace InstrumentStore.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            //builder.Services.AddControllers(options =>
-            //{
-            //	options.Filters.Add<ExceptionFilter>();
-            //});
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add<ExceptionFilter>();
+            });
 
-            builder.Services.AddControllers();
+            //builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -40,6 +40,7 @@ namespace InstrumentStore.API
             builder.Services.AddScoped<IPaidOrderService, PaidOrderService>();
             builder.Services.AddScoped<IPaymentMethodService, PaymentMethodService>();
             builder.Services.AddScoped<IProductCategoryService, ProduCtategoryService>();
+            builder.Services.AddScoped<IProductComparisonService, ProductComparisonService>();
             builder.Services.AddScoped<IProductFilterService, ProductFilterService>();
             builder.Services.AddScoped<IImageService, ImageService>();
             builder.Services.AddScoped<IProductPropertyService, ProductPropertyService>();

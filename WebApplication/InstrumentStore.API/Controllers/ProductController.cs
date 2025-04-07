@@ -40,6 +40,8 @@ namespace InstrumentStore.API.Controllers
             _usersService = usersService;
         }
 
+
+
         [HttpGet("page{page}")]
         public async Task<ActionResult<List<ProductCard>>> GetAllProductsCards([FromRoute] int page)
         {

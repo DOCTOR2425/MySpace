@@ -1,0 +1,92 @@
+<div class="comparison-container">
+  <h2 class="comparison-title">Сравнение товаров</h2>
+
+  <div *ngIf="!products.length" class="empty-comparison">
+    <p>В списке сравнения нет товаров</p>
+    <a [routerLink]="['/']" class="btn btn-primary">Перейти в каталог</a>
+  </div>
+
+  <div *ngIf="products.length" class="comparison-content">
+    <div class="comparison-controls">
+      <button (click)="clearComparisonList()" class="clear-btn">
+        <i class="bi bi-trash"></i> Очистить сравнение
+      </button>
+    </div>
+
+    <div class="table-responsive">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Характеристики</th>
+            <th *ngFor="let product of products" class="product-column">
+              <button
+                (click)="
+                  deleteFromComparison(product.productResponseData.productId)
+                "
+                class="remove-btn"
+                title="Удалить из сравнения"
+              >
+                &times;
+              </button>
+              <div class="product-info">
+                <div
+                  class="product-image-container"
+                  [routerLink]="[
+                    '/product',
+                    product.productResponseData.productId
+                  ]"
+                >
+                  <img
+                    [src]="product.productResponseData.image"
+                    [alt]="product.productResponseData.name"
+                    class="product-image"
+                    (error)="
+                      product.productResponseData.image = 'assets/no-image.png'
+                    "
+                  />
+                </div>
+                <h3
+                  class="product-title"
+                  [routerLink]="[
+                    '/product',
+                    product.productResponseData.productId
+                  ]"
+                >
+                  {{ product.productResponseData.name }}
+                </h3>
+                <div class="product-meta">
+                  <span class="product-brand">{{
+                    product.productResponseData.brand
+                  }}</span>
+                  <span class="product-price"
+                    >{{ product.productResponseData.price | number }} руб.</span
+                  >
+                  <span
+                    class="product-availability"
+                    [class.out-of-stock]="
+                      product.productResponseData.quantity <= 0
+                    "
+                  >
+                    {{
+                      product.productResponseData.quantity > 0
+                        ? "В наличии"
+                        : "Нет в наличии"
+                    }}
+                  </span>
+                </div>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let prop of properties">
+            <td class="property-name">{{ prop }}</td>
+            <td *ngFor="let product of products" class="property-value">
+              {{ getPropertyValue(product, prop) }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

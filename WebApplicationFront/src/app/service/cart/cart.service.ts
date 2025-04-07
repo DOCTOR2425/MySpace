@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CartItem } from '../../data/interfaces/cart/cart-item.interface';
-import { asapScheduler, Observable, scheduled } from 'rxjs';
+import { asapScheduler, Observable, of, scheduled } from 'rxjs';
 import { OrderOptions } from '../../data/interfaces/order-options/order-options.interface';
 import { UserOrderInfo } from '../../data/interfaces/user/user-order-info.interface';
 import { environment } from '../../../environments/environment.development';
@@ -31,7 +31,8 @@ export class CartService {
         withCredentials: true,
       });
     } else {
-      return scheduled([this.getCartItemsFromLocalStorage()], asapScheduler);
+      // return scheduled([this.getCartItemsFromLocalStorage()], asapScheduler);
+      return of(this.getCartItemsFromLocalStorage());
     }
   }
 

@@ -8,6 +8,8 @@ import { Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { CreateCommentRequest } from '../../data/interfaces/Comment/create-comment-request.interface';
 import { CommentResponse } from '../../data/interfaces/Comment/comment-response.interface';
+import { ComparisonService } from '../../service/comparison/comparison.service';
+import { ToastService } from '../../service/toast/toast.service';
 
 @Component({
   selector: 'app-product',
@@ -27,13 +29,20 @@ export class ProductComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
-    private cartService: CartService
+    private cartService: CartService,
+    private comparisonService: ComparisonService,
+    private toastService: ToastService
   ) {}
 
   public ngOnInit(): void {
     this.productId = this.route.snapshot.paramMap.get('id')!;
     this.loadProduct();
     this.loadComments();
+  }
+
+  public ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   private loadProduct(): void {
@@ -97,8 +106,17 @@ export class ProductComponent implements OnInit, OnDestroy {
       });
   }
 
-  public ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+  public addToComparison(): void {
+    this.comparisonService
+      .addToComparison(this.productId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (val) => {
+          this.toastService.showSuccess(
+            'Продукт добавлне в сравнения',
+            'Добавленно'
+          );
+        },
+      });
   }
 }

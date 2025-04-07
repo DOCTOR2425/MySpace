@@ -6,7 +6,6 @@ import { environment } from '../../environments/environment.development';
 import { Product } from '../data/interfaces/product/product.interface';
 import { FilterRequest } from '../data/interfaces/filters/filter-request.interface';
 import { CategoryFilters } from '../data/interfaces/filters/category-filters.intervace';
-import { ProductData } from '../data/interfaces/product/product-data.interface';
 import { ProductToUpdate } from '../data/interfaces/product/product-to-update-response.interface';
 import { CreateCommentRequest } from '../data/interfaces/Comment/create-comment-request.interface';
 import { CommentResponse } from '../data/interfaces/Comment/comment-response.interface';

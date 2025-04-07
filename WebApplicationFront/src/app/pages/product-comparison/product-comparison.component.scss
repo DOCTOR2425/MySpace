@@ -1,0 +1,162 @@
+.comparison-container {
+  width: 100%;
+  padding: 0px 1rem;
+  box-sizing: border-box;
+}
+
+.comparison-title {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.empty-comparison {
+  text-align: center;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 0.5rem;
+
+  p {
+    margin-bottom: 1rem;
+    color: #6c757d;
+  }
+}
+
+.comparison-controls {
+  margin-bottom: 1rem;
+}
+
+.clear-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &:hover {
+    background: #c82333;
+  }
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+}
+
+.comparison-table {
+  width: 100%;
+  min-width: 800px;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #dee2e6;
+    vertical-align: top;
+  }
+
+  thead th {
+    background: #f8f9fa;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+}
+
+.product-column {
+  min-width: 220px;
+  text-align: center;
+  position: relative;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  &:hover {
+    background: #5a6268;
+  }
+}
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.product-image-container {
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.product-image {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.product-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.product-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.product-brand {
+  color: #6c757d;
+}
+
+.product-price {
+  font-weight: bold;
+  color: #dc3545;
+}
+
+.product-availability {
+  color: #28a745;
+
+  &.out-of-stock {
+    color: #dc3545;
+  }
+}
+
+.property-name {
+  font-weight: 600;
+  background: #f8f9fa;
+  width: 200px;
+}
+
+.property-value {
+  text-align: center;
+}

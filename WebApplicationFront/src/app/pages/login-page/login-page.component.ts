@@ -12,6 +12,7 @@ import { ToastService } from '../../service/toast/toast.service';
 import { AdminService } from '../../service/admin/admin.service';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../service/user/user.service';
+import { ComparisonService } from '../../service/comparison/comparison.service';
 
 @Component({
   selector: 'app-login-page',
@@ -31,7 +32,8 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private userService: UserService,
     private adminService: AdminService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private comparisonService: ComparisonService
   ) {}
 
   public loginForm = new FormGroup({
@@ -78,6 +80,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
       localStorage.setItem(this.userService.userEMailKey, '');
       this.router.navigate(['admin']);
     } else {
+      localStorage.setItem(this.comparisonService.comparisonKey, '');
       localStorage.setItem(this.userService.userEMailKey, loginValue.email);
       this.userService.userEMail = loginValue.email;
       this.router.navigate([`${this.returnUrl}`]);

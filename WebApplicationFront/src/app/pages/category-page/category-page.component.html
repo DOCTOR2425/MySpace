@@ -1,5 +1,5 @@
 <div class="page-layout">
-  <div class="filters-column">
+  <div *ngIf="categoryFilters" class="filters-column">
     <div
       *ngFor="let rangeFilter of categoryFilters.rangePropertyForFilters"
       class="filter-group"
