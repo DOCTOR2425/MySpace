@@ -31,9 +31,9 @@ export class ProductCardComponent implements OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe();
 
-    const button = document.getElementById(
-      this.product.productId
-    ) as HTMLButtonElement;
+    const button = document.getElementsByClassName(
+      'add-to-cart-btn'
+    )[0] as HTMLButtonElement;
     button.style.backgroundColor = 'gray';
   }
 }

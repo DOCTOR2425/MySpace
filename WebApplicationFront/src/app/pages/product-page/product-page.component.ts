@@ -112,7 +112,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (val) => {
-          this.toastService.showSuccess(
+          this.toastService.showInfo(
             'Продукт добавлне в сравнения',
             'Добавленно'
           );

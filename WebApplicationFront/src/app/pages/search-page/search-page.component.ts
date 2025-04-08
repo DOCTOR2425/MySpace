@@ -31,7 +31,6 @@ export class SearchPageComponent implements OnInit {
       )
       .subscribe((val) => {
         this.products = val;
-        console.log(this.products);
       });
   }
 }

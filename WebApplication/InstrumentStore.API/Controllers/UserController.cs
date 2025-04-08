@@ -1,5 +1,4 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Authentication;
 using System.Security.Claims;
 using AutoMapper;
 using InstrumentStore.Domain.Abstractions;
@@ -47,18 +46,10 @@ namespace InstrumentStore.API.Controllers
         {
             string token = "";
 
-            try
-            {
-                if (await _adminService.IsAdminEmail(email))
-                    token = await _adminService.Login(email, password);
-                else
-                    token = await _usersService.Login(email, password);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw new AuthenticationException();
-            }
+            if (await _adminService.IsAdminEmail(email))
+                token = await _adminService.Login(email, password);
+            else
+                token = await _usersService.Login(email, password);
 
             HttpContext.Response.Cookies.Append(JwtProvider.AccessCookiesName, token, new CookieOptions()
             {// выдача пользователю токена в куки файлы
@@ -105,9 +96,6 @@ namespace InstrumentStore.API.Controllers
 
             UserProfileResponse response = _mapper.Map<UserProfileResponse>(user,
                 opt => opt.Items["DbContext"] = _dbContext);
-
-
-
 
             return Ok(response);
         }

@@ -126,11 +126,11 @@ namespace InstrumentStore.Domain.Services
         public async Task<List<PaidOrder>> GetAll(int page)
         {
             return await _dbContext.PaidOrder
+                .OrderByDescending(o => o.OrderDate)
                 .Skip((page - 1) * PageSize)
                 .Take(PageSize)
                 .Include(o => o.User)
                 .Include(o => o.DeliveryMethod)
-                .OrderByDescending(o => o.OrderDate)
                 .ToListAsync();
         }
     }

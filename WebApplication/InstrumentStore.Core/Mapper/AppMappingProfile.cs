@@ -3,7 +3,6 @@ using InstrumentStore.Domain.Contracts.Cart;
 using InstrumentStore.Domain.Contracts.Comment;
 using InstrumentStore.Domain.Contracts.PaidOrders;
 using InstrumentStore.Domain.Contracts.Products;
-using InstrumentStore.Domain.Contracts.Some;
 using InstrumentStore.Domain.Contracts.User;
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
@@ -237,9 +236,6 @@ namespace InstrumentStore.Domain.Mapper
                 .ForPath(dest => dest.Name, opt => opt.MapFrom(src => src.ProductProperty.Name))
                 .ForPath(dest => dest.IsRanged, opt => opt.MapFrom(src => src.ProductProperty.IsRanged));
 
-            CreateMap<Brand, BrandResponse>();
-            CreateMap<Country, CountryResponse>();
-            CreateMap<ProductCategory, ProductCategoryResponse>();
             CreateMap<ProductProperty, ProductPropertyResponse>();
 
 

@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../service/auth/auth.service';
 import { AdminService } from '../../service/admin/admin.service';
@@ -14,7 +20,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   public userEmail?: string = undefined;
   public searchQuery: string = '';
   private unsubscribe$ = new Subject<void>();
@@ -24,8 +30,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public authService: AuthService,
     public userService: UserService,
     public adminService: AdminService,
-    private productService: ProductService
+    private productService: ProductService,
+    private el: ElementRef
   ) {}
+
+  ngAfterViewInit() {
+    const header = this.el.nativeElement.querySelector('.header');
+    const updateHeight = () => {
+      const height = header.offsetHeight;
+      document.documentElement.style.setProperty(
+        '--header-height',
+        `${height}px`
+      );
+    };
+
+    updateHeight();
+    new ResizeObserver(updateHeight).observe(header);
+  }
 
   public ngOnInit(): void {
     this.userEmail = this.userService.userEMail?.slice(0, 3).toUpperCase();

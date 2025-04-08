@@ -108,8 +108,10 @@ export class LoginPageComponent implements OnInit, OnDestroy {
             this.login(response, loginValue);
           },
           error: (error) => {
-            console.log(error.status);
-            this.toastService.showError(error.message, 'Ошибка');
+            this.toastService.showError(
+              error.error.error,
+              'Ошибка регистрации'
+            );
           },
         });
     } else {
@@ -141,7 +143,6 @@ export class LoginPageComponent implements OnInit, OnDestroy {
             });
           },
           error: (error) => {
-            console.log(error.status);
             this.toastService.showError(error.message, 'Ошибка');
           },
         });

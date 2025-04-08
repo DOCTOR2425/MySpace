@@ -9,9 +9,7 @@
   margin-bottom: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   height: 150px;
-  /* Фиксированная высота */
   overflow: hidden;
-  /* Обрезаем контент, который не влезает */
   box-sizing: border-box;
 }
 
@@ -36,7 +34,6 @@
   font-weight: bold;
   margin: 0;
   word-wrap: break-word;
-  /* Перенос слов */
 }
 
 .price-controls {
@@ -75,7 +72,6 @@
 
 .number-control button:disabled {
   background-color: #ccc;
-  cursor: not-allowed;
 }
 
 .remove-btn {

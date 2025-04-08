@@ -6,52 +6,54 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InstrumentStore.API.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class ProductCategoryController : ControllerBase
-	{
-		private readonly IProductCategoryService _productCategoryService;
-		private readonly IMapper _mapper;
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ProductCategoryController : ControllerBase
+    {
+        private readonly IProductCategoryService _productCategoryService;
+        private readonly IMapper _mapper;
 
-		public ProductCategoryController(
-			IProductCategoryService productCategoryService,
-			IMapper mapper)
-		{
-			_productCategoryService = productCategoryService;
-			_mapper = mapper;
-		}
+        public ProductCategoryController(
+            IProductCategoryService productCategoryService,
+            IMapper mapper)
+        {
+            _productCategoryService = productCategoryService;
+            _mapper = mapper;
+        }
 
-		[HttpGet("get-all-categories")]
-		public async Task<ActionResult<List<ProductCategory>>> GetAllCategories()
-		{
-			return await _productCategoryService.GetAll();
-		}
+        [HttpGet("get-all-categories")]
+        public async Task<ActionResult<List<ProductCategory>>> GetAllCategories()
+        {
+            return await _productCategoryService.GetAll();
+        }
 
-		[HttpPost("create-category")]
-		public async Task<ActionResult<Guid>> CreateCategory([FromBody] string productCategoryName)
-		{
-			ProductCategory productCategory = new ProductCategory
-			{
-				ProductCategoryId = Guid.NewGuid(),
-				Name = productCategoryName
-			};
 
-			return Ok(await _productCategoryService.Create(productCategory));
-		}
 
-		[HttpGet("get-properties-by-category/{id:guid}")]
-		public async Task<ActionResult<List<ProductPropertyResponse>>> GetPropertiesByCategory(Guid id)
-		{
-			List<ProductProperty> productProperties =
-				await _productCategoryService.GetProductPropertiesByCategory(id);
+        [HttpPost("create-category")]
+        public async Task<ActionResult<Guid>> CreateCategory([FromBody] string productCategoryName)
+        {
+            ProductCategory productCategory = new ProductCategory
+            {
+                ProductCategoryId = Guid.NewGuid(),
+                Name = productCategoryName
+            };
 
-			List<ProductPropertyResponse> properties =
-				new List<ProductPropertyResponse>(productProperties.Count);
+            return Ok(await _productCategoryService.Create(productCategory));
+        }
 
-			foreach (ProductProperty productProperty in productProperties)
-				properties.Add(_mapper.Map<ProductPropertyResponse>(productProperty));
+        [HttpGet("get-properties-by-category/{id:guid}")]
+        public async Task<ActionResult<List<ProductPropertyResponse>>> GetPropertiesByCategory(Guid id)
+        {
+            List<ProductProperty> productProperties =
+                await _productCategoryService.GetProductPropertiesByCategory(id);
 
-			return Ok(properties);
-		}
-	}
+            List<ProductPropertyResponse> properties =
+                new List<ProductPropertyResponse>(productProperties.Count);
+
+            foreach (ProductProperty productProperty in productProperties)
+                properties.Add(_mapper.Map<ProductPropertyResponse>(productProperty));
+
+            return Ok(properties);
+        }
+    }
 }
