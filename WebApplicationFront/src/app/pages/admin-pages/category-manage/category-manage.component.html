@@ -1,0 +1,54 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>Управление категориями</h1>
+    <button class="btn btn-primary" [routerLink]="['']">
+      <i class="fas fa-plus"></i> Добавить категорию
+    </button>
+  </div>
+
+  <div *ngIf="categories" class="table-container">
+    <table class="categories-table">
+      <thead>
+        <tr>
+          <th>Название</th>
+          <th>Кол-во товаров</th>
+          <th>Статус</th>
+          <th>Действия</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let category of categories">
+          <td>{{ category.name }}</td>
+          <td>{{ category.productCount }}</td>
+          <td>
+            <span
+              [class]="
+                'status-badge ' +
+                (category.isHidden ? 'status-hidden' : 'status-active')
+              "
+            >
+              {{ category.isHidden ? "Скрыта" : "Активна" }}
+            </span>
+          </td>
+          <td class="actions">
+            <button class="btn-icon" [routerLink]="['']">Редактировать</button>
+            <button
+              class="btn-icon"
+              [class.btn-warning]="!category.isHidden"
+              (click)="
+                changeVisibilityStatus(
+                  category.productCategoryId,
+                  category.isHidden ? false : true
+                )
+              "
+            >
+              {{
+                category.isHidden ? "Показать категорию" : "Скрыть категорию"
+              }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

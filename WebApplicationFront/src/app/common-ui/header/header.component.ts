@@ -1,10 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../service/auth/auth.service';
 import { AdminService } from '../../service/admin/admin.service';
@@ -13,6 +7,8 @@ import { UserService } from '../../service/user/user.service';
 import { ProductService } from '../../service/product.service';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { ProductCategoryService } from '../../service/product-category/product-category.service';
+import { ProductCategory } from '../../data/interfaces/some/product-category.interface';
 
 @Component({
   selector: 'app-header',
@@ -23,6 +19,7 @@ import { FormsModule } from '@angular/forms';
 export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   public userEmail?: string = undefined;
   public searchQuery: string = '';
+  public categories: ProductCategory[] = [];
   private unsubscribe$ = new Subject<void>();
 
   constructor(
@@ -31,22 +28,8 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     public userService: UserService,
     public adminService: AdminService,
     private productService: ProductService,
-    private el: ElementRef
+    private productCategoryService: ProductCategoryService
   ) {}
-
-  ngAfterViewInit() {
-    const header = this.el.nativeElement.querySelector('.header');
-    const updateHeight = () => {
-      const height = header.offsetHeight;
-      document.documentElement.style.setProperty(
-        '--header-height',
-        `${height}px`
-      );
-    };
-
-    updateHeight();
-    new ResizeObserver(updateHeight).observe(header);
-  }
 
   public ngOnInit(): void {
     this.userEmail = this.userService.userEMail?.slice(0, 3).toUpperCase();
@@ -58,11 +41,34 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(() => {
         this.searchQuery = '';
       });
+
+    this.productCategoryService
+      .getTopCategoriesBySales()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (val) => {
+          this.categories = val;
+        },
+      });
   }
 
   public ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  public ngAfterViewInit(): void {
+    const header = document.getElementsByClassName('header')[0] as HTMLElement;
+    const updateHeight = () => {
+      const height = header.offsetHeight;
+      document.documentElement.style.setProperty(
+        '--header-height',
+        `${height}px`
+      );
+    };
+
+    updateHeight();
+    new ResizeObserver(updateHeight).observe(header);
   }
 
   public searchByName(): void {

@@ -17,6 +17,7 @@ import { RegisterUserFromOrderRequest } from '../../data/interfaces/user/registe
 import { AddToCartRequest } from '../../data/interfaces/cart/add-to-cart-request.interface';
 import { CartItemComponent } from './cart-item/cart-item.component';
 import { UserDeliveryAddress } from '../../data/interfaces/user/user-delivery-address.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart-page',
@@ -36,7 +37,8 @@ export class CartPageComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private cartService: CartService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {
     this.orderForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -64,13 +66,21 @@ export class CartPageComponent implements OnInit, OnDestroy {
       userOrderInfo: this.cartService.getUserOrderInfo(),
     })
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((val) => {
-        this.items = val.cartItems;
-        this.updateTotalPrice();
-        this.orderOptions = val.orderOptions;
-        this.userOrderInfo = val.userOrderInfo;
-        this.orderForm.patchValue(this.userOrderInfo);
-        this.orderForm.patchValue(this.userOrderInfo.userDeliveryAddress);
+      .subscribe({
+        next: (val) => {
+          this.items = val.cartItems;
+          this.updateTotalPrice();
+          this.orderOptions = val.orderOptions;
+          this.userOrderInfo = val.userOrderInfo;
+          this.orderForm.patchValue(this.userOrderInfo);
+          this.orderForm.patchValue(this.userOrderInfo.userDeliveryAddress);
+        },
+        error: (error) => {
+          if (error.status == 401) {
+            this.authService.logout();
+            this.router.navigate(['/']);
+          }
+        },
       });
   }
 

@@ -2,6 +2,7 @@
 using InstrumentStore.Domain.Abstractions;
 using InstrumentStore.Domain.Contracts.Products;
 using InstrumentStore.Domain.DataBase.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InstrumentStore.API.Controllers
@@ -27,10 +28,8 @@ namespace InstrumentStore.API.Controllers
             return await _productCategoryService.GetAll();
         }
 
-
-
         [HttpPost("create-category")]
-        public async Task<ActionResult<Guid>> CreateCategory([FromBody] string productCategoryName)
+        public async Task<ActionResult<Guid>> CreateCategory([FromQuery] string productCategoryName)
         {
             ProductCategory productCategory = new ProductCategory
             {
@@ -54,6 +53,28 @@ namespace InstrumentStore.API.Controllers
                 properties.Add(_mapper.Map<ProductPropertyResponse>(productProperty));
 
             return Ok(properties);
+        }
+
+        [HttpGet("get-top-categories-by-sales")]
+        public async Task<IActionResult> GetTopCategoriesBySales()
+        {
+            return Ok((await _productCategoryService.GetCategoriesBySales()).Take(8));
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpGet("get-categories-for-admin")]
+        public async Task<IActionResult> GetProductCategoriesForAdmin()
+        {
+            return Ok(await _productCategoryService.GetCategoriesForAdmin());
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost("change-visibility-status/{categoryId:guid}")]
+        public async Task<IActionResult> ChangeVisibilityStatus(
+            Guid categoryId,
+            [FromQuery] bool visibilityStatus)
+        {
+            return Ok(await _productCategoryService.ChangeVisibilityStatus(categoryId, visibilityStatus));
         }
     }
 }

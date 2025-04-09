@@ -3,7 +3,7 @@ CREATE OR ALTER PROC SearchByName
     @page INT
 AS
 BEGIN
-    DECLARE @productOnPage INT = 5;
+    DECLARE @productOnPage INT = 10;
     DECLARE @startRow INT = (@page - 1) * @productOnPage + 1;
     DECLARE @endRow INT = @page * @productOnPage;
 

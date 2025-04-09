@@ -4,7 +4,8 @@ import { ComparisonService } from '../../service/comparison/comparison.service';
 import { Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../service/auth/auth.service';
 
 @Component({
   selector: 'app-product-comparison',
@@ -18,15 +19,27 @@ export class ProductComparisonComponent implements OnInit {
 
   private unsubscribe$ = new Subject<void>();
 
-  constructor(private comparisonService: ComparisonService) {}
+  constructor(
+    private comparisonService: ComparisonService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   public ngOnInit(): void {
     this.comparisonService
       .getUserComparison()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((products) => {
-        this.products = products;
-        this.updatePropertiesLists();
+      .subscribe({
+        next: (products) => {
+          this.products = products;
+          this.updatePropertiesLists();
+        },
+        error: (error) => {
+          if (error.status == 401) {
+            this.authService.logout();
+            this.router.navigate(['/']);
+          }
+        },
       });
   }
 

@@ -36,7 +36,7 @@ export class UserPageComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.initForm();
     this.getUser();
-    this.getPaidOrder();
+    // this.getPaidOrder();
   }
 
   public ngOnDestroy(): void {
@@ -68,9 +68,18 @@ export class UserPageComponent implements OnInit, OnDestroy {
     this.userService
       .getUser()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((user) => {
-        this.user = user;
-        this.userForm.patchValue(this.user);
+      .subscribe({
+        next: (user) => {
+          this.user = user;
+          this.userForm.patchValue(this.user);
+          this.getPaidOrder();
+        },
+        error: (error) => {
+          if (error.status == 401) {
+            this.authService.logout();
+            this.router.navigate(['/']);
+          }
+        },
       });
   }
 
@@ -117,13 +126,7 @@ export class UserPageComponent implements OnInit, OnDestroy {
   }
 
   public logout(): void {
-    this.authService
-      .logout()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(() => {
-        this.userService.userEMail = undefined;
-        localStorage.setItem(this.userService.userEMailKey, '');
-        this.router.navigate(['']);
-      });
+    this.authService.logout();
+    this.router.navigate(['']);
   }
 }

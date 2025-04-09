@@ -3,6 +3,7 @@ using InstrumentStore.Domain.Contracts.Cart;
 using InstrumentStore.Domain.Contracts.Comment;
 using InstrumentStore.Domain.Contracts.PaidOrders;
 using InstrumentStore.Domain.Contracts.Products;
+using InstrumentStore.Domain.Contracts.Some;
 using InstrumentStore.Domain.Contracts.User;
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
@@ -238,9 +239,10 @@ namespace InstrumentStore.Domain.Mapper
 
             CreateMap<ProductProperty, ProductPropertyResponse>();
 
-
             CreateMap<Comment, CommentResponse>()
                  .ForPath(dest => dest.UserName, opt => opt.MapFrom(src => src.User.FirstName));
+
+            CreateMap<ProductCategory, ProductCategoryForAdmin>();
         }
     }
 }

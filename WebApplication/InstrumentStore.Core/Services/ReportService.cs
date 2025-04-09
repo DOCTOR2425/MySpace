@@ -1,13 +1,10 @@
-﻿using AutoMapper;
+﻿using System.Runtime.InteropServices;
+using AutoMapper;
 using InstrumentStore.Domain.Abstractions;
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Office.Interop.Excel;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using Excel = Microsoft.Office.Interop.Excel;
 using Word = Microsoft.Office.Interop.Word;
 
@@ -138,21 +135,19 @@ namespace InstrumentStore.Domain.Services
 
         public async Task<string> GenerateReportSalesByCategoryOverTime(DateTime from, DateTime to)
         {
-            Dictionary<string, decimal> categoriesStats = new Dictionary<string, decimal>();
-            List<PaidOrderItem> paidOrderItems = await _dbContext.PaidOrderItem
-                .AsQueryable()
-                .Include(i => i.Product)
+            Dictionary<string, decimal> categoriesStats = await _dbContext.PaidOrderItem
                 .Include(i => i.Product.ProductCategory)
-                .Where(i => i.PaidOrder.OrderDate >= from && i.PaidOrder.OrderDate <= to)
-                .ToListAsync();
-
-            foreach (ProductCategory category in _dbContext.ProductCategory)
-            {
-                categoriesStats.Add(category.Name,
-                    paidOrderItems.Where(
-                        p => p.Product.ProductCategory.ProductCategoryId == category.ProductCategoryId)
-                    .Sum(i => i.Price * i.Quantity));
-            }
+                .GroupBy(i => i.Product.ProductCategory.Name)
+                .Select(g => new
+                {
+                    CategoryName = g.Key,
+                    TotalSales = g.Sum(i => i.Price * i.Quantity)
+                })
+                .OrderByDescending(x => x.TotalSales)
+                .ToDictionaryAsync(
+                    x => x.CategoryName,
+                    x => x.TotalSales
+                );
 
             await GenerateExcelReport(categoriesStats,
                 "Продажи по категориям",
@@ -252,7 +247,7 @@ namespace InstrumentStore.Domain.Services
             int currentRow = 1;
 
             Dictionary<Product, int> productsByCategory = new Dictionary<Product, int>();
-            foreach(var category in categories)
+            foreach (var category in categories)
             {
                 currentRow++;
                 table.Cells[currentRow, 1] = category.Name;

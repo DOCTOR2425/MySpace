@@ -125,7 +125,7 @@ namespace InstrumentStore.Domain.Services
                 .FirstOrDefaultAsync(u => u.UserId == id);
 
             if (user == null)
-                throw new ArgumentNullException("No user with that Id");
+                throw new UnauthorizedAccessException("No user with that Id");
 
             return user;
         }

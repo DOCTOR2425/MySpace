@@ -60,6 +60,8 @@ namespace InstrumentStore.Domain.Service
                 .Include(p => p.Country)
                 .OrderBy(p => p.Name)
                 .Where(p => p.ProductCategory.ProductCategoryId == categoryId)
+                .Skip((page - 1) * IProductService.pageSize)
+                .Take(IProductService.pageSize)
                 .ToListAsync();
         }
 

@@ -16,6 +16,7 @@ import { SearchPageComponent } from './pages/search-page/search-page.component';
 import { OrderPageComponent } from './pages/admin-pages/orders-page/order-page/order-page.component';
 import { OrdersPageComponent } from './pages/admin-pages/orders-page/orders-page.component';
 import { ProductComparisonComponent } from './pages/product-comparison/product-comparison.component';
+import { CategoryManageComponent } from './pages/admin-pages/category-manage/category-manage.component';
 
 export const routes: Routes = [
   {
@@ -38,6 +39,7 @@ export const routes: Routes = [
     children: [
       { path: '', component: AdminMainPageComponent },
       { path: 'catalog', component: CatalogManageComponent },
+      { path: 'categories', component: CategoryManageComponent },
       { path: 'create-product', component: CreateProductComponent },
       { path: 'update-product/:id', component: UpdateProductComponent },
       { path: 'reports', component: ReportsPageComponent },

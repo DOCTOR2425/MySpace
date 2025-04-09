@@ -8,8 +8,7 @@ namespace InstrumentStore.API
     {
         public void OnException(ExceptionContext context)
         {
-            Console.WriteLine($"Error in {context.ActionDescriptor.DisplayName}: {context.Exception.Message}");
-            Console.WriteLine(context.Exception.Message);
+            Console.WriteLine($"\nError in {context.ActionDescriptor.DisplayName}:\n{context.Exception.Message}");
 
             var statusCode = context.Exception switch
             {

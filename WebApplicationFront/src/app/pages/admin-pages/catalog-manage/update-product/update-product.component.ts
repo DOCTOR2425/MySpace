@@ -44,6 +44,32 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
     private productService: ProductService
   ) {}
 
+  public ngOnInit(): void {
+    this.productToUpdateId = this.route.snapshot.paramMap.get('id')!;
+
+    forkJoin({
+      productToUpdate: this.productService.getProductToUpdate(
+        this.productToUpdateId
+      ),
+      productOptions: this.adminService.getOptionsForProduct(),
+    })
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((val) => {
+        this.productToUpdate = val.productToUpdate;
+        this.optionsForProduct = val.productOptions;
+        this.buildForms(val.productToUpdate);
+      });
+  }
+
+  public ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+
+    this.photos.forEach((photo) => {
+      URL.revokeObjectURL(this.getPhotoUrl(photo));
+    });
+  }
+
   private buildForms(productToUpdate: ProductToUpdate): void {
     this.productForm = this.fb.group({
       name: [productToUpdate.name, Validators.required],
@@ -94,23 +120,6 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
       );
       this.photosToView = this.photos.map((file) => this.getPhotoUrl(file));
     });
-  }
-
-  public ngOnInit(): void {
-    this.productToUpdateId = this.route.snapshot.paramMap.get('id')!;
-
-    forkJoin({
-      productToUpdate: this.productService.getProductToUpdate(
-        this.productToUpdateId
-      ),
-      productOptions: this.adminService.getOptionsForProduct(),
-    })
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((val) => {
-        this.productToUpdate = val.productToUpdate;
-        this.optionsForProduct = val.productOptions;
-        this.buildForms(val.productToUpdate);
-      });
   }
 
   public onSubmit(): void {
@@ -218,15 +227,6 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
 
   public getPhotoUrl(file: File): string {
     return URL.createObjectURL(file);
-  }
-
-  public ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-
-    this.photos.forEach((photo) => {
-      URL.revokeObjectURL(this.getPhotoUrl(photo));
-    });
   }
 
   public exit(): void {

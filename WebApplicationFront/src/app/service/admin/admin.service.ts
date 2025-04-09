@@ -103,15 +103,6 @@ export class AdminService {
     );
   }
 
-  public getAllCategories(): Observable<ProductCategory[]> {
-    return this.http.get<ProductCategory[]>(
-      `${this.baseApiUrl}/api/ProductCategory/get-all-categories`,
-      {
-        withCredentials: true,
-      }
-    );
-  }
-
   public getAllOrders(page: number): Observable<AdminPaidOrder[]> {
     return this.http.get<AdminPaidOrder[]>(
       `${this.baseApiUrl}/api/PaidOrder/get-all-orders?page=${page}`,

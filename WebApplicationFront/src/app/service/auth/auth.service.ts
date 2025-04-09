@@ -31,12 +31,10 @@ export class AuthService {
     );
   }
 
-  public logout(): Observable<Object> {
-    this.userService.userEMail = '';
-
-    return this.http.get(`${this.baseApiUrl}logout`, {
-      withCredentials: true,
-    });
+  public logout(): void {
+    this.userService.userEMail = undefined;
+    this.cookiesManager.deleteAuthCookie();
+    localStorage.setItem(this.userService.userEMailKey, '');
   }
 
   public isLoggedIn(): boolean {

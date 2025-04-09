@@ -50,14 +50,10 @@
     </span>
   </div>
   <div class="lowMenu d-inline-flex mt-3">
-    <a [routerLink]="['/category/шуруповёрты']">Шуруповёрты</a>
-    <a [routerLink]="['/category/топоры']">Топоры</a>
-    <a [routerLink]="['/category/отвёртки']">Отвертки</a>
-    <a [routerLink]="['/category/string']">Пилы</a>
-    <a>Молотки</a>
-    <a>Плоскогубцы</a>
-    <a>Электро-инструменты</a>
-    <a>Гаечные ключи</a>
-    <a>Бензопилы</a>
+    <a
+      *ngFor="let category of categories"
+      [routerLink]="['/category/' + category.name]"
+      >{{ category.name }}</a
+    >
   </div>
 </div>
