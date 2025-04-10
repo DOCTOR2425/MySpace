@@ -50,7 +50,7 @@ export class CatalogManageComponent implements OnDestroy {
   public uploadProducts(): void {
     this.page++;
     if (this.searchQuery != '') {
-      this.searchByName(this.page);
+      this.searchByNameUpload(this.page);
     } else {
       this.loadProducts(this.page);
     }
@@ -86,6 +86,19 @@ export class CatalogManageComponent implements OnDestroy {
   }
 
   private searchByName(page: number): void {
+    this.productService
+      .searchByNameWithArchive(this.searchQuery, page)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (val) => {
+          this.products = val;
+          this.applyFilters();
+          this.loading = false;
+        },
+      });
+  }
+
+  private searchByNameUpload(page: number): void {
     this.productService
       .searchByNameWithArchive(this.searchQuery, page)
       .pipe(takeUntil(this.unsubscribe$))

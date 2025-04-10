@@ -1,8 +1,8 @@
-/* Основные стили страницы */
 .page-container {
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+  cursor: default;
 }
 
 .page-header {
@@ -11,7 +11,6 @@
   align-items: center;
   margin-bottom: 24px;
   padding-bottom: 16px;
-  border-bottom: 1px solid #e0e0e0;
 
   h1 {
     margin: 0;
@@ -21,7 +20,6 @@
   }
 }
 
-/* Стили для таблицы */
 .table-container {
   background: white;
   border-radius: 8px;
@@ -55,7 +53,6 @@
   }
 }
 
-/* Стили для кнопок действий */
 .actions {
   display: flex;
   gap: 8px;
@@ -100,10 +97,19 @@
         background-color: rgba(56, 142, 60, 0.15);
       }
     }
+
+    &.non-available {
+      color: white;
+      background-color: gray;
+      cursor: default;
+      &:hover {
+        color: white;
+        background-color: gray;
+      }
+    }
   }
 }
 
-/* Стили для статуса */
 .status-badge {
   display: inline-block;
   padding: 4px 10px;
@@ -124,7 +130,6 @@
   }
 }
 
-/* Стили для кнопки добавления */
 .btn-primary {
   padding: 10px 16px;
   background-color: #1976d2;
@@ -144,26 +149,71 @@
   }
 }
 
-/* Стили для состояния загрузки */
-.loading-spinner {
+.filters-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
   align-items: center;
-  padding: 40px;
-  color: #666;
 
-  i {
-    font-size: 24px;
-    margin-right: 12px;
-    animation: spin 1s linear infinite;
-  }
-}
+  .search-box {
+    display: flex;
+    align-items: center;
+    width: 60%;
 
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
+    .search-input {
+      flex: 1;
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px 0 0 5px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.3s;
+
+      &:focus {
+        border-color: #007bff;
+      }
+    }
+
+    .search-button {
+      width: 100pt;
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 0 5px 5px 0;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
   }
-  to {
-    transform: rotate(360deg);
+
+  .status-filter {
+    display: flex;
+    align-items: center;
+
+    label {
+      margin-right: 10px;
+      font-weight: 500;
+    }
+
+    .status-select {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.3s;
+
+      &:focus {
+        border-color: #007bff;
+      }
+    }
   }
 }

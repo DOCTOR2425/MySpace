@@ -1,0 +1,121 @@
+.category-form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+
+  h2,
+  h3 {
+    color: #333;
+  }
+
+  .form-field {
+    margin-bottom: 20px;
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+
+      &.invalid {
+        border-color: #e74c3c;
+      }
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 0.8em;
+      margin-top: 5px;
+    }
+  }
+
+  .properties-section {
+    margin: 30px 0;
+
+    .add-button {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-bottom: 15px;
+
+      &:hover {
+        background: #2980b9;
+      }
+    }
+
+    .property-item {
+      margin-bottom: 15px;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 4px;
+
+      .property-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .property-name {
+          flex: 1;
+
+          input {
+            width: 100%;
+          }
+        }
+
+        .property-type {
+          white-space: nowrap;
+
+          label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+          }
+        }
+
+        .remove-button {
+          background: #e74c3c;
+          color: white;
+          border: none;
+          padding: 5px 10px;
+          border-radius: 4px;
+          cursor: pointer;
+
+          &:hover {
+            background: #c0392b;
+          }
+        }
+      }
+    }
+  }
+
+  .submit-button {
+    background: #2ecc71;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1em;
+
+    &:hover {
+      background: #27ae60;
+    }
+
+    &:disabled {
+      background: #95a5a6;
+      cursor: default;
+    }
+  }
+}

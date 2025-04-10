@@ -6,13 +6,6 @@ namespace InstrumentStore.Domain.DataBase
 {
     public class InstrumentStoreDBContext : DbContext
     {
-        //private readonly IConfiguration _config;
-
-        //public InstrumentStoreDBContext(IConfiguration config)
-        //{
-        //	_config = config;
-        //}
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {//DESKTOP-0MK8KC9
             optionsBuilder.UseSqlServer(@$"Server=WSA-195-74-BY;Database=MySpaceDB;

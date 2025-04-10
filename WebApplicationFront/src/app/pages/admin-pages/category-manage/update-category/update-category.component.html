@@ -1,0 +1,95 @@
+<div class="category-form">
+  <h2>Редактирование категории</h2>
+
+  <div *ngIf="isLoading" class="loading">Загрузка данных...</div>
+
+  <form *ngIf="!isLoading" [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+    <div class="form-field">
+      <label for="categoryName">Название категории</label>
+      <input
+        id="categoryName"
+        type="text"
+        formControlName="categoryName"
+        [class.invalid]="
+          categoryForm.get('categoryName')?.invalid &&
+          categoryForm.get('categoryName')?.touched
+        "
+      />
+      <div
+        *ngIf="
+          categoryForm.get('categoryName')?.invalid &&
+          categoryForm.get('categoryName')?.touched
+        "
+        class="error-message"
+      >
+        Название должно содержать минимум 3 символа
+      </div>
+    </div>
+
+    <div class="properties-section">
+      <h3>Свойства товаров</h3>
+      <button type="button" (click)="addProperty()" class="add-button">
+        + Добавить свойство
+      </button>
+
+      <div formArrayName="propertyList">
+        <div
+          *ngFor="let property of propertyList.controls; let i = index"
+          [formGroupName]="i"
+          class="property-item"
+        >
+          <div class="property-controls">
+            <div class="property-name">
+              <input
+                type="text"
+                formControlName="propertyName"
+                placeholder="Имя свойства"
+                [class.invalid]="
+                  property.get('propertyName')?.invalid &&
+                  property.get('propertyName')?.touched
+                "
+              />
+              <div
+                *ngIf="
+                  property.get('propertyName')?.invalid &&
+                  property.get('propertyName')?.touched
+                "
+                class="error-message"
+              >
+                Минимум 2 символа
+              </div>
+            </div>
+
+            <div class="property-type">
+              <label>
+                <input type="checkbox" formControlName="isNumeric" />
+                Числовое
+              </label>
+            </div>
+
+            <button
+              type="button"
+              (click)="removeProperty(i)"
+              class="remove-button"
+            >
+              Удалить
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="cancel-button" (click)="exit()">
+        Отмена
+      </button>
+      <button
+        type="submit"
+        [disabled]="categoryForm.invalid || propertyList.length == 0"
+        class="submit-button"
+      >
+        Сохранить изменения
+      </button>
+    </div>
+  </form>
+</div>

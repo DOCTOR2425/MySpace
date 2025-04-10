@@ -1,4 +1,4 @@
-﻿using InstrumentStore.Domain.Contracts.Some;
+﻿using InstrumentStore.Domain.Contracts.ProductCategories;
 using InstrumentStore.Domain.DataBase.Models;
 
 namespace InstrumentStore.Domain.Abstractions
@@ -14,6 +14,9 @@ namespace InstrumentStore.Domain.Abstractions
         Task<List<ProductCategory>> GetCategoriesBySales();
         Task<List<ProductCategoryForAdmin>> GetCategoriesForAdmin();
         Task<Guid> ChangeVisibilityStatus(Guid categoryId, bool visibilityStatus);
+        Task<Guid> Create(ProductCategoryCreateRequest productCategory);
+        Task<ProductCategoryDTOUpdate> GetProductCategoryResponseById(Guid categoryId);
+        Task<Guid> Update(Guid categoryId, ProductCategoryDTOUpdate newCategory);
 
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using InstrumentStore.Domain.Abstractions;
-using InstrumentStore.Domain.Contracts.Products;
+using InstrumentStore.Domain.Contracts.ProductCategories;
+using InstrumentStore.Domain.Contracts.ProductProperties;
 using InstrumentStore.Domain.DataBase.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,18 +29,6 @@ namespace InstrumentStore.API.Controllers
             return await _productCategoryService.GetAll();
         }
 
-        [HttpPost("create-category")]
-        public async Task<ActionResult<Guid>> CreateCategory([FromQuery] string productCategoryName)
-        {
-            ProductCategory productCategory = new ProductCategory
-            {
-                ProductCategoryId = Guid.NewGuid(),
-                Name = productCategoryName
-            };
-
-            return Ok(await _productCategoryService.Create(productCategory));
-        }
-
         [HttpGet("get-properties-by-category/{id:guid}")]
         public async Task<ActionResult<List<ProductPropertyResponse>>> GetPropertiesByCategory(Guid id)
         {
@@ -62,6 +51,14 @@ namespace InstrumentStore.API.Controllers
         }
 
         [Authorize(Roles = "admin")]
+        [HttpPost("create-category")]
+        public async Task<ActionResult<Guid>> CreateCategory(
+            [FromBody] ProductCategoryCreateRequest request)
+        {
+            return Ok(await _productCategoryService.Create(request));
+        }
+
+        [Authorize(Roles = "admin")]
         [HttpGet("get-categories-for-admin")]
         public async Task<IActionResult> GetProductCategoriesForAdmin()
         {
@@ -75,6 +72,22 @@ namespace InstrumentStore.API.Controllers
             [FromQuery] bool visibilityStatus)
         {
             return Ok(await _productCategoryService.ChangeVisibilityStatus(categoryId, visibilityStatus));
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpGet("get-category-for-update/{categoryId:guid}")]
+        public async Task<ActionResult<ProductCategoryDTOUpdate>> GetProductCategoryForAdminById(Guid categoryId)
+        {
+            return Ok(await _productCategoryService.GetProductCategoryResponseById(categoryId));
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost("update-category/{categoryId:guid}")]
+        public async Task<ActionResult<Guid>> UpdateCategory(
+            Guid categoryId,
+            [FromBody] ProductCategoryDTOUpdate request)
+        {
+            return Ok(await _productCategoryService.Update(categoryId, request));
         }
     }
 }

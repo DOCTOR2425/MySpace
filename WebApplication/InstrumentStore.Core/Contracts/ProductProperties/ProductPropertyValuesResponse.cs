@@ -1,4 +1,4 @@
-﻿namespace InstrumentStore.Domain.Contracts.Products
+﻿namespace InstrumentStore.Domain.Contracts.ProductProperties
 {
     public class ProductPropertyValuesResponse
     {

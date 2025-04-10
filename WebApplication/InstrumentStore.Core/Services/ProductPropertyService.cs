@@ -191,5 +191,14 @@ namespace InstrumentStore.Domain.Services
                 .Where(p => p.Product.ProductId == productId)
                 .ExecuteDeleteAsync();
         }
+
+        public async Task<Guid> DeleteById(Guid propertyId)
+        {
+            await _dbContext.ProductProperty
+                .Where(p => p.ProductPropertyId == propertyId)
+                .ExecuteDeleteAsync();
+
+            return propertyId;
+        }
     }
 }

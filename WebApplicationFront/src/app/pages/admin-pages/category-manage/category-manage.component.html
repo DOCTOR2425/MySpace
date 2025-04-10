@@ -1,9 +1,34 @@
 <div class="page-container">
   <div class="page-header">
     <h1>Управление категориями</h1>
-    <button class="btn btn-primary" [routerLink]="['']">
+    <button class="btn btn-primary" [routerLink]="['/admin/create-category']">
       <i class="fas fa-plus"></i> Добавить категорию
     </button>
+  </div>
+
+  <div class="filters-container">
+    <div class="search-box">
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        placeholder="Поиск по названию..."
+        class="search-input"
+      />
+      <button class="search-button" (click)="filterByName()">Поиск</button>
+    </div>
+
+    <div class="status-filter">
+      <label>Статус товара:</label>
+      <select
+        [(ngModel)]="visibilityStatus"
+        (change)="applyFilters()"
+        class="status-select"
+      >
+        <option value="all">Все категории</option>
+        <option value="active">Только видимые</option>
+        <option value="archived">Только невидимые</option>
+      </select>
+    </div>
   </div>
 
   <div *ngIf="categories" class="table-container">
@@ -17,7 +42,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let category of categories">
+        <tr *ngFor="let category of filteredCategories">
           <td>{{ category.name }}</td>
           <td>{{ category.productCount }}</td>
           <td>
@@ -31,16 +56,28 @@
             </span>
           </td>
           <td class="actions">
-            <button class="btn-icon" [routerLink]="['']">Редактировать</button>
             <button
               class="btn-icon"
-              [class.btn-warning]="!category.isHidden"
+              [routerLink]="[
+                '/admin/update-category',
+                category.productCategoryId
+              ]"
+            >
+              Редактировать
+            </button>
+            <button
+              class="btn-icon"
+              [class.btn-warning]="
+                !category.isHidden && category.productCount != 0
+              "
+              [class.non-available]="category.productCount == 0"
               (click)="
                 changeVisibilityStatus(
                   category.productCategoryId,
                   category.isHidden ? false : true
                 )
               "
+              [disabled]="category.productCount == 0"
             >
               {{
                 category.isHidden ? "Показать категорию" : "Скрыть категорию"

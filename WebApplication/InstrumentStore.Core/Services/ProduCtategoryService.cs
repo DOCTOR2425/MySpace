@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using InstrumentStore.Domain.Abstractions;
-using InstrumentStore.Domain.Contracts.Some;
+using InstrumentStore.Domain.Contracts.ProductCategories;
+using InstrumentStore.Domain.Contracts.ProductProperties;
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
 using Microsoft.EntityFrameworkCore;
@@ -10,12 +11,17 @@ namespace InstrumentStore.Domain.Services
     public class ProduCtategoryService : IProductCategoryService
     {
         private readonly InstrumentStoreDBContext _dbContext;
+        private readonly IProductPropertyService _productPropertyService;
         private readonly IMapper _mapper;
 
-        public ProduCtategoryService(InstrumentStoreDBContext dbContext, IMapper mapper)
+        public ProduCtategoryService(
+            InstrumentStoreDBContext dbContext,
+            IMapper mapper,
+            IProductPropertyService productPropertyService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _productPropertyService = productPropertyService;
         }
 
         public async Task<List<ProductCategory>> GetAll()
@@ -40,18 +46,61 @@ namespace InstrumentStore.Domain.Services
             return await _dbContext.ProductCategory.FindAsync(id);
         }
 
-        public async Task<Guid> Create(ProductCategory productCategory)
+        public async Task<ProductCategoryDTOUpdate> GetProductCategoryResponseById(Guid categoryId)
+        {
+            ProductCategory productCategory = await GetById(categoryId);
+            List<ProductPropertyDTOUpdate> properties = _mapper
+                .Map<List<ProductPropertyDTOUpdate>>(await GetProductPropertiesByCategory(categoryId));
+
+            ProductCategoryDTOUpdate categoryDTO = new ProductCategoryDTOUpdate()
+            {
+                Name = productCategory.Name,
+                Properties = properties
+            };
+
+            return categoryDTO;
+        }
+
+        private async Task CheckCategoryExistence(string categoryName)
         {
             ProductCategory? category = await _dbContext.ProductCategory
-                .FirstOrDefaultAsync(c => c.Name == productCategory.Name);
+                .FirstOrDefaultAsync(c => c.Name == categoryName);
 
-            if (category == null)
+            if (category != null)
                 throw new InvalidOperationException("Такая категория уже существует");
+        }
+
+        public async Task<Guid> Create(ProductCategory productCategory)
+        {
+            await CheckCategoryExistence(productCategory.Name);
 
             await _dbContext.ProductCategory.AddAsync(productCategory);
             await _dbContext.SaveChangesAsync();
 
             return productCategory.ProductCategoryId;
+        }
+
+        public async Task<Guid> Create(ProductCategoryCreateRequest productCategory)
+        {
+            await CheckCategoryExistence(productCategory.Name);
+
+            ProductCategory category = new ProductCategory()
+            {
+                ProductCategoryId = Guid.NewGuid(),
+                Name = productCategory.Name,
+            };
+            await Create(category);
+
+            foreach (var property in productCategory.Properties)
+                await _productPropertyService.CreateProperty(new ProductProperty()
+                {
+                    ProductPropertyId = Guid.NewGuid(),
+                    Name = property.Key,
+                    IsRanged = property.Value,
+                    ProductCategory = category,
+                });
+
+            return category.ProductCategoryId;
         }
 
         public async Task<Guid> Update(Guid oldId, ProductCategory newProductType)
@@ -64,6 +113,72 @@ namespace InstrumentStore.Domain.Services
             _dbContext.SaveChanges();
 
             return oldId;
+        }
+
+        public async Task<Guid> Update(Guid categoryId, ProductCategoryDTOUpdate newCategory)
+        {
+            ProductCategory category = await GetById(categoryId);
+            category.Name = newCategory.Name;
+
+            List<ProductProperty> oldProperties = await GetProductPropertiesByCategory(categoryId);
+            foreach (var property in oldProperties)
+            {
+                ProductPropertyDTOUpdate? propertyResponse = newCategory.Properties
+                    .Find(p => p.ProductPropertyId == property.ProductPropertyId);
+
+                if (propertyResponse == null)
+                    await _productPropertyService.DeleteById(property.ProductPropertyId);
+
+                property.Name = propertyResponse.Name;
+
+                if (propertyResponse.DefaultValue != null)
+                    await _dbContext.ProductPropertyValue
+                        .Where(p => p.ProductProperty.ProductPropertyId == property.ProductPropertyId)
+                        .ExecuteUpdateAsync(x => x.SetProperty(p => p.Value, propertyResponse.DefaultValue));
+            }
+
+            await CreateNewProperties(category, newCategory.Properties, oldProperties);
+
+            return categoryId;
+        }
+
+        private async Task CreateNewProperties(
+            ProductCategory category,
+            List<ProductPropertyDTOUpdate> newPropertiesRequest,
+            List<ProductProperty> oldProperties)
+        {
+            List<Product> products = await _dbContext.Product
+                .Where(p => p.ProductCategory.ProductCategoryId == category.ProductCategoryId)
+                .ToListAsync();
+
+            foreach (var property in newPropertiesRequest)
+            {
+                ProductProperty? target = oldProperties
+                    .Find(p => p.ProductPropertyId == property.ProductPropertyId);
+
+                if (target == null)
+                {
+                    ProductProperty newProperty = new ProductProperty()
+                    {
+                        ProductPropertyId = Guid.NewGuid(),
+                        Name = property.Name,
+                        IsRanged = property.IsRanged,
+                        ProductCategory = category
+                    };
+                    await _productPropertyService.CreateProperty(newProperty);
+
+                    foreach (var product in products)
+                    {
+                        await _productPropertyService.CreatePropertyValue(new ProductPropertyValue()
+                        {
+                            ProductPropertyValueId = Guid.NewGuid(),
+                            Value = property.DefaultValue,
+                            Product = product,
+                            ProductProperty = newProperty
+                        });
+                    }
+                }
+            }
         }
 
         public async Task<List<ProductProperty>> GetProductPropertiesByCategory(string category)

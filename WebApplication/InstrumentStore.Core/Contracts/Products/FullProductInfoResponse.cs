@@ -1,4 +1,6 @@
-﻿namespace InstrumentStore.Domain.Contracts.Products
+﻿using InstrumentStore.Domain.Contracts.ProductProperties;
+
+namespace InstrumentStore.Domain.Contracts.Products
 {
     public class FullProductInfoResponse
     {

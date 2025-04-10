@@ -1,4 +1,4 @@
-﻿namespace InstrumentStore.Domain.Contracts.Some
+﻿namespace InstrumentStore.Domain.Contracts.ProductCategories
 {
     public class ProductCategoryForAdmin
     {

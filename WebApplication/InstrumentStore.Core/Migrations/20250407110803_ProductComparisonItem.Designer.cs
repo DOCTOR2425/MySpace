@@ -53,7 +53,7 @@ namespace InstrumentStore.Domain.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("ProductCategory")
+                    b.Property<string>("ProductCategories")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -339,7 +339,7 @@ namespace InstrumentStore.Domain.Migrations
                     b.ToTable("Product");
                 });
 
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.ProductCategory", b =>
+            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.ProductCategories", b =>
                 {
                     b.Property<Guid>("ProductCategoryId")
                         .ValueGeneratedOnAdd()
@@ -351,7 +351,7 @@ namespace InstrumentStore.Domain.Migrations
 
                     b.HasKey("ProductCategoryId");
 
-                    b.ToTable("ProductCategory");
+                    b.ToTable("ProductCategories");
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.ProductComparisonItem", b =>
@@ -594,7 +594,7 @@ namespace InstrumentStore.Domain.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("InstrumentStore.Domain.DataBase.Models.ProductCategory", "ProductCategory")
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.ProductCategories", "ProductCategories")
                         .WithMany()
                         .HasForeignKey("ProductCategoryId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -604,7 +604,7 @@ namespace InstrumentStore.Domain.Migrations
 
                     b.Navigation("Country");
 
-                    b.Navigation("ProductCategory");
+                    b.Navigation("ProductCategories");
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.ProductComparisonItem", b =>
@@ -628,13 +628,13 @@ namespace InstrumentStore.Domain.Migrations
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.ProductProperty", b =>
                 {
-                    b.HasOne("InstrumentStore.Domain.DataBase.Models.ProductCategory", "ProductCategory")
+                    b.HasOne("InstrumentStore.Domain.DataBase.Models.ProductCategories", "ProductCategories")
                         .WithMany()
                         .HasForeignKey("ProductCategoryId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("ProductCategory");
+                    b.Navigation("ProductCategories");
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.ProductPropertyValue", b =>

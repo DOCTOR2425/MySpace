@@ -17,6 +17,8 @@ import { OrderPageComponent } from './pages/admin-pages/orders-page/order-page/o
 import { OrdersPageComponent } from './pages/admin-pages/orders-page/orders-page.component';
 import { ProductComparisonComponent } from './pages/product-comparison/product-comparison.component';
 import { CategoryManageComponent } from './pages/admin-pages/category-manage/category-manage.component';
+import { CreateCategoryComponent } from './pages/admin-pages/category-manage/create-category/create-category.component';
+import { UpdateCategoryComponent } from './pages/admin-pages/category-manage/update-category/update-category.component';
 
 export const routes: Routes = [
   {
@@ -39,12 +41,14 @@ export const routes: Routes = [
     children: [
       { path: '', component: AdminMainPageComponent },
       { path: 'catalog', component: CatalogManageComponent },
-      { path: 'categories', component: CategoryManageComponent },
       { path: 'create-product', component: CreateProductComponent },
       { path: 'update-product/:id', component: UpdateProductComponent },
       { path: 'reports', component: ReportsPageComponent },
       { path: 'orders', component: OrdersPageComponent },
       { path: 'order/:id', component: OrderPageComponent },
+      { path: 'categories', component: CategoryManageComponent },
+      { path: 'create-category', component: CreateCategoryComponent },
+      { path: 'update-category/:id', component: UpdateCategoryComponent },
     ],
   },
 ];

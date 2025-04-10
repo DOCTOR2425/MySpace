@@ -1,13 +1,12 @@
-﻿namespace InstrumentStore.Domain.Contracts.Products
+﻿namespace InstrumentStore.Domain.Contracts.ProductProperties
 {
-	public class ProductPropertyResponse
-	{
-		public Guid ProductPropertyId {  get; set; }
-
+    public class ProductPropertyResponse
+    {
+        public Guid ProductPropertyId { get; set; }
         public string Name { get; set; } = string.Empty;
-		public bool IsRanged { get; set; } = false;
+        public bool IsRanged { get; set; } = false;
 
-		public ProductPropertyResponse() { }
+        public ProductPropertyResponse() { }
 
         public ProductPropertyResponse(Guid productPropertyId, string name, bool isRanged)
         {

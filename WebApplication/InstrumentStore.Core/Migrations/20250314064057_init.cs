@@ -80,7 +80,7 @@ namespace InstrumentStore.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductCategory",
+                name: "ProductCategories",
                 columns: table => new
                 {
                     ProductCategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -137,7 +137,7 @@ namespace InstrumentStore.Domain.Migrations
                     table.ForeignKey(
                         name: "FK_Product_ProductCategory_ProductCategoryId",
                         column: x => x.ProductCategoryId,
-                        principalTable: "ProductCategory",
+                        principalTable: "ProductCategories",
                         principalColumn: "ProductCategoryId");
                 });
 
@@ -156,7 +156,7 @@ namespace InstrumentStore.Domain.Migrations
                     table.ForeignKey(
                         name: "FK_ProductProperty_ProductCategory_ProductCategoryId",
                         column: x => x.ProductCategoryId,
-                        principalTable: "ProductCategory",
+                        principalTable: "ProductCategories",
                         principalColumn: "ProductCategoryId");
                 });
 
@@ -502,7 +502,7 @@ namespace InstrumentStore.Domain.Migrations
                 name: "Country");
 
             migrationBuilder.DropTable(
-                name: "ProductCategory");
+                name: "ProductCategories");
 
             migrationBuilder.DropTable(
                 name: "UserRegistrInfo");

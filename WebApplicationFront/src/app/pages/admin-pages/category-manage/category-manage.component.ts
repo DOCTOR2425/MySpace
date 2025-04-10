@@ -4,10 +4,11 @@ import { Subject, takeUntil } from 'rxjs';
 import { ProductCategoryForAdmin } from '../../../data/interfaces/product-category/product-category-for-admin.interface';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-category-manage',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './category-manage.component.html',
   styleUrl: './category-manage.component.scss',
 })
@@ -16,6 +17,7 @@ export class CategoryManageComponent implements OnInit, OnDestroy {
   public filteredCategories: ProductCategoryForAdmin[] = [];
   private unsubscribe$ = new Subject<void>();
 
+  public searchMode = false;
   public searchQuery = '';
   public visibilityStatus: 'all' | 'active' | 'archived' = 'all';
 
@@ -55,28 +57,46 @@ export class CategoryManageComponent implements OnInit, OnDestroy {
   }
 
   public applyFilters(): void {
-    this.filteredCategories = this.categories.filter((category) => {
-      let matchesStatus = true;
-      if (this.visibilityStatus === 'active') {
-        matchesStatus = !category.isHidden;
-      } else if (this.visibilityStatus === 'archived') {
-        matchesStatus = category.isHidden;
-      }
-      return matchesStatus;
-    });
+    if (this.searchMode) {
+      this.filterByName();
+      this.filteredCategories = this.filteredCategories.filter((category) => {
+        let matchesStatus = true;
+        if (this.visibilityStatus === 'active') {
+          matchesStatus = !category.isHidden;
+        } else if (this.visibilityStatus === 'archived') {
+          matchesStatus = category.isHidden;
+        }
+        return matchesStatus;
+      });
+    } else {
+      this.filteredCategories = this.categories.filter((category) => {
+        let matchesStatus = true;
+        if (this.visibilityStatus === 'active') {
+          matchesStatus = !category.isHidden;
+        } else if (this.visibilityStatus === 'archived') {
+          matchesStatus = category.isHidden;
+        }
+        return matchesStatus;
+      });
+    }
   }
 
-  private filterByVisibility(
+  public filterByVisibility(
     categories: ProductCategoryForAdmin[]
   ): ProductCategoryForAdmin[] {
     return categories;
   }
 
-  private filterByName(
-    categories: ProductCategoryForAdmin[]
-  ): ProductCategoryForAdmin[] {
-    return categories.filter((category) =>
-      category.name.includes(this.searchQuery)
+  public filterByName(
+    categories: ProductCategoryForAdmin[] = this.categories
+  ): void {
+    if (this.searchQuery == '') this.searchMode = false;
+    else this.searchMode = true;
+
+    this.filteredCategories = categories.filter((category) =>
+      category.name
+        .toLocaleLowerCase()
+        .includes(this.searchQuery.toLocaleLowerCase())
     );
   }
 }
