@@ -194,5 +194,12 @@ namespace InstrumentStore.Domain.Service
 
             return id;
         }
+
+        public async Task<List<Product>> GetSpecialProductsForUser()
+        {
+
+
+            throw new NotImplementedException();
+        }
     }
 }

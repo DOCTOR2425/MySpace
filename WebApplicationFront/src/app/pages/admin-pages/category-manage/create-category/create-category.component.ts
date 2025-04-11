@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -51,32 +51,38 @@ export class CreateCategoryComponent implements OnDestroy {
     });
   }
 
-  addProperty(): void {
+  public addProperty(): void {
     this.propertyList.push(this.createPropertyGroup());
   }
 
-  removeProperty(index: number): void {
+  public removeProperty(index: number): void {
     this.propertyList.removeAt(index);
   }
 
-  prepareRequest(): ProductCategoryCreateRequest {
+  private prepareRequest(): ProductCategoryCreateRequest {
     const properties: { [key: string]: boolean } = {};
 
     this.propertyList.controls.forEach((control) => {
       const propName = control.get('propertyName')?.value;
       const isNumeric = control.get('isNumeric')?.value;
       if (propName) {
-        properties[propName] = isNumeric;
+        properties[this.formatString(propName)] = isNumeric;
       }
     });
 
     return {
-      name: this.categoryForm.get('categoryName')?.value,
+      name: this.formatString(this.categoryForm.get('categoryName')?.value),
       properties,
     };
   }
 
-  onSubmit(): void {
+  private formatString(input: string): string {
+    if (!input) return '';
+    input = input.trim();
+    return input.charAt(0).toUpperCase() + input.slice(1);
+  }
+
+  public onSubmit(): void {
     if (this.categoryForm.valid) {
       const payload = this.prepareRequest();
       this.productCategoryService

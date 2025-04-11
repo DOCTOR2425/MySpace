@@ -40,8 +40,6 @@ namespace InstrumentStore.API.Controllers
             _usersService = usersService;
         }
 
-
-
         [HttpGet("page{page}")]
         public async Task<ActionResult<List<ProductCard>>> GetAllProductsCards([FromRoute] int page)
         {
@@ -223,6 +221,12 @@ namespace InstrumentStore.API.Controllers
                 comments.Add(_mapper.Map<CommentResponse>(comment));
 
             return Ok(comments);
+        }
+
+        [HttpGet("get-special-products-for-user")]
+        public async Task<IActionResult> GetSpecialProductsForUser()
+        {
+            throw new NotImplementedException();
         }
     }
 }

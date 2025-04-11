@@ -26,20 +26,23 @@ namespace InstrumentStore.Domain.Services
 
         public async Task<List<ProductCategory>> GetAll()
         {
-            List<ProductCategory> topCategories = await _dbContext.PaidOrderItem
-                .Include(i => i.Product.ProductCategory)
-                .GroupBy(i => i.Product.ProductCategory)
-                .Select(g => new
-                {
-                    Category = g.Key,
-                    TotalSales = g.Sum(i => i.Price * i.Quantity)
-                })
+            var categoriesWithSales = await _dbContext.ProductCategory
+                .GroupJoin(
+                    _dbContext.PaidOrderItem.Include(i => i.Product.ProductCategory),
+                    category => category.ProductCategoryId,
+                    orderItem => orderItem.Product.ProductCategory.ProductCategoryId,
+                    (category, orderItems) => new
+                    {
+                        Category = category,
+                        TotalSales = orderItems.Sum(i => i.Price * i.Quantity)
+                    })
                 .OrderByDescending(x => x.TotalSales)
                 .Select(x => x.Category)
                 .ToListAsync();
 
-            return topCategories;
+            return categoriesWithSales;
         }
+
 
         public async Task<ProductCategory> GetById(Guid id)
         {
@@ -127,18 +130,24 @@ namespace InstrumentStore.Domain.Services
                     .Find(p => p.ProductPropertyId == property.ProductPropertyId);
 
                 if (propertyResponse == null)
+                {
                     await _productPropertyService.DeleteById(property.ProductPropertyId);
+                }
+                else
+                {
+                    property.Name = propertyResponse.Name;
+                    property.IsRanged = propertyResponse.IsRanged;
 
-                property.Name = propertyResponse.Name;
-
-                if (propertyResponse.DefaultValue != null)
-                    await _dbContext.ProductPropertyValue
-                        .Where(p => p.ProductProperty.ProductPropertyId == property.ProductPropertyId)
-                        .ExecuteUpdateAsync(x => x.SetProperty(p => p.Value, propertyResponse.DefaultValue));
+                    if (propertyResponse.DefaultValue != null)
+                        await _dbContext.ProductPropertyValue
+                            .Where(p => p.ProductProperty.ProductPropertyId == property.ProductPropertyId)
+                            .ExecuteUpdateAsync(x => x.SetProperty(p => p.Value, propertyResponse.DefaultValue));
+                }
             }
 
             await CreateNewProperties(category, newCategory.Properties, oldProperties);
 
+            await _dbContext.SaveChangesAsync();
             return categoryId;
         }
 

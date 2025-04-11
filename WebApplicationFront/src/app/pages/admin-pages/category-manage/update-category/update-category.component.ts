@@ -1,59 +1,59 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { ProductCategoryCreateRequest } from '../../../../data/interfaces/product-category/product-category-create-request.interface';
 import {
+  AbstractControl,
   FormArray,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { ProductCategoryService } from '../../../../service/product-category/product-category.service';
-import { ToastService } from '../../../../service/toast/toast.service';
 import { CommonModule } from '@angular/common';
+import { ProductCategoryDTOUpdate } from '../../../../data/interfaces/product-category/product-category-update-request.interface';
+import { ProductPropertyDTOUpdate } from '../../../../data/interfaces/product-category/product-property-update-request.interface';
 
 @Component({
-  selector: 'app-update-category',
   imports: [CommonModule, ReactiveFormsModule],
+  selector: 'app-update-category',
   templateUrl: './update-category.component.html',
-  styleUrl: './update-category.component.scss',
+  styleUrls: ['./update-category.component.scss'],
 })
 export class UpdateCategoryComponent implements OnInit, OnDestroy {
   public categoryId!: string;
+  public category!: ProductCategoryDTOUpdate;
   private unsubscribe$ = new Subject<void>();
   public categoryForm: FormGroup;
-  public isLoading = true;
 
   constructor(
     private fb: FormBuilder,
     private productCategoryService: ProductCategoryService,
-    private toastService: ToastService,
     private router: Router,
     private route: ActivatedRoute
   ) {
     this.categoryForm = this.fb.group({
-      categoryName: ['', [Validators.required, Validators.minLength(3)]],
-      propertyList: this.fb.array([]),
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      properties: this.fb.array([]),
     });
   }
 
   public ngOnInit(): void {
     this.categoryId = this.route.snapshot.paramMap.get('id')!;
 
-    // this.productCategoryService
-    //   .getProductCategoryForAdmin(this.categoryId)
-    //   .pipe(takeUntil(this.unsubscribe$))
-    //   .subscribe({
-    //     next: (category) => {
-    //       this.populateForm(category);
-    //       this.isLoading = false;
-    //     },
-    //     error: (error) => {
-    //       this.toastService.showError(error.error.error, 'Ошибка');
-    //       this.router.navigate(['/admin/categories']);
-    //     },
-    //   });
+    this.productCategoryService
+      .getProductCategoryForUpdate(this.categoryId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (category) => {
+          this.category = category;
+          this.populateForm(category);
+        },
+        error: () => {
+          this.router.navigate(['/admin/categories']);
+        },
+      });
   }
 
   public ngOnDestroy(): void {
@@ -61,37 +61,68 @@ export class UpdateCategoryComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  private populateForm(category: ProductCategoryCreateRequest): void {
+  private populateForm(category: ProductCategoryDTOUpdate): void {
     this.categoryForm.patchValue({
-      categoryName: category.name,
+      name: category.name,
     });
 
-    if (this.propertyList.length) {
-      this.propertyList.removeAt(0);
-    }
-
-    Object.entries(category.properties).forEach(([name, isNumeric]) => {
-      this.addProperty(name, isNumeric);
+    category.properties.forEach((property) => {
+      this.addProperty(property);
     });
   }
 
-  get propertyList(): FormArray {
-    return this.categoryForm.get('propertyList') as FormArray;
+  get properties(): FormArray {
+    return this.categoryForm.get('properties') as FormArray;
   }
 
-  private createPropertyGroup(name = '', isNumeric = false) {
-    return this.fb.group({
-      propertyName: [name, [Validators.required, Validators.minLength(2)]],
-      isNumeric: [isNumeric],
+  public defaultValueValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const isRanged = control.get('isRanged')?.value;
+      const defaultValue = control.get('defaultValue')?.value;
+      const isDefaultValueValid = /^-?\d*(\.\d+)?$/.test(defaultValue);
+
+      if (isRanged && defaultValue && !isDefaultValueValid) {
+        return { defaultValueInvalid: true };
+      }
+      return null;
+    };
+  }
+
+  private createPropertyGroup(property?: ProductPropertyDTOUpdate): FormGroup {
+    const group = this.fb.group(
+      {
+        productPropertyId: [property?.productPropertyId || null],
+        name: [
+          property?.name || '',
+          [Validators.required, Validators.minLength(2)],
+        ],
+        isRanged: [property?.isRanged || false],
+        defaultValue: [property?.defaultValue || ''],
+      },
+      { validators: this.defaultValueValidator() }
+    );
+
+    group.get('isRanged')?.valueChanges.subscribe((isRanged) => {
+      const defaultValueControl = group.get('defaultValue');
+      if (isRanged) {
+        defaultValueControl?.setValidators([
+          Validators.pattern(/^-?\d*(\.\d+)?$/),
+        ]);
+      } else {
+        defaultValueControl?.clearValidators();
+      }
+      defaultValueControl?.updateValueAndValidity();
     });
+
+    return group;
   }
 
-  public addProperty(name = '', isNumeric = false): void {
-    this.propertyList.push(this.createPropertyGroup(name, isNumeric));
+  public addProperty(property?: ProductPropertyDTOUpdate): void {
+    this.properties.push(this.createPropertyGroup(property));
   }
 
   public removeProperty(index: number): void {
-    this.propertyList.removeAt(index);
+    this.properties.removeAt(index);
   }
 
   public onSubmit(): void {
@@ -103,40 +134,39 @@ export class UpdateCategoryComponent implements OnInit, OnDestroy {
     }
   }
 
-  public exit() {
-    console.log('exit');
-
-    this.router.navigate(['/admin/categories']);
-  }
-
-  private prepareRequest(): ProductCategoryCreateRequest {
-    const properties: { [key: string]: boolean } = {};
-
-    this.propertyList.controls.forEach((control) => {
-      const propName = control.get('propertyName')?.value;
-      const isNumeric = control.get('isNumeric')?.value;
-      if (propName) {
-        properties[propName] = isNumeric;
-      }
-    });
-
+  private prepareRequest(): ProductCategoryDTOUpdate {
     return {
-      name: this.categoryForm.get('categoryName')?.value,
-      properties,
+      name: this.formatString(this.categoryForm.value.name),
+      properties: this.categoryForm.value.properties.map((prop: any) => ({
+        productPropertyId: prop.productPropertyId,
+        name: this.formatString(prop.name),
+        isRanged: prop.isRanged,
+        defaultValue: prop.defaultValue || undefined,
+      })),
     };
   }
 
-  private updateCategory(payload: ProductCategoryCreateRequest): void {
-    // this.productCategoryService
-    //   .updateCategory(this.categoryId, payload)
-    //   .pipe(takeUntil(this.unsubscribe$))
-    //   .subscribe({
-    //     next: () => {
-    //       this.exit();
-    //     },
-    //     error: (error) => {
-    //       this.toastService.showError(error.error.error, 'Ошибка обновления');
-    //     },
-    //   });
+  private formatString(input: string): string {
+    if (!input) return '';
+    input = input.trim();
+    return input.charAt(0).toUpperCase() + input.slice(1);
+  }
+
+  private updateCategory(payload: ProductCategoryDTOUpdate): void {
+    this.productCategoryService
+      .updateCategory(this.categoryId, payload)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/admin/categories']);
+        },
+        error: () => {
+          alert('Ошибка при обновлении категории');
+        },
+      });
+  }
+
+  public exit(): void {
+    this.router.navigate(['/admin/categories']);
   }
 }

@@ -1,24 +1,19 @@
 <div class="category-form">
   <h2>Редактирование категории</h2>
 
-  <div *ngIf="isLoading" class="loading">Загрузка данных...</div>
-
-  <form *ngIf="!isLoading" [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+  <form *ngIf="category" [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
     <div class="form-field">
-      <label for="categoryName">Название категории</label>
+      <label>Название категории</label>
       <input
-        id="categoryName"
         type="text"
-        formControlName="categoryName"
+        formControlName="name"
         [class.invalid]="
-          categoryForm.get('categoryName')?.invalid &&
-          categoryForm.get('categoryName')?.touched
+          categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched
         "
       />
       <div
         *ngIf="
-          categoryForm.get('categoryName')?.invalid &&
-          categoryForm.get('categoryName')?.touched
+          categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched
         "
         class="error-message"
       >
@@ -32,9 +27,9 @@
         + Добавить свойство
       </button>
 
-      <div formArrayName="propertyList">
+      <div formArrayName="properties">
         <div
-          *ngFor="let property of propertyList.controls; let i = index"
+          *ngFor="let property of properties.controls; let i = index"
           [formGroupName]="i"
           class="property-item"
         >
@@ -42,17 +37,15 @@
             <div class="property-name">
               <input
                 type="text"
-                formControlName="propertyName"
+                formControlName="name"
                 placeholder="Имя свойства"
                 [class.invalid]="
-                  property.get('propertyName')?.invalid &&
-                  property.get('propertyName')?.touched
+                  property.get('name')?.invalid && property.get('name')?.touched
                 "
               />
               <div
                 *ngIf="
-                  property.get('propertyName')?.invalid &&
-                  property.get('propertyName')?.touched
+                  property.get('name')?.invalid && property.get('name')?.touched
                 "
                 class="error-message"
               >
@@ -62,9 +55,30 @@
 
             <div class="property-type">
               <label>
-                <input type="checkbox" formControlName="isNumeric" />
-                Числовое
+                <input type="checkbox" formControlName="isRanged" />
+                Диапазон значений
               </label>
+            </div>
+
+            <div class="property-default">
+              <input
+                type="text"
+                formControlName="defaultValue"
+                placeholder="Значение по умолчанию"
+                [class.invalid]="
+                  property.get('defaultValue')?.invalid &&
+                  property.get('defaultValue')?.touched
+                "
+              />
+              <div
+                *ngIf="
+                  property.get('defaultValue')?.invalid &&
+                  property.get('defaultValue')?.touched
+                "
+                class="error-message"
+              >
+                Значение должно быть числом
+              </div>
             </div>
 
             <button
@@ -85,8 +99,8 @@
       </button>
       <button
         type="submit"
-        [disabled]="categoryForm.invalid || propertyList.length == 0"
         class="submit-button"
+        [disabled]="categoryForm.invalid"
       >
         Сохранить изменения
       </button>
