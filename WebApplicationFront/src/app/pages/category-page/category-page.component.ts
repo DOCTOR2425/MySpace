@@ -28,11 +28,11 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
   public categoryName!: string;
   public products: ProductCard[] = [];
   public categoryFilters!: CategoryFilters;
+  public showAllValues: boolean = false; // Declare showAllValues variable
 
   private unsubscribe$ = new Subject<void>();
 
-  @ViewChildren('rangeInputMin') rangeInputsMin!: QueryList<any>;
-  @ViewChildren('rangeInputMax') rangeInputsMax!: QueryList<any>;
+  @ViewChildren('rangeInput') rangeInputs!: QueryList<any>;
   @ViewChildren('collectionInput') collectionInputs!: QueryList<any>;
 
   constructor(
@@ -61,6 +61,18 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
             this.categoryFilters.rangePropertyForFilters.forEach((filter) => {
               filter.currentMinValue = filter.minValue;
               filter.currentMaxValue = filter.maxValue;
+            });
+
+            // Ensure 'Цена' and 'Бренд' are the first filters
+            this.categoryFilters.rangePropertyForFilters.sort((a, b) => {
+              if (a.propertyName === 'Цена') return -1;
+              if (b.propertyName === 'Цена') return 1;
+              return 0;
+            });
+            this.categoryFilters.collectionPropertyForFilters.sort((a, b) => {
+              if (a.propertyName === 'Бренд') return -1;
+              if (b.propertyName === 'Бренд') return 1;
+              return 0;
             });
           });
       });
