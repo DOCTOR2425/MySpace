@@ -197,9 +197,37 @@ namespace InstrumentStore.Domain.Service
 
         public async Task<List<Product>> GetSpecialProductsForUser()
         {
-
-
             throw new NotImplementedException();
+        }
+
+        public async Task<List<Product>> GetSimmularToProduct(Guid productId)
+        {
+            Product? target = await _dbContext.Product
+                .Include(p => p.ProductCategory)
+                .FirstOrDefaultAsync(p => p.ProductId == productId);
+
+            if (target == null)
+                throw new ArgumentNullException("Такого товара не существует");
+
+            List<Product> productsInCategoryOrderedBySales = await _dbContext.ProductCategory
+                .Where(category => category.ProductCategoryId == target.ProductCategory.ProductCategoryId)
+                .SelectMany(category => _dbContext.PaidOrderItem
+                    .Include(oi => oi.Product)
+                    .Include(oi => oi.Product.ProductCategory)
+                    .Where(oi => oi.Product.ProductCategory.ProductCategoryId == category.ProductCategoryId)
+                    .GroupBy(oi => oi.Product)
+                    .Select(g => new
+                    {
+                        Product = g.Key,
+                        TotalSales = g.Sum(oi => oi.Quantity)
+                    })
+                    .OrderByDescending(x => x.TotalSales)
+                    .Select(x => x.Product)
+                )
+                .ToListAsync();
+            productsInCategoryOrderedBySales.Remove(target);
+
+            return productsInCategoryOrderedBySales;
         }
     }
 }

@@ -25,5 +25,6 @@ namespace InstrumentStore.Domain.Abstractions
             List<Product> productsForFilter,
             int page);
         Task<List<ProductCard>> SearchByName(string input, int package);
+        Task<List<Product>> GetSimmularToProduct(Guid productId);
     }
 }

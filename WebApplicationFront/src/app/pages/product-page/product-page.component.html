@@ -1,81 +1,84 @@
 <div class="product-page">
   <div class="product" *ngIf="product">
-    <div class="gallery-section">
-      <div class="thumbnail-container">
-        <div
-          class="thumbnail"
-          *ngFor="
-            let img of [
-              product.productResponseData.image,
-              product.productResponseData.image,
-              product.productResponseData.image
-            ]
-          "
-        >
-          <img
-            [src]="img"
-            [alt]="product.productResponseData.name"
+    <!-- Верхний блок -->
+    <div class="product-top">
+      <!-- Галерея -->
+      <div class="gallery">
+        <div class="thumbnails">
+          <div
+            class="thumbnail"
+            *ngFor="let img of product.images"
             (click)="selectImage(img)"
+          >
+            <img [src]="img" [alt]="product.name" />
+          </div>
+        </div>
+        <div class="main-image">
+          <img
+            [src]="selectedImage || product.images[0]"
+            [alt]="product.name"
           />
         </div>
       </div>
-      <div class="main-image">
-        <img
-          [src]="selectedImage || product.productResponseData.image"
-          [alt]="product.productResponseData.name"
-        />
-      </div>
-    </div>
 
-    <div class="product-info">
-      <h1 class="product-title">{{ product.productResponseData.name }}</h1>
-      <div class="price-section">
-        <span class="price">{{ product.productResponseData.price }} руб.</span>
+      <!-- Информация -->
+      <div class="product-info">
+        <h1 class="title">{{ product.name }}</h1>
+        <div class="price">{{ product.price }} руб.</div>
+
         <div class="actions">
-          <button id="addToCart" class="btn-cart" (click)="addToCart()">
-            <span>В корзину</span>
+          <button class="add-to-cart" (click)="addToCart()">В корзину</button>
+          <button class="add-to-compare" (click)="addToComparison()">
+            К сравнению
           </button>
-
-          <button
-            id="addToComparison"
-            class="btn-cart"
-            (click)="addToComparison()"
-          >
-            <span>К Сравнению</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="description-section">
-        <h3>Описание</h3>
-        <p>{{ product.productResponseData.description }}</p>
-      </div>
-
-      <div class="properties-section">
-        <h3>Характеристики</h3>
-        <div class="property" *ngFor="let propName of propertyNames">
-          <span class="property-name">{{ propName }}:</span>
-          <span class="property-value">{{ product.properties[propName] }}</span>
         </div>
       </div>
     </div>
 
+    <!-- Нижний блок -->
+    <div class="product-bottom">
+      <div class="description">
+        <h3>Описание</h3>
+        <p>{{ product.description }}</p>
+      </div>
+
+      <div class="properties">
+        <h3>Характеристики</h3>
+        <div
+          class="property"
+          *ngFor="let prop of product.productPropertyValues"
+        >
+          <span class="name">{{ prop.name }}:</span>
+          <span class="value">{{ prop.value }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Похожие товары -->
+    <div class="similar-products" *ngIf="simmularProducts.length > 0">
+      <h2>Похожие товары</h2>
+      <div class="products-scroll">
+        <app-product-card
+          *ngFor="let product of simmularProducts"
+          [product]="product"
+        >
+        </app-product-card>
+      </div>
+    </div>
+
+    <!-- Комментарии -->
     <div class="comments-section">
       <h2>Отзывы</h2>
 
       <div class="comment-form">
         <h3>Оставить отзыв</h3>
         <textarea
-          maxlength="1000"
           [(ngModel)]="newComment"
           placeholder="Ваш отзыв..."
+          maxlength="1000"
           rows="3"
         ></textarea>
-        <button
-          class="btn-submit"
-          (click)="addComment()"
-          [disabled]="!newComment"
-        >
+        <button (click)="addComment()" [disabled]="!newComment">
           Отправить
         </button>
       </div>
@@ -88,9 +91,7 @@
               comment.creationDate | date : "dd.MM.yyyy"
             }}</span>
           </div>
-          <p class="comment-text">
-            {{ comment.text }}
-          </p>
+          <p class="comment-text">{{ comment.text }}</p>
         </div>
       </div>
     </div>

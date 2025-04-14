@@ -1,33 +1,36 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ProductService } from '../../service/product.service';
 import { CommonModule } from '@angular/common';
-import { Product } from '../../data/interfaces/product/product.interface';
 import { CartService } from '../../service/cart/cart.service';
-import { Subject, takeUntil } from 'rxjs';
+import { filter, Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { CreateCommentRequest } from '../../data/interfaces/Comment/create-comment-request.interface';
 import { CommentResponse } from '../../data/interfaces/Comment/comment-response.interface';
 import { ComparisonService } from '../../service/comparison/comparison.service';
 import { ToastService } from '../../service/toast/toast.service';
+import { FullProductInfoResponse } from '../../data/interfaces/product/product-to-update-response.interface';
+import { ProductCard } from '../../data/interfaces/product/product-card.interface';
+import { ProductCardComponent } from '../../common-ui/product-card/product-card.component';
 
 @Component({
   selector: 'app-product',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ProductCardComponent],
   templateUrl: './product-page.component.html',
   styleUrls: ['./product-page.component.scss'],
 })
 export class ProductComponent implements OnInit, OnDestroy {
-  public productId!: string;
-  public product!: Product;
-  public propertyNames: string[] = [];
+  @Input() id!: string;
+  public product!: FullProductInfoResponse;
   public selectedImage: string | null = null;
   public newComment: string = '';
   public comments: CommentResponse[] = [];
+  public simmularProducts: ProductCard[] = [];
   private unsubscribe$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private productService: ProductService,
     private cartService: CartService,
     private comparisonService: ComparisonService,
@@ -35,9 +38,13 @@ export class ProductComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-    this.productId = this.route.snapshot.paramMap.get('id')!;
-    this.loadProduct();
-    this.loadComments();
+    this.loadPage();
+    this.router.events
+      .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+      .subscribe(() => {
+        this.id = this.route.snapshot.paramMap.get('id')!;
+        this.loadPage();
+      });
   }
 
   public ngOnDestroy(): void {
@@ -45,19 +52,28 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  private loadProduct(): void {
+  private loadPage() {
+    this.selectedImage = null;
+    this.newComment = '';
+
     this.productService
-      .getProductById(this.productId)
+      .getProductById(this.id)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((data) => {
         this.product = data;
-        this.propertyNames = Object.keys(data.properties);
+      });
+    this.loadComments();
+    this.productService
+      .getSimmularToProduct(this.id)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((data) => {
+        this.simmularProducts = data;
       });
   }
 
-  private loadComments(): void {
+  private loadComments() {
     this.productService
-      .getCommentsByProduct(this.productId)
+      .getCommentsByProduct(this.id)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (comments) => {
@@ -72,7 +88,7 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   public addToCart(): void {
     const addToCartRequest = {
-      productId: this.productId,
+      productId: this.id,
       quantity: 1,
     };
     this.cartService
@@ -92,7 +108,7 @@ export class ProductComponent implements OnInit, OnDestroy {
 
     const request: CreateCommentRequest = {
       text: this.newComment,
-      productId: this.productId,
+      productId: this.id,
     };
 
     this.productService
@@ -108,7 +124,7 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   public addToComparison(): void {
     this.comparisonService
-      .addToComparison(this.productId)
+      .addToComparison(this.id)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (val) => {

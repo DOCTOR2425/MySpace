@@ -1,212 +1,96 @@
 <div class="page-layout">
   <div *ngIf="categoryFilters" class="filters-column">
-    <div class="filter-group">
-      <label>Цена</label>
+    <div
+      *ngFor="let filter of categoryFilters.rangePropertyForFilters"
+      class="filter-group"
+    >
+      <label class="filter-label">{{ filter.propertyName }}</label>
       <div class="range-control">
-        <span
-          >От:
-          {{ categoryFilters.rangePropertyForFilters[0].currentMinValue }}</span
-        >
-        <span
-          >До:
-          {{ categoryFilters.rangePropertyForFilters[0].currentMaxValue }}</span
-        >
-        <input
-          type="range"
-          [min]="categoryFilters.rangePropertyForFilters[0].minValue"
-          [max]="categoryFilters.rangePropertyForFilters[0].maxValue"
-          [(ngModel)]="
-            categoryFilters.rangePropertyForFilters[0].currentMinValue
-          "
-          (change)="onFilterChange()"
-          #rangeInputMin
-          [attr.data-property]="
-            categoryFilters.rangePropertyForFilters[0].propertyName
-          "
-        />
-        <input
-          type="range"
-          [min]="categoryFilters.rangePropertyForFilters[0].minValue"
-          [max]="categoryFilters.rangePropertyForFilters[0].maxValue"
-          [(ngModel)]="
-            categoryFilters.rangePropertyForFilters[0].currentMaxValue
-          "
-          (change)="onFilterChange()"
-          #rangeInputMax
-          [attr.data-property]="
-            categoryFilters.rangePropertyForFilters[0].propertyName
-          "
-        />
-      </div>
-    </div>
-
-    <div class="filter-group">
-      <label>Бренд</label>
-      <div
-        *ngIf="
-          categoryFilters.collectionPropertyForFilters[0].uniqueValues.length >
-          3
-        "
-      >
-        <div
-          class="checkbox-option"
-          *ngFor="
-            let value of categoryFilters.collectionPropertyForFilters[0].uniqueValues.slice(
-              0,
-              3
-            )
-          "
-        >
-          <input
-            type="checkbox"
-            [value]="value"
-            (change)="onFilterChange()"
-            #collectionInput
-            [attr.data-property]="
-              categoryFilters.collectionPropertyForFilters[0].propertyName
-            "
-          />
-          <span>{{ value }}</span>
+        <div class="range-values">
+          <span class="range-value">От: {{ filter.currentMinValue }}</span>
+          <span class="range-value">До: {{ filter.currentMaxValue }}</span>
         </div>
-        <button (click)="showAllValues = !showAllValues">
-          {{ showAllValues ? "Скрыть" : "Показать все" }}
-        </button>
-        <ng-container *ngIf="showAllValues">
-          <div
-            class="checkbox-option"
-            *ngFor="
-              let value of categoryFilters.collectionPropertyForFilters[0].uniqueValues.slice(
-                3
-              )
-            "
-          >
-            <input
-              type="checkbox"
-              [value]="value"
-              (change)="onFilterChange()"
-              #collectionInput
-              [attr.data-property]="
-                categoryFilters.collectionPropertyForFilters[0].propertyName
-              "
-            />
-            <span>{{ value }}</span>
+        <div class="slider-container">
+          <div class="slider-track">
+            <div
+              class="slider-range"
+              [style.left]="getRangeLeft(filter)"
+              [style.right]="getRangeRight(filter)"
+            ></div>
           </div>
-        </ng-container>
-      </div>
-      <div
-        *ngIf="
-          categoryFilters.collectionPropertyForFilters[0].uniqueValues.length <=
-          3
-        "
-      >
-        <div
-          class="checkbox-option"
-          *ngFor="
-            let value of categoryFilters.collectionPropertyForFilters[0]
-              .uniqueValues
-          "
-        >
           <input
-            type="checkbox"
-            [value]="value"
-            (change)="onFilterChange()"
-            #collectionInput
-            [attr.data-property]="
-              categoryFilters.collectionPropertyForFilters[0].propertyName
-            "
+            type="range"
+            class="range-slider lower"
+            [min]="filter.minValue"
+            [max]="filter.maxValue"
+            [value]="filter.currentMinValue"
+            (input)="onRangeChange(filter, true, $event)"
           />
-          <span>{{ value }}</span>
+          <input
+            type="range"
+            class="range-slider upper"
+            [min]="filter.minValue"
+            [max]="filter.maxValue"
+            [value]="filter.currentMaxValue"
+            (input)="onRangeChange(filter, false, $event)"
+          />
         </div>
       </div>
     </div>
 
     <div
       *ngFor="
-        let rangeFilter of categoryFilters.rangePropertyForFilters.slice(1)
+        let filter of categoryFilters.collectionPropertyForFilters;
+        let i = index
       "
       class="filter-group"
     >
-      <label>{{ rangeFilter.propertyName }}</label>
-      <div class="range-control">
-        <span>От: {{ rangeFilter.currentMinValue }}</span>
-        <span>До: {{ rangeFilter.currentMaxValue }}</span>
-        <input
-          type="range"
-          [min]="rangeFilter.minValue"
-          [max]="rangeFilter.maxValue"
-          [(ngModel)]="rangeFilter.currentMinValue"
-          (change)="onFilterChange()"
-          #rangeInputMin
-          [attr.data-property]="rangeFilter.propertyName"
-        />
-        <input
-          type="range"
-          [min]="rangeFilter.minValue"
-          [max]="rangeFilter.maxValue"
-          [(ngModel)]="rangeFilter.currentMaxValue"
-          (change)="onFilterChange()"
-          #rangeInputMax
-          [attr.data-property]="rangeFilter.propertyName"
-        />
-      </div>
-    </div>
-
-    <div
-      *ngFor="
-        let collectionFilter of categoryFilters.collectionPropertyForFilters.slice(
-          1
-        )
-      "
-      class="filter-group"
-    >
-      <label>{{ collectionFilter.propertyName }}</label>
-      <div *ngIf="collectionFilter.uniqueValues.length > 3">
+      <label class="filter-label">{{ filter.propertyName }}</label>
+      <div class="checkbox-group">
         <div
           class="checkbox-option"
-          *ngFor="let value of collectionFilter.uniqueValues.slice(0, 3)"
+          *ngFor="let value of getVisibleValues(filter, 3); trackBy: trackByFn"
         >
-          <input
-            type="checkbox"
-            [value]="value"
-            (change)="onFilterChange()"
-            #collectionInput
-            [attr.data-property]="collectionFilter.propertyName"
-          />
-          <span>{{ value }}</span>
-        </div>
-        <button (click)="showAllValues = !showAllValues">
-          {{ showAllValues ? "Скрыть" : "Показать все" }}
-        </button>
-        <ng-container *ngIf="showAllValues">
-          <div
-            class="checkbox-option"
-            *ngFor="let value of collectionFilter.uniqueValues.slice(3)"
-          >
+          <label class="checkbox-label">
             <input
               type="checkbox"
+              class="checkbox-input"
               [value]="value"
               (change)="onFilterChange()"
               #collectionInput
-              [attr.data-property]="collectionFilter.propertyName"
+              [attr.data-property]="filter.propertyName"
             />
-            <span>{{ value }}</span>
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">{{ value }}</span>
+          </label>
+        </div>
+        <button
+          *ngIf="filter.uniqueValues.length > 3"
+          class="toggle-values-btn"
+          (click)="toggleShowAll(i)"
+        >
+          {{ showAllStates[i] ? "Скрыть" : "Показать все" }}
+          <span class="toggle-icon">{{ showAllStates[i] ? "▲" : "▼" }}</span>
+        </button>
+        <ng-container *ngIf="showAllStates[i]">
+          <div
+            class="checkbox-option"
+            *ngFor="let value of getHiddenValues(filter, 3); trackBy: trackByFn"
+          >
+            <label class="checkbox-label">
+              <input
+                type="checkbox"
+                class="checkbox-input"
+                [value]="value"
+                (change)="onFilterChange()"
+                #collectionInput
+                [attr.data-property]="filter.propertyName"
+              />
+              <span class="checkbox-custom"></span>
+              <span class="checkbox-text">{{ value }}</span>
+            </label>
           </div>
         </ng-container>
-      </div>
-      <div *ngIf="collectionFilter.uniqueValues.length <= 3">
-        <div
-          class="checkbox-option"
-          *ngFor="let value of collectionFilter.uniqueValues"
-        >
-          <input
-            type="checkbox"
-            [value]="value"
-            (change)="onFilterChange()"
-            #collectionInput
-            [attr.data-property]="collectionFilter.propertyName"
-          />
-          <span>{{ value }}</span>
-        </div>
       </div>
     </div>
   </div>
@@ -214,7 +98,7 @@
   <div class="products-column">
     <div class="products-grid">
       <app-product-card
-        *ngFor="let product of products"
+        *ngFor="let product of products; trackBy: trackByFn"
         [product]="product"
       ></app-product-card>
     </div>

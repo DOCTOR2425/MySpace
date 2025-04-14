@@ -111,16 +111,17 @@ namespace InstrumentStore.API.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<ActionResult<ProductResponse>> GetProduct([FromRoute] Guid id)
+        public async Task<ActionResult<FullProductInfoResponse>> GetProduct([FromRoute] Guid id)
         {
             var product = await _productService.GetById(id);
-            var productResponseData = _mapper.Map<ProductData>(product, opt => opt.Items["DbContext"] = _dbContext);
+            FullProductInfoResponse productResponseData = _mapper
+                .Map<FullProductInfoResponse>(product, opt => opt.Items["DbContext"] = _dbContext);
 
-            ProductResponse response = new ProductResponse(
-                productResponseData,
-                await _productPropertyService.GetProductProperties(id));
+            //FullProductInfoResponse response = new FullProductInfoResponse(
+            //    productResponseData,
+            //    await _productPropertyService.GetProductProperties(id));
 
-            return Ok(response);
+            return Ok(productResponseData);
         }
 
         [HttpPut("update-product/{id:guid}")]
@@ -227,6 +228,14 @@ namespace InstrumentStore.API.Controllers
         public async Task<IActionResult> GetSpecialProductsForUser()
         {
             throw new NotImplementedException();
+        }
+
+        [HttpGet("get-simmular-to-product/{productId:guid}")]
+        public async Task<ActionResult<List<ProductCard>>> GetSimmularToProduct(
+            [FromRoute] Guid productId)
+        {
+            return Ok(_mapper.Map<List<ProductCard>>(await _productService.GetSimmularToProduct(productId),
+                opt => opt.Items["DbContext"] = _dbContext).Take(10));
         }
     }
 }

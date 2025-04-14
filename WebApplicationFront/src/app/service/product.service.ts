@@ -6,7 +6,7 @@ import { environment } from '../../environments/environment.development';
 import { Product } from '../data/interfaces/product/product.interface';
 import { FilterRequest } from '../data/interfaces/filters/filter-request.interface';
 import { CategoryFilters } from '../data/interfaces/filters/category-filters.intervace';
-import { ProductToUpdate } from '../data/interfaces/product/product-to-update-response.interface';
+import { FullProductInfoResponse } from '../data/interfaces/product/product-to-update-response.interface';
 import { CreateCommentRequest } from '../data/interfaces/Comment/create-comment-request.interface';
 import { CommentResponse } from '../data/interfaces/Comment/comment-response.interface';
 
@@ -24,8 +24,8 @@ export class ProductService {
     });
   }
 
-  public getProductById(id: string): Observable<Product> {
-    return this.http.get<Product>(`${this.baseApiUrl}${id}`, {
+  public getProductById(id: string): Observable<FullProductInfoResponse> {
+    return this.http.get<FullProductInfoResponse>(`${this.baseApiUrl}${id}`, {
       withCredentials: true,
     });
   }
@@ -63,8 +63,10 @@ export class ProductService {
     );
   }
 
-  public getProductToUpdate(productId: string): Observable<ProductToUpdate> {
-    return this.http.get<ProductToUpdate>(
+  public getProductToUpdate(
+    productId: string
+  ): Observable<FullProductInfoResponse> {
+    return this.http.get<FullProductInfoResponse>(
       `${this.baseApiUrl}get-product-to-update/${productId}`,
       { withCredentials: true }
     );
@@ -134,6 +136,13 @@ export class ProductService {
   ): Observable<CommentResponse[]> {
     return this.http.get<CommentResponse[]>(
       `${this.baseApiUrl}get-comments-by-product/${productId}`,
+      { withCredentials: true }
+    );
+  }
+
+  public getSimmularToProduct(productId: string): Observable<ProductCard[]> {
+    return this.http.get<ProductCard[]>(
+      `${this.baseApiUrl}get-simmular-to-product/${productId}`,
       { withCredentials: true }
     );
   }

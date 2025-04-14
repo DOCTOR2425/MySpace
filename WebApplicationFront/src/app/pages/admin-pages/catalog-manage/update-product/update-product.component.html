@@ -1,7 +1,7 @@
 <h1>Изменение товара</h1>
 
 <div class="product-form-container">
-  <div *ngIf="productToUpdate" class="product-form">
+  <div *ngIf="FullProductInfoResponse" class="product-form">
     <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="name">Название товара:</label>
@@ -75,7 +75,7 @@
             style="display: none"
           />
           <label
-            *ngIf="!productToUpdate.isArchive"
+            *ngIf="!FullProductInfoResponse.isArchive"
             for="photos"
             class="action-button"
           >
@@ -85,7 +85,7 @@
             <div *ngFor="let photo of photos; let i = index" class="photo-item">
               <img [src]="[photosToView[i]]" [alt]="photosToView[i]" />
               <button
-                *ngIf="!productToUpdate.isArchive"
+                *ngIf="!FullProductInfoResponse.isArchive"
                 type="button"
                 class="delete-button"
                 (click)="onPhotoDelete(i)"
@@ -102,20 +102,20 @@
           class="archive-button"
           type="button"
           (click)="
-            productToUpdate.isArchive
+            FullProductInfoResponse.isArchive
               ? changeArchiveStatus(false)
               : changeArchiveStatus(true)
           "
         >
           {{
-            productToUpdate.isArchive
+            FullProductInfoResponse.isArchive
               ? "Вернуть из архива"
               : "Переместить в архив"
           }}
         </button>
       </div>
 
-      <div *ngIf="!productToUpdate.isArchive" class="form-actions">
+      <div *ngIf="!FullProductInfoResponse.isArchive" class="form-actions">
         <button type="submit" class="save-button">Обновить товар</button>
         <button type="button" class="cancel-button" (click)="exit()">
           Отмена
@@ -124,7 +124,10 @@
     </form>
   </div>
 
-  <div *ngIf="productToUpdate && propertiesForm" class="properties-form">
+  <div
+    *ngIf="FullProductInfoResponse && propertiesForm"
+    class="properties-form"
+  >
     <h2>Свойства товара</h2>
     <form [formGroup]="propertiesForm">
       <div *ngFor="let property of productProperties" class="form-group">

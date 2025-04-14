@@ -12,7 +12,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AdminService } from '../../../../service/admin/admin.service';
 import { ProductProperty } from '../../../../data/interfaces/product/product-property.interface';
 import { ProductService } from '../../../../service/product.service';
-import { ProductToUpdate } from '../../../../data/interfaces/product/product-to-update-response.interface';
+import { FullProductInfoResponse } from '../../../../data/interfaces/product/product-to-update-response.interface';
 import { OptionsForProduct } from '../../../../data/interfaces/some/options-for-order.interface';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { CreateProductRequest } from '../../../../data/interfaces/product/create-product-request.interface';
@@ -26,7 +26,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class UpdateProductComponent implements OnInit, OnDestroy {
   public productToUpdateId!: string;
-  public productToUpdate!: ProductToUpdate;
+  public FullProductInfoResponse!: FullProductInfoResponse;
   public productProperties: ProductProperty[] = [];
   public optionsForProduct!: OptionsForProduct;
   public photos: File[] = [];
@@ -48,16 +48,16 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
     this.productToUpdateId = this.route.snapshot.paramMap.get('id')!;
 
     forkJoin({
-      productToUpdate: this.productService.getProductToUpdate(
+      FullProductInfoResponse: this.productService.getProductToUpdate(
         this.productToUpdateId
       ),
       productOptions: this.adminService.getOptionsForProduct(),
     })
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((val) => {
-        this.productToUpdate = val.productToUpdate;
+        this.FullProductInfoResponse = val.FullProductInfoResponse;
         this.optionsForProduct = val.productOptions;
-        this.buildForms(val.productToUpdate);
+        this.buildForms(val.FullProductInfoResponse);
       });
   }
 
@@ -70,35 +70,38 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
     });
   }
 
-  private buildForms(productToUpdate: ProductToUpdate): void {
+  private buildForms(FullProductInfoResponse: FullProductInfoResponse): void {
     this.productForm = this.fb.group({
-      name: [productToUpdate.name, Validators.required],
+      name: [FullProductInfoResponse.name, Validators.required],
       brand: [
         this.optionsForProduct.brands.find(
-          (b) => b.name == productToUpdate.brand
+          (b) => b.name == FullProductInfoResponse.brand
         )?.brandId,
         Validators.required,
       ],
       country: [
         this.optionsForProduct.countries.find(
-          (c) => c.name == productToUpdate.country
+          (c) => c.name == FullProductInfoResponse.country
         )?.countryId,
         Validators.required,
       ],
       category: [
         this.optionsForProduct.productCategories.find(
-          (c) => c.name == productToUpdate.productCategory
+          (c) => c.name == FullProductInfoResponse.productCategory
         )?.productCategoryId,
         Validators.required,
       ],
-      price: [productToUpdate.price, [Validators.required, Validators.min(0)]],
-      quantity: [
-        productToUpdate.quantity,
+      price: [
+        FullProductInfoResponse.price,
         [Validators.required, Validators.min(0)],
       ],
-      description: [productToUpdate.description, Validators.required],
+      quantity: [
+        FullProductInfoResponse.quantity,
+        [Validators.required, Validators.min(0)],
+      ],
+      description: [FullProductInfoResponse.description, Validators.required],
     });
-    if (productToUpdate.isArchive) this.productForm.disable();
+    if (FullProductInfoResponse.isArchive) this.productForm.disable();
 
     this.adminService
       .getProductPropertiesByCategory(this.productForm.value.category)
@@ -108,16 +111,24 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
         this.initPropertiesForm();
       });
 
-    const imageRequests = productToUpdate.images.map((image) =>
-      this.http.get(`https://localhost:7295/images/${image}`, {
+    const imageRequests = FullProductInfoResponse.images.map((image) =>
+      this.http.get(image, {
         responseType: 'blob',
       })
     );
     forkJoin(imageRequests).subscribe((blobs) => {
-      this.photos = blobs.map(
-        (blob, index) =>
-          new File([blob], productToUpdate.images[index], { type: blob.type })
-      );
+      this.photos = blobs.map((blob, index) => {
+        return new File(
+          [blob],
+          FullProductInfoResponse.images[index].replace(
+            'https://localhost:7295/images/',
+            ''
+          ),
+          {
+            type: blob.type,
+          }
+        );
+      });
       this.photosToView = this.photos.map((file) => this.getPhotoUrl(file));
     });
   }
@@ -136,7 +147,6 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
       brandId: this.productForm.value.brand,
       countryId: this.productForm.value.country,
     };
-
     const formData = new FormData();
     formData.append('productDto', JSON.stringify(product));
     product.images.forEach((image) => {
@@ -185,10 +195,10 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
       (category) => category.productCategoryId === selectedValue
     );
     const controls: { [key: string]: FormControl } = {};
-    if (selectedOption?.name == this.productToUpdate.productCategory) {
+    if (selectedOption?.name == this.FullProductInfoResponse.productCategory) {
       this.productProperties.forEach((property) => {
         controls[property.productPropertyId] = this.fb.control(
-          this.productToUpdate.productPropertyValues.find(
+          this.FullProductInfoResponse.productPropertyValues.find(
             (prop) => prop.propertyId == property.productPropertyId
           )?.value,
           Validators.required
@@ -204,7 +214,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
     }
 
     this.propertiesForm = this.fb.group(controls);
-    if (this.productToUpdate.isArchive) this.propertiesForm.disable();
+    if (this.FullProductInfoResponse.isArchive) this.propertiesForm.disable();
   }
 
   public onPhotosChange(event: Event): void {
@@ -239,9 +249,9 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: () => {
-          this.productToUpdate.isArchive = status;
+          this.FullProductInfoResponse.isArchive = status;
 
-          if (this.productToUpdate.isArchive) {
+          if (this.FullProductInfoResponse.isArchive) {
             this.productForm.disable();
             this.propertiesForm?.disable();
           } else {

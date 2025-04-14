@@ -92,10 +92,21 @@ export class CartService {
     }
 
     this.productService.getProductById(payload.productId).subscribe((val) => {
-      let productData = val.productResponseData;
+      let product = val;
       let cartItem = {
         cartItemId: uuidv4(),
-        product: productData,
+        product: {
+          productId: product.productId,
+          name: product.name,
+          description: product.description,
+          price: product.price,
+          quantity: product.quantity,
+          image: product.images[0],
+          productCategory: product.productCategory,
+          brand: product.brand,
+          country: product.country,
+          isArchive: product.isArchive,
+        },
         quantity: 1,
       };
       cartItems.push(cartItem);

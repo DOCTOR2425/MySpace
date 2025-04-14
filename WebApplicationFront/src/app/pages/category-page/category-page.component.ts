@@ -4,6 +4,7 @@ import {
   OnInit,
   ViewChildren,
   QueryList,
+  ElementRef,
 } from '@angular/core';
 import { ProductService } from '../../service/product.service';
 import { ActivatedRoute } from '@angular/router';
@@ -20,20 +21,21 @@ import { ProductCard } from '../../data/interfaces/product/product-card.interfac
 
 @Component({
   selector: 'app-category-page',
+  standalone: true,
   imports: [ProductCardComponent, CommonModule, FormsModule],
   templateUrl: './category-page.component.html',
-  styleUrl: './category-page.component.scss',
+  styleUrls: ['./category-page.component.scss'],
 })
 export class CategoryPageComponent implements OnInit, OnDestroy {
-  public categoryName!: string;
+  public categoryName: string = '';
   public products: ProductCard[] = [];
   public categoryFilters!: CategoryFilters;
-  public showAllValues: boolean = false; // Declare showAllValues variable
+  public showAllStates: boolean[] = [];
 
   private unsubscribe$ = new Subject<void>();
+  private debounceTimer: any;
 
-  @ViewChildren('rangeInput') rangeInputs!: QueryList<any>;
-  @ViewChildren('collectionInput') collectionInputs!: QueryList<any>;
+  @ViewChildren('collectionInput') collectionInputs!: QueryList<ElementRef>;
 
   constructor(
     private route: ActivatedRoute,
@@ -44,81 +46,77 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
     this.route.paramMap
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((params) => {
-        this.categoryName = params.get('categoryName')!;
-        forkJoin({
-          productsCardsByCategory:
-            this.productService.getAllProductsCardsByCategory(
-              this.categoryName
-            ),
-          categoryFilters: this.productService.getCategoryFilters(
-            this.categoryName
-          ),
-        })
-          .pipe(takeUntil(this.unsubscribe$))
-          .subscribe((val) => {
-            this.products = val.productsCardsByCategory;
-            this.categoryFilters = val.categoryFilters;
-            this.categoryFilters.rangePropertyForFilters.forEach((filter) => {
-              filter.currentMinValue = filter.minValue;
-              filter.currentMaxValue = filter.maxValue;
-            });
-
-            // Ensure 'Цена' and 'Бренд' are the first filters
-            this.categoryFilters.rangePropertyForFilters.sort((a, b) => {
-              if (a.propertyName === 'Цена') return -1;
-              if (b.propertyName === 'Цена') return 1;
-              return 0;
-            });
-            this.categoryFilters.collectionPropertyForFilters.sort((a, b) => {
-              if (a.propertyName === 'Бренд') return -1;
-              if (b.propertyName === 'Бренд') return 1;
-              return 0;
-            });
-          });
+        this.categoryName = params.get('categoryName') || '';
+        this.loadData();
       });
   }
 
-  public ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+  private loadData(): void {
+    forkJoin({
+      productsCardsByCategory:
+        this.productService.getAllProductsCardsByCategory(this.categoryName),
+      categoryFilters: this.productService.getCategoryFilters(
+        this.categoryName
+      ),
+    })
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: ({ productsCardsByCategory, categoryFilters }) => {
+          this.products = productsCardsByCategory;
+          this.initializeFilters(categoryFilters);
+        },
+        error: (err) => console.error('Error loading data:', err),
+      });
   }
 
-  private getRangeFilters(): RangeFilter[] {
-    let rangesForFilter: RangePropertyForFilter[] =
-      this.categoryFilters.rangePropertyForFilters.filter(
-        (filter) =>
-          filter.minValue != filter.currentMinValue ||
-          filter.maxValue != filter.currentMaxValue
-      );
-
-    return rangesForFilter.map((filter) => ({
-      minValue: filter.currentMinValue ?? 0,
-      maxValue: filter.currentMaxValue ?? 0,
-      property: filter.propertyName,
-    }));
+  private initializeFilters(filters: CategoryFilters): void {
+    this.categoryFilters = filters;
+    this.showAllStates = new Array(
+      this.categoryFilters.collectionPropertyForFilters.length
+    ).fill(false);
+    this.categoryFilters.rangePropertyForFilters.forEach((filter) => {
+      filter.currentMinValue = filter.minValue;
+      filter.currentMaxValue = filter.maxValue;
+    });
+    this.sortFilters();
   }
 
-  private getCollectionFilters(): CollectionFilter[] {
-    const collectionFilters = this.collectionInputs
-      .filter((input) => input.nativeElement.checked)
-      .map((input) => ({
-        property: input.nativeElement.getAttribute('data-property'),
-        propertyValue: input.nativeElement.value,
-      }));
-
-    if (collectionFilters.length == 0) return [];
-
-    return collectionFilters;
+  private sortFilters(): void {
+    this.categoryFilters.rangePropertyForFilters.sort((a, b) =>
+      a.propertyName === 'Цена' ? -1 : b.propertyName === 'Цена' ? 1 : 0
+    );
+    this.categoryFilters.collectionPropertyForFilters.sort((a, b) =>
+      a.propertyName === 'Бренд' ? -1 : b.propertyName === 'Бренд' ? 1 : 0
+    );
   }
 
-  onFilterChange(): void {
-    const rangeFilters = this.getRangeFilters();
-    const collectionFilters = this.getCollectionFilters();
+  public onRangeChange(
+    filter: RangePropertyForFilter,
+    isMin: boolean,
+    event: Event
+  ): void {
+    const value = parseFloat((event.target as HTMLInputElement).value);
+    if (isMin) {
+      filter.currentMinValue = Math.min(value, filter.currentMaxValue!);
+    } else {
+      filter.currentMaxValue = Math.max(value, filter.currentMinValue!);
+    }
+    this.debouncedFilterChange();
+  }
 
-    const filterRequest: FilterRequest = {
-      rangeFilters,
-      collectionFilters,
-    };
+  public onFilterChange(): void {
+    this.debouncedFilterChange();
+  }
+
+  private debouncedFilterChange(): void {
+    clearTimeout(this.debounceTimer);
+    this.debounceTimer = setTimeout(() => this.applyFilters(), 300);
+  }
+
+  private applyFilters(): void {
+    const rangeFilters = this.getActiveRangeFilters();
+    const collectionFilters = this.getActiveCollectionFilters();
+    const filterRequest: FilterRequest = { rangeFilters, collectionFilters };
 
     this.productService
       .getAllProductsCardsByCategoryWithFilters(
@@ -126,8 +124,70 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
         filterRequest
       )
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((data) => {
-        this.products = data;
+      .subscribe({
+        next: (data) => (this.products = data),
+        error: (err) => console.error('Error applying filters:', err),
       });
+  }
+
+  private getActiveRangeFilters(): RangeFilter[] {
+    return this.categoryFilters.rangePropertyForFilters
+      .filter(
+        (filter) =>
+          filter.minValue !== filter.currentMinValue ||
+          filter.maxValue !== filter.currentMaxValue
+      )
+      .map((filter) => ({
+        minValue: filter.currentMinValue ?? filter.minValue,
+        maxValue: filter.currentMaxValue ?? filter.maxValue,
+        property: filter.propertyName,
+      }));
+  }
+
+  private getActiveCollectionFilters(): CollectionFilter[] {
+    const checkedInputs = this.collectionInputs.filter(
+      (input) => input.nativeElement.checked
+    );
+    return checkedInputs.length === 0
+      ? []
+      : checkedInputs.map((input) => ({
+          property: input.nativeElement.getAttribute('data-property'),
+          propertyValue: input.nativeElement.value,
+        }));
+  }
+
+  public getRangeLeft(filter: RangePropertyForFilter): string {
+    const min = filter.minValue;
+    const max = filter.maxValue;
+    const currentMin = filter.currentMinValue ?? min;
+    return `${((currentMin - min) / (max - min)) * 100}%`;
+  }
+
+  public getRangeRight(filter: RangePropertyForFilter): string {
+    const min = filter.minValue;
+    const max = filter.maxValue;
+    const currentMax = filter.currentMaxValue ?? max;
+    return `${100 - ((currentMax - min) / (max - min)) * 100}%`;
+  }
+
+  public toggleShowAll(index: number): void {
+    this.showAllStates[index] = !this.showAllStates[index];
+  }
+
+  public getVisibleValues(filter: any, count: number): any[] {
+    return filter.uniqueValues.slice(0, count);
+  }
+
+  public getHiddenValues(filter: any, count: number): any[] {
+    return filter.uniqueValues.slice(count);
+  }
+
+  public trackByFn(index: number, item: any): any {
+    return item.propertyName || index;
+  }
+
+  public ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

@@ -219,8 +219,8 @@ namespace InstrumentStore.Domain.Mapper
 
                     foreach (var image in images)
                     {
-                        dest.Images.Add(image);
-                        //dest.Images.Add("https://localhost:7295/images/" + image);
+                        //dest.Images.Add(image);
+                        dest.Images.Add("https://localhost:7295/images/" + image);
                     }
 
                     List<ProductPropertyValue> propertyValues = dbContext.ProductPropertyValue

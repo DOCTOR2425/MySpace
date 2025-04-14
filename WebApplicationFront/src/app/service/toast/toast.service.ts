@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 export class ToastService {
   constructor(private toastr: ToastrService) {}
 
-  public showError(message: string, title: string): void {
+  public showError(message: string, title: string = 'Ошибка'): void {
     this.toastr.error(message, title, {
       timeOut: 3000,
     });

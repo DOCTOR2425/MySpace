@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { Product } from '../../data/interfaces/product/product.interface';
 import { AuthService } from '../auth/auth.service';
 import { ProductService } from '../product.service';
+import { ProductPropertyValuesResponse } from '../../data/interfaces/product/product-property-value-respone.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -61,8 +62,32 @@ export class ComparisonService {
 
     this.productService.getProductById(productId).subscribe({
       next: (product) => {
-        items.push(product);
-        product.productResponseData.productCategory;
+        let target = {
+          productResponseData: {
+            productId: product.productId,
+            name: product.name,
+            description: product.description,
+            price: product.price,
+            quantity: product.quantity,
+            image: product.images[0],
+            productCategory: product.productCategory,
+            brand: product.brand,
+            country: product.country,
+            isArchive: product.isArchive,
+          },
+          properties: product.productPropertyValues.reduce(
+            (
+              acc: { [key: string]: string },
+              item: ProductPropertyValuesResponse
+            ) => {
+              acc[item.name] = item.value;
+              return acc;
+            },
+            {}
+          ),
+        };
+        items.push(target);
+        product.productCategory;
         localStorage.setItem(this.comparisonKey, JSON.stringify(items));
         return productId;
       },
