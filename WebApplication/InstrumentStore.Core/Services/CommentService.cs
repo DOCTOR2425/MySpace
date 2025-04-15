@@ -30,7 +30,7 @@ namespace InstrumentStore.Domain.Services
             Comment comment = new Comment()
             {
                 CommentId = Guid.NewGuid(),
-                Text = commentText,
+                Text = commentText.Trim(),
                 CreationDate = DateTime.Now,
                 Product = product,
                 User = user

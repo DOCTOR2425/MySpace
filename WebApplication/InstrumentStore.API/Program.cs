@@ -84,12 +84,7 @@ namespace InstrumentStore.API
 
             app.UseCors(x =>
             {
-                x.WithOrigins("https://localhost:4200")
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .AllowCredentials();
-
-                x.WithOrigins("https://vite.localhost:4200")
+                x.WithOrigins("https://localhost:4200", "https://vite.localhost:4200")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials();

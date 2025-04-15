@@ -1,8 +1,6 @@
 <div class="product-page">
   <div class="product" *ngIf="product">
-    <!-- Верхний блок -->
     <div class="product-top">
-      <!-- Галерея -->
       <div class="gallery">
         <div class="thumbnails">
           <div
@@ -21,13 +19,14 @@
         </div>
       </div>
 
-      <!-- Информация -->
       <div class="product-info">
         <h1 class="title">{{ product.name }}</h1>
         <div class="price">{{ product.price }} руб.</div>
 
         <div class="actions">
-          <button class="add-to-cart" (click)="addToCart()">В корзину</button>
+          <button id="addToCart" class="add-to-cart" (click)="addToCart()">
+            В корзину
+          </button>
           <button class="add-to-compare" (click)="addToComparison()">
             К сравнению
           </button>
@@ -35,7 +34,6 @@
       </div>
     </div>
 
-    <!-- Нижний блок -->
     <div class="product-bottom">
       <div class="description">
         <h3>Описание</h3>
@@ -54,7 +52,6 @@
       </div>
     </div>
 
-    <!-- Похожие товары -->
     <div class="similar-products" *ngIf="simmularProducts.length > 0">
       <h2>Похожие товары</h2>
       <div class="products-scroll">
@@ -66,10 +63,8 @@
       </div>
     </div>
 
-    <!-- Комментарии -->
     <div class="comments-section">
       <h2>Отзывы</h2>
-
       <div class="comment-form">
         <h3>Оставить отзыв</h3>
         <textarea
@@ -83,8 +78,12 @@
         </button>
       </div>
 
-      <div class="comments-list">
-        <div class="comment" *ngFor="let comment of comments">
+      <cdk-virtual-scroll-viewport
+        class="comments-list"
+        itemSize="120"
+        [style.height.px]="viewportHeight"
+      >
+        <div class="comment" *cdkVirtualFor="let comment of comments">
           <div class="comment-header">
             <span class="user-name">{{ comment.userName }}</span>
             <span class="comment-date">{{
@@ -93,7 +92,7 @@
           </div>
           <p class="comment-text">{{ comment.text }}</p>
         </div>
-      </div>
+      </cdk-virtual-scroll-viewport>
     </div>
   </div>
 </div>

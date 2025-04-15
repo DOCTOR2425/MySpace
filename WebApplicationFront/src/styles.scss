@@ -19,3 +19,34 @@ body {
 a {
   text-decoration: none !important;
 }
+
+.toast-container {
+  position: fixed !important;
+  z-index: 999999 !important;
+  pointer-events: none;
+
+  .toast {
+    pointer-events: auto;
+  }
+
+  .toast-info {
+    background-color: dimgray !important;
+    color: white !important;
+
+    .toast-title {
+      color: white !important;
+    }
+
+    .toast-message {
+      color: white !important;
+    }
+
+    .toast-close-button {
+      color: white !important;
+    }
+
+    .toast-progress {
+      background-color: rgba(255, 255, 255, 0.3) !important;
+    }
+  }
+}

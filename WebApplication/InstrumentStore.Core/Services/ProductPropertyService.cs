@@ -132,8 +132,7 @@ namespace InstrumentStore.Domain.Services
 
         public async Task<RangePropertyForFilter[]> GetRangeProperties(Guid categoryId)
         {
-            List<RangePropertyForFilter> rangePropertyForFilters = new List<RangePropertyForFilter>();
-            rangePropertyForFilters.AddRange(await GetStaticsPropertiesToRangeProperties(categoryId));
+            List<RangePropertyForFilter> rangePropertyForFilters = [.. await GetStaticsPropertiesToRangeProperties(categoryId)];
             List<ProductProperty> productProperty = await _dbContext.ProductProperty
                 .Where(p => p.ProductCategory.ProductCategoryId == categoryId &&
                     p.IsRanged)
@@ -152,8 +151,8 @@ namespace InstrumentStore.Domain.Services
 
                 rangePropertyForFilters.Add(new RangePropertyForFilter(
                     property.Name,
-                    targetPropertyValues.Max(pv => decimal.Parse(pv.Value, formatInfo)),
-                    targetPropertyValues.Min(pv => decimal.Parse(pv.Value, formatInfo))));
+                    Math.Ceiling(targetPropertyValues.Max(pv => decimal.Parse(pv.Value, formatInfo))),
+                    Math.Floor(targetPropertyValues.Min(pv => decimal.Parse(pv.Value, formatInfo)))));
             }
             return rangePropertyForFilters.ToArray();
         }
@@ -170,8 +169,8 @@ namespace InstrumentStore.Domain.Services
 
             rangePropertyForFilters.Insert(0, new RangePropertyForFilter(
                 "Цена",
-                productPrices.Max(),
-                productPrices.Min()));
+                Math.Ceiling(productPrices.Max()),
+                Math.Floor(productPrices.Min())));
 
             return rangePropertyForFilters;
         }

@@ -12,10 +12,11 @@ import { ToastService } from '../../service/toast/toast.service';
 import { FullProductInfoResponse } from '../../data/interfaces/product/product-to-update-response.interface';
 import { ProductCard } from '../../data/interfaces/product/product-card.interface';
 import { ProductCardComponent } from '../../common-ui/product-card/product-card.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-product',
-  imports: [CommonModule, FormsModule, ProductCardComponent],
+  imports: [CommonModule, FormsModule, ProductCardComponent, ScrollingModule],
   templateUrl: './product-page.component.html',
   styleUrls: ['./product-page.component.scss'],
 })
@@ -27,6 +28,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   public comments: CommentResponse[] = [];
   public simmularProducts: ProductCard[] = [];
   private unsubscribe$ = new Subject<void>();
+
+  public viewportHeight = 500;
 
   constructor(
     private route: ActivatedRoute,
@@ -70,14 +73,16 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.simmularProducts = data;
       });
   }
-
   private loadComments() {
     this.productService
       .getCommentsByProduct(this.id)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (comments) => {
-          this.comments = comments;
+          if (!comments) this.comments = [];
+          else {
+            this.comments = comments;
+          }
         },
       });
   }
@@ -107,7 +112,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     if (!this.newComment.trim()) return;
 
     const request: CreateCommentRequest = {
-      text: this.newComment,
+      text: this.newComment.trim(),
       productId: this.id,
     };
 

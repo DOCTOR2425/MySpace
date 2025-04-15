@@ -78,7 +78,7 @@ namespace InstrumentStore.API.Controllers
         }
 
         [HttpGet("category-filters/{category}")]
-        public async Task<ActionResult> GetCategoryFilters([FromRoute] string category)
+        public async Task<IActionResult> GetCategoryFilters([FromRoute] string category)
         {
             return Ok(await _productPropertyService.GetCategoryFilters(category));
         }
@@ -116,10 +116,6 @@ namespace InstrumentStore.API.Controllers
             var product = await _productService.GetById(id);
             FullProductInfoResponse productResponseData = _mapper
                 .Map<FullProductInfoResponse>(product, opt => opt.Items["DbContext"] = _dbContext);
-
-            //FullProductInfoResponse response = new FullProductInfoResponse(
-            //    productResponseData,
-            //    await _productPropertyService.GetProductProperties(id));
 
             return Ok(productResponseData);
         }

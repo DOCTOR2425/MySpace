@@ -131,6 +131,7 @@ export class ProductService {
       withCredentials: true,
     });
   }
+
   public getCommentsByProduct(
     productId: string
   ): Observable<CommentResponse[]> {
