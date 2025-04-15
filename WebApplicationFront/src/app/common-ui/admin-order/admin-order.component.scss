@@ -1,5 +1,5 @@
 :host {
-  display: contents; /* Ключевое изменение - компонент становится "невидимым" для таблицы */
+  display: contents;
 }
 
 .order-row {
@@ -16,7 +16,6 @@
   }
 }
 
-/* Остальные стили остаются такими же, как в предыдущем примере */
 .customer-info {
   .customer-name {
     font-weight: 500;

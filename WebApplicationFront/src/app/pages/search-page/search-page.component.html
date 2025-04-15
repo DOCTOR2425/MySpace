@@ -8,7 +8,7 @@
     <div class="col-12" *ngIf="products.length === 0">
       <p>Нет товаров, соответствующих вашему запросу.</p>
     </div>
-    <div class="col-md-4" *ngFor="let product of products">
+    <div class="col-md-2" *ngFor="let product of products">
       <app-product-card [product]="product"></app-product-card>
     </div>
   </div>

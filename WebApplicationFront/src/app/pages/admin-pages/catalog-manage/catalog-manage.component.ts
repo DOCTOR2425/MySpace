@@ -117,8 +117,10 @@ export class CatalogManageComponent implements OnDestroy {
 
   public changeArchiveStatusToProduct(
     productId: string,
-    newStatus: boolean
+    newStatus: boolean,
+    event: Event
   ): void {
+    event.stopPropagation();
     const product = this.products.find((p) => p.productId === productId);
     if (!product) {
       return;

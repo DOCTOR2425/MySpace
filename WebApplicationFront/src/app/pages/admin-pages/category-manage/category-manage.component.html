@@ -42,7 +42,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let category of filteredCategories">
+        <tr
+          *ngFor="let category of filteredCategories"
+          [routerLink]="['/admin/update-category', category.productCategoryId]"
+          routerLinkActive="router-link-active"
+        >
           <td>{{ category.name }}</td>
           <td>{{ category.productCount }}</td>
           <td>
@@ -58,15 +62,6 @@
           <td class="actions">
             <button
               class="btn-icon"
-              [routerLink]="[
-                '/admin/update-category',
-                category.productCategoryId
-              ]"
-            >
-              Редактировать
-            </button>
-            <button
-              class="btn-icon"
               [class.btn-warning]="
                 !category.isHidden && category.productCount != 0
               "
@@ -74,7 +69,8 @@
               (click)="
                 changeVisibilityStatus(
                   category.productCategoryId,
-                  category.isHidden ? false : true
+                  category.isHidden ? false : true,
+                  $event
                 )
               "
               [disabled]="category.productCount == 0"

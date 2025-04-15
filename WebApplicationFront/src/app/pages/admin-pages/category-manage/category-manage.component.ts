@@ -42,8 +42,11 @@ export class CategoryManageComponent implements OnInit, OnDestroy {
 
   public changeVisibilityStatus(
     categoryId: string,
-    visibilityStatus: boolean
+    visibilityStatus: boolean,
+    event: Event
   ): void {
+    event.stopPropagation();
+
     this.productCategoryService
       .changeVisibilityStatus(categoryId, visibilityStatus)
       .pipe(takeUntil(this.unsubscribe$))

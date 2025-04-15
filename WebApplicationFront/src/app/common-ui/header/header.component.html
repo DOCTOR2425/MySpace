@@ -8,7 +8,7 @@
     </div>
   </nav>
   <div class="middleMenu d-inline-flex">
-    <h1 routerLink="/" style="cursor: pointer">MySpace</h1>
+    <h2 routerLink="/" style="cursor: pointer">MySpace</h2>
 
     <div class="search-container">
       <input
@@ -24,7 +24,7 @@
       </button>
     </div>
 
-    <span class="buttons d-flex">
+    <span class="buttons">
       <span [routerLink]="['comparison']">
         <img src="https://cdn-icons-png.flaticon.com/128/994/994414.png" />
         <a>Сравнение</a>
@@ -34,10 +34,7 @@
         <button [routerLink]="['/user']">{{ userEmail }}</button>
       </ng-container>
       <ng-template #loginButton>
-        <span
-          [routerLink]="['/login']"
-          [queryParams]="{ returnUrl: this.router.url }"
-        >
+        <span [routerLink]="['/login']">
           <img src="https://cdn-icons-png.flaticon.com/128/1828/1828453.png" />
           <a>Войти</a>
         </span>

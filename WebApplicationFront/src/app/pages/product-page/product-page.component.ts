@@ -1,5 +1,10 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterLink,
+} from '@angular/router';
 import { ProductService } from '../../service/product.service';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../service/cart/cart.service';
@@ -13,10 +18,17 @@ import { FullProductInfoResponse } from '../../data/interfaces/product/product-t
 import { ProductCard } from '../../data/interfaces/product/product-card.interface';
 import { ProductCardComponent } from '../../common-ui/product-card/product-card.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { AuthService } from '../../service/auth/auth.service';
 
 @Component({
   selector: 'app-product',
-  imports: [CommonModule, FormsModule, ProductCardComponent, ScrollingModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ProductCardComponent,
+    ScrollingModule,
+    RouterLink,
+  ],
   templateUrl: './product-page.component.html',
   styleUrls: ['./product-page.component.scss'],
 })
@@ -27,17 +39,18 @@ export class ProductComponent implements OnInit, OnDestroy {
   public newComment: string = '';
   public comments: CommentResponse[] = [];
   public simmularProducts: ProductCard[] = [];
+  public viewportHeight = 300;
+  public expanded = false;
   private unsubscribe$ = new Subject<void>();
-
-  public viewportHeight = 500;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
+    public router: Router,
     private productService: ProductService,
     private cartService: CartService,
     private comparisonService: ComparisonService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    public authService: AuthService
   ) {}
 
   public ngOnInit(): void {
@@ -53,6 +66,12 @@ export class ProductComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  public toggleViewportSize() {
+    this.expanded = !this.expanded;
+    this.viewportHeight = this.expanded ? 600 : 300;
+    setTimeout(() => window.visualViewport!.height, 300);
   }
 
   private loadPage() {

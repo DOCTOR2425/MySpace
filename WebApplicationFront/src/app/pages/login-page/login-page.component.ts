@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -6,13 +6,14 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { AuthService } from '../../service/auth/auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { ToastService } from '../../service/toast/toast.service';
 import { AdminService } from '../../service/admin/admin.service';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../service/user/user.service';
 import { ComparisonService } from '../../service/comparison/comparison.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-login-page',
@@ -21,19 +22,18 @@ import { ComparisonService } from '../../service/comparison/comparison.service';
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss'],
 })
-export class LoginPageComponent implements OnInit, OnDestroy {
-  public returnUrl: string = '';
+export class LoginPageComponent implements OnDestroy {
   public isLoginMode: boolean = true;
   private unsubscribe$ = new Subject<void>();
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
     private userService: UserService,
     private adminService: AdminService,
     private toastService: ToastService,
-    private comparisonService: ComparisonService
+    private comparisonService: ComparisonService,
+    private location: Location
   ) {}
 
   public loginForm = new FormGroup({
@@ -51,14 +51,6 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', Validators.required),
   });
-
-  ngOnInit(): void {
-    this.route.queryParams
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((params) => {
-        this.returnUrl = params['returnUrl'] || '/';
-      });
-  }
 
   public ngOnDestroy(): void {
     this.unsubscribe$.next();
@@ -83,7 +75,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
       localStorage.setItem(this.comparisonService.comparisonKey, '');
       localStorage.setItem(this.userService.userEMailKey, loginValue.email);
       this.userService.userEMail = loginValue.email;
-      this.router.navigate([`${this.returnUrl}`]);
+      this.location.back();
     }
   }
 
@@ -103,6 +95,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
           email: loginValue.email!,
           password: loginValue.password!,
         })
+        .pipe(takeUntil(this.unsubscribe$))
         .subscribe({
           next: (response) => {
             this.login(response, loginValue);
@@ -135,6 +128,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
           email: registerValue.email!,
           password: registerValue.password!,
         })
+        .pipe(takeUntil(this.unsubscribe$))
         .subscribe({
           next: (response) => {
             this.login(response, {

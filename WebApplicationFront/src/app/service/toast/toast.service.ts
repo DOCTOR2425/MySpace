@@ -25,7 +25,7 @@ export class ToastService {
 
   public showSuccess(message: string, title: string): void {
     this.toastr.success(message, title, {
-      timeOut: 1000,
+      timeOut: 2000,
       positionClass: 'toast-top-right',
     });
   }

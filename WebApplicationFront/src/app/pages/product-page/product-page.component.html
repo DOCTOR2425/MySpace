@@ -65,7 +65,7 @@
 
     <div class="comments-section">
       <h2>Отзывы</h2>
-      <div class="comment-form">
+      <div *ngIf="authService.isLoggedIn()" class="comment-form">
         <h3>Оставить отзыв</h3>
         <textarea
           [(ngModel)]="newComment"
@@ -78,12 +78,24 @@
         </button>
       </div>
 
+      <button
+        class="to-login-btn"
+        [routerLink]="['/login']"
+        *ngIf="!authService.isLoggedIn()"
+      >
+        Зарегистрируйтесь, что бы оставлять комментарии
+      </button>
+
       <cdk-virtual-scroll-viewport
-        class="comments-list"
-        itemSize="120"
+        class="comments-viewport"
+        itemSize="70"
         [style.height.px]="viewportHeight"
       >
-        <div class="comment" *cdkVirtualFor="let comment of comments">
+        <div
+          class="comment animate__animated animate__fadeInUp"
+          *cdkVirtualFor="let comment of comments; let $index = index"
+          [style.animation-delay.ms]="100 * $index"
+        >
           <div class="comment-header">
             <span class="user-name">{{ comment.userName }}</span>
             <span class="comment-date">{{
@@ -93,6 +105,10 @@
           <p class="comment-text">{{ comment.text }}</p>
         </div>
       </cdk-virtual-scroll-viewport>
+
+      <button class="expand-btn" (click)="toggleViewportSize()">
+        {{ expanded ? "Свернуть" : "Развернуть" }}
+      </button>
     </div>
   </div>
 </div>

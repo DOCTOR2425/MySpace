@@ -13,10 +13,11 @@ import { CommonModule } from '@angular/common';
 import { UpdateUserRequest } from '../../data/interfaces/user/update-user.interface';
 import { Router } from '@angular/router';
 import { UserPaidOrder } from '../../data/interfaces/paid-order/user-paid-order.interface';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-user-page',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ScrollingModule],
   templateUrl: './user-page.component.html',
   styleUrls: ['./user-page.component.scss'],
 })
@@ -36,7 +37,6 @@ export class UserPageComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.initForm();
     this.getUser();
-    // this.getPaidOrder();
   }
 
   public ngOnDestroy(): void {
@@ -102,20 +102,20 @@ export class UserPageComponent implements OnInit, OnDestroy {
       this.userForm.markAllAsTouched();
       return;
     }
-    let updatedUser: UpdateUserRequest = {
-      firstName: this.userForm.value.firstName,
-      surname: this.userForm.value.surname,
-      telephone: this.userForm.value.telephone,
-      email: this.userForm.value.email,
-      city: this.userForm.value.city,
-      street: this.userForm.value.street,
-      houseNumber: this.userForm.value.houseNumber,
-      entrance: this.userForm.value.entrance,
-      flat: this.userForm.value.flat,
-    };
+    // let updatedUser: UpdateUserRequest = {
+    //   firstName: this.userForm.value.firstName,
+    //   surname: this.userForm.value.surname,
+    //   telephone: this.userForm.value.telephone,
+    //   email: this.userForm.value.email,
+    //   city: this.userForm.value.city,
+    //   street: this.userForm.value.street,
+    //   houseNumber: this.userForm.value.houseNumber,
+    //   entrance: this.userForm.value.entrance,
+    //   flat: this.userForm.value.flat,
+    // };
 
     this.userService
-      .updateUser(updatedUser)
+      .updateUser(this.userForm.value)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((user) => {
         this.user = user;

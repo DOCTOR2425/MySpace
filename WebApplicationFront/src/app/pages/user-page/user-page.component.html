@@ -1,4 +1,4 @@
-<div *ngIf="user">
+<div class="user-container" *ngIf="user">
   <h2>{{ user.firstName }} {{ user.surname }}</h2>
   <p>Телефон: {{ user.telephone }}</p>
   <p>Email: {{ user.email }}</p>
@@ -40,19 +40,28 @@
   </div>
 
   <h3>История покупок</h3>
-  <div class="order-card" *ngFor="let order of paidOrders">
-    <h4>Дата заказа: {{ order.orderDate | date : "dd.MM.yyyy" }}</h4>
-    <div class="order-item" *ngFor="let item of order.paidOrderItems">
-      <img [src]="item.productData.image" alt="{{ item.productData.name }}" />
-      <div class="item-details">
-        <p><strong>Название:</strong> {{ item.productData.name }}</p>
-        <p><strong>Бренд:</strong> {{ item.productData.brand }}</p>
-        <p><strong>Колличество:</strong> {{ item.quantity }}</p>
-        <p><strong>Цена:</strong> {{ item.price }} руб.</p>
+  <cdk-virtual-scroll-viewport
+    itemSize="200"
+    class="orders-viewport"
+    [style.height.px]="800"
+  >
+    <div *cdkVirtualFor="let order of paidOrders" class="order-card">
+      <div class="order-header">
+        <h4>Заказ от {{ order.orderDate | date : "dd.MM.yyyy" }}</h4>
+        <span class="order-total">{{ getOrderTotal(order) }} руб.</span>
+      </div>
+      <div>
+        <div class="order-item" *ngFor="let item of order.paidOrderItems">
+          <img
+            [src]="item.productData.image"
+            alt="{{ item.productData.name }}"
+          />
+          <div>
+            <p class="item-name">{{ item.productData.name }}</p>
+            <p class="item-meta">{{ item.quantity }} × {{ item.price }} руб.</p>
+          </div>
+        </div>
       </div>
     </div>
-    <p class="order-total">
-      <strong>Общая сумма заказа:</strong> {{ getOrderTotal(order) }} руб.
-    </p>
-  </div>
+  </cdk-virtual-scroll-viewport>
 </div>

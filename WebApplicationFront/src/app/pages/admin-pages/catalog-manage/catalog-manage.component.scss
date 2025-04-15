@@ -115,12 +115,8 @@ h1 {
   flex-shrink: 0;
 }
 .actions-cell {
-  width: 110px;
-  min-width: 110px;
-  flex-shrink: 0;
+  min-width: 120px;
   justify-content: center;
-  display: grid;
-  gap: 5px;
 }
 
 .table-header {
@@ -150,36 +146,36 @@ img {
   border-radius: 4px;
 }
 
-.edit-button,
+.restore-button,
 .delete-button {
-  padding: 6px 10px;
+  max-width: 100%;
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
   border: none;
   border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   height: 30px;
-  font-size: 13px;
   white-space: nowrap;
+  color: white;
+  transition: background-color 0.3s ease;
 }
 
-.edit-button {
-  background-color: #ffc107;
-  color: black;
+.restore-button {
+  background-color: #4caf50;
 
   &:hover {
-    background-color: #e0a800;
+    background-color: #3d8b40;
   }
 }
 
 .delete-button {
-  background-color: #dc3545;
-  color: white;
+  background-color: #f44336;
 
   &:hover {
-    background-color: #c82333;
+    background-color: #d32f2f;
   }
 }
 

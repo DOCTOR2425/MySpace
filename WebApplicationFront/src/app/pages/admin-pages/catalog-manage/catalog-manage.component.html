@@ -43,7 +43,11 @@
     <div class="header-cell actions-cell">Действия</div>
   </div>
   <div class="products-table">
-    <div class="table-row" *ngFor="let product of filteredProducts">
+    <div
+      class="table-row"
+      *ngFor="let product of filteredProducts"
+      [routerLink]="['/admin/update-product', product.productId]"
+    >
       <div class="table-cell image-cell">
         <img [src]="product.image" alt="{{ product.name }}" />
       </div>
@@ -55,17 +59,11 @@
       <div class="table-cell country-cell">{{ product.country }}</div>
       <div class="table-cell actions-cell">
         <button
-          [routerLink]="['/admin/update-product', product.productId]"
-          class="edit-button"
-        >
-          Редактировать
-        </button>
-        <button
-          class="delete-button"
+          [class]="product.isArchive ? 'restore-button' : 'delete-button'"
           (click)="
             product.isArchive
-              ? changeArchiveStatusToProduct(product.productId, false)
-              : changeArchiveStatusToProduct(product.productId, true)
+              ? changeArchiveStatusToProduct(product.productId, false, $event)
+              : changeArchiveStatusToProduct(product.productId, true, $event)
           "
         >
           {{ product.isArchive ? "Восстановить" : "В архив" }}
