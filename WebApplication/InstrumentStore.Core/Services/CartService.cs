@@ -27,7 +27,7 @@ namespace InstrumentStore.Domain.Services
             _adminService = adminService;
         }
 
-        public async Task<List<CartItem>> GetAllCart(Guid userId)
+        public async Task<List<CartItem>> GetUserCartItems(Guid userId)
         {
             return await _dbContext.CartItem
                 .Include(c => c.User)

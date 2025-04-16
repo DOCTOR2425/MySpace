@@ -12,16 +12,18 @@ import { ProductCard } from '../../data/interfaces/product/product-card.interfac
   styleUrl: './catalog-page.component.scss',
 })
 export class CatalogComponent implements OnInit, OnDestroy {
+  public products: ProductCard[] = [];
   private unsubscribe$ = new Subject<void>();
-  products: ProductCard[] = [];
 
   constructor(private productService: ProductService) {}
 
   public ngOnInit(): void {
     this.productService
-      .getProductCards()
+      .getSpecialProductsForUser()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((val) => {
+        console.log(val);
+
         this.products = val;
       });
   }

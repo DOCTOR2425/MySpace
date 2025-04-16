@@ -51,6 +51,9 @@ namespace InstrumentStore.Domain.Services
             return await _dbContext.PaidOrderItem
                 .Include(i => i.PaidOrder)
                 .Include(i => i.Product)
+                .Include(i => i.Product.ProductCategory)
+                .Include(i => i.Product.Brand)
+                .Include(i => i.Product.Country)
                 .Where(i => i.PaidOrder.PaidOrderId == paidOrderId)
                 .ToListAsync();
         }

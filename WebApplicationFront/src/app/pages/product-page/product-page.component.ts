@@ -70,7 +70,9 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   public toggleViewportSize() {
     this.expanded = !this.expanded;
-    this.viewportHeight = this.expanded ? 600 : 300;
+    this.viewportHeight = this.expanded
+      ? window.visualViewport!.height * 0.78
+      : 300;
     setTimeout(() => window.visualViewport!.height, 300);
   }
 

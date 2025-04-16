@@ -48,7 +48,7 @@ namespace InstrumentStore.API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<CartItemResponse>>> GetUserCart()
         {
-            List<CartItem> cartItems = await _cartService.GetAllCart(
+            List<CartItem> cartItems = await _cartService.GetUserCartItems(
                 await _jwtProvider.GetUserIdFromToken(GetToken()));
 
             List<CartItemResponse> result = new List<CartItemResponse>();

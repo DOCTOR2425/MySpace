@@ -7,7 +7,7 @@ namespace InstrumentStore.Domain.Abstractions
 {
     public interface IProductService
     {
-        public const int pageSize = 10;
+        public const int PageSize = 10;
 
         Task<Guid> Create(Product product);
         Task<Guid> Create(CreateProductRequest productRequest, List<IFormFile> images);
@@ -26,5 +26,6 @@ namespace InstrumentStore.Domain.Abstractions
             int page);
         Task<List<ProductCard>> SearchByName(string input, int package);
         Task<List<Product>> GetSimmularToProduct(Guid productId);
+        Task<List<Product>> GetSpecialProductsForUser(Guid userId);
     }
 }

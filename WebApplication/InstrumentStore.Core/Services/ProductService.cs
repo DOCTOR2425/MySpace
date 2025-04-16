@@ -16,6 +16,7 @@ namespace InstrumentStore.Domain.Service
         private readonly IProductCategoryService _productCategoryService;
         private readonly IProductPropertyService _productPropertyService;
         private readonly IProductFilterService _productFilterService;
+        private readonly IPaidOrderService _paidOrderService;
         private readonly IImageService _imageService;
 
         public ProductService(InstrumentStoreDBContext dbContext,
@@ -24,7 +25,8 @@ namespace InstrumentStore.Domain.Service
             IProductCategoryService productCategoryService,
             IProductPropertyService productPropertyService,
             IProductFilterService productFilterService,
-            IImageService imageService)
+            IImageService imageService,
+            IPaidOrderService paidOrderService)
         {
             _dbContext = dbContext;
             _brandService = brandService;
@@ -33,6 +35,7 @@ namespace InstrumentStore.Domain.Service
             _productPropertyService = productPropertyService;
             _productFilterService = productFilterService;
             _imageService = imageService;
+            _paidOrderService = paidOrderService;
         }
 
         public async Task<List<Product>> GetAll(int page)
@@ -42,8 +45,8 @@ namespace InstrumentStore.Domain.Service
                 .Include(p => p.Brand)
                 .Include(p => p.Country)
                 .OrderBy(p => p.Name)
-                .Skip((page - 1) * IProductService.pageSize)
-                .Take(IProductService.pageSize)
+                .Skip((page - 1) * IProductService.PageSize)
+                .Take(IProductService.PageSize)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -60,8 +63,8 @@ namespace InstrumentStore.Domain.Service
                 .Include(p => p.Country)
                 .OrderBy(p => p.Name)
                 .Where(p => p.ProductCategory.ProductCategoryId == categoryId)
-                .Skip((page - 1) * IProductService.pageSize)
-                .Take(IProductService.pageSize)
+                .Skip((page - 1) * IProductService.PageSize)
+                .Take(IProductService.PageSize)
                 .ToListAsync();
         }
 
@@ -195,11 +198,6 @@ namespace InstrumentStore.Domain.Service
             return id;
         }
 
-        public async Task<List<Product>> GetSpecialProductsForUser()
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<List<Product>> GetSimmularToProduct(Guid productId)
         {
             Product? target = await _dbContext.Product
@@ -228,6 +226,77 @@ namespace InstrumentStore.Domain.Service
             productsInCategoryOrderedBySales.Remove(target);
 
             return productsInCategoryOrderedBySales;
+        }
+
+        public async Task<List<Product>> GetSpecialProductsForUser(Guid userId)
+        {
+            Dictionary<ProductCategory, int> categoryPoints = new Dictionary<ProductCategory, int>();
+
+            await GetPaidOrderItemPoints(userId, categoryPoints);
+            await GetCartItemPoints(userId, categoryPoints);
+            await GetComparisonItemPoints(userId, categoryPoints);
+
+            List<Product> products = new List<Product>();
+            int pointsAmount = categoryPoints.Sum(c => c.Value);
+            foreach (var category in categoryPoints)
+            {
+                products.AddRange(_dbContext.Product
+                    .Where(p => p.ProductCategory == category.Key)
+                    .Take((int)Math.Round((decimal)(category.Value * IProductService.PageSize) / pointsAmount))
+                    .ToList());
+            }
+
+            return products.Take(IProductService.PageSize).ToList();
+        }
+
+        private async Task GetPaidOrderItemPoints(Guid userId, Dictionary<ProductCategory, int> categoryPoints)
+        {
+            foreach (var order in await _paidOrderService.GetAllByUserId(userId))
+                foreach (var item in await _paidOrderService.GetAllItemsByOrder(order.PaidOrderId))
+                {
+                    try
+                    {
+                        categoryPoints.Add(item.Product.ProductCategory, 1);
+                    }
+                    catch (Exception e)
+                    {
+                        categoryPoints[item.Product.ProductCategory] += 1;
+                    }
+                }
+        }
+
+        private async Task GetCartItemPoints(Guid userId, Dictionary<ProductCategory, int> categoryPoints)
+        {
+            foreach (var item in await _dbContext.CartItem
+                .Where(i => i.User.UserId == userId)
+                .ToListAsync())
+            {
+                try
+                {
+                    categoryPoints.Add(item.Product.ProductCategory, 1);
+                }
+                catch (Exception e)
+                {
+                    categoryPoints[item.Product.ProductCategory] += 1;
+                }
+            }
+        }
+
+        private async Task GetComparisonItemPoints(Guid userId, Dictionary<ProductCategory, int> categoryPoints)
+        {
+            foreach (var item in await _dbContext.ProductComparisonItem
+                .Where(i => i.User.UserId == userId)
+                .ToListAsync())
+            {
+                try
+                {
+                    categoryPoints.Add(item.Product.ProductCategory, 1);
+                }
+                catch (Exception e)
+                {
+                    categoryPoints[item.Product.ProductCategory] += 1;
+                }
+            }
         }
     }
 }

@@ -6,7 +6,7 @@ namespace InstrumentStore.Domain.Abstractions
 	public interface ICartService
 	{
 		Task<Guid> AddToCart(Guid userId, Guid productId, int quantity);
-		Task<List<CartItem>> GetAllCart(Guid userId);
+		Task<List<CartItem>> GetUserCartItems(Guid userId);
 		Task<Guid> OrderCartForRegistered(Guid userId, OrderRequest orderCartRequest);
 		Task<Guid> OrderProduct(Guid userId,
 			Guid productId,

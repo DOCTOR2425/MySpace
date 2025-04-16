@@ -40,6 +40,12 @@ namespace InstrumentStore.API.Controllers
             _usersService = usersService;
         }
 
+        //private string GetToken()
+        //{
+        //    return HttpContext.Request.Headers["Authorization"]
+        //        .ToString().Substring("Bearer ".Length).Trim();
+        //}
+
         [HttpGet("page{page}")]
         public async Task<ActionResult<List<ProductCard>>> GetAllProductsCards([FromRoute] int page)
         {
@@ -51,6 +57,21 @@ namespace InstrumentStore.API.Controllers
                 productsCards.Add(_mapper.Map<ProductCard>(p, opt => opt.Items["DbContext"] = _dbContext));
 
             return Ok(productsCards);
+        }
+
+        [HttpGet("get-special-products-for-user")]
+        public async Task<ActionResult<List<ProductCard>>> GetSpecialProductsForUser()
+        {
+            List<Product> products = await _productService.GetSpecialProductsForUser(
+                (await _usersService.GetUserFromToken(HttpContext.Request.Headers["Authorization"]
+                    .ToString().Substring("Bearer ".Length).Trim())).UserId);
+
+            List<ProductCard> productsCards = new List<ProductCard>();
+            foreach (var p in products)
+                productsCards.Add(_mapper.Map<ProductCard>(p, opt => opt.Items["DbContext"] = _dbContext));
+
+            return Ok(productsCards);
+
         }
 
         [HttpGet("category/{category}/page{page}")]// функция получения товаров с фильтрацией
@@ -218,12 +239,6 @@ namespace InstrumentStore.API.Controllers
                 comments.Add(_mapper.Map<CommentResponse>(comment));
 
             return Ok(comments);
-        }
-
-        [HttpGet("get-special-products-for-user")]
-        public async Task<IActionResult> GetSpecialProductsForUser()
-        {
-            throw new NotImplementedException();
         }
 
         [HttpGet("get-simmular-to-product/{productId:guid}")]

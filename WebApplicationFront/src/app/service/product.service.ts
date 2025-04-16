@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProductCard } from '../data/interfaces/product/product-card.interface';
 import { environment } from '../../environments/environment.development';
-import { Product } from '../data/interfaces/product/product.interface';
 import { FilterRequest } from '../data/interfaces/filters/filter-request.interface';
 import { CategoryFilters } from '../data/interfaces/filters/category-filters.intervace';
 import { FullProductInfoResponse } from '../data/interfaces/product/product-to-update-response.interface';
@@ -18,10 +17,13 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  public getProductCards(page: number = 1): Observable<ProductCard[]> {
-    return this.http.get<ProductCard[]>(`${this.baseApiUrl}page${page}`, {
-      withCredentials: true,
-    });
+  public getSpecialProductsForUser(): Observable<ProductCard[]> {
+    return this.http.get<ProductCard[]>(
+      `${this.baseApiUrl}get-special-products-for-user`,
+      {
+        withCredentials: true,
+      }
+    );
   }
 
   public getProductById(id: string): Observable<FullProductInfoResponse> {

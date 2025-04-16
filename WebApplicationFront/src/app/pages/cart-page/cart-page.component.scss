@@ -4,8 +4,8 @@
   gap: 20px;
   padding: 20px;
   background-color: rgb(231, 230, 230);
-  min-height: 100vh;
   box-sizing: border-box;
+  min-height: 100%;
 
   @media (min-width: 768px) {
     grid-template-columns: 2fr 1fr;
