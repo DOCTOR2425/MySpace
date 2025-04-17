@@ -27,10 +27,17 @@ import { ProductCard } from '../../data/interfaces/product/product-card.interfac
   styleUrls: ['./category-page.component.scss'],
 })
 export class CategoryPageComponent implements OnInit, OnDestroy {
-  public categoryName: string = '';
+  public categoryId: string = '';
   public products: ProductCard[] = [];
   public categoryFilters!: CategoryFilters;
   public showAllStates: boolean[] = [];
+
+  // Пагинация
+  public currentPage: number = 1;
+  public itemsPerPage: number = 4; // Можно изменить на нужное количество
+  public totalItems: number = 0;
+  public totalPages: number = 0;
+  public pages: number[] = [];
 
   private unsubscribe$ = new Subject<void>();
   private debounceTimer: any;
@@ -46,7 +53,8 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
     this.route.paramMap
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((params) => {
-        this.categoryName = params.get('categoryName') || '';
+        this.categoryId = params.get('id') || '';
+        this.currentPage = 1; // Сброс страницы при смене категории
         this.loadData();
       });
   }
@@ -54,19 +62,50 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
   private loadData(): void {
     forkJoin({
       productsCardsByCategory:
-        this.productService.getAllProductsCardsByCategory(this.categoryName),
-      categoryFilters: this.productService.getCategoryFilters(
-        this.categoryName
-      ),
+        this.productService.getAllProductsCardsByCategory(
+          this.categoryId,
+          this.currentPage
+        ),
+      categoryFilters: this.productService.getCategoryFilters(this.categoryId),
     })
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: ({ productsCardsByCategory, categoryFilters }) => {
-          this.products = productsCardsByCategory;
+          this.products = productsCardsByCategory.items;
+          this.totalItems = productsCardsByCategory.totalCount;
+          this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+          this.updatePageNumbers();
           this.initializeFilters(categoryFilters);
         },
         error: (err) => console.error('Error loading data:', err),
       });
+  }
+
+  private updatePageNumbers(): void {
+    const maxPagesToShow = 5; // Максимальное количество отображаемых страниц
+    let startPage: number, endPage: number;
+
+    if (this.totalPages <= maxPagesToShow) {
+      startPage = 1;
+      endPage = this.totalPages;
+    } else {
+      const halfMaxPages = Math.floor(maxPagesToShow / 2);
+      if (this.currentPage <= halfMaxPages + 1) {
+        startPage = 1;
+        endPage = maxPagesToShow;
+      } else if (this.currentPage >= this.totalPages - halfMaxPages) {
+        startPage = this.totalPages - maxPagesToShow + 1;
+        endPage = this.totalPages;
+      } else {
+        startPage = this.currentPage - halfMaxPages;
+        endPage = this.currentPage + halfMaxPages;
+      }
+    }
+
+    this.pages = Array.from(
+      { length: endPage - startPage + 1 },
+      (_, i) => startPage + i
+    );
   }
 
   private initializeFilters(filters: CategoryFilters): void {
@@ -101,10 +140,12 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
     } else {
       filter.currentMaxValue = Math.max(value, filter.currentMinValue!);
     }
+    this.currentPage = 1; // Сброс на первую страницу при изменении фильтров
     this.debouncedFilterChange();
   }
 
   public onFilterChange(): void {
+    this.currentPage = 1; // Сброс на первую страницу при изменении фильтров
     this.debouncedFilterChange();
   }
 
@@ -120,12 +161,18 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
 
     this.productService
       .getAllProductsCardsByCategoryWithFilters(
-        this.categoryName,
-        filterRequest
+        this.categoryId,
+        filterRequest,
+        this.currentPage
       )
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
-        next: (data) => (this.products = data),
+        next: (data) => {
+          this.products = data.items;
+          this.totalItems = data.totalCount;
+          this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+          this.updatePageNumbers();
+        },
         error: (err) => console.error('Error applying filters:', err),
       });
   }
@@ -184,6 +231,27 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
 
   public trackByFn(index: number, item: any): any {
     return item.propertyName || index;
+  }
+
+  // Методы для пагинации
+  public goToPage(page: number): void {
+    if (page < 1 || page > this.totalPages || page === this.currentPage) {
+      return;
+    }
+    this.currentPage = page;
+    this.applyFilters();
+  }
+
+  public prevPage(): void {
+    if (this.currentPage > 1) {
+      this.goToPage(this.currentPage - 1);
+    }
+  }
+
+  public nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.goToPage(this.currentPage + 1);
+    }
   }
 
   public ngOnDestroy(): void {

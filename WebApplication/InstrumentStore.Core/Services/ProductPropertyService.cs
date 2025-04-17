@@ -60,14 +60,10 @@ namespace InstrumentStore.Domain.Services
             return properties;
         }
 
-        public async Task<CategoryFilters> GetCategoryFilters(string categoryName)
+        public async Task<CategoryFilters> GetCategoryFilters(Guid categoryId)
         {
             try
             {
-                Guid categoryId = (await _dbContext.ProductCategory
-                    .FirstOrDefaultAsync(c => c.Name.ToLower() == categoryName.ToLower()))
-                    .ProductCategoryId;
-
                 RangePropertyForFilter[] rangePropertyForFilters = await GetRangeProperties(categoryId);
                 CollectionPropertyForFilter[] collectionPropertyForFilters = await GetCollectionProperties(categoryId);
 
@@ -175,10 +171,10 @@ namespace InstrumentStore.Domain.Services
             return rangePropertyForFilters;
         }
 
-        public async Task<List<ProductPropertyValue>> GetValuesByCategoryName(string categoryName)
+        public async Task<List<ProductPropertyValue>> GetValuesByCategoryId(Guid categoryId)
         {
             return await _dbContext.ProductPropertyValue
-                .Where(v => v.ProductProperty.ProductCategory.Name == categoryName)
+                .Where(v => v.ProductProperty.ProductCategory.ProductCategoryId == categoryId)
                 .Include(v => v.Product)
                 .Include(v => v.ProductProperty)
                 .ToListAsync();

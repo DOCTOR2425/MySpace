@@ -1,6 +1,6 @@
 .user-container {
-  margin: 20px auto;
-  padding: 12px 30px;
+  margin: 0 auto;
+  padding: 12px 20px;
   max-width: 1200px;
   border-radius: 15px;
   background-color: #ffffff;
@@ -189,4 +189,41 @@ button[type="submit"][disabled] {
   font-size: 18px;
   font-weight: 500;
   color: #333;
+}
+
+.comments-viewport {
+  transition: height 0.3s ease;
+  border-radius: 8px;
+  background: #f9f9f9;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: 16px;
+
+  .comment {
+    padding: 12px;
+    margin: 8px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+    font-size: 14px;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+
+      .comment-date {
+        color: #888;
+      }
+    }
+
+    .comment-text {
+      white-space: pre-line;
+      margin: 0;
+    }
+  }
 }

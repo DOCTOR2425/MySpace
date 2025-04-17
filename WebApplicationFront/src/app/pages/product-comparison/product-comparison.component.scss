@@ -1,6 +1,6 @@
 .comparison-container {
   width: 100%;
-  padding: 0px 1rem;
+  padding: 0 1rem;
   box-sizing: border-box;
 }
 
@@ -16,11 +16,11 @@
   padding: 2rem;
   background: #f8f9fa;
   border-radius: 0.5rem;
+}
 
-  p {
-    margin-bottom: 1rem;
-    color: #6c757d;
-  }
+.empty-comparison p {
+  margin-bottom: 1rem;
+  color: #6c757d;
 }
 
 .comparison-controls {
@@ -28,7 +28,7 @@
 }
 
 .clear-btn {
-  background: #dc3545;
+  background: #6c757d;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -37,43 +37,64 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-
-  &:hover {
-    background: #c82333;
-  }
 }
 
-.table-responsive {
+.clear-btn:hover {
+  background: #5a6268;
+}
+
+/* Фиксированные колонки со скроллом */
+.table-wrapper {
   width: 100%;
   overflow-x: auto;
-  border: 1px solid #dee2e6;
   border-radius: 0.25rem;
+  background: white;
+}
+
+.table-scroll {
+  display: inline-block;
+  min-width: 100%;
 }
 
 .comparison-table {
-  width: 100%;
-  min-width: 800px;
+  width: auto;
   border-collapse: collapse;
-
-  th,
-  td {
-    padding: 0.75rem;
-    border-bottom: 1px solid #dee2e6;
-    vertical-align: top;
-  }
-
-  thead th {
-    background: #f8f9fa;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
+  table-layout: fixed;
 }
 
+.comparison-table th,
+.comparison-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #dee2e6;
+  vertical-align: top;
+}
+
+.comparison-table thead th {
+  background: #f8f9fa;
+  position: sticky;
+  top: 0;
+}
+
+/* Фиксированная колонка характеристик */
+.fixed-column {
+  width: 200px;
+  min-width: 200px;
+  max-width: 200px;
+  position: sticky;
+  left: 0;
+  background: #f8f9fa;
+  z-index: 10;
+  font-weight: 600;
+}
+
+/* Колонки товаров */
 .product-column {
-  min-width: 220px;
+  width: 250px;
+  min-width: 250px;
+  max-width: 250px;
   text-align: center;
   position: relative;
+  border: 1px solid #dee2e6;
 }
 
 .remove-btn {
@@ -82,7 +103,7 @@
   right: 0.5rem;
   width: 1.5rem;
   height: 1.5rem;
-  background: #6c757d;
+  background: #adb5bd;
   color: white;
   border: none;
   border-radius: 50%;
@@ -90,10 +111,10 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
 
-  &:hover {
-    background: #5a6268;
-  }
+.remove-btn:hover {
+  background: #6c757d;
 }
 
 .product-info {
@@ -121,10 +142,19 @@
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 2.8em;
+  line-height: 1.4em;
+  color: #212529;
+}
 
-  &:hover {
-    text-decoration: underline;
-  }
+.product-title:hover {
+  text-decoration: underline;
 }
 
 .product-meta {
@@ -134,29 +164,20 @@
   font-size: 0.875rem;
 }
 
-.product-brand {
-  color: #6c757d;
-}
-
 .product-price {
   font-weight: bold;
-  color: #dc3545;
+  color: #495057;
 }
 
 .product-availability {
-  color: #28a745;
-
-  &.out-of-stock {
-    color: #dc3545;
-  }
+  color: #495057;
 }
 
-.property-name {
-  font-weight: 600;
-  background: #f8f9fa;
-  width: 200px;
+.product-availability.out-of-stock {
+  color: #495057;
 }
 
 .property-value {
   text-align: center;
+  border: 1px solid #dee2e6;
 }

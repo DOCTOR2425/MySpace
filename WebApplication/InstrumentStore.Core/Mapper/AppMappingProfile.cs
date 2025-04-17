@@ -74,6 +74,7 @@ namespace InstrumentStore.Domain.Mapper
                     if (address == null)
                         return;
 
+                    dest.UserDeliveryAddress = new UserDeliveryAddress();
                     dest.UserDeliveryAddress.City = address.City.Name;
                     dest.UserDeliveryAddress.Street = address.Street;
                     dest.UserDeliveryAddress.HouseNumber = address.HouseNumber;
@@ -243,6 +244,9 @@ namespace InstrumentStore.Domain.Mapper
 
             CreateMap<Comment, CommentResponse>()
                  .ForPath(dest => dest.UserName, opt => opt.MapFrom(src => src.User.FirstName));
+            CreateMap<Comment, CommentForUserResponse>()
+                 .ForPath(dest => dest.ProductId, opt => opt.MapFrom(src => src.Product.ProductId))
+                 .ForPath(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name));
 
             CreateMap<ProductCategory, ProductCategoryForAdmin>();
         }

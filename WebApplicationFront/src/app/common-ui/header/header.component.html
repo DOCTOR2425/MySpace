@@ -31,7 +31,9 @@
       </span>
 
       <ng-container *ngIf="authService.isLoggedIn(); else loginButton">
-        <button [routerLink]="['/user']">{{ userEmail }}</button>
+        <button [routerLink]="['/user']" class="user-button">
+          {{ userEmail }}
+        </button>
       </ng-container>
       <ng-template #loginButton>
         <span [routerLink]="['/login']">
@@ -49,7 +51,7 @@
   <div class="lowMenu d-inline-flex">
     <a
       *ngFor="let category of categories"
-      [routerLink]="['/category/' + category.name]"
+      [routerLink]="['/category/' + category.productCategoryId]"
       >{{ category.name }}</a
     >
   </div>

@@ -199,3 +199,34 @@
   margin-left: 5px;
   font-size: 10px;
 }
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 5px;
+
+  .page-button {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s;
+
+    &:hover:not(:disabled) {
+      background: #f0f0f0;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    &.active {
+      background: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+  }
+}

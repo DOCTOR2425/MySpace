@@ -10,10 +10,10 @@ import { AuthService } from '../../service/auth/auth.service';
 import { UserProfile } from '../../data/interfaces/user/user-profile';
 import { Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { UpdateUserRequest } from '../../data/interfaces/user/update-user.interface';
 import { Router } from '@angular/router';
 import { UserPaidOrder } from '../../data/interfaces/paid-order/user-paid-order.interface';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CommentForUserResponse } from '../../data/interfaces/Comment/comment-for-user-response.interface';
 
 @Component({
   selector: 'app-user-page',
@@ -25,6 +25,7 @@ export class UserPageComponent implements OnInit, OnDestroy {
   public user!: UserProfile;
   public userForm!: FormGroup;
   public paidOrders: UserPaidOrder[] = [];
+  public comments: CommentForUserResponse[] = [];
   private unsubscribe$ = new Subject<void>();
 
   constructor(
@@ -37,6 +38,8 @@ export class UserPageComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.initForm();
     this.getUser();
+    this.getPaidOrder();
+    this.getUserComments();
   }
 
   public ngOnDestroy(): void {
@@ -72,12 +75,10 @@ export class UserPageComponent implements OnInit, OnDestroy {
         next: (user) => {
           this.user = user;
           this.userForm.patchValue(this.user);
-          this.getPaidOrder();
         },
         error: (error) => {
           if (error.status == 401) {
-            this.authService.logout();
-            this.router.navigate(['/']);
+            this.logout();
           }
         },
       });
@@ -88,6 +89,17 @@ export class UserPageComponent implements OnInit, OnDestroy {
       .getPaidOrders()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((paidOrders) => (this.paidOrders = paidOrders));
+  }
+
+  private getUserComments(): void {
+    this.userService
+      .getUserComments()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (val) => {
+          this.comments = val;
+        },
+      });
   }
 
   public getOrderTotal(order: UserPaidOrder): number {
@@ -102,17 +114,6 @@ export class UserPageComponent implements OnInit, OnDestroy {
       this.userForm.markAllAsTouched();
       return;
     }
-    // let updatedUser: UpdateUserRequest = {
-    //   firstName: this.userForm.value.firstName,
-    //   surname: this.userForm.value.surname,
-    //   telephone: this.userForm.value.telephone,
-    //   email: this.userForm.value.email,
-    //   city: this.userForm.value.city,
-    //   street: this.userForm.value.street,
-    //   houseNumber: this.userForm.value.houseNumber,
-    //   entrance: this.userForm.value.entrance,
-    //   flat: this.userForm.value.flat,
-    // };
 
     this.userService
       .updateUser(this.userForm.value)
@@ -128,5 +129,13 @@ export class UserPageComponent implements OnInit, OnDestroy {
   public logout(): void {
     this.authService.logout();
     this.router.navigate(['']);
+  }
+
+  public goToProduct(productId: string): void {
+    const selection = window.getSelection();
+    if (selection && selection.toString().length > 0) {
+      return;
+    }
+    this.router.navigate(['/product', productId]);
   }
 }

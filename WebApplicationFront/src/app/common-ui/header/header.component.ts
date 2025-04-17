@@ -61,8 +61,6 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
     const header = document.getElementsByClassName('header')[0] as HTMLElement;
     const updateHeight = () => {
       const height = header.offsetHeight;
-      console.log(height);
-
       document.documentElement.style.setProperty(
         '--header-height',
         `${height}px`

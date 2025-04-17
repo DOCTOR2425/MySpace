@@ -102,5 +102,47 @@
         [product]="product"
       ></app-product-card>
     </div>
+
+    <!-- Пагинация -->
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button
+        class="page-button"
+        (click)="goToPage(1)"
+        [disabled]="currentPage === 1"
+      >
+        «
+      </button>
+      <button
+        class="page-button"
+        (click)="prevPage()"
+        [disabled]="currentPage === 1"
+      >
+        ‹
+      </button>
+
+      <button
+        *ngFor="let page of pages"
+        class="page-button"
+        [class.active]="page === currentPage"
+        (click)="goToPage(page)"
+      >
+        {{ page }}
+      </button>
+
+      <button
+        class="page-button"
+        (click)="nextPage()"
+        [disabled]="currentPage === totalPages"
+      >
+        ›
+      </button>
+      <button
+        class="page-button"
+        (click)="goToPage(totalPages)"
+        [disabled]="currentPage === totalPages"
+      >
+        »
+      </button>
+    </div>
   </div>
 </div>

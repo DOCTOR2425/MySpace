@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using AutoMapper;
 using InstrumentStore.Domain.Abstractions;
+using InstrumentStore.Domain.Contracts.Comment;
 using InstrumentStore.Domain.Contracts.PaidOrders;
 using InstrumentStore.Domain.Contracts.User;
 using InstrumentStore.Domain.DataBase;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InstrumentStore.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -20,6 +22,7 @@ namespace InstrumentStore.API.Controllers
         private readonly IUsersService _usersService;
         private readonly IAdminService _adminService;
         private readonly IPaidOrderService _paidOrderService;
+        private readonly ICommentService _commentService;
         private readonly IMapper _mapper;
 
         public UserController(
@@ -27,13 +30,15 @@ namespace InstrumentStore.API.Controllers
             IAdminService adminService,
             IMapper mapper,
             InstrumentStoreDBContext dbContext,
-            IPaidOrderService paidOrderService)
+            IPaidOrderService paidOrderService,
+            ICommentService commentService)
         {
             _usersService = usersService;
             _adminService = adminService;
             _mapper = mapper;
             _dbContext = dbContext;
             _paidOrderService = paidOrderService;
+            _commentService = commentService;
         }
 
         private async Task<User> GetUserFromToken()
@@ -42,6 +47,7 @@ namespace InstrumentStore.API.Controllers
                 .ToString().Substring("Bearer ".Length).Trim());
         }
 
+        [AllowAnonymous]
         private async Task<string> ClientLogin(string email, string password)
         {
             string token = "";
@@ -62,6 +68,7 @@ namespace InstrumentStore.API.Controllers
             return role;
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]// функция регистрации пользователя
         public async Task<ActionResult<string>> Register([FromBody] RegisterUserRequest request)
         {
@@ -72,6 +79,7 @@ namespace InstrumentStore.API.Controllers
             return Ok(new { role });
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]// функция входа пользователя в аккаунт
         public async Task<ActionResult<string>> Login([FromBody] LoginUserRequest request)
         {
@@ -88,7 +96,6 @@ namespace InstrumentStore.API.Controllers
             return Ok();
         }
 
-        [Authorize]
         [HttpGet("get-user")]
         public async Task<ActionResult<UserProfileResponse>> GetUser()
         {
@@ -100,7 +107,6 @@ namespace InstrumentStore.API.Controllers
             return Ok(response);
         }
 
-        [Authorize]
         [HttpPost("update-user")]
         public async Task<ActionResult<UserProfileResponse>> UpdateUser(
             [FromBody] UpdateUserRequest updateUserRequest)
@@ -115,7 +121,6 @@ namespace InstrumentStore.API.Controllers
             return Ok(response);
         }
 
-        [Authorize]
         [HttpGet("get-paid-orders")]
         public async Task<ActionResult<List<UserPaidOrderResponse>>> GetPaidOrders()
         {
@@ -130,6 +135,13 @@ namespace InstrumentStore.API.Controllers
                     opt => opt.Items["DbContext"] = _dbContext));
 
             return Ok(orderResponses);
+        }
+
+        [HttpGet("get-user-comments")]
+        public async Task<IActionResult> GetUserComments()
+        {
+            return Ok(_mapper.Map<List<CommentForUserResponse>>(await
+                _commentService.GetCommentsByUser((await GetUserFromToken()).UserId)));
         }
     }
 }

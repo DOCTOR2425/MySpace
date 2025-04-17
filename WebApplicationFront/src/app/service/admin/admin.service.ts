@@ -5,7 +5,6 @@ import { environment } from '../../../environments/environment.development';
 import { AdminPaidOrder } from '../../data/interfaces/paid-order/admin-paid-order.interface';
 import { ProductProperty } from '../../data/interfaces/product/product-property.interface';
 import { OptionsForProduct } from '../../data/interfaces/some/options-for-order.interface';
-import { ProductCategory } from '../../data/interfaces/some/product-category.interface';
 
 @Injectable({
   providedIn: 'root',

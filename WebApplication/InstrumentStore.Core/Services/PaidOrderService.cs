@@ -41,9 +41,9 @@ namespace InstrumentStore.Domain.Services
         {
             return await _dbContext.PaidOrder
                 .Include(o => o.User)
+                .Include(o => o.User.UserRegistrInfo)
                 .Include(o => o.DeliveryMethod)
-                .Where(c => c.PaidOrderId == orderId)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(c => c.PaidOrderId == orderId);
         }
 
         public async Task<List<PaidOrderItem>> GetAllItemsByOrder(Guid paidOrderId)
@@ -116,6 +116,7 @@ namespace InstrumentStore.Domain.Services
                 .Include(o => o.User.UserRegistrInfo)
                 .Include(o => o.DeliveryMethod)
                 .Where(o => o.ReceiptDate == DateTime.MinValue)
+                .OrderByDescending(o => o.OrderDate)
                 .ToListAsync();
         }
 

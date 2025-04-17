@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProductCard } from '../data/interfaces/product/product-card.interface';
@@ -33,11 +33,11 @@ export class ProductService {
   }
 
   public getAllProductsCardsByCategory(
-    categoryName: string,
+    categoryId: string,
     page: number = 1
-  ): Observable<ProductCard[]> {
-    return this.http.get<ProductCard[]>(
-      `${this.baseApiUrl}category/${categoryName}/page${page}`,
+  ): Observable<{ items: ProductCard[]; totalCount: number }> {
+    return this.http.get<{ items: ProductCard[]; totalCount: number }>(
+      `${this.baseApiUrl}category/${categoryId}/page${page}`,
       {
         withCredentials: true,
       }
@@ -45,20 +45,23 @@ export class ProductService {
   }
 
   public getAllProductsCardsByCategoryWithFilters(
-    categoryName: string,
+    categoryId: string,
     filter: FilterRequest,
     page: number = 1
-  ): Observable<ProductCard[]> {
+  ): Observable<{ items: ProductCard[]; totalCount: number }> {
     let serializedFilter = encodeURIComponent(JSON.stringify(filter));
-    let url = `category/${categoryName}/page${page}?filters=${serializedFilter}`;
-    return this.http.get<ProductCard[]>(`${this.baseApiUrl}${url}`, {
-      withCredentials: true,
-    });
+    let url = `category/${categoryId}/page${page}?filters=${serializedFilter}`;
+    return this.http.get<{ items: ProductCard[]; totalCount: number }>(
+      `${this.baseApiUrl}${url}`,
+      {
+        withCredentials: true,
+      }
+    );
   }
 
-  public getCategoryFilters(categoryName: string): Observable<CategoryFilters> {
+  public getCategoryFilters(categoryId: string): Observable<CategoryFilters> {
     return this.http.get<CategoryFilters>(
-      `${this.baseApiUrl}category-filters/${categoryName}`,
+      `${this.baseApiUrl}category-filters/${categoryId}`,
       {
         withCredentials: true,
       }
@@ -147,6 +150,12 @@ export class ProductService {
     return this.http.get<ProductCard[]>(
       `${this.baseApiUrl}get-simmular-to-product/${productId}`,
       { withCredentials: true }
+    );
+  }
+
+  public getMostPopularProducts(page: number): Observable<ProductCard[]> {
+    return this.http.get<ProductCard[]>(
+      `${this.baseApiUrl}get-most-popular-products/page${page}`
     );
   }
 }

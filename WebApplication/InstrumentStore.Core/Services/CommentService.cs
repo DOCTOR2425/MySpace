@@ -48,6 +48,21 @@ namespace InstrumentStore.Domain.Services
                 .Include(c => c.Product)
                 .Include(c => c.User)
                 .Where(c => c.Product.ProductId == productId)
+                .OrderByDescending(c => c.CreationDate)
+                .ToListAsync();
+        }
+
+        public async Task<List<Comment>> GetCommentsByUser(Guid userId)
+        {
+            return await _dbContext.Comment
+                .Include(c => c.User)
+                .Include(c => c.User.UserRegistrInfo)
+                .Include(c => c.Product)
+                .Include(c => c.Product.Brand)
+                .Include(c => c.Product.Country)
+                .Include(c => c.Product.ProductCategory)
+                .Where(c => c.User.UserId == userId)
+                .OrderByDescending(c => c.CreationDate)
                 .ToListAsync();
         }
     }

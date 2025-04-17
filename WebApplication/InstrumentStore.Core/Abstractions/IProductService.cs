@@ -7,7 +7,7 @@ namespace InstrumentStore.Domain.Abstractions
 {
     public interface IProductService
     {
-        public const int PageSize = 10;
+        public const int PageSize = 4;
 
         Task<Guid> Create(Product product);
         Task<Guid> Create(CreateProductRequest productRequest, List<IFormFile> images);
@@ -18,14 +18,14 @@ namespace InstrumentStore.Domain.Abstractions
             Guid oldId,
             CreateProductRequest productRequest,
             List<IFormFile> images);
-        Task<List<Product>> GetAllByCategory(string categoryName, int page);
+        Task<List<Product>> GetAllByCategory(Guid categoryId);
         Task<List<Product>> GetAllWithFilters(
-            string categoryName,
+            Guid categoryId,
             FilterRequest filter,
-            List<Product> productsForFilter,
-            int page);
-        Task<List<ProductCard>> SearchByName(string input, int package);
+            List<Product> productsForFilter);
+        Task<List<ProductCard>> SearchByName(string input, int page);
         Task<List<Product>> GetSimmularToProduct(Guid productId);
         Task<List<Product>> GetSpecialProductsForUser(Guid userId);
+        Task<List<Product>> GetProductsByPopularity(int page);
     }
 }

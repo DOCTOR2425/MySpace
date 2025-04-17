@@ -28,7 +28,7 @@ export const routes: Routes = [
       { path: '', component: CatalogComponent },
       { path: 'product/:id', component: ProductComponent },
       { path: 'cart', component: CartPageComponent },
-      { path: 'category/:categoryName', component: CategoryPageComponent },
+      { path: 'category/:id', component: CategoryPageComponent },
       { path: 'user', component: UserPageComponent },
       { path: 'search/:search', component: SearchPageComponent },
       { path: 'comparison', component: ProductComparisonComponent },

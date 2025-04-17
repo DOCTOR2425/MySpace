@@ -1,6 +1,6 @@
 <div *ngIf="order" class="admin-order-container clean">
   <div class="order-header">
-    <h1>Заказ #{{ order.paidOrderId | slice : 0 : 8 }}</h1>
+    <h1>Заказ {{ order.paidOrderId | slice : 0 : 8 }}</h1>
     <div class="order-dates">
       <div class="date-badge">
         <span class="date-label">Оформлен</span>
@@ -41,7 +41,10 @@
             <i class="icon-email"></i> {{ order.userOrderInfo.email }}
           </div>
         </div>
-        <div class="customer-address">
+        <div
+          *ngIf="order.userOrderInfo.userDeliveryAddress"
+          class="customer-address"
+        >
           <i class="icon-location"></i>
           {{ order.userOrderInfo.userDeliveryAddress.city }},
           {{ order.userOrderInfo.userDeliveryAddress.street }}, д.{{

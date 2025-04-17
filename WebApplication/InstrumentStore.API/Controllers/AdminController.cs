@@ -82,14 +82,10 @@ namespace InstrumentStore.API.Controllers
         [HttpGet("get-processing-orders")]
         public async Task<ActionResult<List<AdminPaidOrderResponse>>> GetProcessingOrders()
         {
-            List<AdminPaidOrderResponse> paidOrderResponses = new List<AdminPaidOrderResponse>();
             List<PaidOrder> paidOrders = await _paidOrderService.GetProcessingOrders();
 
-            foreach (PaidOrder order in paidOrders)
-                paidOrderResponses.Add(_mapper.Map<AdminPaidOrderResponse>(order,
+            return Ok(_mapper.Map<List<AdminPaidOrderResponse>>(paidOrders,
                     opt => opt.Items["DbContext"] = _dbContext));
-
-            return Ok(paidOrderResponses);
         }
 
         [HttpPut("close-order{orderId:guid}")]

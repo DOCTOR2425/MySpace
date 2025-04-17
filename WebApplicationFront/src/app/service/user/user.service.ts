@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment.development';
 import { UpdateUserRequest } from '../../data/interfaces/user/update-user.interface';
 import { UserPaidOrder } from '../../data/interfaces/paid-order/user-paid-order.interface';
+import { CommentForUserResponse } from '../../data/interfaces/Comment/comment-for-user-response.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -32,5 +33,12 @@ export class UserService {
     return this.http.get<UserPaidOrder[]>(`${this.baseApiUrl}get-paid-orders`, {
       withCredentials: true,
     });
+  }
+
+  public getUserComments(): Observable<CommentForUserResponse[]> {
+    return this.http.get<CommentForUserResponse[]>(
+      `${this.baseApiUrl}get-user-comments`,
+      { withCredentials: true }
+    );
   }
 }

@@ -51,20 +51,14 @@ namespace InstrumentStore.Domain.Service
                 .ToListAsync();
         }
 
-        public async Task<List<Product>> GetAllByCategory(string categoryName, int page)
+        public async Task<List<Product>> GetAllByCategory(Guid categoryId)
         {
-            Guid? categoryId = (await _dbContext.ProductCategory
-                .FirstOrDefaultAsync(c => c.Name.ToLower() == categoryName.ToLower()))
-                    .ProductCategoryId;
-
             return await _dbContext.Product
                 .Include(p => p.ProductCategory)
                 .Include(p => p.Brand)
                 .Include(p => p.Country)
                 .OrderBy(p => p.Name)
                 .Where(p => p.ProductCategory.ProductCategoryId == categoryId)
-                .Skip((page - 1) * IProductService.PageSize)
-                .Take(IProductService.PageSize)
                 .ToListAsync();
         }
 
@@ -75,12 +69,11 @@ namespace InstrumentStore.Domain.Service
         }
 
         public async Task<List<Product>> GetAllWithFilters(
-            string categoryName,
+            Guid categoryId,
             FilterRequest filter,
-            List<Product> productsForFilter,
-            int page)
+            List<Product> productsForFilter)
         {
-            return await _productFilterService.GetAllWithFilters(categoryName, filter, productsForFilter, page);
+            return await _productFilterService.GetAllWithFilters(categoryId, filter, productsForFilter);
         }
 
         public async Task<Product> GetById(Guid id)
@@ -246,6 +239,10 @@ namespace InstrumentStore.Domain.Service
                     .ToList());
             }
 
+            int missingItems = IProductService.PageSize - products.Count;
+            if (missingItems > 0)
+                products = products.Union(await GetProductsByPopularity(1)).ToList();
+
             return products.Take(IProductService.PageSize).ToList();
         }
 
@@ -268,6 +265,8 @@ namespace InstrumentStore.Domain.Service
         private async Task GetCartItemPoints(Guid userId, Dictionary<ProductCategory, int> categoryPoints)
         {
             foreach (var item in await _dbContext.CartItem
+                .Include(i => i.Product)
+                .Include(i => i.Product.ProductCategory)
                 .Where(i => i.User.UserId == userId)
                 .ToListAsync())
             {
@@ -297,6 +296,57 @@ namespace InstrumentStore.Domain.Service
                     categoryPoints[item.Product.ProductCategory] += 1;
                 }
             }
+        }
+
+        public async Task<List<Product>> GetProductsByPopularity(int page)
+        {
+            var paidOrders = await _dbContext.PaidOrderItem
+                .GroupBy(item => item.Product.ProductId)
+                .Select(g => new { ProductId = g.Key, Count = g.Count() })
+                .ToListAsync();
+
+            var cartItems = await _dbContext.CartItem
+                .GroupBy(item => item.Product.ProductId)
+                .Select(g => new { ProductId = g.Key, Count = g.Count() })
+                .ToListAsync();
+
+            var comparisons = await _dbContext.ProductComparisonItem
+                .GroupBy(item => item.Product.ProductId)
+                .Select(g => new { ProductId = g.Key, Count = g.Count() })
+                .ToListAsync();
+
+            var paidOrdersDict = paidOrders.ToDictionary(x => x.ProductId, x => x.Count);
+            var cartItemsDict = cartItems.ToDictionary(x => x.ProductId, x => x.Count);
+            var comparisonsDict = comparisons.ToDictionary(x => x.ProductId, x => x.Count);
+
+            var allProductIds = paidOrdersDict.Keys
+                .Union(cartItemsDict.Keys)
+                .Union(comparisonsDict.Keys)
+                .ToList();
+
+            var products = await _dbContext.Product
+                .Where(p => allProductIds.Contains(p.ProductId))
+                .Include(p => p.Brand)
+                .Include(p => p.Country)
+                .Include(p => p.ProductCategory)
+                .ToListAsync();
+
+            var sortedProducts = products
+                .Select(p => new
+                {
+                    Product = p,
+                    TotalPopularity =
+                        (paidOrdersDict.TryGetValue(p.ProductId, out var poCount) ? poCount : 0) +
+                        (cartItemsDict.TryGetValue(p.ProductId, out var ciCount) ? ciCount : 0) +
+                        (comparisonsDict.TryGetValue(p.ProductId, out var cCount) ? cCount : 0)
+                })
+                .OrderByDescending(x => x.TotalPopularity)
+                .Skip((page - 1) * IProductService.PageSize)
+                .Take(IProductService.PageSize)
+                .Select(x => x.Product)
+                .ToList();
+
+            return sortedProducts;
         }
     }
 }

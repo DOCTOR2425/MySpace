@@ -5,6 +5,6 @@ namespace InstrumentStore.Domain.Abstractions
 {
     public interface IProductFilterService
     {
-        Task<List<Product>> GetAllWithFilters(string categoryName, FilterRequest filter, List<Product> productsForFilter, int page);
+        Task<List<Product>> GetAllWithFilters(Guid categoryId, FilterRequest filter, List<Product> productsForFilter);
     }
 }

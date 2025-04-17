@@ -39,29 +39,62 @@
     </form>
   </div>
 
-  <h3>История покупок</h3>
-  <cdk-virtual-scroll-viewport
-    itemSize="200"
-    class="orders-viewport"
-    [style.height.px]="800"
-  >
-    <div *cdkVirtualFor="let order of paidOrders" class="order-card">
-      <div class="order-header">
-        <h4>Заказ от {{ order.orderDate | date : "dd.MM.yyyy" }}</h4>
-        <span class="order-total">{{ getOrderTotal(order) }} руб.</span>
-      </div>
-      <div>
-        <div class="order-item" *ngFor="let item of order.paidOrderItems">
-          <img
-            [src]="item.productData.image"
-            alt="{{ item.productData.name }}"
-          />
-          <div>
-            <p class="item-name">{{ item.productData.name }}</p>
-            <p class="item-meta">{{ item.quantity }} × {{ item.price }} руб.</p>
+  <ng-container *ngIf="paidOrders && paidOrders.length > 0">
+    <h3>История покупок</h3>
+    <cdk-virtual-scroll-viewport
+      itemSize="200"
+      class="orders-viewport"
+      [style.height.px]="800"
+    >
+      <div *cdkVirtualFor="let order of paidOrders" class="order-card">
+        <div class="order-header">
+          <h4>Заказ от {{ order.orderDate | date : "dd.MM.yyyy" }}</h4>
+          <span class="order-total">{{ getOrderTotal(order) }} руб.</span>
+        </div>
+        <div>
+          <div class="order-item" *ngFor="let item of order.paidOrderItems">
+            <img
+              [src]="item.productData.image"
+              alt="{{ item.productData.name }}"
+            />
+            <div>
+              <p class="item-name">{{ item.productData.name }}</p>
+              <p class="item-meta">
+                {{ item.quantity }} × {{ item.price }} руб.
+              </p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </cdk-virtual-scroll-viewport>
+    </cdk-virtual-scroll-viewport>
+  </ng-container>
+  <h3 *ngIf="paidOrders && paidOrders.length == 0" class="mt-5 mb-5">
+    Вы пока не совершили покупок
+  </h3>
+
+  <ng-content *ngIf="comments && comments.length > 0">
+    <h3>Ваши комментарии</h3>
+    <cdk-virtual-scroll-viewport
+      class="comments-viewport"
+      itemSize="80"
+      [style.height.px]="790"
+    >
+      <div
+        class="comment"
+        *cdkVirtualFor="let comment of comments"
+        (click)="goToProduct(comment.productId)"
+      >
+        <div class="comment-header">
+          <span class="comment-date">{{
+            comment.creationDate | date : "dd.MM.yyyy"
+          }}</span>
+          <span>{{ comment.productName }} </span>
+        </div>
+        <p class="comment-text">{{ comment.text }}</p>
+      </div>
+    </cdk-virtual-scroll-viewport>
+  </ng-content>
+  <h3 *ngIf="comments && comments.length == 0" class="mt-5 mb-5">
+    Вы пока не оставляли комментарии
+  </h3>
 </div>

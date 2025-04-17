@@ -40,12 +40,6 @@ namespace InstrumentStore.API.Controllers
             _usersService = usersService;
         }
 
-        //private string GetToken()
-        //{
-        //    return HttpContext.Request.Headers["Authorization"]
-        //        .ToString().Substring("Bearer ".Length).Trim();
-        //}
-
         [HttpGet("page{page}")]
         public async Task<ActionResult<List<ProductCard>>> GetAllProductsCards([FromRoute] int page)
         {
@@ -59,6 +53,7 @@ namespace InstrumentStore.API.Controllers
             return Ok(productsCards);
         }
 
+        [Authorize]
         [HttpGet("get-special-products-for-user")]
         public async Task<ActionResult<List<ProductCard>>> GetSpecialProductsForUser()
         {
@@ -74,34 +69,37 @@ namespace InstrumentStore.API.Controllers
 
         }
 
-        [HttpGet("category/{category}/page{page}")]// функция получения товаров с фильтрацией
-        public async Task<ActionResult<List<ProductCard>>> GetAllProductsByCategoryWithFilters(
-            [FromRoute] string category,
+        [HttpGet("category/{categoryId:guid}/page{page}")]// функция получения товаров с фильтрацией
+        public async Task<IActionResult> GetAllProductsByCategoryWithFilters(
+            [FromRoute] Guid categoryId,
             [FromRoute] int page,
             [FromQuery] string? filters)
         {// получени товаров выбранной котегории
-            List<Product> products = await _productService.GetAllByCategory(category, page);
+            List<Product> products = await _productService.GetAllByCategory(categoryId);
             products = products.Where(p => p.IsArchive == false).ToList();
 
             if (!string.IsNullOrEmpty(filters))
             {// фильтрация если она выбранна
                 FilterRequest filterRequest = JsonConvert.DeserializeObject<FilterRequest>(filters);
-
-                products = await _productService.GetAllWithFilters(category, filterRequest, products, page);
+                products = await _productService.GetAllWithFilters(categoryId, filterRequest, products);
             }
 
-            List<ProductCard> productsCards = new List<ProductCard>();
+            List<ProductCard> cards = _mapper.Map<List<ProductCard>>(products
+                    .Skip((page - 1) * IProductService.PageSize)
+                    .Take(IProductService.PageSize),
+                opt => opt.Items["DbContext"] = _dbContext);
 
-            foreach (var p in products)
-                productsCards.Add(_mapper.Map<ProductCard>(p, opt => opt.Items["DbContext"] = _dbContext));
-
-            return Ok(productsCards);
+            return Ok(new
+            {
+                items = cards,
+                totalCount = products.Count
+            });
         }
 
-        [HttpGet("category-filters/{category}")]
-        public async Task<IActionResult> GetCategoryFilters([FromRoute] string category)
+        [HttpGet("category-filters/{categoryId:guid}")]
+        public async Task<IActionResult> GetCategoryFilters([FromRoute] Guid categoryId)
         {
-            return Ok(await _productPropertyService.GetCategoryFilters(category));
+            return Ok(await _productPropertyService.GetCategoryFilters(categoryId));
         }
 
         [HttpGet("search/page{page}")]// функция поиска товаров по имени
@@ -208,15 +206,8 @@ namespace InstrumentStore.API.Controllers
         [HttpGet("get-products-for-admin{page}")]
         public async Task<ActionResult<List<ProductCard>>> GetProductsForAdmin([FromRoute] int page)
         {
-            List<Product> products = await _productService.GetAll(page);
-            List<ProductCard> productsDatas = new List<ProductCard>();
-
-            foreach (var p in products)
-            {
-                productsDatas.Add(_mapper.Map<ProductCard>(p, opt => opt.Items["DbContext"] = _dbContext));
-            }
-
-            return Ok(productsDatas);
+            return Ok(_mapper.Map<List<ProductCard>>(
+                await _productService.GetAll(page), opt => opt.Items["DbContext"] = _dbContext));
         }
 
         [Authorize]
@@ -233,12 +224,8 @@ namespace InstrumentStore.API.Controllers
         [HttpGet("get-comments-by-product/{id:guid}")]
         public async Task<IActionResult> GetCommentsByProduct(Guid id)
         {
-            List<CommentResponse> comments = new List<CommentResponse>();
-
-            foreach (var comment in await _commentService.GetAllCommentsByProduct(id))
-                comments.Add(_mapper.Map<CommentResponse>(comment));
-
-            return Ok(comments);
+            return Ok(_mapper.Map<List<CommentResponse>>(
+                await _commentService.GetAllCommentsByProduct(id)));
         }
 
         [HttpGet("get-simmular-to-product/{productId:guid}")]
@@ -247,6 +234,14 @@ namespace InstrumentStore.API.Controllers
         {
             return Ok(_mapper.Map<List<ProductCard>>(await _productService.GetSimmularToProduct(productId),
                 opt => opt.Items["DbContext"] = _dbContext).Take(10));
+        }
+
+        [HttpGet("get-most-popular-products/page{page}")]
+        public async Task<IActionResult> GetMostPopularProducts([FromRoute] int page)
+        {
+            return Ok(_mapper.Map<List<ProductCard>>(
+                await _productService.GetProductsByPopularity(page),
+                opt => opt.Items["DbContext"] = _dbContext));
         }
     }
 }
