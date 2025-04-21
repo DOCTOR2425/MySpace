@@ -134,4 +134,10 @@ export class UserPageComponent implements OnInit, OnDestroy {
       '$1 ($2) $3-$4-$5'
     );
   }
+
+  public goToComments(): void {
+    this.router.navigate(['/user/comments'], {
+      state: { userName: this.user.firstName },
+    });
+  }
 }

@@ -65,7 +65,7 @@
       </div>
 
       <div class="dashboard-cards">
-        <div class="dashboard-card" [routerLink]="['/user/comments']">
+        <div class="dashboard-card" (click)="goToComments()">
           <div class="card-content">
             <h4>Комментарии</h4>
             <p class="card-count">{{ user.commentNumber }}</p>
@@ -83,7 +83,7 @@
 
         <div
           class="dashboard-card"
-          [routerLink]="['/user/pending-to-pending-reviews']"
+          [routerLink]="['/user/products-pending-reviews']"
         >
           <div class="card-content">
             <h4>Ждут оценки</h4>

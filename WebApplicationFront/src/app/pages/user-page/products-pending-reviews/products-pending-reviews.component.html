@@ -1,0 +1,42 @@
+<div class="products-pending-reviews">
+  <h4>Товары, ожидающие отзывов</h4>
+  <div class="product-list">
+    <div class="product-card" *ngFor="let product of products">
+      <div class="card-image-container">
+        <img
+          [src]="product.image"
+          [alt]="product.name"
+          class="card-image"
+          [routerLink]="['/product', product.productId]"
+        />
+      </div>
+
+      <div class="card-content">
+        <div class="product-price">{{ product.price }} руб.</div>
+        <div class="product-name">{{ product.name }}</div>
+        <button class="add-to-cart-btn" (click)="openReviewPopup(product)">
+          Оставить отзыв
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="review-popup" *ngIf="isReviewPopupOpen">
+    <div class="popup-content">
+      <button class="close-btn" (click)="closeReviewPopup()">×</button>
+      <h6>Напишите отзыв на товар:</h6>
+      <p class="product-name">{{ selectedProduct!.name }}</p>
+
+      <textarea
+        [(ngModel)]="reviewText"
+        placeholder="Введите ваш отзыв здесь..."
+        rows="10"
+      ></textarea>
+
+      <div class="popup-actions">
+        <button class="cancel-btn" (click)="closeReviewPopup()">Отмена</button>
+        <button class="submit-btn" (click)="submitReview()">Подтвердить</button>
+      </div>
+    </div>
+  </div>
+</div>

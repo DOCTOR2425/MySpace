@@ -1,4 +1,10 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
@@ -13,11 +19,16 @@ import { CommonModule } from '@angular/common';
   styleUrl: './comments.component.scss',
 })
 export class CommentsComponent implements OnInit, OnDestroy {
+  public userName!: string;
   public comments: CommentForUserResponse[] = [];
   public viewportHeight: string = '100vh';
   private unsubscribe$ = new Subject<void>();
 
-  constructor(private router: Router, private userService: UserService) {}
+  constructor(private router: Router, private userService: UserService) {
+    this.userName =
+      this.router.getCurrentNavigation()?.extras.state?.['userName'];
+    console.log(this.userName);
+  }
 
   public ngOnInit(): void {
     this.userService
@@ -44,7 +55,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
   private updateViewportHeight(): void {
     const filterHeaderHeight =
       document.querySelector('.header')?.clientHeight || 0;
-    this.viewportHeight = `calc(100vh - var(--header-height) - ${filterHeaderHeight}px - 28px)`;
+    this.viewportHeight = `calc(100vh - var(--header-height) - ${filterHeaderHeight}px)`;
   }
 
   public goToProduct(productId: string): void {

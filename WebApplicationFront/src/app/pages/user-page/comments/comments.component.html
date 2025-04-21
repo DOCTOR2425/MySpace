@@ -1,9 +1,10 @@
 <div class="container">
   <div class="profile-card">
-    <h3 class="profile-name">Егор</h3>
+    <h3 class="profile-name" *ngIf="userName">{{ userName }}</h3>
     <div class="profile-stats">
       <div class="profile-reviews">
-        <span class="reviews-count">3 Отзыва написано</span>
+        <span class="reviews-label">Отзыва написано</span>
+        <span class="reviews-count">{{ comments.length }}</span>
       </div>
     </div>
   </div>

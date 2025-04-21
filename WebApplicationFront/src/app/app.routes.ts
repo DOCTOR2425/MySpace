@@ -21,6 +21,7 @@ import { CreateCategoryComponent } from './pages/admin-pages/category-manage/cre
 import { UpdateCategoryComponent } from './pages/admin-pages/category-manage/update-category/update-category.component';
 import { PaidOrdersComponent } from './pages/user-page/paid-orders/paid-orders.component';
 import { CommentsComponent } from './pages/user-page/comments/comments.component';
+import { ProductsPendingReviewsComponent } from './pages/user-page/products-pending-reviews/products-pending-reviews.component';
 
 export const routes: Routes = [
   {
@@ -34,6 +35,10 @@ export const routes: Routes = [
       { path: 'user', component: UserPageComponent },
       { path: 'user/orders', component: PaidOrdersComponent },
       { path: 'user/comments', component: CommentsComponent },
+      {
+        path: 'user/products-pending-reviews',
+        component: ProductsPendingReviewsComponent,
+      },
       { path: 'search/:search', component: SearchPageComponent },
       { path: 'comparison', component: ProductComparisonComponent },
     ],
