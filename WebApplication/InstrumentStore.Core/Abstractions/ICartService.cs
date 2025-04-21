@@ -13,7 +13,7 @@ namespace InstrumentStore.Domain.Abstractions
 			int quantity,
 			OrderRequest orderRequest);
 		Task<Guid> RemoveFromCart(Guid cartItemId);
-		Task<List<PaidOrderItem>> GetAllOrders(Guid userId);
+		Task<List<PaidOrderItem>> GetUserOrders(Guid userId);
 		Task<Guid> OrderCartForUnregistered(Guid userId, OrderCartOfUnregisteredRequest request);
 	}
 }

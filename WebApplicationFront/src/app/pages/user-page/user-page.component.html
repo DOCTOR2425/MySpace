@@ -1,100 +1,103 @@
 <div class="user-container" *ngIf="user">
-  <h2>{{ user.firstName }} {{ user.surname }}</h2>
-  <p>Телефон: {{ user.telephone }}</p>
-  <p>Email: {{ user.email }}</p>
-  <p>Адресс последней доставки</p>
-  <p>Город: {{ user.city }}</p>
-  <p>Улица: {{ user.street }}</p>
-  <p>Дом: {{ user.houseNumber }}</p>
-  <p>Подъезд: {{ user.entrance }}</p>
-  <p>Квартира: {{ user.flat }}</p>
-
-  <button (click)="logout()">Выйти</button>
-
-  <div class="profile-edit-container">
-    <h3>Редактировать профиль</h3>
-    <form [formGroup]="userForm" (ngSubmit)="updateUser()">
-      <div class="form-row">
-        <label for="firstName">Имя</label>
-        <input type="text" id="firstName" formControlName="firstName" />
-      </div>
-      <div class="form-row">
-        <label for="surname">Фамилия</label>
-        <input type="text" id="surname" formControlName="surname" />
-      </div>
-      <div class="form-row">
-        <label for="telephone">Телефон</label>
-        <input
-          type="text"
-          id="telephone"
-          formControlName="telephone"
-          placeholder="+375 11 111-11-11"
-        />
-      </div>
-      <div class="form-row">
-        <label for="email">Email</label>
-        <input type="email" id="email" formControlName="email" />
-      </div>
-      <button type="submit">Обновить</button>
-    </form>
-  </div>
-
-  <ng-container *ngIf="paidOrders && paidOrders.length > 0">
-    <h3>История покупок</h3>
-    <cdk-virtual-scroll-viewport
-      itemSize="200"
-      class="orders-viewport"
-      [style.height.px]="800"
-    >
-      <div *cdkVirtualFor="let order of paidOrders" class="order-card">
-        <div class="order-header">
-          <h4>Заказ от {{ order.orderDate | date : "dd.MM.yyyy" }}</h4>
-          <span class="order-total">{{ getOrderTotal(order) }} руб.</span>
+  <div class="profile-layout">
+    <div class="user-sidebar">
+      <div class="user-info">
+        <h2>{{ user.firstName }} {{ user.surname }}</h2>
+        <div class="info-item">
+          <span class="info-label">Телефон:</span>
+          <span class="info-value">{{
+            formatPhoneNumber(user.telephone)
+          }}</span>
         </div>
-        <div>
-          <div class="order-item" *ngFor="let item of order.paidOrderItems">
-            <img
-              [src]="item.productData.image"
-              alt="{{ item.productData.name }}"
+        <div class="info-item">
+          <span class="info-label">Email:</span>
+          <span class="info-value">{{ user.email }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Адрес доставки:</span>
+          <span class="info-value">{{ formatAddress() }}</span>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>Управление</h3>
+        <button class="sidebar-button" (click)="logout()">Выйти</button>
+        <button class="sidebar-button" (click)="toggleEditMode()">
+          Редактировать профиль
+        </button>
+      </div>
+    </div>
+
+    <div class="user-content">
+      <div class="profile-edit-container" *ngIf="editMode">
+        <h3>Редактировать профиль</h3>
+        <form [formGroup]="userForm" (ngSubmit)="updateUser()">
+          <div class="form-row">
+            <label for="firstName">Имя</label>
+            <input type="text" id="firstName" formControlName="firstName" />
+          </div>
+          <div class="form-row">
+            <label for="surname">Фамилия</label>
+            <input type="text" id="surname" formControlName="surname" />
+          </div>
+          <div class="form-row">
+            <label for="telephone">Телефон</label>
+            <input
+              type="text"
+              id="telephone"
+              formControlName="telephone"
+              placeholder="+375 11 111-11-11"
             />
-            <div>
-              <p class="item-name">{{ item.productData.name }}</p>
-              <p class="item-meta">
-                {{ item.quantity }} × {{ item.price }} руб.
-              </p>
-            </div>
+          </div>
+          <div class="form-row">
+            <label for="email">Email</label>
+            <input type="email" id="email" formControlName="email" />
+          </div>
+          <button type="submit">Обновить</button>
+          <button type="button" (click)="toggleEditMode()">Отмена</button>
+        </form>
+      </div>
+
+      <div class="large-card">
+        <div class="card-content" [routerLink]="['/cart']">
+          <h4>Корзина</h4>
+        </div>
+      </div>
+
+      <div class="dashboard-cards">
+        <div class="dashboard-card" [routerLink]="['/user/comments']">
+          <div class="card-content">
+            <h4>Комментарии</h4>
+            <p class="card-count">{{ user.commentNumber }}</p>
+            <span class="card-link">Перейти</span>
+          </div>
+        </div>
+
+        <div class="dashboard-card" [routerLink]="['/user/orders']">
+          <div class="card-content">
+            <h4>Покупки</h4>
+            <p class="card-count">{{ user.orderNumber }}</p>
+            <span class="card-link">Перейти</span>
+          </div>
+        </div>
+
+        <div
+          class="dashboard-card"
+          [routerLink]="['/user/pending-to-pending-reviews']"
+        >
+          <div class="card-content">
+            <h4>Ждут оценки</h4>
+            <p class="card-count">{{ user.pendingReviewNumber }}</p>
+            <span class="card-link">Перейти</span>
           </div>
         </div>
       </div>
-    </cdk-virtual-scroll-viewport>
-  </ng-container>
-  <h3 *ngIf="paidOrders && paidOrders.length == 0" class="mt-5 mb-5">
-    Вы пока не совершили покупок
-  </h3>
 
-  <ng-content *ngIf="comments && comments.length > 0">
-    <h3>Ваши комментарии</h3>
-    <cdk-virtual-scroll-viewport
-      class="comments-viewport"
-      itemSize="80"
-      [style.height.px]="790"
-    >
-      <div
-        class="comment"
-        *cdkVirtualFor="let comment of comments"
-        (click)="goToProduct(comment.productId)"
-      >
-        <div class="comment-header">
-          <span class="comment-date">{{
-            comment.creationDate | date : "dd.MM.yyyy"
-          }}</span>
-          <span>{{ comment.productName }} </span>
+      <div class="large-card">
+        <div class="card-content" [routerLink]="['/comparison']">
+          <h4>Сравнения</h4>
         </div>
-        <p class="comment-text">{{ comment.text }}</p>
       </div>
-    </cdk-virtual-scroll-viewport>
-  </ng-content>
-  <h3 *ngIf="comments && comments.length == 0" class="mt-5 mb-5">
-    Вы пока не оставляли комментарии
-  </h3>
+    </div>
+  </div>
 </div>

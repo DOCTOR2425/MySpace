@@ -1,0 +1,96 @@
+.container {
+  display: flex;
+  justify-content: center;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 12px 0;
+}
+
+.profile-card {
+  height: 100px;
+  width: 300px;
+  margin-right: 16px;
+  padding: 16px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profile-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.profile-stats {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-reviews {
+  margin-bottom: 8px;
+}
+
+.reviews-count {
+  font-size: 14px;
+  color: #555;
+}
+
+.comments {
+  width: 1000px;
+}
+
+.comments-viewport {
+  border-radius: 8px;
+  background: #f9f9f9;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: 16px;
+}
+
+.comment {
+  padding: 12px;
+  margin: 8px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+  font-size: 14px;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .comment-body {
+    display: flex;
+    align-items: center;
+
+    .comment-image {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-right: 12px;
+    }
+
+    .comment-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .comment-date {
+      color: #888;
+      margin-bottom: 4px;
+    }
+
+    .comment-product-name {
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+  }
+
+  .comment-text {
+    white-space: pre-line;
+    margin: 12px 0 0 0;
+  }
+}

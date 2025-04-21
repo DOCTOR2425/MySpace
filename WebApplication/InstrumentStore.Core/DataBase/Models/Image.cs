@@ -1,10 +1,14 @@
-﻿namespace InstrumentStore.Domain.DataBase.Models
-{
-	public class Image
-	{
-		public Guid ImageId { get; set; }
-		public string Name { get; set; } = string.Empty;
+﻿using System.ComponentModel.DataAnnotations;
 
-		public required Product Product { get; set; }
-	}
+namespace InstrumentStore.Domain.DataBase.Models
+{
+    public class Image
+    {
+        public Guid ImageId { get; set; }
+        [MaxLength(100)]
+        public string Name { get; set; } = string.Empty;
+        public int Index { get; set; }
+
+        public required Product Product { get; set; }
+    }
 }

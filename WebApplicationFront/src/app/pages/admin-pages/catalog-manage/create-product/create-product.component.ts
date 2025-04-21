@@ -77,7 +77,7 @@ export class CreateProductComponent implements OnInit, OnDestroy {
 
     const formData = new FormData();
     formData.append('productDto', JSON.stringify(product));
-    product.images.forEach((image, index) => {
+    product.images.forEach((image) => {
       formData.append('images', image, image.name);
     });
 
@@ -85,7 +85,7 @@ export class CreateProductComponent implements OnInit, OnDestroy {
       .createProduct(formData)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
-        next: (response) => {
+        next: () => {
           this.exit();
         },
         error: () => {},

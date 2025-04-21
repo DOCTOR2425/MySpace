@@ -231,5 +231,42 @@ namespace InstrumentStore.Domain.Services
 
             return address;
         }
+
+        public async Task<List<Product>> GetOrderedProductsPendingReviewsByUser(Guid userId)
+        {
+            List<Product> products = new List<Product>();
+
+            List<Product> productsBuff = new List<Product>();
+            List<PaidOrder> paidOrders = await _dbContext.PaidOrder
+                .AsQueryable()
+                .Where(o => o.User.UserId == userId)
+                .ToListAsync();
+
+            if (paidOrders.Any() == false)
+                return products;
+
+            foreach (var order in paidOrders)
+            {
+                productsBuff.AddRange(await _dbContext.PaidOrderItem
+                    .AsQueryable()
+                    .Include(i => i.Product)
+                    .Where(i => i.PaidOrder.PaidOrderId == order.PaidOrderId)
+                    .Select(i => i.Product)
+                    .ToListAsync());
+            }
+
+            foreach (var product in productsBuff)
+            {
+                if (await _dbContext.Comment
+                    .AsQueryable()
+                    .Where(c => c.Product.ProductId == product.ProductId)
+                    .AnyAsync() == false)
+                {
+                    products.Add(product);
+                }
+            }
+
+            return products;
+        }
     }
 }

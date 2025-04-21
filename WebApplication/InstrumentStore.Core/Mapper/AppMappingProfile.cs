@@ -24,7 +24,7 @@ namespace InstrumentStore.Domain.Mapper
                 .AfterMap((src, dest, context) =>
                 {
                     var dbContext = (InstrumentStoreDBContext)context.Items["DbContext"];
-                    var image = dbContext.Image.FirstOrDefault(i => i.Product.ProductId == src.ProductId);
+                    var image = dbContext.Image.FirstOrDefault(i => i.Product.ProductId == src.ProductId && i.Index == 0);
                     dest.Image = "https://localhost:7295/images/" + image?.Name;
                 });
 
@@ -35,7 +35,7 @@ namespace InstrumentStore.Domain.Mapper
                 .AfterMap((src, dest, context) =>
                 {
                     var dbContext = (InstrumentStoreDBContext)context.Items["DbContext"];
-                    var image = dbContext.Image.FirstOrDefault(i => i.Product.ProductId == src.ProductId);
+                    var image = dbContext.Image.FirstOrDefault(i => i.Product.ProductId == src.ProductId && i.Index == 0);
                     dest.Image = "https://localhost:7295/images/" + image?.Name;
                 });
 
@@ -47,7 +47,7 @@ namespace InstrumentStore.Domain.Mapper
                 .AfterMap((src, dest, context) =>
                 {
                     var dbContext = (InstrumentStoreDBContext)context.Items["DbContext"];
-                    var image = dbContext.Image.FirstOrDefault(i => i.Product.ProductId == src.Product.ProductId);
+                    var image = dbContext.Image.FirstOrDefault(i => i.Product.ProductId == src.Product.ProductId && i.Index == 0);
                     dest.Product.Image = "https://localhost:7295/images/" + image?.Name;
                 });
 
@@ -83,38 +83,7 @@ namespace InstrumentStore.Domain.Mapper
                 });
 
             CreateMap<User, UserProfileResponse>()
-                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.UserRegistrInfo.Email))
-                .AfterMap((src, dest, context) =>
-                {
-                    var dbContext = (InstrumentStoreDBContext)context.Items["DbContext"];
-
-                    List<PaidOrder> paidOrders = dbContext.PaidOrder
-                                .Where(o => o.User.UserId == src.UserId)
-                                .OrderByDescending(o => o.OrderDate)
-                                .ToList();
-
-                    if (paidOrders.Any() == false)
-                        return;
-
-                    DeliveryAddress? address = null;
-                    foreach (var order in paidOrders)
-                    {
-                        address = dbContext.DeliveryAddress
-                            .Include(a => a.City)
-                            .FirstOrDefault(a => a.PaidOrder == order);
-                        if (address != null)
-                            break;
-                    }
-
-                    if (address == null)
-                        return;
-
-                    dest.City = address.City.Name;
-                    dest.Street = address.Street;
-                    dest.HouseNumber = address.HouseNumber;
-                    dest.Entrance = address.Entrance;
-                    dest.Flat = address.Flat;
-                });
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.UserRegistrInfo.Email));
 
             CreateMap<PaidOrder, UserPaidOrderResponse>()
                 .AfterMap((src, dest, context) =>
@@ -151,8 +120,8 @@ namespace InstrumentStore.Domain.Mapper
                                 ProductCategory = item.Product.ProductCategory.Name,
 
                                 Image = "https://localhost:7295/images/" +
-                                dbContext.Image.First(i =>
-                                i.Product.ProductId == item.Product.ProductId).Name
+                                dbContext.Image.FirstOrDefault(i =>
+                                i.Product.ProductId == item.Product.ProductId && i.Index == 0).Name
                             }
                         });
                     }
@@ -193,8 +162,8 @@ namespace InstrumentStore.Domain.Mapper
                                 ProductCategory = item.Product.ProductCategory.Name,
 
                                 Image = "https://localhost:7295/images/" +
-                                dbContext.Image.First(i =>
-                                i.Product.ProductId == item.Product.ProductId).Name
+                                dbContext.Image.FirstOrDefault(i =>
+                                i.Product.ProductId == item.Product.ProductId && i.Index == 0).Name
                             }
                         });
                     }
@@ -215,6 +184,7 @@ namespace InstrumentStore.Domain.Mapper
 
                     List<string> images = dbContext.Image
                         .Where(i => i.Product.ProductId == src.ProductId)
+                        .OrderBy(i => i.Index)
                         .Select(i => i.Name)
                         .ToList();
 

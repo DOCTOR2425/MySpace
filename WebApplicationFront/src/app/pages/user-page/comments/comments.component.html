@@ -1,0 +1,40 @@
+<div class="container">
+  <div class="profile-card">
+    <h3 class="profile-name">Егор</h3>
+    <div class="profile-stats">
+      <div class="profile-reviews">
+        <span class="reviews-count">3 Отзыва написано</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="comments">
+    <h3 class="header">Ваши комментарии</h3>
+    <cdk-virtual-scroll-viewport
+      itemSize="150"
+      class="comments-viewport"
+      [style.height]="viewportHeight"
+    >
+      <div
+        class="comment"
+        *cdkVirtualFor="let comment of comments"
+        (click)="goToProduct(comment.productId)"
+      >
+        <div class="comment-body">
+          <img
+            class="comment-image"
+            [src]="comment.image"
+            alt="{{ comment.productName }}"
+          />
+          <div class="comment-details">
+            <span class="comment-date">{{
+              comment.creationDate | date : "dd.MM.yyyy"
+            }}</span>
+            <span class="comment-product-name">{{ comment.productName }}</span>
+          </div>
+        </div>
+        <p class="comment-text">{{ comment.text }}</p>
+      </div>
+    </cdk-virtual-scroll-viewport>
+  </div>
+</div>

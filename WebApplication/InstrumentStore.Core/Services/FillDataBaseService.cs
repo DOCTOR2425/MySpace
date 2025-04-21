@@ -270,8 +270,9 @@ namespace InstrumentStore.Domain.Services
             Image image = new Image()
             {
                 ImageId = Guid.NewGuid(),
+                Name = "шуруповёрт2.png",
+                Index = 0,
                 Product = product,
-                Name = "шуруповёрт2.png"
             };
             await _productImageService.Create(image);
             ProductPropertyValue value11 = new ProductPropertyValue()
@@ -318,8 +319,9 @@ namespace InstrumentStore.Domain.Services
             Image image2 = new Image()
             {
                 ImageId = Guid.NewGuid(),
+                Name = "шуруповёрт2.png",
+                Index = 0,
                 Product = product2,
-                Name = "шуруповёрт2.png"
             };
             await _productImageService.Create(image2);
             ProductPropertyValue value21 = new ProductPropertyValue()
@@ -386,6 +388,7 @@ namespace InstrumentStore.Domain.Services
             {
                 ImageId = Guid.NewGuid(),
                 Product = product,
+                Index = 0,
                 Name = "шуруповёрт.png"
             };
             await _productImageService.Create(image);
@@ -432,6 +435,7 @@ namespace InstrumentStore.Domain.Services
             {
                 ImageId = Guid.NewGuid(),
                 Product = product2,
+                Index = 0,
                 Name = "шуруповёрт.png"
             };
             await _productImageService.Create(image2);
@@ -501,6 +505,7 @@ namespace InstrumentStore.Domain.Services
             {
                 ImageId = Guid.NewGuid(),
                 Product = product,
+                Index = 0,
                 Name = "шуруповёрт3.png"
             };
             await _productImageService.Create(image);
@@ -550,6 +555,7 @@ namespace InstrumentStore.Domain.Services
             {
                 ImageId = Guid.NewGuid(),
                 Product = product2,
+                Index = 0,
                 Name = "шуруповёрт3.png"
             };
             await _productImageService.Create(image2);
@@ -699,16 +705,17 @@ namespace InstrumentStore.Domain.Services
             _dBContext.City.RemoveRange(_dBContext.City);
             _dBContext.Comment.RemoveRange(_dBContext.Comment);
             _dBContext.Country.RemoveRange(_dBContext.Country);
+            _dBContext.DeliveryAddress.RemoveRange(_dBContext.DeliveryAddress);
             _dBContext.DeliveryMethod.RemoveRange(_dBContext.DeliveryMethod);
             _dBContext.Image.RemoveRange(_dBContext.Image);
             _dBContext.PaidOrder.RemoveRange(_dBContext.PaidOrder);
             _dBContext.PaidOrderItem.RemoveRange(_dBContext.PaidOrderItem);
             _dBContext.Product.RemoveRange(_dBContext.Product);
             _dBContext.ProductCategory.RemoveRange(_dBContext.ProductCategory);
+            _dBContext.ProductComparisonItem.RemoveRange(_dBContext.ProductComparisonItem);
             _dBContext.ProductProperty.RemoveRange(_dBContext.ProductProperty);
             _dBContext.ProductPropertyValue.RemoveRange(_dBContext.ProductPropertyValue);
             _dBContext.User.RemoveRange(_dBContext.User);
-            _dBContext.DeliveryAddress.RemoveRange(_dBContext.DeliveryAddress);
             _dBContext.UserRegistrInfo.RemoveRange(_dBContext.UserRegistrInfo);
 
             _dBContext.SaveChanges();

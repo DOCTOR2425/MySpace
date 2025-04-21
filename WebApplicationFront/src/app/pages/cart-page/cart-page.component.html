@@ -58,7 +58,11 @@
 
         <div class="form-group full-width">
           <label>Способ оплаты:</label>
-          <select formControlName="paymentMethod">
+          <select
+            id="paymentMethod"
+            formControlName="paymentMethod"
+            formControlName="paymentMethod"
+          >
             <option
               *ngFor="let paymentMethod of orderOptions.paymentMethods"
               [value]="paymentMethod"
@@ -74,6 +78,7 @@
         <div class="form-group full-width">
           <label>Способ доставки:</label>
           <select
+            id="deliveryMethodId"
             formControlName="deliveryMethodId"
             (change)="onDeliveryMethodChange()"
           >

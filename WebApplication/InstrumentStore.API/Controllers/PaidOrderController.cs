@@ -35,9 +35,9 @@ namespace InstrumentStore.API.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<List<PaidOrderItem>>> GetUserCart()
+        public async Task<ActionResult<List<PaidOrderItem>>> GetUserOrders()
         {
-            return Ok(await _cartService.GetAllOrders(
+            return Ok(await _cartService.GetUserOrders(
                 await _jwtProvider.GetUserIdFromToken(
                     HttpContext.Request.Cookies[JwtProvider.AccessCookiesName])));
         }

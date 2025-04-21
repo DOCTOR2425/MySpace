@@ -8,4 +8,8 @@ export interface UserProfile {
   houseNumber: string;
   entrance: string;
   flat: string;
+
+  commentNumber: number;
+  orderNumber: number;
+  pendingReviewNumber: number;
 }

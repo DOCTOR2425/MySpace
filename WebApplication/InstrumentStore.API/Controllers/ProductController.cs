@@ -45,12 +45,8 @@ namespace InstrumentStore.API.Controllers
         {
             List<Product> products = await _productService.GetAll(page);
             products = products.Where(p => p.IsArchive == false).ToList();
-            List<ProductCard> productsCards = new List<ProductCard>();
 
-            foreach (var p in products)
-                productsCards.Add(_mapper.Map<ProductCard>(p, opt => opt.Items["DbContext"] = _dbContext));
-
-            return Ok(productsCards);
+            return Ok(_mapper.Map<List<ProductCard>>(products, opt => opt.Items["DbContext"] = _dbContext));
         }
 
         [Authorize]
@@ -61,12 +57,7 @@ namespace InstrumentStore.API.Controllers
                 (await _usersService.GetUserFromToken(HttpContext.Request.Headers["Authorization"]
                     .ToString().Substring("Bearer ".Length).Trim())).UserId);
 
-            List<ProductCard> productsCards = new List<ProductCard>();
-            foreach (var p in products)
-                productsCards.Add(_mapper.Map<ProductCard>(p, opt => opt.Items["DbContext"] = _dbContext));
-
-            return Ok(productsCards);
-
+            return Ok(_mapper.Map<List<ProductCard>>(products, opt => opt.Items["DbContext"] = _dbContext));
         }
 
         [HttpGet("category/{categoryId:guid}/page{page}")]// функция получения товаров с фильтрацией

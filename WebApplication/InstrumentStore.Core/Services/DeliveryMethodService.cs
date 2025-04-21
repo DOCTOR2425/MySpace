@@ -1,5 +1,4 @@
 ﻿using InstrumentStore.Domain.Abstractions;
-using InstrumentStore.Domain.Contracts.Cart;
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
 using Microsoft.EntityFrameworkCore;
@@ -35,7 +34,7 @@ namespace InstrumentStore.Domain.Services
 
         public async Task<bool> IsHomeDelivery(Guid deliveryMethodId)
         {
-            if((await this.GetById(deliveryMethodId)).Name
+            if ((await GetById(deliveryMethodId)).Name
                 == "Доставка до дома")
                 return true;
             return false;

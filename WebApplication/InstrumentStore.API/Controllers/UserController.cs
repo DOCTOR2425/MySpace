@@ -23,6 +23,8 @@ namespace InstrumentStore.API.Controllers
         private readonly IAdminService _adminService;
         private readonly IPaidOrderService _paidOrderService;
         private readonly ICommentService _commentService;
+        private readonly IProductService _productService;
+        private readonly IImageService _imageService;
         private readonly IMapper _mapper;
 
         public UserController(
@@ -31,7 +33,9 @@ namespace InstrumentStore.API.Controllers
             IMapper mapper,
             InstrumentStoreDBContext dbContext,
             IPaidOrderService paidOrderService,
-            ICommentService commentService)
+            ICommentService commentService,
+            IProductService productService,
+            IImageService imageService)
         {
             _usersService = usersService;
             _adminService = adminService;
@@ -39,6 +43,8 @@ namespace InstrumentStore.API.Controllers
             _dbContext = dbContext;
             _paidOrderService = paidOrderService;
             _commentService = commentService;
+            _productService = productService;
+            _imageService = imageService;
         }
 
         private async Task<User> GetUserFromToken()
@@ -99,12 +105,7 @@ namespace InstrumentStore.API.Controllers
         [HttpGet("get-user")]
         public async Task<ActionResult<UserProfileResponse>> GetUser()
         {
-            User user = await GetUserFromToken();
-
-            UserProfileResponse response = _mapper.Map<UserProfileResponse>(user,
-                opt => opt.Items["DbContext"] = _dbContext);
-
-            return Ok(response);
+            return Ok(await GetUserProfileResponse(await GetUserFromToken()));
         }
 
         [HttpPost("update-user")]
@@ -115,24 +116,38 @@ namespace InstrumentStore.API.Controllers
 
             await _usersService.Update(user.UserId, updateUserRequest);
 
-            UserProfileResponse response = _mapper.Map<UserProfileResponse>(user,
-                opt => opt.Items["DbContext"] = _dbContext);
+            return Ok(await GetUserProfileResponse(user));
+        }
 
-            return Ok(response);
+        private async Task<UserProfileResponse> GetUserProfileResponse(User user)
+        {
+            UserProfileResponse response = _mapper.Map<UserProfileResponse>(user);
+
+            response.PendingReviewNumber = (await _usersService.GetOrderedProductsPendingReviewsByUser(user.UserId)).Count;
+            response.OrderNumber = (await _paidOrderService.GetAllByUserId(user.UserId)).Count;
+            response.CommentNumber = (await _commentService.GetCommentsByUser(user.UserId)).Count;
+
+            DeliveryAddress? address = await _paidOrderService.GetLastAddressByUser(user.UserId);
+            if (address == null)
+                return response;
+
+            response.City = address.City.Name;
+            response.Street = address.Street;
+            response.HouseNumber = address.HouseNumber;
+            response.Entrance = address.Entrance;
+            response.Flat = address.Flat;
+
+            return response;
         }
 
         [HttpGet("get-paid-orders")]
         public async Task<ActionResult<List<UserPaidOrderResponse>>> GetPaidOrders()
         {
-            User user = await GetUserFromToken();
+            List<PaidOrder> paidOrders = await _paidOrderService.GetAllByUserId((await GetUserFromToken()).UserId);
 
-            List<PaidOrder> paidOrders = await _paidOrderService.GetAllByUserId(user.UserId);
-
-            List<UserPaidOrderResponse> orderResponses = new List<UserPaidOrderResponse>();
-
-            foreach (PaidOrder order in paidOrders)
-                orderResponses.Add(_mapper.Map<UserPaidOrderResponse>(order,
-                    opt => opt.Items["DbContext"] = _dbContext));
+            List<UserPaidOrderResponse> orderResponses = _mapper
+                .Map<List<UserPaidOrderResponse>>(paidOrders,
+                    opt => opt.Items["DbContext"] = _dbContext);
 
             return Ok(orderResponses);
         }
@@ -140,8 +155,14 @@ namespace InstrumentStore.API.Controllers
         [HttpGet("get-user-comments")]
         public async Task<IActionResult> GetUserComments()
         {
-            return Ok(_mapper.Map<List<CommentForUserResponse>>(await
-                _commentService.GetCommentsByUser((await GetUserFromToken()).UserId)));
+            List<CommentForUserResponse> comments = _mapper.Map<List<CommentForUserResponse>>(await
+                _commentService.GetCommentsByUser((await GetUserFromToken()).UserId));
+
+            foreach (CommentForUserResponse comment in comments)
+                comment.Image = "https://localhost:7295/images/" +
+                    (await _imageService.GetByProductId(comment.ProductId))[0].Name;
+
+            return Ok(comments);
         }
     }
 }

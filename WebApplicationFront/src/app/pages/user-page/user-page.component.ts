@@ -10,22 +10,18 @@ import { AuthService } from '../../service/auth/auth.service';
 import { UserProfile } from '../../data/interfaces/user/user-profile';
 import { Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { UserPaidOrder } from '../../data/interfaces/paid-order/user-paid-order.interface';
-import { ScrollingModule } from '@angular/cdk/scrolling';
-import { CommentForUserResponse } from '../../data/interfaces/Comment/comment-for-user-response.interface';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-user-page',
-  imports: [CommonModule, ReactiveFormsModule, ScrollingModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './user-page.component.html',
   styleUrls: ['./user-page.component.scss'],
 })
 export class UserPageComponent implements OnInit, OnDestroy {
   public user!: UserProfile;
   public userForm!: FormGroup;
-  public paidOrders: UserPaidOrder[] = [];
-  public comments: CommentForUserResponse[] = [];
+  public editMode: boolean = false;
   private unsubscribe$ = new Subject<void>();
 
   constructor(
@@ -38,8 +34,6 @@ export class UserPageComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.initForm();
     this.getUser();
-    this.getPaidOrder();
-    this.getUserComments();
   }
 
   public ngOnDestroy(): void {
@@ -84,31 +78,6 @@ export class UserPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  private getPaidOrder(): void {
-    this.userService
-      .getPaidOrders()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((paidOrders) => (this.paidOrders = paidOrders));
-  }
-
-  private getUserComments(): void {
-    this.userService
-      .getUserComments()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: (val) => {
-          this.comments = val;
-        },
-      });
-  }
-
-  public getOrderTotal(order: UserPaidOrder): number {
-    return order.paidOrderItems.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
-    );
-  }
-
   public updateUser(): void {
     if (this.userForm.invalid) {
       this.userForm.markAllAsTouched();
@@ -123,6 +92,7 @@ export class UserPageComponent implements OnInit, OnDestroy {
         this.userForm.patchValue(this.user);
         this.userService.userEMail = user.email;
         localStorage.setItem(this.userService.userEMailKey, user.email);
+        this.editMode = false;
       });
   }
 
@@ -131,11 +101,37 @@ export class UserPageComponent implements OnInit, OnDestroy {
     this.router.navigate(['']);
   }
 
-  public goToProduct(productId: string): void {
-    const selection = window.getSelection();
-    if (selection && selection.toString().length > 0) {
-      return;
+  public toggleEditMode(): void {
+    this.editMode = !this.editMode;
+    if (this.editMode) {
+      this.userForm.patchValue(this.user);
     }
-    this.router.navigate(['/product', productId]);
+  }
+
+  public cancelEdit(): void {
+    this.editMode = false;
+    this.userForm.reset();
+    this.userForm.patchValue(this.user);
+  }
+
+  public formatAddress(): string {
+    if (!this.user) return '';
+
+    const parts = [
+      this.user.city,
+      this.user.street,
+      this.user.houseNumber,
+      this.user.flat ? `кв. ${this.user.flat}` : '',
+    ].filter((part) => !!part);
+
+    return parts.join(', ');
+  }
+
+  public formatPhoneNumber(phone: string): string {
+    if (!phone) return '';
+    return phone.replace(
+      /(\+375)(\d{2})(\d{3})(\d{2})(\d{2})/,
+      '$1 ($2) $3-$4-$5'
+    );
   }
 }

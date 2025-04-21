@@ -40,7 +40,7 @@ namespace InstrumentStore.Domain.Services
                 .ToListAsync();
         }
 
-        public async Task<List<PaidOrderItem>> GetAllOrders(Guid userId)
+        public async Task<List<PaidOrderItem>> GetUserOrders(Guid userId)
         {
             return await _dbContext.PaidOrderItem
                 .Include(i => i.Product)

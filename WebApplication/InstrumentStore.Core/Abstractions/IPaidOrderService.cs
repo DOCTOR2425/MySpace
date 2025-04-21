@@ -14,6 +14,7 @@ namespace InstrumentStore.Domain.Abstractions
         Task<Guid> CancelOrder(Guid orderId);
         Task<DeliveryAddress?> GetDeliveryAddressByOrderId(Guid orderId);
         Task<List<PaidOrder>> GetAll(int page);
+        Task<DeliveryAddress?> GetLastAddressByUser(Guid userId);
 
     }
 }

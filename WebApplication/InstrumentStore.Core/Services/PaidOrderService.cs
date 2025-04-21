@@ -49,6 +49,7 @@ namespace InstrumentStore.Domain.Services
         public async Task<List<PaidOrderItem>> GetAllItemsByOrder(Guid paidOrderId)
         {
             return await _dbContext.PaidOrderItem
+                .AsQueryable()
                 .Include(i => i.PaidOrder)
                 .Include(i => i.Product)
                 .Include(i => i.Product.ProductCategory)
@@ -136,6 +137,23 @@ namespace InstrumentStore.Domain.Services
                 .Include(o => o.User)
                 .Include(o => o.DeliveryMethod)
                 .ToListAsync();
+        }
+
+        public async Task<DeliveryAddress?> GetLastAddressByUser(Guid userId)
+        {
+            List<PaidOrder> paidOrders = await GetAllByUserId(userId);
+
+            DeliveryAddress? address = null;
+            foreach (var order in paidOrders)
+            {
+                address = _dbContext.DeliveryAddress
+                    .Include(a => a.City)
+                    .FirstOrDefault(a => a.PaidOrder == order);
+                if (address != null)
+                    break;
+            }
+
+            return address;
         }
     }
 }

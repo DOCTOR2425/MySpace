@@ -20,11 +20,6 @@ namespace InstrumentStore.Domain.DataBase
                 .WithMany()
                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<ProductProperty>()
-                .HasOne(c => c.ProductCategory)
-                .WithMany()
-                .OnDelete(DeleteBehavior.NoAction);
-
             modelBuilder.Entity<ProductCard>()
                 .HasKey(c => c.ProductId);
         }

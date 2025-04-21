@@ -74,6 +74,12 @@ export class CartPageComponent implements OnInit, OnDestroy {
           this.userOrderInfo = val.userOrderInfo;
           this.orderForm.patchValue(this.userOrderInfo);
           this.orderForm.patchValue(this.userOrderInfo.userDeliveryAddress);
+          this.orderForm
+            .get('deliveryMethodId')!
+            .setValue(this.orderOptions.deliveryMethods[0].deliveryMethodId);
+          this.orderForm
+            .get('paymentMethod')!
+            .setValue(this.orderOptions.paymentMethods[0]);
         },
         error: (error) => {
           if (error.status == 401) {

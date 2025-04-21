@@ -139,19 +139,20 @@ namespace InstrumentStore.Domain.Service
         {
             FileStream stream;
             string filePath = "";
-            foreach (var image in images)
+            for (int i = 0; i < images.Count; i++)
             {
                 await _imageService.Create(new Image()
                 {
                     ImageId = Guid.NewGuid(),
                     Product = product,
-                    Name = image.FileName
+                    Index = i,
+                    Name = images[i].FileName
                 });
 
-                filePath = Path.Combine("wwwroot/images", image.FileName);
+                filePath = Path.Combine("wwwroot/images", images[i].FileName);
                 using (stream = new FileStream(filePath, FileMode.Create))
                 {
-                    await image.CopyToAsync(stream);
+                    await images[i].CopyToAsync(stream);
                 };
             }
         }
@@ -284,6 +285,7 @@ namespace InstrumentStore.Domain.Service
         private async Task GetComparisonItemPoints(Guid userId, Dictionary<ProductCategory, int> categoryPoints)
         {
             foreach (var item in await _dbContext.ProductComparisonItem
+                .Include(i => i.Product.ProductCategory)
                 .Where(i => i.User.UserId == userId)
                 .ToListAsync())
             {

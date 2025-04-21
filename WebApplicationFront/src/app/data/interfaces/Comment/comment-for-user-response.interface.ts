@@ -3,4 +3,5 @@ export interface CommentForUserResponse {
   creationDate: Date;
   productId: string;
   productName: string;
+  image: string;
 }

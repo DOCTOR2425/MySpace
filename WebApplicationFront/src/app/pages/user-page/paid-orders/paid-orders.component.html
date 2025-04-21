@@ -1,0 +1,50 @@
+<div class="orders">
+  <div class="sticky-header">
+    <h3>История покупок</h3>
+    <div class="filter-options">
+      <label for="filter">Фильтрация:</label>
+      <select id="filter" (change)="filterOrders($event)">
+        <option value="all">Все</option>
+        <option value="delivered">Доставлен</option>
+        <option value="in_delivery">В доставке</option>
+        <option value="cancelled">Отменён</option>
+      </select>
+    </div>
+  </div>
+  <cdk-virtual-scroll-viewport
+    itemSize="200"
+    class="orders-viewport"
+    [style.height]="viewportHeight"
+  >
+    <div *cdkVirtualFor="let order of filteredOrders" class="order-card">
+      <div class="order-header">
+        <h4>Заказ от {{ order.orderDate | date : "dd.MM.yyyy" }}</h4>
+        <div class="order-details">
+          <span class="order-total">{{ getOrderTotal(order) }} руб.</span>
+          <span class="order-status"
+            >{{ getStatusText(order) }}
+            <span *ngIf="isOrderCompleted(order)">
+              {{ order.receiptDate | date : "dd.MM.yyyy" }}</span
+            ></span
+          >
+        </div>
+      </div>
+      <div>
+        <div
+          (click)="goToProduct(item.productData.productId)"
+          class="order-item"
+          *ngFor="let item of order.paidOrderItems"
+        >
+          <img
+            [src]="item.productData.image"
+            alt="{{ item.productData.name }}"
+          />
+          <div>
+            <p class="item-name">{{ item.productData.name }}</p>
+            <p class="item-meta">{{ item.quantity }} × {{ item.price }} руб.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </cdk-virtual-scroll-viewport>
+</div>

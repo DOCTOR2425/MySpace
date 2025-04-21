@@ -6,8 +6,8 @@ import { environment } from '../../environments/environment.development';
 import { FilterRequest } from '../data/interfaces/filters/filter-request.interface';
 import { CategoryFilters } from '../data/interfaces/filters/category-filters.intervace';
 import { FullProductInfoResponse } from '../data/interfaces/product/product-to-update-response.interface';
-import { CreateCommentRequest } from '../data/interfaces/Comment/create-comment-request.interface';
-import { CommentResponse } from '../data/interfaces/Comment/comment-response.interface';
+import { CreateCommentRequest } from '../data/interfaces/comment/create-comment-request.interface';
+import { CommentResponse } from '../data/interfaces/comment/comment-response.interface';
 
 @Injectable({
   providedIn: 'root',
