@@ -20,7 +20,7 @@ BEGIN
 			p.IsArchive,
             (SELECT TOP 1 i.Name 
              FROM Image AS i 
-             WHERE i.ProductId = p.ProductId) AS Image,
+             WHERE i.ProductId = p.ProductId AND i.[Index] = 0) AS Image,
             ROW_NUMBER() OVER (ORDER BY p.Name) AS RowNum
         FROM Product AS p
         INNER JOIN ProductCategory AS p0 ON p.ProductCategoryId = p0.ProductCategoryId

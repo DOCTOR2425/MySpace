@@ -136,7 +136,7 @@ namespace InstrumentStore.Domain.Services
             if (targetUser != null)
                 return targetUser.UserId;
 
-            string userPassword = GenerateUserPassword();
+            string userPassword = GenerateLoginCode();
             UserRegistrInfo userRegistrInfo = new UserRegistrInfo
             {
                 UserRegistrInfoId = Guid.NewGuid(),
@@ -164,9 +164,9 @@ namespace InstrumentStore.Domain.Services
             return user.UserId;
         }
 
-        private string GenerateUserPassword()
+        private string GenerateLoginCode()
         {
-            int passwordLenth = 4;//TODO пароль 12
+            int passwordLenth = 8;
             var random = new Random();
             var result = string.Join("",
                 Enumerable.Range(0, passwordLenth)
