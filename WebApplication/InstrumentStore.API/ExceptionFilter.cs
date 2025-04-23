@@ -10,26 +10,53 @@ namespace InstrumentStore.API
         {
             Console.WriteLine($"\nError in {context.ActionDescriptor.DisplayName}:\n{context.Exception.Message}");
 
-            var statusCode = context.Exception switch
-            {
-                NotImplementedException => 501,
-                ArgumentNullException => 400,
-                UnauthorizedAccessException => 401,
-                InvalidOperationException => 409,
-                TimeoutException => 408,
-                KeyNotFoundException => 404,
-                FormatException => 400,
-                DivideByZeroException => 422,
-                StackOverflowException => 500,
-                OutOfMemoryException => 507,
-                AuthenticationException => 403,
-                _ => 500
-            };
+            int statusCode = 500;
+            string errorMessage = context.Exception.Message;
 
+            switch (context.Exception)
+            {
+                case NotImplementedException:
+                    statusCode = 501;
+                    break;
+                case ArgumentNullException argNullException:
+                    statusCode = 400;
+                    errorMessage = argNullException.ParamName;
+                    break;
+                case UnauthorizedAccessException:
+                    statusCode = 401;
+                    break;
+                case InvalidOperationException:
+                    statusCode = 409;
+                    break;
+                case TimeoutException:
+                    statusCode = 408;
+                    break;
+                case KeyNotFoundException:
+                    statusCode = 404;
+                    break;
+                case FormatException:
+                    statusCode = 400;
+                    break;
+                case DivideByZeroException:
+                    statusCode = 422;
+                    break;
+                case StackOverflowException:
+                    statusCode = 500;
+                    break;
+                case OutOfMemoryException:
+                    statusCode = 507;
+                    break;
+                case AuthenticationException:
+                    statusCode = 403;
+                    break;
+                default:
+                    statusCode = 500;
+                    break;
+            }
 
             context.Result = new ObjectResult(new
             {
-                Error = context.Exception.Message,
+                Error = errorMessage,
                 Timestamp = DateTime.UtcNow,
                 StatusCode = statusCode
             })

@@ -18,6 +18,7 @@ import { AddToCartRequest } from '../../data/interfaces/cart/add-to-cart-request
 import { CartItemComponent } from './cart-item/cart-item.component';
 import { UserDeliveryAddress } from '../../data/interfaces/user/user-delivery-address.interface';
 import { Router } from '@angular/router';
+import { ToastService } from '../../service/toast/toast.service';
 
 @Component({
   selector: 'app-cart-page',
@@ -38,7 +39,8 @@ export class CartPageComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private cartService: CartService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private toastService: ToastService
   ) {
     this.orderForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -136,6 +138,10 @@ export class CartPageComponent implements OnInit, OnDestroy {
       this.orderForm.markAllAsTouched();
       return;
     }
+    if (this.items.length == 0) {
+      this.toastService.showError('В корзине нет ни одного товара');
+      return;
+    }
 
     if (this.authService.isLoggedIn()) {
       const payload = {
@@ -152,7 +158,12 @@ export class CartPageComponent implements OnInit, OnDestroy {
       this.cartService
         .orderCartForRegistered(payload)
         .pipe(takeUntil(this.unsubscribe$))
-        .subscribe();
+        .subscribe({
+          next: (val) => {},
+          error: (error) => {
+            this.toastService.showError(error.error.error);
+          },
+        });
     } else {
       this.orderCartForUnregistered();
     }

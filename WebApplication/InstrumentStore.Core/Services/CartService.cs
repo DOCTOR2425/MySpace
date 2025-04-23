@@ -87,6 +87,9 @@ namespace InstrumentStore.Domain.Services
 
         public async Task<Guid> OrderCartForRegistered(Guid userId, OrderRequest orderCartRequest)
         {
+            if ((await GetUserCartItems(userId)).Any() == false)
+                throw new ArgumentNullException("В корзине нет ни одного товара");
+
             Guid paidOrderId = await _paidOrderService.Create(userId, orderCartRequest);
 
             await _adminService.SendAdminMailAboutOrder(paidOrderId);
