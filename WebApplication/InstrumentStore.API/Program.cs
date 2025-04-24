@@ -27,6 +27,7 @@ namespace InstrumentStore.API
 
             builder.Services.AddDbContext<InstrumentStoreDBContext>();
 
+            builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IAdminService, AdminService>();
             builder.Services.AddScoped<IBrandService, BrandService>();
             builder.Services.AddScoped<ICartService, CartService>();

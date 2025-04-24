@@ -2,6 +2,6 @@
 {
     public interface IEmailService
     {
-        void SendMail(string to, string text, string subject = "");
+        Task SendMail(string to, string text, string subject = "");
     }
 }
