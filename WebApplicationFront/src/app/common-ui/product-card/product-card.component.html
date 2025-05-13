@@ -16,10 +16,18 @@
     </div>
 
     <button
+      *ngIf="product.cartCount == 0"
       [class]="'add-to-cart-btn ' + product.productId"
       (click)="addToCart()"
     >
       В корзину
+    </button>
+    <button
+      *ngIf="product.cartCount != 0"
+      [class]="'already-in-cart-btn'"
+      [routerLink]="'/cart'"
+    >
+      В корзине {{ product.cartCount }}
     </button>
   </div>
 </div>

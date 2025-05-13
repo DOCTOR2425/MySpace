@@ -1,4 +1,4 @@
-export interface ProductCard {
+export interface AdminProductCard {
   productId: string;
   name: string;
   price: number;

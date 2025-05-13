@@ -4,9 +4,10 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../service/product.service';
 import { Subject, takeUntil } from 'rxjs';
-import { ProductCard } from '../../../data/interfaces/product/product-card.interface';
+import { UserProductCard } from '../../../data/interfaces/product/user-product-card.interface';
 import { BrandManageComponent } from './brand-manage/brand-manage.component';
 import { CountyManageComponent } from './country-manage/country-manage.component';
+import { AdminProductCard } from '../../../data/interfaces/product/admin-product-card.interface';
 
 @Component({
   standalone: true,
@@ -22,8 +23,8 @@ import { CountyManageComponent } from './country-manage/country-manage.component
   styleUrl: './catalog-manage.component.scss',
 })
 export class CatalogManageComponent implements OnInit, OnDestroy {
-  public products: ProductCard[] = [];
-  public filteredProducts: ProductCard[] = [];
+  public products: AdminProductCard[] = [];
+  public filteredProducts: AdminProductCard[] = [];
   public page = 1;
   public loading = false;
   public hasMoreData = true;

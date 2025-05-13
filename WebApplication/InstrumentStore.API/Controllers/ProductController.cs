@@ -40,45 +40,57 @@ namespace InstrumentStore.API.Controllers
 			_usersService = usersService;
 		}
 
-		[HttpGet("page{page}")]
-		public async Task<ActionResult<List<ProductCard>>> GetAllProductsCards([FromRoute] int page)
-		{
-			List<Product> products = await _productService.GetAll(page);
-			products = products.Where(p => p.IsArchive == false).ToList();
+		//[HttpGet("page{page}")]
+		//public async Task<ActionResult<List<UserProductCard>>> GetAllProductsCards([FromRoute] int page)
+		//{
+		//	List<Product> products = await _productService.GetAll(page);
+		//	products = products.Where(p => p.IsArchive == false).ToList();
 
-			return Ok(_mapper.Map<List<ProductCard>>(products, opt => opt.Items["DbContext"] = _dbContext));
+		//	return Ok(await _productService.GetUserProductCards(products));
+		//}
+
+		private async Task<Guid?> GetUserIdFromToken()
+		{
+			string? token = HttpContext.Request.Headers["Authorization"];
+
+			if (token == null)
+				return null;
+
+			return (await _usersService.GetUserFromToken(HttpContext.Request.Headers["Authorization"]
+					.ToString().Substring("Bearer ".Length).Trim())).UserId;
 		}
 
 		[Authorize]
 		[HttpGet("get-special-products-for-user")]
-		public async Task<ActionResult<List<ProductCard>>> GetSpecialProductsForUser()
+		public async Task<ActionResult<List<UserProductCard>>> GetSpecialProductsForUser()
 		{
-			List<Product> products = await _productService.GetSpecialProductsForUser(
-				(await _usersService.GetUserFromToken(HttpContext.Request.Headers["Authorization"]
-					.ToString().Substring("Bearer ".Length).Trim())).UserId);
+			Guid userId = (Guid)await GetUserIdFromToken();
 
-			return Ok(_mapper.Map<List<ProductCard>>(products, opt => opt.Items["DbContext"] = _dbContext));
+			List<Product> products = await _productService.GetSpecialProductsForUser(userId);
+			return Ok(await _productService.GetUserProductCards(products, userId));
+
 		}
 
-		[HttpGet("category/{categoryId:guid}/page{page}")]// функция получения товаров с фильтрацией
+		[HttpGet("category/{categoryId:guid}/page{page}")]
 		public async Task<IActionResult> GetAllProductsByCategoryWithFilters(
 			[FromRoute] Guid categoryId,
 			[FromRoute] int page,
 			[FromQuery] string? filters)
-		{// получени товаров выбранной котегории
+		{
 			List<Product> products = await _productService.GetAllByCategory(categoryId);
 			products = products.Where(p => p.IsArchive == false).ToList();
 
 			if (!string.IsNullOrEmpty(filters))
-			{// фильтрация если она выбранна
+			{
 				FilterRequest filterRequest = JsonConvert.DeserializeObject<FilterRequest>(filters);
 				products = await _productService.GetAllWithFilters(categoryId, filterRequest, products);
 			}
 
-			List<ProductCard> cards = _mapper.Map<List<ProductCard>>(products
-					.Skip((page - 1) * IProductService.PageSize)
-					.Take(IProductService.PageSize),
-				opt => opt.Items["DbContext"] = _dbContext);
+			List<UserProductCard> cards = await _productService.GetUserProductCards(products
+						.Skip((page - 1) * IProductService.PageSize)
+						.Take(IProductService.PageSize)
+						.ToList(),
+					await GetUserIdFromToken());
 
 			return Ok(new
 			{
@@ -93,12 +105,14 @@ namespace InstrumentStore.API.Controllers
 			return Ok(await _productPropertyService.GetCategoryFilters(categoryId));
 		}
 
-		[HttpGet("search/page{page}")]// функция поиска товаров по имени
-		public async Task<ActionResult<List<ProductCard>>> SearchByName(
+		[HttpGet("search/page{page}")]
+		public async Task<ActionResult<List<UserProductCard>>> SearchByName(
 			[FromRoute] int page,
 			[FromQuery] string? name)
 		{
-			List<ProductCard> productsCards = await _productService.SearchByName(name, page);
+			List<UserProductCard> productsCards = _mapper.Map<List<UserProductCard>>(
+				await _productService.SearchByName(name, page));
+
 			productsCards = productsCards.Where(p => p.IsArchive == false).ToList();
 			foreach (var p in productsCards)
 				p.Image = "https://localhost:7295/images/" + p.Image;
@@ -107,12 +121,12 @@ namespace InstrumentStore.API.Controllers
 		}
 
 		[Authorize(Roles = "admin")]
-		[HttpGet("search-with-archive/page{page}")]// функция поиска товаров по имени включая архивные товары
-		public async Task<ActionResult<List<ProductCard>>> SearchByNameWithArchive(
+		[HttpGet("search-with-archive/page{page}")]
+		public async Task<ActionResult<List<AdminProductCard>>> SearchByNameWithArchive(
 			[FromRoute] int page,
 			[FromQuery] string name = "")
 		{
-			List<ProductCard> products = await _productService.SearchByName(name, page);
+			List<AdminProductCard> products = await _productService.SearchByName(name, page);
 
 			for (int i = 0; i < products.Count; i++)
 				products[i].Image = "https://localhost:7295/images/" + products[i].Image;
@@ -179,9 +193,9 @@ namespace InstrumentStore.API.Controllers
 		}
 
 		[HttpGet("get-products-for-admin{page}")]
-		public async Task<ActionResult<List<ProductCard>>> GetProductsForAdmin([FromRoute] int page)
+		public async Task<ActionResult<List<AdminProductCard>>> GetProductsForAdmin([FromRoute] int page)
 		{
-			return Ok(_mapper.Map<List<ProductCard>>(
+			return Ok(_mapper.Map<List<AdminProductCard>>(
 				await _productService.GetAll(page), opt => opt.Items["DbContext"] = _dbContext));
 		}
 
@@ -204,19 +218,21 @@ namespace InstrumentStore.API.Controllers
 		}
 
 		[HttpGet("get-simmular-to-product/{productId:guid}")]
-		public async Task<ActionResult<List<ProductCard>>> GetSimmularToProduct(
+		public async Task<ActionResult<List<UserProductCard>>> GetSimmularToProduct(
 			[FromRoute] Guid productId)
 		{
-			return Ok(_mapper.Map<List<ProductCard>>(await _productService.GetSimmularToProduct(productId),
-				opt => opt.Items["DbContext"] = _dbContext).Take(10));
+			return Ok((await _productService.GetUserProductCards(
+					await _productService.GetSimmularToProduct(productId),
+					await GetUserIdFromToken()))
+				.Take(10));
 		}
 
 		[HttpGet("get-most-popular-products/page{page}")]
 		public async Task<IActionResult> GetMostPopularProducts([FromRoute] int page)
 		{
-			return Ok(_mapper.Map<List<ProductCard>>(
+			return Ok(await _productService.GetUserProductCards(
 				await _productService.GetProductsByPopularity(page),
-				opt => opt.Items["DbContext"] = _dbContext));
+				await GetUserIdFromToken()));
 		}
 
 		[HttpGet("get-product-minimal-data/{productId:guid}")]

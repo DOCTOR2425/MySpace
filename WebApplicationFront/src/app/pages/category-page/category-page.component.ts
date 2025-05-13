@@ -10,25 +10,27 @@ import { ProductService } from '../../service/product.service';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { ProductCardComponent } from '../../common-ui/product-card/product-card.component';
+import { UserProductCardComponent } from '../../common-ui/product-card/product-card.component';
 import { FilterRequest } from '../../data/interfaces/filters/filter-request.interface';
 import { FormsModule } from '@angular/forms';
 import { RangeFilter } from '../../data/interfaces/filters/range-filter.interface';
 import { CollectionFilter } from '../../data/interfaces/filters/collection-filter.interface';
 import { CategoryFilters } from '../../data/interfaces/filters/category-filters.intervace';
 import { RangePropertyForFilter } from '../../data/interfaces/filters/range-property-for-filter.intervace';
-import { ProductCard } from '../../data/interfaces/product/product-card.interface';
+import { UserProductCard } from '../../data/interfaces/product/user-product-card.interface';
+import { CartService } from '../../service/cart/cart.service';
+import { AuthService } from '../../service/auth/auth.service';
 
 @Component({
   selector: 'app-category-page',
   standalone: true,
-  imports: [ProductCardComponent, CommonModule, FormsModule],
+  imports: [UserProductCardComponent, CommonModule, FormsModule],
   templateUrl: './category-page.component.html',
   styleUrls: ['./category-page.component.scss'],
 })
 export class CategoryPageComponent implements OnInit, OnDestroy {
   public categoryId: string = '';
-  public products: ProductCard[] = [];
+  public products: UserProductCard[] = [];
   public categoryFilters!: CategoryFilters;
   public showAllStates: boolean[] = [];
 
@@ -46,7 +48,9 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private productService: ProductService
+    private productService: ProductService,
+    private authService: AuthService,
+    private cartService: CartService
   ) {}
 
   public ngOnInit(): void {
@@ -54,7 +58,7 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((params) => {
         this.categoryId = params.get('id') || '';
-        this.currentPage = 1; // Сброс страницы при смене категории
+        this.currentPage = 1;
         this.loadData();
       });
   }
@@ -72,12 +76,32 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
       .subscribe({
         next: ({ productsCardsByCategory, categoryFilters }) => {
           this.products = productsCardsByCategory.items;
+          if (!this.authService.isLoggedIn())
+            this.getProductsStatsForUnregister();
+
           this.totalItems = productsCardsByCategory.totalCount;
           this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
           this.updatePageNumbers();
           this.initializeFilters(categoryFilters);
         },
         error: (err) => console.error('Error loading data:', err),
+      });
+  }
+
+  private getProductsStatsForUnregister() {
+    this.cartService
+      .getCartItems()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (cartItems) => {
+          this.products = this.products.map((product) => {
+            let cartItem = cartItems.find(
+              (i) => i.productId == product.productId
+            );
+            product.cartCount = cartItem ? cartItem.quantity : 0;
+            return product;
+          });
+        },
       });
   }
 

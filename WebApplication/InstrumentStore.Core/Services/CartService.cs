@@ -141,19 +141,31 @@ namespace InstrumentStore.Domain.Services
 
 		private async Task<Guid> ChangeItemQuantity(Guid cartItemId, int quantity)
 		{
-			(await _dbContext.CartItem.FindAsync(cartItemId)).Quantity = quantity;
+			if (quantity == 0)
+			{
+				await _dbContext.CartItem
+					.Where(i => i.CartItemId == cartItemId)
+					.ExecuteDeleteAsync();
 
-			await _dbContext.SaveChangesAsync();
+				return cartItemId;
+			}
+
+			await _dbContext.CartItem
+				.Where(i => i.CartItemId == cartItemId)
+				.ExecuteUpdateAsync(i => i.SetProperty(i => i.Quantity, quantity));
 
 			return cartItemId;
 		}
 
 		public async Task<int> GetProductQuantityInUserCart(Guid productId, Guid userId)
 		{
-			return await _dbContext.CartItem
-				.Where(i => i.User.UserId == userId &&
-					i.Product.ProductId == productId)
-				.CountAsync();
+			CartItem? target = await _dbContext.CartItem
+				.FirstOrDefaultAsync(i => i.User.UserId == userId &&
+					i.Product.ProductId == productId);
+
+			if (target == null)
+				return 0;
+			return target.Quantity;
 		}
 
 		public async Task<CartItemResponse> GetCartItemResponse(CartItem cartItem)

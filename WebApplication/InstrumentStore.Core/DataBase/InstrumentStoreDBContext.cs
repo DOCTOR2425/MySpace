@@ -11,7 +11,7 @@ namespace InstrumentStore.Domain.DataBase
 			optionsBuilder.UseSqlServer(@$"Server=DESKTOP-0MK8KC9;Database=MySpaceDB;
 				Trusted_Connection=True;Encrypt=False;TrustServerCertificate=True;");
 			//.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
-		}//WSA-195-74-BY
+		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -20,7 +20,7 @@ namespace InstrumentStore.Domain.DataBase
 				.WithMany()
 				.OnDelete(DeleteBehavior.NoAction);
 
-			modelBuilder.Entity<ProductCard>()
+			modelBuilder.Entity<AdminProductCard>()
 				.HasKey(c => c.ProductId);
 		}
 

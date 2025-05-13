@@ -5,9 +5,9 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment.development';
 import { UpdateUserRequest } from '../../data/interfaces/user/update-user.interface';
 import { UserPaidOrder } from '../../data/interfaces/paid-order/user-paid-order.interface';
-import { CommentForUserResponse } from '../../data/interfaces/comment/comment-for-user-response.interface';
-import { ProductCard } from '../../data/interfaces/product/product-card.interface';
+import { UserProductCard } from '../../data/interfaces/product/user-product-card.interface';
 import { UserProductStats } from '../../data/interfaces/product/user-product-stats.interface';
+import { CommentForUserResponse } from '../../data/interfaces/comment/comment-for-user-response.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -41,8 +41,8 @@ export class UserService {
     );
   }
 
-  public getOrderedProductsPendingReviews(): Observable<ProductCard[]> {
-    return this.http.get<ProductCard[]>(
+  public getOrderedProductsPendingReviews(): Observable<UserProductCard[]> {
+    return this.http.get<UserProductCard[]>(
       `${this.baseApiUrl}get-ordered-products-pending-reviews`,
       { withCredentials: true }
     );

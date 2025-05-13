@@ -15,8 +15,8 @@ import { CommentResponse } from '../../data/interfaces/comment/comment-response.
 import { ComparisonService } from '../../service/comparison/comparison.service';
 import { ToastService } from '../../service/toast/toast.service';
 import { FullProductInfoResponse } from '../../data/interfaces/product/product-to-update-response.interface';
-import { ProductCard } from '../../data/interfaces/product/product-card.interface';
-import { ProductCardComponent } from '../../common-ui/product-card/product-card.component';
+import { UserProductCard } from '../../data/interfaces/product/user-product-card.interface';
+import { UserProductCardComponent } from '../../common-ui/product-card/product-card.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { AuthService } from '../../service/auth/auth.service';
 import { UserService } from '../../service/user/user.service';
@@ -27,7 +27,7 @@ import { UserProductStats } from '../../data/interfaces/product/user-product-sta
   imports: [
     CommonModule,
     FormsModule,
-    ProductCardComponent,
+    UserProductCardComponent,
     ScrollingModule,
     RouterLink,
   ],
@@ -40,7 +40,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   public selectedImage: string | null = null;
   public newComment: string = '';
   public comments: CommentResponse[] = [];
-  public simmularProducts: ProductCard[] = [];
+  public simmularProducts: UserProductCard[] = [];
   public userProductStats!: UserProductStats;
 
   public viewportHeight: number = 300;
@@ -62,6 +62,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.loadPage();
     this.router.events
+      .pipe(takeUntil(this.unsubscribe$))
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
       .subscribe(() => {
         this.id = this.route.snapshot.paramMap.get('id')!;
@@ -98,8 +99,26 @@ export class ProductComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((data) => {
         this.simmularProducts = data;
+        this.cartService
+          .getCartItems()
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe({
+            next: (cartItems) => {
+              this.simmularProducts = this.simmularProducts.map((product) => {
+                let cartItem = cartItems.find(
+                  (i) => i.productId == product.productId
+                );
+                product.cartCount = cartItem ? cartItem.quantity : 0;
+                return product;
+              });
+            },
+          });
       });
 
+    this.getUserProductStats();
+  }
+
+  private getUserProductStats() {
     if (this.authService.isLoggedIn()) {
       this.userService
         .getUserProductStats(this.id)
@@ -110,6 +129,32 @@ export class ProductComponent implements OnInit, OnDestroy {
           },
         });
     } else {
+      this.userProductStats = {
+        cartCount: 0,
+        isInComparison: false,
+      };
+
+      this.cartService
+        .getCartItems()
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe({
+          next: (cartItems) => {
+            let item = cartItems.filter((item) => item.productId == this.id)[0];
+            this.userProductStats.cartCount = item ? item.quantity : 0;
+          },
+        });
+
+      this.comparisonService
+        .getUserComparison()
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe({
+          next: (products) => {
+            let product = products.filter(
+              (product) => product.productResponseData.productId == this.id
+            )[0];
+            this.userProductStats.isInComparison = product != null;
+          },
+        });
     }
   }
 
@@ -132,20 +177,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
   public addToCart(): void {
-    const addToCartRequest = {
-      productId: this.id,
-      quantity: 1,
-    };
-    this.cartService
-      .addToUserCart(addToCartRequest)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(() => {
-        const button = document.getElementById(
-          'addToCart'
-        ) as HTMLButtonElement;
-        button.disabled = true;
-        button.textContent = 'Добавлено в корзину';
-      });
+    this.userProductStats.cartCount = 1;
+    this.changeUserCart(this.userProductStats.cartCount);
   }
 
   public addComment(): void {
@@ -195,8 +228,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
   public increaseQuantity(): void {
-    // this.cartService.
     this.userProductStats.cartCount++;
+    this.changeUserCart(this.userProductStats.cartCount);
   }
 
   public decreaseQuantity(): void {
@@ -205,5 +238,16 @@ export class ProductComponent implements OnInit, OnDestroy {
     } else {
       this.userProductStats.cartCount = 0;
     }
+    this.changeUserCart(this.userProductStats.cartCount);
+  }
+
+  private changeUserCart(cartCount: number): void {
+    this.cartService
+      .addToUserCart({
+        productId: this.id,
+        quantity: cartCount,
+      })
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({ next: (val) => {} });
   }
 }

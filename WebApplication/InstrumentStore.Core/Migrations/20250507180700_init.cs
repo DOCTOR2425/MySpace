@@ -61,7 +61,7 @@ namespace InstrumentStore.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductCard",
+                name: "UserProductCard",
                 columns: table => new
                 {
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -486,7 +486,7 @@ namespace InstrumentStore.Domain.Migrations
                 name: "PaidOrderItem");
 
             migrationBuilder.DropTable(
-                name: "ProductCard");
+                name: "UserProductCard");
 
             migrationBuilder.DropTable(
                 name: "ProductComparisonItem");

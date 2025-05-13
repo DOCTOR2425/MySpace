@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../service/product.service';
-import { ProductCard } from '../../data/interfaces/product/product-card.interface';
+import { UserProductCard } from '../../data/interfaces/product/user-product-card.interface';
 import { switchMap } from 'rxjs';
-import { ProductCardComponent } from '../../common-ui/product-card/product-card.component';
+import { UserProductCardComponent } from '../../common-ui/product-card/product-card.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-search-page',
-  imports: [ProductCardComponent, CommonModule],
+  imports: [UserProductCardComponent, CommonModule],
   templateUrl: './search-page.component.html',
   styleUrl: './search-page.component.scss',
 })
 export class SearchPageComponent implements OnInit {
   public search: string = '';
-  public products: ProductCard[] = [];
+  public products: UserProductCard[] = [];
 
   constructor(
     private route: ActivatedRoute,

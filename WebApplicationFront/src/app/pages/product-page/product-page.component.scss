@@ -78,33 +78,65 @@
 
         .actions {
           display: flex;
-          gap: 15px;
+          gap: 12px;
           margin-top: 30px;
 
           button {
-            padding: 12px 24px;
-            border-radius: 4px;
+            padding: 10px 20px;
+            border-radius: 6px;
             font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
-            border: none;
-            transition: background 0.2s;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+          }
+        }
 
-            &.add-to-cart {
-              background: #007bff;
-              color: white;
+        .cart-btn {
+          background: #1976d2;
+          color: white;
 
-              &:hover {
-                background: #0069d9;
-              }
+          &:hover {
+            background: #1565c0;
+          }
+        }
+
+        .quantity-control {
+          display: flex;
+          align-items: center;
+          background: #f5f5f5;
+          border-radius: 6px;
+          overflow: hidden;
+
+          button {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            background: #e0e0e0;
+
+            &:hover {
+              background: #d0d0d0;
             }
+          }
+        }
 
-            &.add-to-compare {
-              background: #f5f5f5;
+        .quantity-count {
+          padding: 0 12px;
+          min-width: 20px;
+          text-align: center;
+        }
 
-              &:hover {
-                background: #e0e0e0;
-              }
-            }
+        .compare-btn {
+          background: #f5f5f5;
+          color: #333;
+
+          &:hover {
+            background: #e0e0e0;
+          }
+
+          &.active {
+            background: #e0e0e0;
+            border-color: #bdbdbd;
           }
         }
       }
@@ -202,6 +234,7 @@
           font-size: 14px;
         }
       }
+
       button {
         font-size: 14px;
         padding: 8px 16px;

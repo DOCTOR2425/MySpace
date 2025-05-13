@@ -17,7 +17,9 @@ namespace InstrumentStore.Domain.Mapper
 
 		public AppMappingProfile()
 		{
-			CreateMap<Product, ProductCard>()
+			CreateMap<Product, UserProductCard>();
+
+			CreateMap<Product, AdminProductCard>()
 				.ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country.Name))
 				.ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand.Name))
 				.ForMember(dest => dest.ProductCategory, opt => opt.MapFrom(src => src.ProductCategory.Name))
@@ -27,6 +29,8 @@ namespace InstrumentStore.Domain.Mapper
 					var image = dbContext.Image.FirstOrDefault(i => i.Product.ProductId == src.ProductId && i.Index == 0);
 					dest.Image = "https://localhost:7295/images/" + image?.Name;
 				});
+
+			CreateMap<AdminProductCard, UserProductCard>();
 
 			CreateMap<Product, ProductMinimalData>();
 
@@ -42,13 +46,10 @@ namespace InstrumentStore.Domain.Mapper
 				});
 
 			CreateMap<CartItem, CartItemResponse>()
+				.ForPath(dest => dest.ProductId, opt => opt.MapFrom(src => src.Product.ProductId))
 				.ForPath(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
 				.ForPath(dest => dest.ProductPrice, opt => opt.MapFrom(src => src.Product.Price))
 				.ForPath(dest => dest.IsProductArchive, opt => opt.MapFrom(src => src.Product.IsArchive));
-			//var dbContext = (InstrumentStoreDBContext)context.Items["DbContext"];
-			//var image = dbContext.Image.FirstOrDefault(i => i.Product.ProductId == src.Product.ProductId && i.Index == 0);
-			//dest.Product.Image = "https://localhost:7295/images/" + image?.Name;
-
 
 			CreateMap<User, UserOrderInfo>()
 				.AfterMap((src, dest, context) =>

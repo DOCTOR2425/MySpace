@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { UserService } from '../../../service/user/user.service';
-import { ProductCard } from '../../../data/interfaces/product/product-card.interface';
+import { UserProductCard } from '../../../data/interfaces/product/user-product-card.interface';
 import { ProductService } from '../../../service/product.service';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -14,9 +14,9 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './products-pending-reviews.component.scss',
 })
 export class ProductsPendingReviewsComponent implements OnInit, OnDestroy {
-  public products!: ProductCard[];
+  public products!: UserProductCard[];
   public isReviewPopupOpen = false;
-  public selectedProduct: ProductCard | null = null;
+  public selectedProduct: UserProductCard | null = null;
   public reviewText = '';
   private unsubscribe$ = new Subject<void>();
 
@@ -41,15 +41,23 @@ export class ProductsPendingReviewsComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  public openReviewPopup(product: ProductCard): void {
+  public openReviewPopup(product: UserProductCard): void {
     this.selectedProduct = product;
     this.isReviewPopupOpen = true;
+
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
   }
 
   public closeReviewPopup(): void {
     this.isReviewPopupOpen = false;
     this.reviewText = '';
     this.selectedProduct = null;
+
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
   }
 
   public submitReview() {

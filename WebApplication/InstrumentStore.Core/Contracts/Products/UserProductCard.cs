@@ -1,17 +1,14 @@
 ﻿namespace InstrumentStore.Domain.Contracts.Products
 {
-	public class ProductCard
+	public class UserProductCard
 	{
 		public Guid ProductId { get; set; }
 		public string Name { get; set; }
 		public decimal Price { get; set; }
-		public int Quantity { get; set; }
 		public string Image { get; set; }
-		public string ProductCategory { get; set; }
-		public string Brand { get; set; }
-		public string Country { get; set; }
 		public bool IsArchive { get; set; } = false;
+		public int CartCount { get; set; }
 
-		public ProductCard() { }
+		public UserProductCard() { }
 	}
 }

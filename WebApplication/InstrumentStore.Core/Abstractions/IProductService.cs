@@ -23,11 +23,13 @@ namespace InstrumentStore.Domain.Abstractions
 			Guid categoryId,
 			FilterRequest filter,
 			List<Product> productsForFilter);
-		Task<List<ProductCard>> SearchByName(string input, int page);
+		Task<List<AdminProductCard>> SearchByName(string input, int page);
 		Task<List<Product>> GetSimmularToProduct(Guid productId);
 		Task<List<Product>> GetSpecialProductsForUser(Guid userId);
 		Task<List<Product>> GetProductsByPopularity(int page);
 		Task<FullProductInfoResponse> GetFullProductInfoResponse(Guid id);
 		Task<ProductMinimalData> GetProductMinimalData(Guid productId);
+		Task<UserProductCard> GetUserProductCard(Guid productId, Guid? userId);
+		Task<List<UserProductCard>> GetUserProductCards(List<Product> products, Guid? userId);
 	}
 }

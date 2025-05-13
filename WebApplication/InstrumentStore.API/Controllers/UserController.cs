@@ -6,7 +6,6 @@ using InstrumentStore.Domain.Contracts.Products;
 using InstrumentStore.Domain.Contracts.User;
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
-using InstrumentStore.Domain.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +23,7 @@ namespace InstrumentStore.API.Controllers
 		private readonly IImageService _imageService;
 		private readonly ICartService _cartService;
 		private readonly IProductComparisonService _productComparisonService;
+		private readonly IProductService _productService;
 		private readonly IMapper _mapper;
 
 		public UserController(
@@ -34,7 +34,8 @@ namespace InstrumentStore.API.Controllers
 			ICommentService commentService,
 			IImageService imageService,
 			ICartService cartService,
-			IProductComparisonService productComparisonService)
+			IProductComparisonService productComparisonService,
+			IProductService productService)
 		{
 			_usersService = usersService;
 			_mapper = mapper;
@@ -44,6 +45,7 @@ namespace InstrumentStore.API.Controllers
 			_imageService = imageService;
 			_cartService = cartService;
 			_productComparisonService = productComparisonService;
+			_productService = productService;
 		}
 
 		private async Task<User> GetUserFromToken()
@@ -116,12 +118,12 @@ namespace InstrumentStore.API.Controllers
 		}
 
 		[HttpGet("get-ordered-products-pending-reviews")]
-		public async Task<ActionResult<List<ProductCard>>> GetOrderedProductsPendingReviews()
+		public async Task<ActionResult<List<UserProductCard>>> GetOrderedProductsPendingReviews()
 		{
-			return Ok(_mapper.Map<List<ProductCard>>(
-				await _usersService.GetOrderedProductsPendingReviewsByUser(
-					(await GetUserFromToken()).UserId),
-					opt => opt.Items["DbContext"] = _dbContext));
+			Guid userId = (await GetUserFromToken()).UserId;
+			return Ok(await _productService.GetUserProductCards(
+					await _usersService.GetOrderedProductsPendingReviewsByUser(userId),
+				userId));
 		}
 
 		[HttpGet("get-user-product-stats/{productId:guid}")]

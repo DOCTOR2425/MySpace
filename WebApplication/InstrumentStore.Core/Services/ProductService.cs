@@ -67,9 +67,12 @@ namespace InstrumentStore.Domain.Service
 				.ToListAsync();
 		}
 
-		public async Task<List<ProductCard>> SearchByName(string input, int page)
+		public async Task<List<AdminProductCard>> SearchByName(string? input, int page)
 		{
-			return await _dbContext.Set<ProductCard>()
+			if (input == null)
+				return new List<AdminProductCard>();
+
+			return await _dbContext.Set<AdminProductCard>()
 					.FromSqlRaw("EXEC SearchByName @p0, @p1", input, page).ToListAsync();
 		}
 
@@ -393,6 +396,49 @@ namespace InstrumentStore.Domain.Service
 				(await _imageService.GetMainProductImage(productId)).Name;
 
 			return response;
+		}
+
+		public async Task<UserProductCard> GetUserProductCard(Guid productId, Guid? userId)
+		{
+			Product product = await GetById(productId);
+
+			UserProductCard response = _mapper.Map<UserProductCard>(product);
+			response.Image = "https://localhost:7295/images/" +
+				(await _imageService.GetMainProductImage(productId)).Name;
+
+			response.CartCount = await GetProductQuantityInUserCart(productId, userId);
+
+			return response;
+		}
+
+		public async Task<List<UserProductCard>> GetUserProductCards(
+			List<Product> products,
+			Guid? userId)
+		{
+			List<UserProductCard> response = _mapper.Map<List<UserProductCard>>(products);
+			foreach (UserProductCard product in response)
+			{
+				product.Image = "https://localhost:7295/images/" +
+					(await _imageService.GetMainProductImage(product.ProductId)).Name;
+
+				product.CartCount = await GetProductQuantityInUserCart(product.ProductId, userId);
+			}
+
+			return response;
+		}
+
+		private async Task<int> GetProductQuantityInUserCart(Guid productId, Guid? userId)
+		{
+			if (userId == null)
+				return 0;
+
+			CartItem? target = await _dbContext.CartItem
+				.FirstOrDefaultAsync(i => i.User.UserId == userId &&
+					i.Product.ProductId == productId);
+
+			if (target == null)
+				return 0;
+			return target.Quantity;
 		}
 	}
 }

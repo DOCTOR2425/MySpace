@@ -28,18 +28,20 @@
             <button
               *ngIf="userProductStats.cartCount == 0"
               id="addToCart"
-              class="add-to-cart"
+              class="cart-btn"
               (click)="addToCart()"
             >
               В корзину
             </button>
 
             <div *ngIf="userProductStats.cartCount" class="quantity-control">
-              <button (click)="decreaseQuantity()" class="control-btn">
+              <button (click)="decreaseQuantity()" class="quantity-btn">
                 -
               </button>
-              <span class="quantity">{{ userProductStats.cartCount }}</span>
-              <button (click)="increaseQuantity()" class="control-btn">
+              <span class="quantity-count">{{
+                userProductStats.cartCount
+              }}</span>
+              <button (click)="increaseQuantity()" class="quantity-btn">
                 +
               </button>
             </div>
@@ -48,14 +50,14 @@
           <ng-container>
             <button
               *ngIf="!userProductStats.isInComparison"
-              class="add-to-compare"
+              class="compare-btn"
               (click)="addToComparison()"
             >
               К сравнению
             </button>
             <button
               *ngIf="userProductStats.isInComparison"
-              class="add-to-compare"
+              class="compare-btn active"
               (click)="deleteFromComparison()"
             >
               Удалить из сравнения

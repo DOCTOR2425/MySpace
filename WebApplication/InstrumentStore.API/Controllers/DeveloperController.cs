@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using InstrumentStore.Domain.Abstractions;
 using InstrumentStore.Domain.DataBase;
-using InstrumentStore.Domain.DataBase.ProcedureResultModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -152,19 +151,6 @@ namespace InstrumentStore.API.Controllers
 						 "AdminId:\t\t" + adminId.ToString() + "\n";
 
 			return adminInfo;
-		}
-
-		[HttpGet("TestDB")]
-		public ActionResult<ProductSearchResult> TestDB()
-		{
-			List<ProductSearchResult> list = _dbContext.Set<ProductSearchResult>()
-					.FromSqlRaw("EXEC SearchByName @p0", "АККУ").ToList();
-
-			//List<Product> products = new List<Product>(list.Count);
-
-			//var products = _mapper.Map<List<Product>>(list);
-
-			return Ok(list);
 		}
 	}
 }

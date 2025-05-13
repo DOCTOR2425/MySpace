@@ -14,7 +14,6 @@ import { OrderOptions } from '../../data/interfaces/order-options/order-options.
 import { UserOrderInfo } from '../../data/interfaces/user/user-order-info.interface';
 import { environment } from '../../../environments/environment.development';
 import { AuthService } from '../auth/auth.service';
-import { ProductService } from '../product.service';
 import { RegisterUserFromOrderRequest } from '../../data/interfaces/user/register-user-from-order-request.interface';
 import { AddToCartRequest } from '../../data/interfaces/cart/add-to-cart-request.interface';
 import { UserDeliveryAddress } from '../../data/interfaces/user/user-delivery-address.interface';

@@ -22,7 +22,7 @@ namespace InstrumentStore.Domain.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("InstrumentStore.Domain.Contracts.Products.ProductCard", b =>
+            modelBuilder.Entity("InstrumentStore.Domain.Contracts.Products.UserProductCard", b =>
                 {
                     b.Property<Guid>("ProductId")
                         .ValueGeneratedOnAdd()
@@ -59,7 +59,7 @@ namespace InstrumentStore.Domain.Migrations
 
                     b.HasKey("ProductId");
 
-                    b.ToTable("ProductCard");
+                    b.ToTable("UserProductCard");
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Brand", b =>

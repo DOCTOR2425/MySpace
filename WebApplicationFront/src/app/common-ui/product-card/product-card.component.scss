@@ -52,17 +52,32 @@
   flex-grow: 1;
 }
 
-.add-to-cart-btn {
+button {
   width: 100%;
   padding: 8px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s;
+  font-weight: 500;
+}
+
+.add-to-cart-btn {
+  background-color: #007bff;
+  border: none;
+  color: white;
 
   &:hover {
     background-color: #0069d9;
+  }
+}
+
+.already-in-cart-btn {
+  border: 2px solid #007bff;
+  background-color: white;
+  color: #007bff;
+
+  &:hover {
+    background-color: #007bff;
+    color: white;
   }
 }
