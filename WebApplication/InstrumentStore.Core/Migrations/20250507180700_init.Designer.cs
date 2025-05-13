@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InstrumentStore.Domain.Migrations
 {
     [DbContext(typeof(InstrumentStoreDBContext))]
-    [Migration("20250421194354_init")]
+    [Migration("20250507180700_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -447,10 +447,20 @@ namespace InstrumentStore.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Surname")
                         .IsRequired()
@@ -462,40 +472,9 @@ namespace InstrumentStore.Domain.Migrations
                         .HasMaxLength(21)
                         .HasColumnType("nvarchar(21)");
 
-                    b.Property<Guid>("UserRegistrInfoId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("UserId");
 
-                    b.HasIndex("UserRegistrInfoId");
-
                     b.ToTable("User");
-                });
-
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.UserRegistrInfo", b =>
-                {
-                    b.Property<Guid>("UserRegistrInfoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("RefreshToken")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.HasKey("UserRegistrInfoId");
-
-                    b.ToTable("UserRegistrInfo");
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.CartItem", b =>
@@ -678,17 +657,6 @@ namespace InstrumentStore.Domain.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("ProductProperty");
-                });
-
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.User", b =>
-                {
-                    b.HasOne("InstrumentStore.Domain.DataBase.Models.UserRegistrInfo", "UserRegistrInfo")
-                        .WithMany()
-                        .HasForeignKey("UserRegistrInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserRegistrInfo");
                 });
 #pragma warning restore 612, 618
         }

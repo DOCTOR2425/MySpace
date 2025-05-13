@@ -15,15 +15,11 @@ namespace InstrumentStore.Domain.Services
 			_dbContext = dbContext;
 		}
 
-		public async Task<City> GetById(Guid cityId)
-		{
-			return await _dbContext.City.FindAsync(cityId);
-		}
-
 		public async Task<List<Image>> GetByProductId(Guid productId)
 		{
 			return await _dbContext.Image
 				.Where(i => i.Product.ProductId == productId)
+				.OrderBy(i => i.Index)
 				.ToListAsync();
 		}
 
@@ -57,6 +53,13 @@ namespace InstrumentStore.Domain.Services
 			await _dbContext.Image
 				.Where(i => i.Product.ProductId == productId)
 				.ExecuteDeleteAsync();
+		}
+
+		public async Task<Image> GetMainProductImage(Guid productId)
+		{
+			return await _dbContext.Image
+				.FirstOrDefaultAsync(i => i.Product.ProductId == productId &&
+					i.Index == 0);
 		}
 	}
 }

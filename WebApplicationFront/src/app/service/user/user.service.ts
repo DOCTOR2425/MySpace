@@ -1,24 +1,22 @@
 import { Injectable } from '@angular/core';
 import { UserProfile } from '../../data/interfaces/user/user-profile';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment.development';
 import { UpdateUserRequest } from '../../data/interfaces/user/update-user.interface';
 import { UserPaidOrder } from '../../data/interfaces/paid-order/user-paid-order.interface';
 import { CommentForUserResponse } from '../../data/interfaces/comment/comment-for-user-response.interface';
 import { ProductCard } from '../../data/interfaces/product/product-card.interface';
+import { UserProductStats } from '../../data/interfaces/product/user-product-stats.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   private baseApiUrl = environment.apiUrl + '/api/User/';
-  public userEMail?: string;
   public userEMailKey: string = 'userEmail';
 
-  constructor(private http: HttpClient) {
-    this.userEMail = localStorage.getItem(this.userEMailKey)?.toString();
-  }
+  constructor(private http: HttpClient) {}
 
   public getUser(): Observable<UserProfile> {
     return this.http.get<UserProfile>(`${this.baseApiUrl}get-user`);
@@ -46,6 +44,13 @@ export class UserService {
   public getOrderedProductsPendingReviews(): Observable<ProductCard[]> {
     return this.http.get<ProductCard[]>(
       `${this.baseApiUrl}get-ordered-products-pending-reviews`,
+      { withCredentials: true }
+    );
+  }
+
+  public getUserProductStats(productId: string): Observable<UserProductStats> {
+    return this.http.get<UserProductStats>(
+      `${this.baseApiUrl}get-user-product-stats/${productId}`,
       { withCredentials: true }
     );
   }

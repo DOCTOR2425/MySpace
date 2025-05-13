@@ -18,6 +18,6 @@ export class CartItemComponent {
   }
 
   public removeItem() {
-    this.cartPage.removeCartItem(this.item);
+    this.cartPage.removeCartItem(this.item.productId);
   }
 }

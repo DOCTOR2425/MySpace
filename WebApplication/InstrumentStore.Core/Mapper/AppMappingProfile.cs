@@ -12,213 +12,183 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InstrumentStore.Domain.Mapper
 {
-    public class AppMappingProfile : Profile
-    {
+	public class AppMappingProfile : Profile
+	{
 
-        public AppMappingProfile()
-        {
-            CreateMap<Product, ProductCard>()
-                .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country.Name))
-                .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand.Name))
-                .ForMember(dest => dest.ProductCategory, opt => opt.MapFrom(src => src.ProductCategory.Name))
-                .AfterMap((src, dest, context) =>
-                {
-                    var dbContext = (InstrumentStoreDBContext)context.Items["DbContext"];
-                    var image = dbContext.Image.FirstOrDefault(i => i.Product.ProductId == src.ProductId && i.Index == 0);
-                    dest.Image = "https://localhost:7295/images/" + image?.Name;
-                });
+		public AppMappingProfile()
+		{
+			CreateMap<Product, ProductCard>()
+				.ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country.Name))
+				.ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand.Name))
+				.ForMember(dest => dest.ProductCategory, opt => opt.MapFrom(src => src.ProductCategory.Name))
+				.AfterMap((src, dest, context) =>
+				{
+					var dbContext = (InstrumentStoreDBContext)context.Items["DbContext"];
+					var image = dbContext.Image.FirstOrDefault(i => i.Product.ProductId == src.ProductId && i.Index == 0);
+					dest.Image = "https://localhost:7295/images/" + image?.Name;
+				});
 
-            CreateMap<Product, ProductData>()
-                .ForPath(dest => dest.Country, opt => opt.MapFrom(src => src.Country.Name))
-                .ForPath(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand.Name))
-                .ForPath(dest => dest.ProductCategory, opt => opt.MapFrom(src => src.ProductCategory.Name))
-                .AfterMap((src, dest, context) =>
-                {
-                    var dbContext = (InstrumentStoreDBContext)context.Items["DbContext"];
-                    var image = dbContext.Image.FirstOrDefault(i => i.Product.ProductId == src.ProductId && i.Index == 0);
-                    dest.Image = "https://localhost:7295/images/" + image?.Name;
-                });
+			CreateMap<Product, ProductMinimalData>();
 
-            CreateMap<CartItem, CartItemResponse>()
-                .ForPath(dest => dest.Product, opt => opt.MapFrom(src => src.Product))
-                .ForPath(dest => dest.Product.ProductCategory, opt => opt.MapFrom(src => src.Product.ProductCategory.Name))
-                .ForPath(dest => dest.Product.Brand, opt => opt.MapFrom(src => src.Product.Brand.Name))
-                .ForPath(dest => dest.Product.Country, opt => opt.MapFrom(src => src.Product.Country.Name))
-                .AfterMap((src, dest, context) =>
-                {
-                    var dbContext = (InstrumentStoreDBContext)context.Items["DbContext"];
-                    var image = dbContext.Image.FirstOrDefault(i => i.Product.ProductId == src.Product.ProductId && i.Index == 0);
-                    dest.Product.Image = "https://localhost:7295/images/" + image?.Name;
-                });
+			CreateMap<Product, ProductData>()
+				.ForPath(dest => dest.Country, opt => opt.MapFrom(src => src.Country.Name))
+				.ForPath(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand.Name))
+				.ForPath(dest => dest.ProductCategory, opt => opt.MapFrom(src => src.ProductCategory.Name))
+				.AfterMap((src, dest, context) =>
+				{
+					var dbContext = (InstrumentStoreDBContext)context.Items["DbContext"];
+					var image = dbContext.Image.FirstOrDefault(i => i.Product.ProductId == src.ProductId && i.Index == 0);
+					dest.Image = "https://localhost:7295/images/" + image?.Name;
+				});
+
+			CreateMap<CartItem, CartItemResponse>()
+				.ForPath(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
+				.ForPath(dest => dest.ProductPrice, opt => opt.MapFrom(src => src.Product.Price))
+				.ForPath(dest => dest.IsProductArchive, opt => opt.MapFrom(src => src.Product.IsArchive));
+			//var dbContext = (InstrumentStoreDBContext)context.Items["DbContext"];
+			//var image = dbContext.Image.FirstOrDefault(i => i.Product.ProductId == src.Product.ProductId && i.Index == 0);
+			//dest.Product.Image = "https://localhost:7295/images/" + image?.Name;
 
 
-            CreateMap<User, UserOrderInfo>()
-                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.UserRegistrInfo.Email))
-                .AfterMap((src, dest, context) =>
-                {
-                    var dbContext = (InstrumentStoreDBContext)context.Items["DbContext"];
+			CreateMap<User, UserOrderInfo>()
+				.AfterMap((src, dest, context) =>
+				{
+					var dbContext = (InstrumentStoreDBContext)context.Items["DbContext"];
 
-                    PaidOrder? paidOrder = dbContext.PaidOrder
-                        .Include(o => o.DeliveryMethod)
-                        .Where(o => o.User.UserId == src.UserId)
-                        .OrderBy(o => o.OrderDate)
-                        .LastOrDefault();
+					PaidOrder? paidOrder = dbContext.PaidOrder
+						.Include(o => o.DeliveryMethod)
+						.Where(o => o.User.UserId == src.UserId)
+						.OrderBy(o => o.OrderDate)
+						.LastOrDefault();
 
-                    if (paidOrder == null)
-                        return;
+					if (paidOrder == null)
+						return;
 
-                    DeliveryAddress? address = dbContext.DeliveryAddress
-                        .Include(a => a.City)
-                        .FirstOrDefault(a => a.PaidOrder.PaidOrderId == paidOrder.PaidOrderId);
+					DeliveryAddress? address = dbContext.DeliveryAddress
+						.FirstOrDefault(a => a.PaidOrder.PaidOrderId == paidOrder.PaidOrderId);
 
-                    if (address == null)
-                        return;
+					if (address == null)
+						return;
 
-                    dest.UserDeliveryAddress = new UserDeliveryAddress();
-                    dest.UserDeliveryAddress.City = address.City.Name;
-                    dest.UserDeliveryAddress.Street = address.Street;
-                    dest.UserDeliveryAddress.HouseNumber = address.HouseNumber;
-                    dest.UserDeliveryAddress.Entrance = address.Entrance;
-                    dest.UserDeliveryAddress.Flat = address.Flat;
-                });
+					dest.UserDeliveryAddress = new UserDeliveryAddress();
+					dest.UserDeliveryAddress.City = address.City;
+					dest.UserDeliveryAddress.Street = address.Street;
+					dest.UserDeliveryAddress.HouseNumber = address.HouseNumber;
+					dest.UserDeliveryAddress.Entrance = address.Entrance;
+					dest.UserDeliveryAddress.Flat = address.Flat;
+				});
 
-            CreateMap<User, UserProfileResponse>()
-                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.UserRegistrInfo.Email));
+			CreateMap<User, UserProfileResponse>();
 
-            CreateMap<PaidOrder, UserPaidOrderResponse>()
-                .AfterMap((src, dest, context) =>
-                {
-                    var dbContext = (InstrumentStoreDBContext)context.Items["DbContext"];
+			CreateMap<PaidOrder, UserPaidOrderResponse>()
+				.AfterMap((src, dest, context) =>
+				{
+					var dbContext = (InstrumentStoreDBContext)context.Items["DbContext"];
 
-                    dest.PaidOrderItems = new List<PaidOrderItemResponse>();
+					dest.PaidOrderItems = new List<PaidOrderItemResponse>();
 
-                    List<PaidOrderItem> paidOrderItems = dbContext.PaidOrderItem
-                        .Include(i => i.Product)
-                        .Include(i => i.Product.Brand)
-                        .Include(i => i.Product.Country)
-                        .Include(i => i.Product.ProductCategory)
-                        .Where(i => i.PaidOrder.PaidOrderId == src.PaidOrderId)
-                        .ToList();
+					List<PaidOrderItem> paidOrderItems = dbContext.PaidOrderItem
+						.Include(i => i.Product)
+						.Include(i => i.Product.Brand)
+						.Include(i => i.Product.Country)
+						.Include(i => i.Product.ProductCategory)
+						.Where(i => i.PaidOrder.PaidOrderId == src.PaidOrderId)
+						.ToList();
 
-                    foreach (var item in paidOrderItems)
-                    {
-                        dest.PaidOrderItems.Add(new PaidOrderItemResponse()
-                        {
-                            PaidOrderItemId = item.PaidOrderItemId,
-                            Price = item.Price,
-                            Quantity = item.Quantity,
+					foreach (var item in paidOrderItems)
+					{
+						dest.PaidOrderItems.Add(new PaidOrderItemResponse()
+						{
+							PaidOrderItemId = item.PaidOrderItemId,
+							Price = item.Price,
+							Quantity = item.Quantity,
 
-                            ProductData = new ProductData()
-                            {
-                                ProductId = item.Product.ProductId,
-                                Name = item.Product.Name,
-                                Description = item.Product.Description,
-                                Brand = item.Product.Brand.Name,
-                                Country = item.Product.Country.Name,
-                                Price = item.Product.Price,
-                                Quantity = item.Quantity,
-                                ProductCategory = item.Product.ProductCategory.Name,
+							ProductData = new ProductData()
+							{
+								ProductId = item.Product.ProductId,
+								Name = item.Product.Name,
+								Description = item.Product.Description,
+								Brand = item.Product.Brand.Name,
+								Country = item.Product.Country.Name,
+								Price = item.Product.Price,
+								Quantity = item.Quantity,
+								ProductCategory = item.Product.ProductCategory.Name,
 
-                                Image = "https://localhost:7295/images/" +
-                                dbContext.Image.FirstOrDefault(i =>
-                                i.Product.ProductId == item.Product.ProductId && i.Index == 0).Name
-                            }
-                        });
-                    }
-                });
+								Image = "https://localhost:7295/images/" +
+								dbContext.Image.FirstOrDefault(i =>
+								i.Product.ProductId == item.Product.ProductId && i.Index == 0).Name
+							}
+						});
+					}
+				});
 
-            CreateMap<PaidOrder, AdminPaidOrderResponse>()
-                .AfterMap((src, dest, context) =>
-                {
-                    var dbContext = (InstrumentStoreDBContext)context.Items["DbContext"];
+			CreateMap<PaidOrder, AdminPaidOrderResponse>()
+				.AfterMap((src, dest, context) =>
+				{
+					var dbContext = (InstrumentStoreDBContext)context.Items["DbContext"];
 
-                    dest.PaidOrderItems = new List<PaidOrderItemResponse>();
+					dest.PaidOrderItems = new List<PaidOrderItemResponse>();
 
-                    List<PaidOrderItem> paidOrderItems = dbContext.PaidOrderItem
-                        .Include(i => i.Product)
-                        .Include(i => i.Product.Brand)
-                        .Include(i => i.Product.Country)
-                        .Include(i => i.Product.ProductCategory)
-                        .Where(i => i.PaidOrder.PaidOrderId == src.PaidOrderId)
-                        .ToList();
+					List<PaidOrderItem> paidOrderItems = dbContext.PaidOrderItem
+						.Include(i => i.Product)
+						.Include(i => i.Product.Brand)
+						.Include(i => i.Product.Country)
+						.Include(i => i.Product.ProductCategory)
+						.Where(i => i.PaidOrder.PaidOrderId == src.PaidOrderId)
+						.ToList();
 
-                    foreach (var item in paidOrderItems)
-                    {
-                        dest.PaidOrderItems.Add(new PaidOrderItemResponse()
-                        {
-                            PaidOrderItemId = item.PaidOrderItemId,
-                            Price = item.Price,
-                            Quantity = item.Quantity,
+					foreach (var item in paidOrderItems)
+					{
+						dest.PaidOrderItems.Add(new PaidOrderItemResponse()
+						{
+							PaidOrderItemId = item.PaidOrderItemId,
+							Price = item.Price,
+							Quantity = item.Quantity,
 
-                            ProductData = new ProductData()
-                            {
-                                ProductId = item.Product.ProductId,
-                                Name = item.Product.Name,
-                                Description = item.Product.Description,
-                                Brand = item.Product.Brand.Name,
-                                Country = item.Product.Country.Name,
-                                Price = item.Product.Price,
-                                Quantity = item.Quantity,
-                                ProductCategory = item.Product.ProductCategory.Name,
+							ProductData = new ProductData()
+							{
+								ProductId = item.Product.ProductId,
+								Name = item.Product.Name,
+								Description = item.Product.Description,
+								Brand = item.Product.Brand.Name,
+								Country = item.Product.Country.Name,
+								Price = item.Product.Price,
+								Quantity = item.Quantity,
+								ProductCategory = item.Product.ProductCategory.Name,
 
-                                Image = "https://localhost:7295/images/" +
-                                dbContext.Image.FirstOrDefault(i =>
-                                i.Product.ProductId == item.Product.ProductId && i.Index == 0).Name
-                            }
-                        });
-                    }
+								Image = "https://localhost:7295/images/" +
+								dbContext.Image.FirstOrDefault(i =>
+								i.Product.ProductId == item.Product.ProductId && i.Index == 0).Name
+							}
+						});
+					}
 
-                    dest.UserOrderInfo = context.Mapper.Map<UserOrderInfo>(src.User);
-                });
+					dest.UserOrderInfo = context.Mapper.Map<UserOrderInfo>(src.User);
+				});
 
-            CreateMap<DeliveryAddress, UserDeliveryAddress>()
-                .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City.Name));
+			CreateMap<DeliveryAddress, UserDeliveryAddress>()
+				.ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City));
 
-            CreateMap<Product, FullProductInfoResponse>()
-                .ForMember(dest => dest.ProductCategory, opt => opt.MapFrom(src => src.ProductCategory.Name))
-                .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand.Name))
-                .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country.Name))
-                .AfterMap((src, dest, context) =>
-                {
-                    var dbContext = (InstrumentStoreDBContext)context.Items["DbContext"];
+			CreateMap<Product, FullProductInfoResponse>()
+				.ForMember(dest => dest.ProductCategory, opt => opt.MapFrom(src => src.ProductCategory.Name))
+				.ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand.Name))
+				.ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country.Name));
 
-                    List<string> images = dbContext.Image
-                        .Where(i => i.Product.ProductId == src.ProductId)
-                        .OrderBy(i => i.Index)
-                        .Select(i => i.Name)
-                        .ToList();
+			CreateMap<ProductPropertyValue, ProductPropertyValuesResponse>()
+				.ForPath(dest => dest.PropertyId, opt => opt.MapFrom(src => src.ProductProperty.ProductPropertyId))
+				.ForPath(dest => dest.Name, opt => opt.MapFrom(src => src.ProductProperty.Name))
+				.ForPath(dest => dest.IsRanged, opt => opt.MapFrom(src => src.ProductProperty.IsRanged));
 
-                    foreach (var image in images)
-                    {
-                        //dest.Images.Add(image);
-                        dest.Images.Add("https://localhost:7295/images/" + image);
-                    }
+			CreateMap<ProductProperty, ProductPropertyResponse>();
+			CreateMap<ProductProperty, ProductPropertyDTOUpdate>();
 
-                    List<ProductPropertyValue> propertyValues = dbContext.ProductPropertyValue
-                        .Include(p => p.ProductProperty)
-                        .Where(p => p.Product.ProductId == src.ProductId)
-                        .ToList();
+			CreateMap<Comment, CommentResponse>()
+				 .ForPath(dest => dest.UserName, opt => opt.MapFrom(src => src.User.FirstName));
+			CreateMap<Comment, CommentForUserResponse>()
+				 .ForPath(dest => dest.ProductId, opt => opt.MapFrom(src => src.Product.ProductId))
+				 .ForPath(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name));
 
-                    foreach (var propertyValue in propertyValues)
-                        dest.ProductPropertyValues
-                            .Add(context.Mapper.Map<ProductPropertyValuesResponse>(propertyValue));
-                });
-
-            CreateMap<ProductPropertyValue, ProductPropertyValuesResponse>()
-                .ForPath(dest => dest.PropertyId, opt => opt.MapFrom(src => src.ProductProperty.ProductPropertyId))
-                .ForPath(dest => dest.Name, opt => opt.MapFrom(src => src.ProductProperty.Name))
-                .ForPath(dest => dest.IsRanged, opt => opt.MapFrom(src => src.ProductProperty.IsRanged));
-
-            CreateMap<ProductProperty, ProductPropertyResponse>();
-            CreateMap<ProductProperty, ProductPropertyDTOUpdate>();
-
-            CreateMap<Comment, CommentResponse>()
-                 .ForPath(dest => dest.UserName, opt => opt.MapFrom(src => src.User.FirstName));
-            CreateMap<Comment, CommentForUserResponse>()
-                 .ForPath(dest => dest.ProductId, opt => opt.MapFrom(src => src.Product.ProductId))
-                 .ForPath(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name));
-
-            CreateMap<ProductCategory, ProductCategoryForAdmin>();
-        }
-    }
+			CreateMap<ProductCategory, ProductCategoryForAdmin>();
+		}
+	}
 }

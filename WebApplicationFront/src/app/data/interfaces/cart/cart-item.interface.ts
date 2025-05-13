@@ -1,7 +1,8 @@
-import { ProductData } from "../product/product-data.interface";
-
 export interface CartItem {
-  cartItemId: string,
-  product: ProductData,
-  quantity: number
+  productId: string;
+  productName: string;
+  productPrice: number;
+  productImage: string;
+  isProductArchive: boolean;
+  quantity: number;
 }

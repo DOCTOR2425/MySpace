@@ -1,19 +1,27 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../service/product.service';
 import { Subject, takeUntil } from 'rxjs';
 import { ProductCard } from '../../../data/interfaces/product/product-card.interface';
+import { BrandManageComponent } from './brand-manage/brand-manage.component';
+import { CountyManageComponent } from './country-manage/country-manage.component';
 
 @Component({
   standalone: true,
   selector: 'app-catalog-manage',
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    BrandManageComponent,
+    CountyManageComponent,
+  ],
   templateUrl: './catalog-manage.component.html',
   styleUrl: './catalog-manage.component.scss',
 })
-export class CatalogManageComponent implements OnDestroy {
+export class CatalogManageComponent implements OnInit, OnDestroy {
   public products: ProductCard[] = [];
   public filteredProducts: ProductCard[] = [];
   public page = 1;

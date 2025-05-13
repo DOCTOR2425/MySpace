@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AdminService } from '../../../service/admin/admin.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
+import { ReportService } from '../../../service/report/report.service';
+import { ToastService } from '../../../service/toast/toast.service';
 
 @Component({
   selector: 'app-reports-page',
@@ -16,7 +17,10 @@ export class ReportsPageComponent implements OnInit, OnDestroy {
   public to!: string;
 
   private unsubscribe$ = new Subject<void>();
-  constructor(private adminService: AdminService) {}
+  constructor(
+    private reportService: ReportService,
+    private toastService: ToastService
+  ) {}
 
   public ngOnInit(): void {}
 
@@ -39,55 +43,43 @@ export class ReportsPageComponent implements OnInit, OnDestroy {
     }
     switch (this.selectedReportType) {
       case 'sales':
-        this.generateExcelProductSalaringReport(from, to);
+        this.subscription(
+          this.reportService.generateReportSalesByCategoryOverTime(from, to)
+        );
         break;
       case 'stock':
-        this.generateExcelStockReport(from, to);
+        this.subscription(
+          this.reportService.generateExcelStockReport(from, to)
+        );
+        break;
+      case 'orders':
+        this.subscription(this.reportService.generateOrdersReport(from, to));
+        break;
+      case 'usersProfit':
+        this.subscription(
+          this.reportService.generateProfitFromUsersReport(from, to)
+        );
         break;
     }
   }
 
-  private generateExcelStockReport(from: string, to: string) {
-    this.adminService
-      .generateExcelStockReport(from, to)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: (blob: Blob) => {
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'report.xlsx';
-          document.body.appendChild(a);
-          a.click();
-          window.URL.revokeObjectURL(url);
-          document.body.removeChild(a);
-        },
-        error: (err) => {
-          console.error('Ошибка при генерации отчета:', err);
-          alert('Не удалось сгенерировать отчет. Попробуйте еще раз.');
-        },
-      });
-  }
-
-  private generateExcelProductSalaringReport(from: string, to: string) {
-    this.adminService
-      .generateReportSalesByCategoryOverTime(from, to)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: (blob: Blob) => {
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'report.xlsx';
-          document.body.appendChild(a);
-          a.click();
-          window.URL.revokeObjectURL(url);
-          document.body.removeChild(a);
-        },
-        error: (err) => {
-          console.error('Ошибка при генерации отчета:', err);
-          alert('Не удалось сгенерировать отчет. Попробуйте еще раз.');
-        },
-      });
+  private subscription(observable: Observable<Blob>) {
+    observable.pipe(takeUntil(this.unsubscribe$)).subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'report.xlsx';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      },
+      error: (err) => {
+        this.toastService.showError(
+          'Не удалось сгенерировать отчет. Попробуйте еще раз.'
+        );
+      },
+    });
   }
 }

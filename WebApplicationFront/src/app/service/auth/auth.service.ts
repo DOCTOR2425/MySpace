@@ -10,7 +10,7 @@ import { UserService } from '../user/user.service';
   providedIn: 'root',
 })
 export class AuthService {
-  private baseApiUrl = environment.apiUrl + '/api/User/';
+  private baseApiUrl = environment.apiUrl + '/api/Account/';
 
   constructor(
     private http: HttpClient,
@@ -18,21 +18,23 @@ export class AuthService {
     private userService: UserService
   ) {}
 
-  public login(payload: {
-    email: string;
-    password: string;
-  }): Observable<{ role: string }> {
+  public login(email: string): Observable<{ role: string }> {
     return this.http.post<{ role: string }>(
-      `${this.baseApiUrl}login`,
+      `${this.baseApiUrl}login-first-stage/${email}`,
+      null,
+      { withCredentials: true }
+    );
+  }
+
+  public register(payload: RegisterUser): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseApiUrl}register-first-stage`,
       payload,
-      {
-        withCredentials: true,
-      }
+      { withCredentials: true }
     );
   }
 
   public logout(): void {
-    this.userService.userEMail = undefined;
     this.cookiesManager.deleteAuthCookie();
     localStorage.setItem(this.userService.userEMailKey, '');
   }
@@ -44,9 +46,11 @@ export class AuthService {
     return false;
   }
 
-  public register(payload: RegisterUser): Observable<any> {
-    return this.http.post<any>(`${this.baseApiUrl}register`, payload, {
-      withCredentials: true,
-    });
+  public verifyCode(email: string, code: string): Observable<{ role: string }> {
+    return this.http.post<{ role: string }>(
+      `${this.baseApiUrl}verify-login-code/${email}/${code}`,
+      null,
+      { withCredentials: true }
+    );
   }
 }

@@ -2,9 +2,9 @@
 {
 	public interface IReportService
 	{
-		Task<string> GenerateReportSalesByCategoryOverTime(DateTime from, DateTime to);
-		Task<string> GenerateWordReport(DateTime from, DateTime to);
-		Task<string> GenerateStockReportOverTime(DateTime from, DateTime to);
-
-    }
+		Task<string> GenerateSalesByCategoryOverTimeReport(DateTime from, DateTime to);
+		Task<string> GenerateStockOverTimeReport(DateTime from, DateTime to);
+		Task<string> GenerateOrdersReport(DateTime from, DateTime to);
+		Task<string> GenerateProfitFromUsersReport(DateTime from, DateTime to);
+	}
 }

@@ -1,7 +1,13 @@
 <div class="form-container">
   <form
     class="ms-5 mt-3"
-    [formGroup]="isLoginMode ? loginForm : registerForm"
+    [formGroup]="
+      showVerificationCode
+        ? verificationForm
+        : isLoginMode
+        ? loginForm
+        : registerForm
+    "
     (ngSubmit)="onSubmit()"
     [ngClass]="{ 'register-form': !isLoginMode }"
   >
@@ -11,6 +17,7 @@
         class="btn btn-outline-primary btn-lg"
         [ngClass]="{ active: isLoginMode }"
         (click)="setMode('login')"
+        [disabled]="isLoading"
       >
         Войти
       </button>
@@ -19,86 +26,155 @@
         class="btn btn-outline-primary btn-lg"
         [ngClass]="{ active: !isLoginMode }"
         (click)="setMode('register')"
+        [disabled]="isLoading"
       >
         Зарегистрироваться
       </button>
     </div>
 
-    <div *ngIf="isLoginMode">
+    <div *ngIf="isLoginMode && !showVerificationCode">
       <div class="form-group">
-        <label for="exampleInputEmail1">Email address</label>
+        <label for="exampleInputEmail1">Email адрес</label>
         <input
           class="form-control"
           id="exampleInputEmail1"
           aria-describedby="emailHelp"
-          placeholder="Enter email"
+          placeholder="Введите email"
           formControlName="email"
+          [disabled]="isLoading"
         />
-      </div>
-      <div class="form-group">
-        <label for="exampleInputPassword1">Password</label>
-        <input
-          type="password"
-          class="form-control"
-          id="exampleInputPassword1"
-          placeholder="Password"
-          formControlName="password"
-        />
+        <small
+          *ngIf="
+            loginForm.controls.email.invalid && loginForm.controls.email.touched
+          "
+          class="text-danger"
+        >
+          Пожалуйста, введите корректный email адрес
+        </small>
       </div>
     </div>
 
-    <div *ngIf="!isLoginMode">
+    <div *ngIf="showVerificationCode">
+      <div class="form-group">
+        <label for="verificationCode">Код подтверждения</label>
+        <input
+          class="form-control"
+          id="verificationCode"
+          placeholder="Введите код из письма"
+          formControlName="verificationCode"
+          [disabled]="isLoading"
+        />
+        <small
+          *ngIf="
+            verificationForm.controls.verificationCode.invalid &&
+            verificationForm.controls.verificationCode.touched
+          "
+          class="text-danger"
+        >
+          Пожалуйста, введите код подтверждения
+        </small>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoginMode && !showVerificationCode">
       <div class="form-row">
         <div class="form-group">
-          <label for="firstName">First Name</label>
+          <label for="firstName">Имя</label>
           <input
             class="form-control"
             id="firstName"
-            placeholder="First Name"
+            placeholder="Ваше имя"
             formControlName="firstName"
+            [disabled]="isLoading"
           />
+          <small
+            *ngIf="
+              registerForm.controls.firstName.invalid &&
+              registerForm.controls.firstName.touched
+            "
+            class="text-danger"
+          >
+            Пожалуйста, укажите ваше имя
+          </small>
         </div>
         <div class="form-group">
-          <label for="surname">Surname</label>
+          <label for="surname">Фамилия</label>
           <input
             class="form-control"
             id="surname"
-            placeholder="Surname"
+            placeholder="Ваша фамилия"
             formControlName="surname"
+            [disabled]="isLoading"
           />
+          <small
+            *ngIf="
+              registerForm.controls.surname.invalid &&
+              registerForm.controls.surname.touched
+            "
+            class="text-danger"
+          >
+            Пожалуйста, укажите вашу фамилию
+          </small>
         </div>
       </div>
       <div class="form-group">
-        <label for="telephone">Telephone</label>
+        <label for="telephone">Телефон</label>
         <input
           class="form-control"
           id="telephone"
-          placeholder="Telephone"
+          placeholder="+375 29 123-45-67"
           formControlName="telephone"
+          [disabled]="isLoading"
         />
+        <small
+          *ngIf="
+            registerForm.controls.telephone.invalid &&
+            registerForm.controls.telephone.touched
+          "
+          class="text-danger"
+        >
+          Пожалуйста, введите номер в формате +375 XX XXX-XX-XX
+        </small>
       </div>
       <hr />
       <div class="form-group">
-        <label for="exampleInputEmail1">Email</label>
+        <label for="registerEmail">Email</label>
         <input
           class="form-control"
-          id="exampleInputEmail1"
+          id="registerEmail"
           aria-describedby="emailHelp"
-          placeholder="Enter email"
+          placeholder="Введите email"
           formControlName="email"
+          [disabled]="isLoading"
         />
-      </div>
-      <div class="form-group">
-        <label for="exampleInputPassword1">Password</label>
-        <input
-          type="password"
-          class="form-control"
-          id="exampleInputPassword1"
-          placeholder="Password"
-          formControlName="password"
-        />
+        <small
+          *ngIf="
+            registerForm.controls.email.invalid &&
+            registerForm.controls.email.touched
+          "
+          class="text-danger"
+        >
+          Пожалуйста, введите корректный email адрес
+        </small>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary mt-1">Submit</button>
+    <button type="submit" class="btn btn-primary mt-1" [disabled]="isLoading">
+      <span *ngIf="!isLoading">
+        {{
+          showVerificationCode
+            ? "Подтвердить"
+            : isLoginMode
+            ? "Войти"
+            : "Зарегистрироваться"
+        }}
+      </span>
+      <span
+        *ngIf="isLoading"
+        class="spinner-border spinner-border-sm"
+        role="status"
+        aria-hidden="true"
+      ></span>
+      <span *ngIf="isLoading">Отправка...</span>
+    </button>
   </form>
 </div>

@@ -32,7 +32,7 @@ export class ProductCardComponent implements OnDestroy {
       .subscribe();
 
     const button = document.getElementsByClassName(
-      'add-to-cart-btn'
+      'add-to-cart-btn ' + this.product.productId
     )[0] as HTMLButtonElement;
     button.style.backgroundColor = 'gray';
   }

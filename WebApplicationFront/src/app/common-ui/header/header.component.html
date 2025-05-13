@@ -27,7 +27,7 @@
 
       <ng-container *ngIf="authService.isLoggedIn(); else loginButton">
         <button [routerLink]="['/user']" class="user-button">
-          {{ userEmail }}
+          {{ getEmail() }}
         </button>
       </ng-container>
       <ng-template #loginButton>

@@ -1,9 +1,32 @@
 <h1>Управление каталогом</h1>
 
 <div class="actions">
-  <button class="add-button" [routerLink]="['/admin/create-product']">
+  <button
+    class="bi bi-clipboard2 btn btn-outline-success mx-2"
+    [routerLink]="['/admin/create-product']"
+  >
     Добавить товар
   </button>
+
+  <button
+    type="button"
+    class="bi bi-clipboard2 btn btn-outline-success mx-2"
+    data-bs-toggle="modal"
+    data-bs-target="#brandsModal"
+  >
+    Управление брендами
+  </button>
+  <app-brand-manage #brandsModal></app-brand-manage>
+
+  <button
+    type="button"
+    class="bi bi-clipboard2 btn btn-outline-success mx-2"
+    data-bs-toggle="modal"
+    data-bs-target="#countriesModal"
+  >
+    Управление странами
+  </button>
+  <app-country-manage #countriesModal></app-country-manage>
 </div>
 
 <div class="filters-container">

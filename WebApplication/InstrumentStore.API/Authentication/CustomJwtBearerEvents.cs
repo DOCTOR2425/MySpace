@@ -1,8 +1,6 @@
 ﻿using InstrumentStore.Domain.Abstractions;
 using InstrumentStore.Domain.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using NuGet.Common;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -22,13 +20,13 @@ namespace InstrumentStore.API.Authentication
 			AuthenticationFailedContext context)
 		{
 			var scope = _scopeFactory.CreateScope();
-			var usersService = scope.ServiceProvider.GetRequiredService<IUsersService>();
+			var accountService = scope.ServiceProvider.GetRequiredService<IAccountService>();
 
-			JwtSecurityToken oldRefreshToken = await usersService.GetRefreshToken(token);
+			JwtSecurityToken oldRefreshToken = await accountService.GetRefreshToken(token);
 
 			if (oldRefreshToken.ValidTo > DateTime.UtcNow)
 			{
-				return await usersService.ReLogin(token);
+				return await accountService.UserReLogin(token);
 			}
 			else
 			{
@@ -42,14 +40,14 @@ namespace InstrumentStore.API.Authentication
 			AuthenticationFailedContext context)
 		{
 			var scope = _scopeFactory.CreateScope();
-			var adminService = scope.ServiceProvider.GetRequiredService<IAdminService>();
+			var accountService = scope.ServiceProvider.GetRequiredService<IAccountService>();
 
-			JwtSecurityToken oldRefreshToken = await adminService.GetRefreshToken();
-			//Console.WriteLine(oldRefreshToken.ValidTo);
-			return await adminService.ReLogin(token);
+			JwtSecurityToken oldRefreshToken = await accountService.GetAdminRefreshToken();
+			return await accountService.AdminReLogin(token);
+
 			if (oldRefreshToken.ValidTo > DateTime.UtcNow)
 			{
-				return await adminService.ReLogin(token);// TODO сделать настройки админа в другом json
+				return await accountService.AdminReLogin(token);// TODO сделать настройки админа в другом json
 			}
 			else
 			{
@@ -60,10 +58,6 @@ namespace InstrumentStore.API.Authentication
 
 		public override async Task AuthenticationFailed(AuthenticationFailedContext context)
 		{
-			//Console.WriteLine(context.Exception.GetType().FullName);
-
-			//if (context.Exception is SecurityTokenExpiredException)
-			//{
 			string strToken = context.Request.Headers["Authorization"]
 			.ToString()
 			.Substring("Bearer ".Length)
@@ -94,21 +88,11 @@ namespace InstrumentStore.API.Authentication
 			var identity = new ClaimsIdentity(newJwtToken.Claims, JwtBearerDefaults.AuthenticationScheme);
 			context.Principal = new ClaimsPrincipal(identity);
 
-			//Console.WriteLine(newAccessToken);
-
 			context.Success();
-			//}
-			//else
-			//{
-			//	await base.AuthenticationFailed(context);
-			//}
 		}
 
 		public override async Task TokenValidated(TokenValidatedContext context)
 		{
-			//var scope = _scopeFactory.CreateScope();
-			//var adminService = scope.ServiceProvider.GetRequiredService<IAdminService>();
-			//Console.WriteLine((await adminService.GetRefreshToken()).ValidTo);
 			await base.TokenValidated(context);
 		}
 	}

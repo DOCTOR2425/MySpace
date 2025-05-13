@@ -17,7 +17,6 @@ import { ProductCategory } from '../../data/interfaces/some/product-category.int
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
-  public userEmail?: string = undefined;
   public searchQuery: string = '';
   public categories: ProductCategory[] = [];
   private unsubscribe$ = new Subject<void>();
@@ -32,7 +31,6 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {}
 
   public ngOnInit(): void {
-    this.userEmail = this.userService.userEMail?.slice(0, 3).toUpperCase();
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
@@ -50,6 +48,13 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
           this.categories = val;
         },
       });
+  }
+
+  public getEmail(): string | undefined {
+    return localStorage
+      .getItem(this.userService.userEMailKey)
+      ?.slice(0, 3)
+      .toUpperCase();
   }
 
   public ngOnDestroy(): void {

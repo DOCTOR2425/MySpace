@@ -1,6 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using AutoMapper;
+﻿using AutoMapper;
 using InstrumentStore.Domain.Abstractions;
 using InstrumentStore.Domain.Contracts.Comment;
 using InstrumentStore.Domain.Contracts.PaidOrders;
@@ -14,157 +12,127 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InstrumentStore.API.Controllers
 {
-    [Authorize]
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UserController : ControllerBase
-    {
-        private readonly InstrumentStoreDBContext _dbContext;
-        private readonly IUsersService _usersService;
-        private readonly IAdminService _adminService;
-        private readonly IPaidOrderService _paidOrderService;
-        private readonly ICommentService _commentService;
-        private readonly IProductService _productService;
-        private readonly IImageService _imageService;
-        private readonly IMapper _mapper;
+	[Authorize]
+	[Route("api/[controller]")]
+	[ApiController]
+	public class UserController : ControllerBase
+	{
+		private readonly InstrumentStoreDBContext _dbContext;
+		private readonly IUserService _usersService;
+		private readonly IPaidOrderService _paidOrderService;
+		private readonly ICommentService _commentService;
+		private readonly IImageService _imageService;
+		private readonly ICartService _cartService;
+		private readonly IProductComparisonService _productComparisonService;
+		private readonly IMapper _mapper;
 
-        public UserController(
-            IUsersService usersService,
-            IAdminService adminService,
-            IMapper mapper,
-            InstrumentStoreDBContext dbContext,
-            IPaidOrderService paidOrderService,
-            ICommentService commentService,
-            IProductService productService,
-            IImageService imageService)
-        {
-            _usersService = usersService;
-            _adminService = adminService;
-            _mapper = mapper;
-            _dbContext = dbContext;
-            _paidOrderService = paidOrderService;
-            _commentService = commentService;
-            _productService = productService;
-            _imageService = imageService;
-        }
+		public UserController(
+			IUserService usersService,
+			IMapper mapper,
+			InstrumentStoreDBContext dbContext,
+			IPaidOrderService paidOrderService,
+			ICommentService commentService,
+			IImageService imageService,
+			ICartService cartService,
+			IProductComparisonService productComparisonService)
+		{
+			_usersService = usersService;
+			_mapper = mapper;
+			_dbContext = dbContext;
+			_paidOrderService = paidOrderService;
+			_commentService = commentService;
+			_imageService = imageService;
+			_cartService = cartService;
+			_productComparisonService = productComparisonService;
+		}
 
-        private async Task<User> GetUserFromToken()
-        {
-            return await _usersService.GetUserFromToken(HttpContext.Request.Headers["Authorization"]
-                .ToString().Substring("Bearer ".Length).Trim());
-        }
+		private async Task<User> GetUserFromToken()
+		{
+			return await _usersService.GetUserFromToken(HttpContext.Request.Headers["Authorization"]
+				.ToString().Substring("Bearer ".Length).Trim());
+		}
 
-        [AllowAnonymous]
-        private async Task<string> ClientLogin(string email, string password)
-        {
-            string token = "";
+		[HttpGet("get-user")]
+		public async Task<ActionResult<UserProfileResponse>> GetUser()
+		{
+			return Ok(await GetUserProfileResponse(await GetUserFromToken()));
+		}
 
-            if (await _adminService.IsAdminEmail(email))
-                token = await _adminService.Login(email, password);
-            else
-                token = await _usersService.Login(email, password);
+		[HttpPost("update-user")]
+		public async Task<ActionResult<UserProfileResponse>> UpdateUser(
+			[FromBody] UpdateUserRequest updateUserRequest)
+		{
+			User user = await GetUserFromToken();
 
-            HttpContext.Response.Cookies.Append(JwtProvider.AccessCookiesName, token, new CookieOptions()
-            {// выдача пользователю токена в куки файлы
-                Expires = DateTime.Now.Add(JwtProvider.CookiesLifeTime)
-            });
+			await _usersService.Update(user.UserId, updateUserRequest);
 
-            string role = (new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken)
-                .Claims.First(c => c.Type == ClaimTypes.Role).Value;
+			return Ok(await GetUserProfileResponse(user));
+		}
 
-            return role;
-        }
+		private async Task<UserProfileResponse> GetUserProfileResponse(User user)
+		{
+			UserProfileResponse response = _mapper.Map<UserProfileResponse>(user);
 
-        [AllowAnonymous]
-        [HttpPost("register")]// функция регистрации пользователя
-        public async Task<ActionResult<string>> Register([FromBody] RegisterUserRequest request)
-        {
-            Guid userId = await _usersService.Register(request);
+			response.PendingReviewNumber = (await _usersService.GetOrderedProductsPendingReviewsByUser(user.UserId)).Count;
+			response.OrderNumber = (await _paidOrderService.GetAllByUserId(user.UserId)).Count;
+			response.CommentNumber = (await _commentService.GetCommentsByUser(user.UserId)).Count;
 
-            string role = await ClientLogin(request.Email, request.Password);
+			DeliveryAddress? address = await _paidOrderService.GetLastAddressByUser(user.UserId);
+			if (address == null)
+				return response;
 
-            return Ok(new { role });
-        }
+			response.City = address.City;
+			response.Street = address.Street;
+			response.HouseNumber = address.HouseNumber;
+			response.Entrance = address.Entrance;
+			response.Flat = address.Flat;
 
-        [AllowAnonymous]
-        [HttpPost("login")]// функция входа пользователя в аккаунт
-        public async Task<ActionResult<string>> Login([FromBody] LoginUserRequest request)
-        {
-            string role = await ClientLogin(request.Email, request.Password);
+			return response;
+		}
 
-            return Ok(new { role });
-        }
+		[HttpGet("get-paid-orders")]
+		public async Task<ActionResult<List<UserPaidOrderResponse>>> GetPaidOrders()
+		{
+			List<PaidOrder> paidOrders = await _paidOrderService.GetAllByUserId((await GetUserFromToken()).UserId);
 
-        [HttpGet("get-user")]
-        public async Task<ActionResult<UserProfileResponse>> GetUser()
-        {
-            return Ok(await GetUserProfileResponse(await GetUserFromToken()));
-        }
+			List<UserPaidOrderResponse> orderResponses = _mapper
+				.Map<List<UserPaidOrderResponse>>(paidOrders,
+					opt => opt.Items["DbContext"] = _dbContext);
 
-        [HttpPost("update-user")]
-        public async Task<ActionResult<UserProfileResponse>> UpdateUser(
-            [FromBody] UpdateUserRequest updateUserRequest)
-        {
-            User user = await GetUserFromToken();
+			return Ok(orderResponses);
+		}
 
-            await _usersService.Update(user.UserId, updateUserRequest);
+		[HttpGet("get-user-comments")]
+		public async Task<IActionResult> GetUserComments()
+		{
+			List<CommentForUserResponse> comments = _mapper.Map<List<CommentForUserResponse>>(await
+				_commentService.GetCommentsByUser((await GetUserFromToken()).UserId));
 
-            return Ok(await GetUserProfileResponse(user));
-        }
+			foreach (CommentForUserResponse comment in comments)
+				comment.Image = "https://localhost:7295/images/" +
+					(await _imageService.GetByProductId(comment.ProductId))[0].Name;
 
-        private async Task<UserProfileResponse> GetUserProfileResponse(User user)
-        {
-            UserProfileResponse response = _mapper.Map<UserProfileResponse>(user);
+			return Ok(comments);
+		}
 
-            response.PendingReviewNumber = (await _usersService.GetOrderedProductsPendingReviewsByUser(user.UserId)).Count;
-            response.OrderNumber = (await _paidOrderService.GetAllByUserId(user.UserId)).Count;
-            response.CommentNumber = (await _commentService.GetCommentsByUser(user.UserId)).Count;
+		[HttpGet("get-ordered-products-pending-reviews")]
+		public async Task<ActionResult<List<ProductCard>>> GetOrderedProductsPendingReviews()
+		{
+			return Ok(_mapper.Map<List<ProductCard>>(
+				await _usersService.GetOrderedProductsPendingReviewsByUser(
+					(await GetUserFromToken()).UserId),
+					opt => opt.Items["DbContext"] = _dbContext));
+		}
 
-            DeliveryAddress? address = await _paidOrderService.GetLastAddressByUser(user.UserId);
-            if (address == null)
-                return response;
+		[HttpGet("get-user-product-stats/{productId:guid}")]
+		public async Task<ActionResult<UserProductStats>> GetUserProductStats([FromRoute] Guid productId)
+		{
+			Guid userId = (await GetUserFromToken()).UserId;
+			UserProductStats userProductStats = new UserProductStats(
+				await _cartService.GetProductQuantityInUserCart(productId, userId),
+				await _productComparisonService.IsProductInUserComparison(productId, userId));
 
-            response.City = address.City.Name;
-            response.Street = address.Street;
-            response.HouseNumber = address.HouseNumber;
-            response.Entrance = address.Entrance;
-            response.Flat = address.Flat;
-
-            return response;
-        }
-
-        [HttpGet("get-paid-orders")]
-        public async Task<ActionResult<List<UserPaidOrderResponse>>> GetPaidOrders()
-        {
-            List<PaidOrder> paidOrders = await _paidOrderService.GetAllByUserId((await GetUserFromToken()).UserId);
-
-            List<UserPaidOrderResponse> orderResponses = _mapper
-                .Map<List<UserPaidOrderResponse>>(paidOrders,
-                    opt => opt.Items["DbContext"] = _dbContext);
-
-            return Ok(orderResponses);
-        }
-
-        [HttpGet("get-user-comments")]
-        public async Task<IActionResult> GetUserComments()
-        {
-            List<CommentForUserResponse> comments = _mapper.Map<List<CommentForUserResponse>>(await
-                _commentService.GetCommentsByUser((await GetUserFromToken()).UserId));
-
-            foreach (CommentForUserResponse comment in comments)
-                comment.Image = "https://localhost:7295/images/" +
-                    (await _imageService.GetByProductId(comment.ProductId))[0].Name;
-
-            return Ok(comments);
-        }
-
-        [HttpGet("get-ordered-products-pending-reviews")]
-        public async Task<ActionResult<List<ProductCard>>> GetOrderedProductsPendingReviews()
-        {
-            return Ok(_mapper.Map<List<ProductCard>>(
-                await _usersService.GetOrderedProductsPendingReviewsByUser(
-                    (await GetUserFromToken()).UserId),
-                    opt => opt.Items["DbContext"] = _dbContext));
-        }
-    }
+			return Ok(userProductStats);
+		}
+	}
 }

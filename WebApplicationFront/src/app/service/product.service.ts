@@ -8,6 +8,7 @@ import { CategoryFilters } from '../data/interfaces/filters/category-filters.int
 import { FullProductInfoResponse } from '../data/interfaces/product/product-to-update-response.interface';
 import { CreateCommentRequest } from '../data/interfaces/comment/create-comment-request.interface';
 import { CommentResponse } from '../data/interfaces/comment/comment-response.interface';
+import { ProductMinimalData } from '../data/interfaces/product/product-minimal-data.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -20,16 +21,22 @@ export class ProductService {
   public getSpecialProductsForUser(): Observable<ProductCard[]> {
     return this.http.get<ProductCard[]>(
       `${this.baseApiUrl}get-special-products-for-user`,
-      {
-        withCredentials: true,
-      }
+      { withCredentials: true }
     );
   }
 
   public getProductById(id: string): Observable<FullProductInfoResponse> {
-    return this.http.get<FullProductInfoResponse>(`${this.baseApiUrl}${id}`, {
-      withCredentials: true,
-    });
+    return this.http.get<FullProductInfoResponse>(
+      `${this.baseApiUrl}get-product/${id}`,
+      { withCredentials: true }
+    );
+  }
+
+  public getProductMinimalData(id: string): Observable<ProductMinimalData> {
+    return this.http.get<ProductMinimalData>(
+      `${this.baseApiUrl}get-product-minimal-data/${id}`,
+      { withCredentials: true }
+    );
   }
 
   public getAllProductsCardsByCategory(
@@ -38,9 +45,7 @@ export class ProductService {
   ): Observable<{ items: ProductCard[]; totalCount: number }> {
     return this.http.get<{ items: ProductCard[]; totalCount: number }>(
       `${this.baseApiUrl}category/${categoryId}/page${page}`,
-      {
-        withCredentials: true,
-      }
+      { withCredentials: true }
     );
   }
 
@@ -53,26 +58,13 @@ export class ProductService {
     let url = `category/${categoryId}/page${page}?filters=${serializedFilter}`;
     return this.http.get<{ items: ProductCard[]; totalCount: number }>(
       `${this.baseApiUrl}${url}`,
-      {
-        withCredentials: true,
-      }
+      { withCredentials: true }
     );
   }
 
   public getCategoryFilters(categoryId: string): Observable<CategoryFilters> {
     return this.http.get<CategoryFilters>(
       `${this.baseApiUrl}category-filters/${categoryId}`,
-      {
-        withCredentials: true,
-      }
-    );
-  }
-
-  public getProductToUpdate(
-    productId: string
-  ): Observable<FullProductInfoResponse> {
-    return this.http.get<FullProductInfoResponse>(
-      `${this.baseApiUrl}get-product-to-update/${productId}`,
       { withCredentials: true }
     );
   }
@@ -96,9 +88,7 @@ export class ProductService {
     return this.http.put(
       `${this.baseApiUrl}update-product/${productId}`,
       product,
-      {
-        withCredentials: true,
-      }
+      { withCredentials: true }
     );
   }
 
@@ -125,9 +115,7 @@ export class ProductService {
   ): Observable<object> {
     return this.http.put(
       `${this.baseApiUrl}change-archive-status/${productId}?archiveStatus=${archiveStatus}`,
-      {
-        withCredentials: true,
-      }
+      { withCredentials: true }
     );
   }
 

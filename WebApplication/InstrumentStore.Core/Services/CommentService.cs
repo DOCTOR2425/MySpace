@@ -5,65 +5,64 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InstrumentStore.Domain.Services
 {
-    public class CommentService : ICommentService
-    {
-        private readonly InstrumentStoreDBContext _dbContext;
+	public class CommentService : ICommentService
+	{
+		private readonly InstrumentStoreDBContext _dbContext;
 
-        public CommentService(InstrumentStoreDBContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+		public CommentService(InstrumentStoreDBContext dbContext)
+		{
+			_dbContext = dbContext;
+		}
 
-        public async Task<Guid> CreateCommentToProduct(string commentText, Guid productId, Guid userId)
-        {
-            if (commentText.Any() == false || commentText.Length > 1000)
-                new ArgumentNullException("неверный текст");
+		public async Task<Guid> CreateCommentToProduct(string commentText, Guid productId, Guid userId)
+		{
+			if (commentText.Any() == false || commentText.Length > 1000)
+				new ArgumentNullException("неверный текст");
 
-            Product? product = await _dbContext.Product
-                .FindAsync(productId);
-            User? user = await _dbContext.User
-                .FindAsync(userId);
+			Product? product = await _dbContext.Product
+				.FindAsync(productId);
+			User? user = await _dbContext.User
+				.FindAsync(userId);
 
-            if (product == null || user == null)
-                throw new ArgumentNullException($"Нет таких продукта или юзера:\n{productId}\n{userId}");
+			if (product == null || user == null)
+				throw new ArgumentNullException($"Нет таких продукта или юзера:\n{productId}\n{userId}");
 
-            Comment comment = new Comment()
-            {
-                CommentId = Guid.NewGuid(),
-                Text = commentText.Trim(),
-                CreationDate = DateTime.Now,
-                Product = product,
-                User = user
-            };
+			Comment comment = new Comment()
+			{
+				CommentId = Guid.NewGuid(),
+				Text = commentText.Trim(),
+				CreationDate = DateTime.Now,
+				Product = product,
+				User = user
+			};
 
-            await _dbContext.Comment.AddAsync(comment);
-            await _dbContext.SaveChangesAsync();
+			await _dbContext.Comment.AddAsync(comment);
+			await _dbContext.SaveChangesAsync();
 
-            return comment.CommentId;
-        }
+			return comment.CommentId;
+		}
 
-        public async Task<List<Comment>> GetAllCommentsByProduct(Guid productId)
-        {
-            return await _dbContext.Comment
-                .Include(c => c.Product)
-                .Include(c => c.User)
-                .Where(c => c.Product.ProductId == productId)
-                .OrderByDescending(c => c.CreationDate)
-                .ToListAsync();
-        }
+		public async Task<List<Comment>> GetAllCommentsByProduct(Guid productId)
+		{
+			return await _dbContext.Comment
+				.Include(c => c.Product)
+				.Include(c => c.User)
+				.Where(c => c.Product.ProductId == productId)
+				.OrderByDescending(c => c.CreationDate)
+				.ToListAsync();
+		}
 
-        public async Task<List<Comment>> GetCommentsByUser(Guid userId)
-        {
-            return await _dbContext.Comment
-                .Include(c => c.User)
-                .Include(c => c.User.UserRegistrInfo)
-                .Include(c => c.Product)
-                .Include(c => c.Product.Brand)
-                .Include(c => c.Product.Country)
-                .Include(c => c.Product.ProductCategory)
-                .Where(c => c.User.UserId == userId)
-                .OrderByDescending(c => c.CreationDate)
-                .ToListAsync();
-        }
-    }
+		public async Task<List<Comment>> GetCommentsByUser(Guid userId)
+		{
+			return await _dbContext.Comment
+				.Include(c => c.User)
+				.Include(c => c.Product)
+				.Include(c => c.Product.Brand)
+				.Include(c => c.Product.Country)
+				.Include(c => c.Product.ProductCategory)
+				.Where(c => c.User.UserId == userId)
+				.OrderByDescending(c => c.CreationDate)
+				.ToListAsync();
+		}
+	}
 }

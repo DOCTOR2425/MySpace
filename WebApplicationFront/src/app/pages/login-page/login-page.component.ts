@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 import { UserService } from '../../service/user/user.service';
 import { ComparisonService } from '../../service/comparison/comparison.service';
 import { Location } from '@angular/common';
+import { CartService } from '../../service/cart/cart.service';
 
 @Component({
   selector: 'app-login-page',
@@ -24,11 +25,15 @@ import { Location } from '@angular/common';
 })
 export class LoginPageComponent implements OnDestroy {
   public isLoginMode: boolean = true;
+  public showVerificationCode: boolean = false;
+  public isLoading: boolean = false;
+  private currentEmail: string = '';
   private unsubscribe$ = new Subject<void>();
 
   constructor(
     private router: Router,
     private authService: AuthService,
+    private cartService: CartService,
     private userService: UserService,
     private adminService: AdminService,
     private toastService: ToastService,
@@ -38,7 +43,10 @@ export class LoginPageComponent implements OnDestroy {
 
   public loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', Validators.required),
+  });
+
+  public verificationForm = new FormGroup({
+    verificationCode: new FormControl('', Validators.required),
   });
 
   public registerForm = new FormGroup({
@@ -49,7 +57,6 @@ export class LoginPageComponent implements OnDestroy {
       Validators.pattern(/^\+375\s\d{2}\s\d{3}-\d{2}-\d{2}$/),
     ]),
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', Validators.required),
   });
 
   public ngOnDestroy(): void {
@@ -59,88 +66,134 @@ export class LoginPageComponent implements OnDestroy {
 
   public setMode(mode: 'login' | 'register'): void {
     this.isLoginMode = mode === 'login';
+    this.showVerificationCode = false;
+    this.loginForm.reset();
+    this.registerForm.reset();
+    this.verificationForm.reset();
   }
 
-  private login(
-    response: { role: string },
-    loginValue: { email: string; password: string }
-  ) {
+  private login(response: { role: string }, email: string) {
+    this.isLoading = false;
     if (response.role === 'admin') {
       this.adminService.isAdmin = true;
-
-      this.userService.userEMail = undefined;
       localStorage.setItem(this.userService.userEMailKey, '');
       this.router.navigate(['admin']);
     } else {
       localStorage.setItem(this.comparisonService.comparisonKey, '');
-      localStorage.setItem(this.userService.userEMailKey, loginValue.email);
-      this.userService.userEMail = loginValue.email;
+      localStorage.setItem(this.userService.userEMailKey, email);
+      if (!this.isLoginMode) {
+        this.cartService.registerCart();
+        this.router.navigate(['/']);
+        return;
+      }
       this.location.back();
     }
   }
 
   public onSubmit(): void {
-    if (this.isLoginMode) {
-      if (this.loginForm.invalid) {
-        this.markFormGroupTouched(this.loginForm);
-        return;
-      }
-      const loginValue = this.loginForm.value as {
-        email: string;
-        password: string;
-      };
-
-      this.authService
-        .login({
-          email: loginValue.email!,
-          password: loginValue.password!,
-        })
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe({
-          next: (response) => {
-            this.login(response, loginValue);
-          },
-          error: (error) => {
-            this.toastService.showError(
-              error.error.error,
-              'Ошибка регистрации'
-            );
-          },
-        });
+    if (this.showVerificationCode) {
+      this.verifyCode();
+    } else if (this.isLoginMode) {
+      this.loginFirstStage();
     } else {
-      if (this.registerForm.invalid) {
-        this.markFormGroupTouched(this.registerForm);
-        return;
-      }
-      const registerValue = this.registerForm.value as {
-        firstName: string;
-        surname: string;
-        telephone: string;
-        email: string;
-        password: string;
-      };
-
-      this.authService
-        .register({
-          firstName: registerValue.firstName!,
-          surname: registerValue.surname!,
-          telephone: registerValue.telephone!,
-          email: registerValue.email!,
-          password: registerValue.password!,
-        })
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe({
-          next: (response) => {
-            this.login(response, {
-              email: registerValue.email!,
-              password: registerValue.password!,
-            });
-          },
-          error: (error) => {
-            this.toastService.showError(error.message, 'Ошибка');
-          },
-        });
+      this.registerFirstStage();
     }
+  }
+
+  private verifyCode(): void {
+    if (this.verificationForm.invalid) {
+      this.markFormGroupTouched(this.verificationForm);
+      return;
+    }
+
+    const code = this.verificationForm.value.verificationCode || '';
+
+    this.isLoading = true;
+    this.authService
+      .verifyCode(this.currentEmail, code)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (response) => {
+          this.login(response, this.currentEmail);
+        },
+        error: (error) => {
+          this.isLoading = false;
+          const errorMessage =
+            error.error?.error || 'Неверный код подтверждения';
+          this.toastService.showError(errorMessage, 'Ошибка подтверждения');
+        },
+      });
+  }
+
+  private loginFirstStage(): void {
+    if (this.loginForm.invalid) {
+      this.markFormGroupTouched(this.loginForm);
+      return;
+    }
+
+    this.isLoading = true;
+    this.currentEmail = this.loginForm.value.email!;
+    this.authService
+      .login(this.currentEmail)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.showVerificationCode = true;
+          this.toastService.showSuccess(
+            'Код подтверждения отправлен на вашу почту',
+            'Успешно'
+          );
+        },
+        error: (error) => {
+          this.isLoading = false;
+          const errorMessage =
+            error.error?.error || 'Не удалось отправить код подтверждения';
+          this.toastService.showError(errorMessage, 'Ошибка входа');
+        },
+      });
+  }
+
+  private registerFirstStage(): void {
+    if (this.registerForm.invalid) {
+      this.markFormGroupTouched(this.registerForm);
+      return;
+    }
+
+    this.isLoading = true;
+    const registerValue = this.registerForm.value as {
+      firstName: string;
+      surname: string;
+      telephone: string;
+      email: string;
+    };
+
+    this.currentEmail = registerValue.email!;
+
+    this.authService
+      .register({
+        firstName: registerValue.firstName!,
+        surname: registerValue.surname!,
+        telephone: registerValue.telephone!,
+        email: registerValue.email!,
+      })
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.showVerificationCode = true;
+          this.toastService.showSuccess(
+            'Код подтверждения отправлен на вашу почту',
+            'Успешно'
+          );
+        },
+        error: (error) => {
+          this.isLoading = false;
+          const errorMessage =
+            error.error?.error || 'Не удалось отправить код подтверждения';
+          this.toastService.showError(errorMessage, 'Ошибка регистрации');
+        },
+      });
   }
 
   private markFormGroupTouched(formGroup: FormGroup) {

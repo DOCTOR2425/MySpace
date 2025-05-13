@@ -1,29 +1,39 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable, OnDestroy } from '@angular/core';
 import { CartItem } from '../../data/interfaces/cart/cart-item.interface';
-import { asapScheduler, Observable, of, scheduled } from 'rxjs';
+import {
+  asapScheduler,
+  forkJoin,
+  map,
+  Observable,
+  scheduled,
+  Subject,
+  takeUntil,
+} from 'rxjs';
 import { OrderOptions } from '../../data/interfaces/order-options/order-options.interface';
 import { UserOrderInfo } from '../../data/interfaces/user/user-order-info.interface';
 import { environment } from '../../../environments/environment.development';
 import { AuthService } from '../auth/auth.service';
 import { ProductService } from '../product.service';
-import { v4 as uuidv4 } from 'uuid';
 import { RegisterUserFromOrderRequest } from '../../data/interfaces/user/register-user-from-order-request.interface';
 import { AddToCartRequest } from '../../data/interfaces/cart/add-to-cart-request.interface';
 import { UserDeliveryAddress } from '../../data/interfaces/user/user-delivery-address.interface';
+import { ProductMinimalData } from '../../data/interfaces/product/product-minimal-data.interface';
 
 @Injectable({
   providedIn: 'root',
 })
-export class CartService {
+export class CartService implements OnDestroy {
   private cartKey = 'cart';
   private baseApiUrl = environment.apiUrl + '/api/Cart/';
+  private unsubscribe$ = new Subject<void>();
 
-  constructor(
-    private http: HttpClient,
-    private authService: AuthService,
-    private productService: ProductService
-  ) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
+
+  public ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 
   public getCartItems(): Observable<CartItem[]> {
     if (this.authService.isLoggedIn() == true) {
@@ -31,38 +41,38 @@ export class CartService {
         withCredentials: true,
       });
     } else {
-      // return scheduled([this.getCartItemsFromLocalStorage()], asapScheduler);
-      return of(this.getCartItemsFromLocalStorage());
+      return this.convertocalStorageDataToCartItems(
+        this.getCartItemsFromLocalStorage()
+      );
     }
   }
 
-  private getCartItemsFromLocalStorage(): CartItem[] {
+  private convertocalStorageDataToCartItems(
+    payload: { productId: string; quantity: number }[]
+  ): Observable<CartItem[]> {
+    return this.getProductForUnregestereCart(
+      payload.map((item) => item.productId)
+    ).pipe(
+      takeUntil(this.unsubscribe$),
+      map((products) => {
+        return products.map((product, index) => ({
+          productId: product.productId,
+          productName: product.name,
+          productPrice: product.price,
+          productImage: product.image,
+          isProductArchive: product.isArchive,
+          quantity: payload[index].quantity,
+        }));
+      })
+    );
+  }
+
+  private getCartItemsFromLocalStorage(): {
+    productId: string;
+    quantity: number;
+  }[] {
     let cartItemsJson = localStorage.getItem(this.cartKey);
     return cartItemsJson ? JSON.parse(cartItemsJson) : [];
-  }
-
-  public cahngeCart(cartItem: CartItem): Observable<Object> {
-    if (this.authService.isLoggedIn() == true) {
-      return this.http.post(
-        `${this.baseApiUrl}change-cart-item-quantity`,
-        cartItem,
-        {
-          withCredentials: true,
-        }
-      );
-    } else {
-      this.cahngeCartLocalStorage(cartItem);
-      return scheduled([Object], asapScheduler);
-    }
-  }
-
-  private cahngeCartLocalStorage(cartItem: CartItem): void {
-    this.removeFromCartLocalStorage(cartItem.cartItemId);
-    if (cartItem.quantity != 0) {
-      let cartItems = this.getCartItemsFromLocalStorage();
-      cartItems.push(cartItem);
-      localStorage.setItem(this.cartKey, JSON.stringify(cartItems));
-    }
   }
 
   public addToUserCart(payload: {
@@ -83,49 +93,35 @@ export class CartService {
     productId: string;
     quantity: number;
   }): void {
-    const cartItems = this.getCartItemsFromLocalStorage();
-    if (
-      cartItems.filter((i) => i.product.productId == payload.productId).length >
-      0
-    ) {
+    let cartItems = this.getCartItemsFromLocalStorage();
+
+    if (cartItems.filter((i) => i.productId == payload.productId).length > 0) {
+      this.removeFromCartLocalStorage(payload.productId);
+
+      if (payload.quantity > 0) {
+        cartItems = this.getCartItemsFromLocalStorage();
+        cartItems.push(payload);
+        localStorage.setItem(this.cartKey, JSON.stringify(cartItems));
+      }
       return;
     }
 
-    this.productService.getProductById(payload.productId).subscribe((val) => {
-      let product = val;
-      let cartItem = {
-        cartItemId: uuidv4(),
-        product: {
-          productId: product.productId,
-          name: product.name,
-          description: product.description,
-          price: product.price,
-          quantity: product.quantity,
-          image: product.images[0],
-          productCategory: product.productCategory,
-          brand: product.brand,
-          country: product.country,
-          isArchive: product.isArchive,
-        },
-        quantity: 1,
-      };
-      cartItems.push(cartItem);
-      localStorage.setItem(this.cartKey, JSON.stringify(cartItems));
-    });
+    cartItems.push(payload);
+    localStorage.setItem(this.cartKey, JSON.stringify(cartItems));
   }
 
-  public removeFromCart(cartItemId: string): Observable<Object> {
+  public removeFromCart(productId: string): Observable<Object> {
     if (this.authService.isLoggedIn() == true) {
-      return this.http.delete(this.baseApiUrl + cartItemId);
+      return this.http.delete(this.baseApiUrl + productId);
     } else {
-      this.removeFromCartLocalStorage(cartItemId);
+      this.removeFromCartLocalStorage(productId);
       return scheduled([Object], asapScheduler);
     }
   }
 
-  private removeFromCartLocalStorage(itemId: string): void {
+  private removeFromCartLocalStorage(productId: string): void {
     let cartItems = this.getCartItemsFromLocalStorage();
-    cartItems = cartItems.filter((item) => item.cartItemId !== itemId);
+    cartItems = cartItems.filter((item) => item.productId !== productId);
     localStorage.setItem(this.cartKey, JSON.stringify(cartItems));
   }
 
@@ -147,9 +143,9 @@ export class CartService {
     user: RegisterUserFromOrderRequest;
     cartItems: AddToCartRequest[];
     deliveryMethodId: any;
-    paymentMethodId: any;
-  }): Observable<Object> {
-    return this.http.post(
+    paymentMethod: any;
+  }): Observable<{ orderId: string }> {
+    return this.http.post<{ orderId: string }>(
       `${this.baseApiUrl}order-cart-for-unregistered`,
       payload,
       {
@@ -196,5 +192,31 @@ export class CartService {
 
   public clearLocalCart(): void {
     localStorage.setItem(this.cartKey, '');
+  }
+
+  private getProductForUnregestereCart(
+    productsId: string[]
+  ): Observable<ProductMinimalData[]> {
+    let params = new HttpParams();
+
+    productsId.forEach((id) => {
+      params = params.append('productsId', id);
+    });
+
+    return this.http.get<ProductMinimalData[]>(
+      `${this.baseApiUrl}get-product-for-unregestered-cart`,
+      { params, withCredentials: true }
+    );
+  }
+
+  public registerCart() {
+    let cartItems = this.getCartItemsFromLocalStorage();
+
+    const cartItemsrequest = cartItems.map((item) => this.addToUserCart(item));
+    forkJoin(cartItemsrequest)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((items) => {
+        this.clearLocalCart();
+      });
   }
 }

@@ -90,7 +90,6 @@ export class UserPageComponent implements OnInit, OnDestroy {
       .subscribe((user) => {
         this.user = user;
         this.userForm.patchValue(this.user);
-        this.userService.userEMail = user.email;
         localStorage.setItem(this.userService.userEMailKey, user.email);
         this.editMode = false;
       });

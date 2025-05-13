@@ -12,8 +12,14 @@ export class ToastService {
   private configureToastr(): void {
     const options: Partial<GlobalConfig> = {
       positionClass: 'toast-top-right',
+      maxOpened: 3,
+      autoDismiss: true,
+      preventDuplicates: true,
     };
-    this.toastr.toastrConfig = { ...this.toastr.toastrConfig, ...options };
+    this.toastr.toastrConfig = {
+      ...this.toastr.toastrConfig,
+      ...options,
+    };
   }
 
   public showError(message: string, title: string = 'Ошибка'): void {

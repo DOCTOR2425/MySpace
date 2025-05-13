@@ -48,7 +48,7 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
     this.productToUpdateId = this.route.snapshot.paramMap.get('id')!;
 
     forkJoin({
-      FullProductInfoResponse: this.productService.getProductToUpdate(
+      FullProductInfoResponse: this.productService.getProductById(
         this.productToUpdateId
       ),
       productOptions: this.adminService.getOptionsForProduct(),
@@ -111,26 +111,25 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
         this.initPropertiesForm();
       });
 
-    const imageRequests = FullProductInfoResponse.images.map((image) =>
-      this.http.get(image, {
-        responseType: 'blob',
-      })
-    );
-    forkJoin(imageRequests).subscribe((blobs) => {
-      this.photos = blobs.map((blob, index) => {
-        return new File(
-          [blob],
-          FullProductInfoResponse.images[index].replace(
-            'https://localhost:7295/images/',
-            ''
-          ),
-          {
-            type: blob.type,
-          }
-        );
-      });
-      this.photosToView = this.photos.map((file) => this.getPhotoUrl(file));
+    const imageRequests = FullProductInfoResponse.images.map((image) => {
+      const name = image.replace('https://localhost:7295/images/', '');
+      return this.adminService.uploadImage(name);
     });
+    forkJoin(imageRequests)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((blobs) => {
+        this.photos = blobs.map((blob, index) => {
+          return new File(
+            [blob],
+            FullProductInfoResponse.images[index].replace(
+              'https://localhost:7295/images/',
+              ''
+            ),
+            { type: blob.type }
+          );
+        });
+        this.photosToView = this.photos.map((file) => this.getPhotoUrl(file));
+      });
   }
 
   public onSubmit(): void {

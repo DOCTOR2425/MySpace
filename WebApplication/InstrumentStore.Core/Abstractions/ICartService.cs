@@ -1,4 +1,5 @@
 ﻿using InstrumentStore.Domain.Contracts.Cart;
+using InstrumentStore.Domain.Contracts.Products;
 using InstrumentStore.Domain.DataBase.Models;
 
 namespace InstrumentStore.Domain.Abstractions
@@ -15,5 +16,8 @@ namespace InstrumentStore.Domain.Abstractions
 		Task<Guid> RemoveFromCart(Guid cartItemId);
 		Task<List<PaidOrderItem>> GetUserOrders(Guid userId);
 		Task<Guid> OrderCartForUnregistered(Guid userId, OrderCartOfUnregisteredRequest request);
+		Task<int> GetProductQuantityInUserCart(Guid productId, Guid userId);
+		Task<CartItemResponse> GetCartItemResponse(CartItem cartItem);
+		Task<List<ProductMinimalData>> GetProductForUnregestereCart(List<Guid> productsId);
 	}
 }

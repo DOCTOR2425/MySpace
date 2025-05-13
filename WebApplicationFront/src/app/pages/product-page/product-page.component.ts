@@ -19,6 +19,8 @@ import { ProductCard } from '../../data/interfaces/product/product-card.interfac
 import { ProductCardComponent } from '../../common-ui/product-card/product-card.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { AuthService } from '../../service/auth/auth.service';
+import { UserService } from '../../service/user/user.service';
+import { UserProductStats } from '../../data/interfaces/product/user-product-stats.interface';
 
 @Component({
   selector: 'app-product',
@@ -39,8 +41,11 @@ export class ProductComponent implements OnInit, OnDestroy {
   public newComment: string = '';
   public comments: CommentResponse[] = [];
   public simmularProducts: ProductCard[] = [];
-  public viewportHeight = 300;
-  public expanded = false;
+  public userProductStats!: UserProductStats;
+
+  public viewportHeight: number = 300;
+  public expanded: boolean = false;
+
   private unsubscribe$ = new Subject<void>();
 
   constructor(
@@ -50,7 +55,8 @@ export class ProductComponent implements OnInit, OnDestroy {
     private cartService: CartService,
     private comparisonService: ComparisonService,
     private toastService: ToastService,
-    public authService: AuthService
+    public authService: AuthService,
+    private userService: UserService
   ) {}
 
   public ngOnInit(): void {
@@ -93,7 +99,20 @@ export class ProductComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         this.simmularProducts = data;
       });
+
+    if (this.authService.isLoggedIn()) {
+      this.userService
+        .getUserProductStats(this.id)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe({
+          next: (stats) => {
+            this.userProductStats = stats;
+          },
+        });
+    } else {
+    }
   }
+
   private loadComments() {
     this.productService
       .getCommentsByProduct(this.id)
@@ -154,11 +173,37 @@ export class ProductComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (val) => {
+          this.userProductStats.isInComparison = true;
           this.toastService.showInfo(
             'Продукт добавлне в сравнения',
             'Добавленно'
           );
         },
       });
+  }
+
+  public deleteFromComparison(): void {
+    this.comparisonService
+      .deleteFromComparison(this.id)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: () => {
+          this.userProductStats.isInComparison = false;
+          this.toastService.showInfo('Продукт удалён из сравнений', 'Удалено');
+        },
+      });
+  }
+
+  public increaseQuantity(): void {
+    // this.cartService.
+    this.userProductStats.cartCount++;
+  }
+
+  public decreaseQuantity(): void {
+    if (this.userProductStats.cartCount > 1) {
+      this.userProductStats.cartCount--;
+    } else {
+      this.userProductStats.cartCount = 0;
+    }
   }
 }

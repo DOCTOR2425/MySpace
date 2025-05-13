@@ -19,6 +19,7 @@ import { CartItemComponent } from './cart-item/cart-item.component';
 import { UserDeliveryAddress } from '../../data/interfaces/user/user-delivery-address.interface';
 import { Router } from '@angular/router';
 import { ToastService } from '../../service/toast/toast.service';
+import { UserService } from '../../service/user/user.service';
 
 @Component({
   selector: 'app-cart-page',
@@ -40,6 +41,7 @@ export class CartPageComponent implements OnInit, OnDestroy {
     private cartService: CartService,
     private authService: AuthService,
     private router: Router,
+    private userService: UserService,
     private toastService: ToastService
   ) {
     this.orderForm = this.fb.group({
@@ -78,7 +80,10 @@ export class CartPageComponent implements OnInit, OnDestroy {
           this.orderForm.patchValue(this.userOrderInfo.userDeliveryAddress);
           this.orderForm
             .get('deliveryMethodId')!
-            .setValue(this.orderOptions.deliveryMethods[0].deliveryMethodId);
+            .setValue(
+              this.orderOptions.deliveryMethods.find((m) => m.price == 0)!
+                .deliveryMethodId
+            );
           this.orderForm
             .get('paymentMethod')!
             .setValue(this.orderOptions.paymentMethods[0]);
@@ -99,39 +104,46 @@ export class CartPageComponent implements OnInit, OnDestroy {
 
   public updateTotalPrice(): void {
     this.totalPrice = this.items.reduce(
-      (total, item) => total + item.product.price * item.quantity,
+      (total, item) => total + item.productPrice * item.quantity,
       0
     );
   }
 
   public changeItemQuantity(item: CartItem, isIncrease: boolean): void {
-    if (isIncrease) {
-      item.quantity += 1;
-      this.cahngeItemNumber(item);
-    } else if (item.quantity > 1) {
-      item.quantity -= 1;
-      this.cahngeItemNumber(item);
-    }
+    if (isIncrease) item.quantity++;
+    else item.quantity--;
+
+    this.cartService
+      .addToUserCart({
+        productId: item.productId,
+        quantity: item.quantity,
+      })
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe();
+    this.updateTotalPrice();
   }
 
-  public removeCartItem(item: CartItem): void {
+  public removeCartItem(productId: string): void {
     this.items = this.items.filter(
-      (itemTarget) => itemTarget.cartItemId !== item.cartItemId
+      (itemTarget) => itemTarget.productId !== productId
     );
     this.cartService
-      .removeFromCart(item.cartItemId)
+      .removeFromCart(productId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe();
     this.updateTotalPrice();
   }
 
-  public cahngeItemNumber(cartItem: CartItem): void {
-    this.cartService
-      .cahngeCart(cartItem)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe();
-    this.updateTotalPrice();
-  }
+  // public cahngeItemNumber(cartItem: CartItem): void {
+  //   this.cartService
+  //     .addToUserCart({
+  //       productId: cartItem.productId,
+  //       quantity: cartItem.quantity,
+  //     })
+  //     .pipe(takeUntil(this.unsubscribe$))
+  //     .subscribe();
+  //   this.updateTotalPrice();
+  // }
 
   public orderCart(): void {
     if (this.orderForm.invalid) {
@@ -185,7 +197,7 @@ export class CartPageComponent implements OnInit, OnDestroy {
     };
 
     const cartItems: AddToCartRequest[] = this.items.map((item) => ({
-      productId: item.product.productId,
+      productId: item.productId,
       quantity: item.quantity,
     }));
 
@@ -193,10 +205,21 @@ export class CartPageComponent implements OnInit, OnDestroy {
       user,
       cartItems,
       deliveryMethodId: this.orderForm.value.deliveryMethodId,
-      paymentMethodId: this.orderForm.value.paymentMethod,
+      paymentMethod: this.orderForm.value.paymentMethod,
     };
 
-    this.cartService.orderCartForUnregistered(payload).subscribe();
+    this.cartService.orderCartForUnregistered(payload).subscribe({
+      next: (value: { orderId: string }) => {
+        localStorage.setItem(
+          this.userService.userEMailKey,
+          this.orderForm.value.email
+        );
+        this.router.navigate(['/user']);
+      },
+      error: (error) => {
+        this.toastService.showError(error);
+      },
+    });
     this.cartService.clearLocalCart();
   }
 

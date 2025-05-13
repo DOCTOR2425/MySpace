@@ -1,0 +1,142 @@
+<div
+  class="modal fade"
+  id="brandsModal"
+  data-bs-backdrop="static"
+  tabindex="-1"
+  aria-labelledby="brandsModalLabel"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-lg modal-dialog-scrollable"
+    style="height: calc(100vh - 60px)"
+  >
+    <div class="modal-content h-100">
+      <div class="modal-header">
+        <h5 class="modal-title" id="brandsModalLabel">Управление брендами</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Закрыть"
+        ></button>
+      </div>
+      <div
+        class="modal-body d-flex flex-column"
+        *ngIf="viewMode === 'list'"
+        style="overflow: hidden"
+      >
+        <div class="mb-3">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Поиск брендов..."
+            [(ngModel)]="searchBrand"
+            (input)="filterBrands()"
+          />
+        </div>
+
+        <div class="table-responsive flex-grow-1" style="overflow-y: auto">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Название бренда</th>
+                <th>Действия</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let brand of filteredBrands">
+                <td>{{ brand.name }}</td>
+                <td>
+                  <button
+                    class="btn btn-sm btn-outline-primary me-2"
+                    (click)="showEditForm(brand)"
+                  >
+                    Изменить
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="d-grid mt-3">
+          <button class="btn btn-success" (click)="showCreateForm()">
+            <i class="bi bi-plus-circle"></i> Добавить бренд
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="viewMode === 'create'" class="d-flex flex-column h-100">
+        <div class="modal-header">
+          <h5 class="modal-title">Добавление нового бренда</h5>
+          <button
+            type="button"
+            class="btn-close"
+            (click)="resetView()"
+            aria-label="Закрыть"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Название бренда</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="newBrandName"
+              placeholder="Введите название бренда..."
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="resetView()">
+            Отмена
+          </button>
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="createBrand()"
+            [disabled]="!newBrandName.trim()"
+          >
+            Сохранить
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="viewMode === 'edit'" class="d-flex flex-column h-100">
+        <div class="modal-header">
+          <h5 class="modal-title">Редактирование бренда</h5>
+          <button
+            type="button"
+            class="btn-close"
+            (click)="resetView()"
+            aria-label="Закрыть"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Название бренда</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="editingBrand.name"
+              placeholder="Введите новое название..."
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="resetView()">
+            Отмена
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="updateBrand()"
+            [disabled]="!editingBrand.name.trim()"
+          >
+            Обновить
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

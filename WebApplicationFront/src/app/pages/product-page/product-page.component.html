@@ -23,13 +23,44 @@
         <h1 class="title">{{ product.name }}</h1>
         <div class="price">{{ product.price }} руб.</div>
 
-        <div class="actions">
-          <button id="addToCart" class="add-to-cart" (click)="addToCart()">
-            В корзину
-          </button>
-          <button class="add-to-compare" (click)="addToComparison()">
-            К сравнению
-          </button>
+        <div class="actions" *ngIf="userProductStats">
+          <ng-container>
+            <button
+              *ngIf="userProductStats.cartCount == 0"
+              id="addToCart"
+              class="add-to-cart"
+              (click)="addToCart()"
+            >
+              В корзину
+            </button>
+
+            <div *ngIf="userProductStats.cartCount" class="quantity-control">
+              <button (click)="decreaseQuantity()" class="control-btn">
+                -
+              </button>
+              <span class="quantity">{{ userProductStats.cartCount }}</span>
+              <button (click)="increaseQuantity()" class="control-btn">
+                +
+              </button>
+            </div>
+          </ng-container>
+
+          <ng-container>
+            <button
+              *ngIf="!userProductStats.isInComparison"
+              class="add-to-compare"
+              (click)="addToComparison()"
+            >
+              К сравнению
+            </button>
+            <button
+              *ngIf="userProductStats.isInComparison"
+              class="add-to-compare"
+              (click)="deleteFromComparison()"
+            >
+              Удалить из сравнения
+            </button>
+          </ng-container>
         </div>
       </div>
     </div>

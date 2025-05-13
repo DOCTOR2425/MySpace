@@ -102,22 +102,6 @@ namespace InstrumentStore.Domain.Migrations
                     b.ToTable("CartItem");
                 });
 
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.City", b =>
-                {
-                    b.Property<Guid>("CityId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.HasKey("CityId");
-
-                    b.ToTable("City");
-                });
-
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Comment", b =>
                 {
                     b.Property<Guid>("CommentId")
@@ -169,8 +153,10 @@ namespace InstrumentStore.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CityId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Entrance")
                         .IsRequired()
@@ -196,8 +182,6 @@ namespace InstrumentStore.Domain.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("DeliveryAddressId");
-
-                    b.HasIndex("CityId");
 
                     b.HasIndex("PaidOrderId");
 
@@ -444,10 +428,20 @@ namespace InstrumentStore.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Surname")
                         .IsRequired()
@@ -459,40 +453,9 @@ namespace InstrumentStore.Domain.Migrations
                         .HasMaxLength(21)
                         .HasColumnType("nvarchar(21)");
 
-                    b.Property<Guid>("UserRegistrInfoId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("UserId");
 
-                    b.HasIndex("UserRegistrInfoId");
-
                     b.ToTable("User");
-                });
-
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.UserRegistrInfo", b =>
-                {
-                    b.Property<Guid>("UserRegistrInfoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("RefreshToken")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.HasKey("UserRegistrInfoId");
-
-                    b.ToTable("UserRegistrInfo");
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.CartItem", b =>
@@ -535,19 +498,11 @@ namespace InstrumentStore.Domain.Migrations
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.DeliveryAddress", b =>
                 {
-                    b.HasOne("InstrumentStore.Domain.DataBase.Models.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("InstrumentStore.Domain.DataBase.Models.PaidOrder", "PaidOrder")
                         .WithMany()
                         .HasForeignKey("PaidOrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("City");
 
                     b.Navigation("PaidOrder");
                 });
@@ -675,17 +630,6 @@ namespace InstrumentStore.Domain.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("ProductProperty");
-                });
-
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.User", b =>
-                {
-                    b.HasOne("InstrumentStore.Domain.DataBase.Models.UserRegistrInfo", "UserRegistrInfo")
-                        .WithMany()
-                        .HasForeignKey("UserRegistrInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserRegistrInfo");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,18 +1,15 @@
 <div class="cart-item">
   <img
-    [src]="item.product.image"
-    [alt]="item.product.name"
-    [routerLink]="['/product/' + item.product.productId]"
+    [src]="item.productImage"
+    [alt]="item.productName"
+    [routerLink]="['/product/' + item.productId]"
   />
   <div class="cart-info">
-    <h5
-      [routerLink]="['/product/' + item.product.productId]"
-      class="product-name"
-    >
-      {{ item.product.name }}
+    <h5 [routerLink]="['/product/' + item.productId]" class="product-name">
+      {{ item.productName }}
     </h5>
     <div class="price-controls">
-      <p class="price">{{ item.product.price }} руб.</p>
+      <p class="price">{{ item.productPrice }} руб.</p>
       <div class="number-control">
         <button
           (click)="changeQuantity(false)"
@@ -24,7 +21,7 @@
         <p>{{ item.quantity }}</p>
         <button (click)="changeQuantity(true)">+</button>
       </div>
-      <p class="total-price">{{ item.product.price * item.quantity }} руб.</p>
+      <p class="total-price">{{ item.productPrice * item.quantity }} руб.</p>
       <button class="remove-btn" (click)="removeItem()">Удалить</button>
     </div>
   </div>

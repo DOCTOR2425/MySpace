@@ -5,52 +5,56 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InstrumentStore.Domain.Services
 {
-    public class CountryService : ICountryService
-    {
-        private readonly InstrumentStoreDBContext _dbContext;
+	public class CountryService : ICountryService
+	{
+		private readonly InstrumentStoreDBContext _dbContext;
 
-        public CountryService(InstrumentStoreDBContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+		public CountryService(InstrumentStoreDBContext dbContext)
+		{
+			_dbContext = dbContext;
+		}
 
-        public async Task<List<Country>> GetAll()
-        {
-            return await _dbContext.Country.AsNoTracking().ToListAsync();
-        }
+		public async Task<List<Country>> GetAll()
+		{
+			return await _dbContext.Country.AsNoTracking().ToListAsync();
+		}
 
-        public async Task<Country> GetById(Guid id)
-        {
-            return await _dbContext.Country.FindAsync(id);
-        }
+		public async Task<Country> GetById(Guid id)
+		{
+			return await _dbContext.Country.FindAsync(id);
+		}
 
-        public async Task<Guid> Create(Country brand)
-        {
-            await _dbContext.Country.AddAsync(brand);
-            await _dbContext.SaveChangesAsync();
+		public async Task<Guid> Create(string countryName)
+		{
+			Country country = new Country()
+			{
+				CountryId = Guid.NewGuid(),
+				Name = countryName
+			};
 
-            return brand.CountryId;
-        }
+			await _dbContext.Country.AddAsync(country);
+			await _dbContext.SaveChangesAsync();
 
-        public async Task<Guid> Update(Guid oldId, Country newCountry)
-        {
-            await _dbContext.Country
-                .Where(p => p.CountryId == oldId)
-                .ExecuteUpdateAsync(x => x
-                    .SetProperty(p => p.Name, newCountry.Name));
+			return country.CountryId;
+		}
 
-            _dbContext.SaveChanges();
+		public async Task<Guid> Update(Guid oldId, string newName)
+		{
+			await _dbContext.Country
+				.Where(p => p.CountryId == oldId)
+				.ExecuteUpdateAsync(x => x
+					.SetProperty(p => p.Name, newName));
 
-            return oldId;
-        }
+			return oldId;
+		}
 
-        public async Task<Guid> Delete(Guid id)
-        {
-            await _dbContext.Country
-                .Where(p => p.CountryId == id)
-                .ExecuteDeleteAsync();
+		public async Task<Guid> Delete(Guid id)
+		{
+			await _dbContext.Country
+				.Where(p => p.CountryId == id)
+				.ExecuteDeleteAsync();
 
-            return id;
-        }
-    }
+			return id;
+		}
+	}
 }

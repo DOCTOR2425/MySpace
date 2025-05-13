@@ -2,17 +2,14 @@
 using InstrumentStore.Domain.Abstractions;
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace InstrumentStore.Domain.Services
 {
 	public class AdminService : IAdminService
 	{
 		private readonly InstrumentStoreDBContext _dbContext;
-		private readonly IUsersService _usersService;
+		private readonly IUserService _usersService;
 		private readonly IProductService _productService;
 		private readonly IPaidOrderService _paidOrderService;
 		private readonly IDeliveryMethodService _deliveryMethodService;
@@ -23,7 +20,7 @@ namespace InstrumentStore.Domain.Services
 		private readonly IConfiguration _config;
 
 		public AdminService(InstrumentStoreDBContext dbContext,
-			IUsersService usersService,
+			IUserService usersService,
 			IProductService productService,
 			IPaidOrderService paidOrderService,
 			IDeliveryMethodService eliveryMethodService,
@@ -55,7 +52,7 @@ namespace InstrumentStore.Domain.Services
 			mailText += $"Заказ от {paidOrder.OrderDate}\n";
 			mailText += $"Клиент - {paidOrder.User.Surname} {paidOrder.User.FirstName}\n";
 			mailText += $"Телефон клиента - {paidOrder.User.Telephone}\n";
-			mailText += $"Email клиента - {paidOrder.User.UserRegistrInfo.Email}\n";
+			mailText += $"Email клиента - {paidOrder.User.Email}\n";
 			mailText += $"Способ оплаты - {paidOrder.PaymentMethod}\n";
 			mailText += $"Способ доставки - {paidOrder.DeliveryMethod.Name} (стоимость - {paidOrder.DeliveryMethod.Price})\n";
 
@@ -80,46 +77,6 @@ namespace InstrumentStore.Domain.Services
 			mailText += $"\nОбщая сумма с доставкой: {summaryPrice + paidOrder.DeliveryMethod.Price}.р";
 
 			_emailService.SendMail(_config["AdminSettings:AdminMail"], mailText, "Новый заказ");
-		}
-
-		public async Task<JwtSecurityToken> GetRefreshToken()
-		{
-			return new JwtSecurityTokenHandler()
-				.ReadToken(_config["AdminSettings:RefreshToken"]) as JwtSecurityToken;
-		}
-
-		public async Task<string> Login(string email, string password)
-		{
-			if (await IsAdminEmail(email) == false)
-				throw new Exception("Invalid admin email");
-
-			if (await Verify(password, _config["AdminSettings:LoginPasswordHash"]) == false)
-				throw new Exception("Invalid password of admin, email: " + email);
-
-			Guid adminId = Guid.Parse(_config["AdminSettings:AdminId"]);
-
-			_config["AdminSettings:RefreshToken"] =
-				await _jwtProvider.GenerateRefreshToken(adminId);
-
-			return await _jwtProvider.GenerateAccessToken(adminId);
-		}
-
-		public async Task<bool> Verify(string password, string passwordHash)
-		{
-			return BCrypt.Net.BCrypt.EnhancedVerify(password, passwordHash);
-		}
-
-		public async Task<string> ReLogin(JwtSecurityToken token)
-		{
-			Guid adminId = await GetUserIdFromToken(token);
-
-			return await _jwtProvider.GenerateAccessToken(adminId);
-		}
-
-		private async Task<Guid> GetUserIdFromToken(JwtSecurityToken token)
-		{
-			return Guid.Parse(token.Claims
-					.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
 		}
 
 		public async Task<bool> IsAdminEmail(string email)

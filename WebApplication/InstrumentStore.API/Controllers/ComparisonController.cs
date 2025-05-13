@@ -14,7 +14,7 @@ namespace InstrumentStore.API.Controllers
     {
         private readonly InstrumentStoreDBContext _dbContext;
         private readonly IProductComparisonService _productComparisonService;
-        private readonly IUsersService _usersService;
+        private readonly IUserService _usersService;
         private readonly IProductPropertyService _productPropertyService;
         private readonly IMapper _mapper;
 
@@ -22,7 +22,7 @@ namespace InstrumentStore.API.Controllers
             InstrumentStoreDBContext dbContext,
             IProductComparisonService productComparisonService,
             IMapper mapper,
-            IUsersService usersService,
+            IUserService usersService,
             IProductPropertyService productPropertyService)
         {
             _dbContext = dbContext;
