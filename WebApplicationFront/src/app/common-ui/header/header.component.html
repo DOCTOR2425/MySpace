@@ -1,53 +1,84 @@
-<div class="navbar header border-bottom border-black d-flex flex-column">
-  <div class="middleMenu d-inline-flex">
-    <div class="logo-container">
-      <h2 routerLink="/" style="cursor: pointer">MySpace</h2>
-      <h6>О нас</h6>
-    </div>
-
-    <div class="search-container">
-      <input
-        type="text"
-        placeholder="Поиск товаров..."
-        [(ngModel)]="searchQuery"
-      />
-      <button (click)="searchByName()">
-        <img
-          src="https://cdn-icons-png.flaticon.com/128/622/622669.png"
-          alt="Поиск"
-        />
-      </button>
-    </div>
-
-    <span class="buttons">
-      <span [routerLink]="['comparison']">
-        <img src="https://cdn-icons-png.flaticon.com/128/994/994414.png" />
-        <a>Сравнение</a>
-      </span>
-
-      <ng-container *ngIf="authService.isLoggedIn(); else loginButton">
-        <button [routerLink]="['/user']" class="user-button">
-          {{ getEmail() }}
-        </button>
-      </ng-container>
-      <ng-template #loginButton>
-        <span [routerLink]="['/login']">
-          <img src="https://cdn-icons-png.flaticon.com/128/1828/1828453.png" />
-          <a>Войти</a>
-        </span>
-      </ng-template>
-
-      <span [routerLink]="['cart']">
-        <img src="https://cdn-icons-png.flaticon.com/128/481/481384.png" />
-        <a>Корзина</a>
-      </span>
-    </span>
-  </div>
-  <div class="lowMenu d-inline-flex">
-    <a
-      *ngFor="let category of categories"
-      [routerLink]="['/category/' + category.productCategoryId]"
-      >{{ category.name }}</a
+<div
+  class="navbar nav header bar-expand-lg navbar-light bg-white fixed-top border-bottom border-dark shadow-sm px-3 px-lg-5"
+>
+  <div class="container-fluid d-flex flex-column p-0">
+    <div
+      class="d-flex w-100 align-items-center justify-content-between pt-2 flex-nowrap"
     >
+      <div class="d-flex align-items-end me-3">
+        <h2
+          class="mb-0 fw-bolder fs-3 fs-lg-2 cursor-pointer text-dark hover-primary"
+          routerLink="/"
+        >
+          MySpace
+        </h2>
+        <h6
+          class="mb-0 ms-2 d-none d-lg-block fs-6 cursor-pointer"
+          routerLink="['/about']"
+        >
+          О нас
+        </h6>
+      </div>
+
+      <div
+        class="input-group rounded-pill bg-light flex-grow-1 mx-2 mx-lg-3"
+        style="max-width: 500px"
+      >
+        <input
+          type="text"
+          class="form-control border-0 bg-transparent shadow-none ps-3"
+          placeholder="Поиск товаров..."
+          [(ngModel)]="searchQuery"
+        />
+        <button
+          class="btn d-flex justify-content-center align-items-center p-1 me-1"
+          (click)="searchByName()"
+        >
+          <i class="bi bi-search text-primary fs-6 border-start ps-2"></i>
+        </button>
+      </div>
+
+      <div class="d-flex align-items-center">
+        <div class="nav-icons">
+          <div class="nav-item" [routerLink]="['comparison']">
+            <i class="bi bi-clipboard2-data nav-icon"></i>
+            <span class="nav-label">Сравнение</span>
+          </div>
+
+          <ng-container *ngIf="authService.isLoggedIn(); else loginButton">
+            <div class="nav-item" [routerLink]="['/user']">
+              <i class="bi bi-person-circle nav-icon"></i>
+              <span class="nav-label text-truncate" style="max-width: 100px">{{
+                getEmail()
+              }}</span>
+            </div>
+          </ng-container>
+
+          <ng-template #loginButton>
+            <div class="nav-item" [routerLink]="['/login']">
+              <i class="bi bi-box-arrow-in-right nav-icon"></i>
+              <span class="nav-label">Войти</span>
+            </div>
+          </ng-template>
+
+          <div class="nav-item" [routerLink]="['cart']">
+            <i class="bi bi-cart3 nav-icon"></i>
+            <span class="nav-label">Корзина</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex w-100 overflow-auto py-1 hide-scrollbar">
+      <div class="d-flex flex-center flex-nowrap gap-2">
+        <a
+          *ngFor="let category of categories"
+          class="btn-sm btn-outline-dark rounded-pill flex-shrink-0"
+          [routerLink]="['/category/' + category.productCategoryId]"
+        >
+          {{ category.name }}
+        </a>
+      </div>
+    </div>
   </div>
 </div>

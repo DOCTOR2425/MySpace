@@ -72,10 +72,9 @@ export class LoginPageComponent implements OnDestroy {
     this.verificationForm.reset();
   }
 
-  private login(response: { role: string }, email: string) {
+  private login(response: { role: string; isBlocked: boolean }, email: string) {
     this.isLoading = false;
     if (response.role === 'admin') {
-      this.adminService.isAdmin = true;
       localStorage.setItem(this.userService.userEMailKey, '');
       this.router.navigate(['admin']);
     } else {

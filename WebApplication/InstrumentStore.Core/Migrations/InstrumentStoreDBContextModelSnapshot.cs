@@ -22,7 +22,7 @@ namespace InstrumentStore.Domain.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("InstrumentStore.Domain.Contracts.Products.UserProductCard", b =>
+            modelBuilder.Entity("InstrumentStore.Domain.Contracts.Products.AdminProductCard", b =>
                 {
                     b.Property<Guid>("ProductId")
                         .ValueGeneratedOnAdd()
@@ -59,7 +59,7 @@ namespace InstrumentStore.Domain.Migrations
 
                     b.HasKey("ProductId");
 
-                    b.ToTable("UserProductCard");
+                    b.ToTable("AdminProductCard");
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Brand", b =>
@@ -428,6 +428,13 @@ namespace InstrumentStore.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime?>("BlockDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("BlockDetails")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -442,6 +449,9 @@ namespace InstrumentStore.Domain.Migrations
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("RegistrationDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Surname")
                         .IsRequired()

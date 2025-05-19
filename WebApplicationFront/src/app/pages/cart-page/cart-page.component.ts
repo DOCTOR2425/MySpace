@@ -160,7 +160,9 @@ export class CartPageComponent implements OnInit, OnDestroy {
         .orderCartForRegistered(payload)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe({
-          next: (val) => {},
+          next: (val) => {
+            this.router.navigate(['/user']);
+          },
           error: (error) => {
             this.toastService.showError(error.error.error);
           },

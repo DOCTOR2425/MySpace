@@ -81,6 +81,8 @@ namespace InstrumentStore.Domain.Mapper
 
 			CreateMap<User, UserProfileResponse>();
 
+			CreateMap<User, AdminUserResponse>();
+
 			CreateMap<PaidOrder, UserPaidOrderResponse>()
 				.AfterMap((src, dest, context) =>
 				{

@@ -16,7 +16,6 @@ import { FullProductInfoResponse } from '../../../../data/interfaces/product/pro
 import { OptionsForProduct } from '../../../../data/interfaces/some/options-for-order.interface';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { CreateProductRequest } from '../../../../data/interfaces/product/create-product-request.interface';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-update-product',
@@ -36,13 +35,20 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
 
   constructor(
-    private http: HttpClient,
     private router: Router,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private adminService: AdminService,
     private productService: ProductService
   ) {}
+
+  selectedImage: string = '';
+
+  openImageModal(imageUrl: string) {
+    this.selectedImage = imageUrl;
+    // const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+    // modal.show();
+  }
 
   public ngOnInit(): void {
     this.productToUpdateId = this.route.snapshot.paramMap.get('id')!;

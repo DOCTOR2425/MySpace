@@ -1,0 +1,278 @@
+.admin-container {
+  padding: 16px;
+  font-family: 'Roboto', sans-serif;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.filter-section {
+  background-color: #f8f9fa;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+  h2 {
+    margin: 0 0 16px 0;
+    color: #2E86C1;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+}
+
+.filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 200px;
+  min-width: 0;
+
+  label {
+    margin-bottom: 6px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #555;
+  }
+
+  input,
+  select {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background-color: white;
+    transition: border-color 0.2s;
+
+    &:focus {
+      border-color: #2E86C1;
+      outline: none;
+    }
+  }
+}
+
+.search-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 200px;
+
+  .search-input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+
+    &:focus {
+      border-color: #007bff;
+    }
+  }
+}
+
+.filter-actions {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-left: auto;
+  flex: 1 1 100%;
+}
+
+.btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+
+  &:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.apply-btn {
+  background-color: #2E86C1;
+  color: white;
+  box-shadow: 0 2px 4px rgba(46, 134, 193, 0.3);
+  height: 42px;
+}
+
+.reset-btn {
+  background-color: #f0f0f0;
+  color: #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 42px;
+}
+
+.table-container {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+
+  th,
+  td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+  }
+
+  th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #555;
+    font-size: 0.9rem;
+    position: sticky;
+    top: 0;
+  }
+
+  tr {
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #f5f9ff;
+    }
+  }
+
+  td {
+    font-size: 0.95rem;
+  }
+}
+
+.user-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  .user-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .user-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #333;
+  }
+
+  .user-status {
+    font-size: 1.2rem;
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .info-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  .info-label {
+    font-weight: 500;
+    color: #666;
+    font-size: 0.9rem;
+    min-width: 80px;
+  }
+
+  .info-value {
+    flex: 1;
+    font-size: 0.95rem;
+  }
+
+  .user-actions {
+    margin-top: 12px;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+.active {
+  color: #28a745;
+  font-weight: 500;
+}
+
+.blocked {
+  color: #dc3545;
+  font-weight: 500;
+}
+
+.btn {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.block-btn {
+  color: #d32f2f;
+  background-color: rgba(211, 47, 47, 0.08);
+
+  &:hover {
+    background-color: rgba(211, 47, 47, 0.15);
+  }
+}
+
+.unblock-btn {
+  color: #388e3c;
+  background-color: rgba(56, 142, 60, 0.08);
+
+  &:hover {
+    background-color: rgba(56, 142, 60, 0.15);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.user-card,
+.stat-card {
+  animation: fadeIn 0.3s ease-out forwards;
+}

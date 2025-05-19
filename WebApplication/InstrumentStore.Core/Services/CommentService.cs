@@ -2,6 +2,7 @@
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Authentication;
 
 namespace InstrumentStore.Domain.Services
 {
@@ -16,9 +17,6 @@ namespace InstrumentStore.Domain.Services
 
 		public async Task<Guid> CreateCommentToProduct(string commentText, Guid productId, Guid userId)
 		{
-			if (commentText.Any() == false || commentText.Length > 1000)
-				new ArgumentNullException("неверный текст");
-
 			Product? product = await _dbContext.Product
 				.FindAsync(productId);
 			User? user = await _dbContext.User
@@ -26,6 +24,12 @@ namespace InstrumentStore.Domain.Services
 
 			if (product == null || user == null)
 				throw new ArgumentNullException($"Нет таких продукта или юзера:\n{productId}\n{userId}");
+
+			if (user.BlockDate != null)
+				throw new AuthenticationException("Запрещено оставлять комментарии по причине бана");
+
+			if (commentText.Any() == false || commentText.Length > 1000)
+				new ArgumentNullException("неверный текст");
 
 			Comment comment = new Comment()
 			{

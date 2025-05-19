@@ -38,6 +38,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   @Input() id!: string;
   public product!: FullProductInfoResponse;
   public selectedImage: string | null = null;
+  public lastSelectedImage: string | null = null;
   public newComment: string = '';
   public comments: CommentResponse[] = [];
   public simmularProducts: UserProductCard[] = [];
@@ -85,6 +86,7 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   private loadPage() {
     this.selectedImage = null;
+    this.lastSelectedImage = null;
     this.newComment = '';
 
     this.productService
@@ -173,7 +175,12 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
   public selectImage(image: string): void {
+    this.lastSelectedImage = this.selectedImage;
     this.selectedImage = image;
+  }
+
+  public unselectImage(): void {
+    this.selectedImage = this.lastSelectedImage;
   }
 
   public addToCart(): void {
@@ -196,6 +203,12 @@ export class ProductComponent implements OnInit, OnDestroy {
         next: () => {
           this.loadComments();
           this.newComment = '';
+        },
+        error: (error) => {
+          if (error.status == 403) {
+            this.toastService.showError('Вам запрещено оставлять комментарии');
+            this.newComment = '';
+          }
         },
       });
   }

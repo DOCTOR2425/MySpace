@@ -44,7 +44,7 @@
       <tbody>
         <tr
           *ngFor="let category of filteredCategories"
-          [routerLink]="['/admin/update-category', category.productCategoryId]"
+          (click)="handleRowClick(category.productCategoryId)"
           routerLinkActive="router-link-active"
         >
           <td>{{ category.name }}</td>

@@ -1,5 +1,5 @@
 <tr
-  [routerLink]="['/admin/order', order.paidOrderId]"
+  (click)="handleRowClick(order.paidOrderId)"
   routerLinkActive="router-link-active"
   class="order-row"
 >

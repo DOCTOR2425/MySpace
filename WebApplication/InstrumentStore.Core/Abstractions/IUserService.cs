@@ -13,5 +13,14 @@ namespace InstrumentStore.Domain.Abstractions
 		Task<User> Update(Guid userId, UpdateUserRequest newUser);
 		Task<DeliveryAddress?> GetLastUserDeliveryAddress(Guid userId);
 		Task<List<Product>> GetOrderedProductsPendingReviewsByUser(Guid userId);
+		Task<List<User>> GetUsersForAdmin(
+			string? query,
+			DateTime? dateFrom,
+			DateTime? dateTo,
+			bool? isBlocked,
+			bool? hasOrders);
+		Task<AdminUserResponse> GetAdminUserResponse(User user);
+		Task<Guid> BlockUser(Guid userId, string details);
+		Task<Guid> UnblockUser(Guid userId);
 	}
 }

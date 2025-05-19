@@ -46,8 +46,11 @@ export class AuthService {
     return false;
   }
 
-  public verifyCode(email: string, code: string): Observable<{ role: string }> {
-    return this.http.post<{ role: string }>(
+  public verifyCode(
+    email: string,
+    code: string
+  ): Observable<{ role: string; isBlocked: boolean }> {
+    return this.http.post<{ role: string; isBlocked: boolean }>(
       `${this.baseApiUrl}verify-login-code/${email}/${code}`,
       null,
       { withCredentials: true }

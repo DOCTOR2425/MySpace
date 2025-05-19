@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InstrumentStore.Domain.Migrations
 {
     [DbContext(typeof(InstrumentStoreDBContext))]
-    [Migration("20250507180700_init")]
+    [Migration("20250515124552_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace InstrumentStore.Domain.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("InstrumentStore.Domain.Contracts.Products.UserProductCard", b =>
+            modelBuilder.Entity("InstrumentStore.Domain.Contracts.Products.AdminProductCard", b =>
                 {
                     b.Property<Guid>("ProductId")
                         .ValueGeneratedOnAdd()
@@ -62,7 +62,7 @@ namespace InstrumentStore.Domain.Migrations
 
                     b.HasKey("ProductId");
 
-                    b.ToTable("UserProductCard");
+                    b.ToTable("AdminProductCard");
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Brand", b =>
@@ -103,22 +103,6 @@ namespace InstrumentStore.Domain.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("CartItem");
-                });
-
-            modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.City", b =>
-                {
-                    b.Property<Guid>("CityId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.HasKey("CityId");
-
-                    b.ToTable("City");
                 });
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.Comment", b =>
@@ -172,8 +156,10 @@ namespace InstrumentStore.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CityId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Entrance")
                         .IsRequired()
@@ -199,8 +185,6 @@ namespace InstrumentStore.Domain.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("DeliveryAddressId");
-
-                    b.HasIndex("CityId");
 
                     b.HasIndex("PaidOrderId");
 
@@ -447,6 +431,13 @@ namespace InstrumentStore.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime?>("BlockDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("BlockDetails")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -461,6 +452,9 @@ namespace InstrumentStore.Domain.Migrations
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("RegistrationDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Surname")
                         .IsRequired()
@@ -517,19 +511,11 @@ namespace InstrumentStore.Domain.Migrations
 
             modelBuilder.Entity("InstrumentStore.Domain.DataBase.Models.DeliveryAddress", b =>
                 {
-                    b.HasOne("InstrumentStore.Domain.DataBase.Models.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("InstrumentStore.Domain.DataBase.Models.PaidOrder", "PaidOrder")
                         .WithMany()
                         .HasForeignKey("PaidOrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("City");
 
                     b.Navigation("PaidOrder");
                 });

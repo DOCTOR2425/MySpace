@@ -40,15 +40,6 @@ namespace InstrumentStore.API.Controllers
 			_usersService = usersService;
 		}
 
-		//[HttpGet("page{page}")]
-		//public async Task<ActionResult<List<UserProductCard>>> GetAllProductsCards([FromRoute] int page)
-		//{
-		//	List<Product> products = await _productService.GetAll(page);
-		//	products = products.Where(p => p.IsArchive == false).ToList();
-
-		//	return Ok(await _productService.GetUserProductCards(products));
-		//}
-
 		private async Task<Guid?> GetUserIdFromToken()
 		{
 			string? token = HttpContext.Request.Headers["Authorization"];

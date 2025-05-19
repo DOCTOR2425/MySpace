@@ -118,6 +118,7 @@ namespace InstrumentStore.Domain.Services
 				Surname = registerUserRequest.Surname,
 				Telephone = registerUserRequest.Telephone,
 				Email = registerUserRequest.Email,
+				RegistrationDate = DateTime.Now,
 			};
 
 			user.RefreshToken = await _jwtProvider.GenerateRefreshToken(user.UserId);
@@ -171,7 +172,8 @@ namespace InstrumentStore.Domain.Services
 				FirstName = registerUserRequest.FirstName,
 				Surname = registerUserRequest.Surname,
 				Telephone = registerUserRequest.Telephone,
-				Email = registerUserRequest.Email
+				Email = registerUserRequest.Email,
+				RegistrationDate = DateTime.Now
 			};
 
 			user.RefreshToken = await _jwtProvider.GenerateRefreshToken(user.UserId);

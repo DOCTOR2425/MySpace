@@ -12,6 +12,25 @@ namespace InstrumentStore.Domain.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AdminProductCard",
+                columns: table => new
+                {
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductCategory = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Brand = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsArchive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AdminProductCard", x => x.ProductId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Brand",
                 columns: table => new
                 {
@@ -21,18 +40,6 @@ namespace InstrumentStore.Domain.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Brand", x => x.BrandId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "City",
-                columns: table => new
-                {
-                    CityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_City", x => x.CityId);
                 });
 
             migrationBuilder.CreateTable(
@@ -61,25 +68,6 @@ namespace InstrumentStore.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserProductCard",
-                columns: table => new
-                {
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductCategory = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Brand = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsArchive = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductCard", x => x.ProductId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ProductCategory",
                 columns: table => new
                 {
@@ -100,7 +88,10 @@ namespace InstrumentStore.Domain.Migrations
                     Surname = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Telephone = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    RefreshToken = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false)
+                    RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RefreshToken = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    BlockDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    BlockDetails = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -324,18 +315,12 @@ namespace InstrumentStore.Domain.Migrations
                     HouseNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     Entrance = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     Flat = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    CityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PaidOrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DeliveryAddress", x => x.DeliveryAddressId);
-                    table.ForeignKey(
-                        name: "FK_DeliveryAddress_City_CityId",
-                        column: x => x.CityId,
-                        principalTable: "City",
-                        principalColumn: "CityId",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_DeliveryAddress_PaidOrder_PaidOrderId",
                         column: x => x.PaidOrderId,
@@ -390,11 +375,6 @@ namespace InstrumentStore.Domain.Migrations
                 name: "IX_Comment_UserId",
                 table: "Comment",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DeliveryAddress_CityId",
-                table: "DeliveryAddress",
-                column: "CityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeliveryAddress_PaidOrderId",
@@ -471,6 +451,9 @@ namespace InstrumentStore.Domain.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AdminProductCard");
+
+            migrationBuilder.DropTable(
                 name: "CartItem");
 
             migrationBuilder.DropTable(
@@ -486,16 +469,10 @@ namespace InstrumentStore.Domain.Migrations
                 name: "PaidOrderItem");
 
             migrationBuilder.DropTable(
-                name: "UserProductCard");
-
-            migrationBuilder.DropTable(
                 name: "ProductComparisonItem");
 
             migrationBuilder.DropTable(
                 name: "ProductPropertyValue");
-
-            migrationBuilder.DropTable(
-                name: "City");
 
             migrationBuilder.DropTable(
                 name: "PaidOrder");

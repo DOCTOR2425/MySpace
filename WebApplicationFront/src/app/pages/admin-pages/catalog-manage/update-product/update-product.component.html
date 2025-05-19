@@ -1,152 +1,260 @@
-<h1>Изменение товара</h1>
+<div class="container py-4">
+  <h1 class="h3 mb-4">Изменение товара</h1>
 
-<div class="product-form-container">
-  <div *ngIf="FullProductInfoResponse" class="product-form">
-    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="name">Название товара:</label>
-        <input type="text" id="name" formControlName="name" />
-      </div>
-
-      <div *ngIf="optionsForProduct.brands" class="form-group">
-        <label for="brand">Бренд:</label>
-        <select id="brand" formControlName="brand">
-          <option
-            *ngFor="let brand of optionsForProduct.brands"
-            [value]="brand.brandId"
-          >
-            {{ brand.name }}
-          </option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="country">Страна производства:</label>
-        <select id="country" formControlName="country">
-          <option
-            *ngFor="let country of optionsForProduct.countries"
-            [value]="country.countryId"
-          >
-            {{ country.name }}
-          </option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="category">Категория:</label>
-        <select
-          id="category"
-          formControlName="category"
-          (change)="getCategoryProperty($event)"
-        >
-          <option
-            *ngFor="let category of optionsForProduct.productCategories"
-            [value]="category.productCategoryId"
-          >
-            {{ category.name }}
-          </option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="price">Цена:</label>
-        <input type="number" id="price" formControlName="price" />
-      </div>
-
-      <div class="form-group">
-        <label for="quantity">Количество на складе:</label>
-        <input type="number" id="quantity" formControlName="quantity" />
-      </div>
-
-      <div class="form-group">
-        <label for="description">Описание:</label>
-        <textarea id="description" formControlName="description"></textarea>
-      </div>
-
-      <div *ngIf="photos" class="form-group">
-        <label for="photos">Фото товара (максимум 4):</label>
-        <div class="photos-upload">
-          <input
-            type="file"
-            id="photos"
-            accept="image/*"
-            multiple
-            (change)="onPhotosChange($event)"
-            style="display: none"
-          />
-          <label
-            *ngIf="!FullProductInfoResponse.isArchive"
-            for="photos"
-            class="action-button"
-          >
-            {{ photos.length < 4 ? "Добавить фото" : "Максимум 4 фото" }}
-          </label>
-          <div class="photos-preview">
-            <div *ngFor="let photo of photos; let i = index" class="photo-item">
-              <img [src]="[photosToView[i]]" [alt]="photosToView[i]" />
-              <button
-                *ngIf="!FullProductInfoResponse.isArchive"
-                type="button"
-                class="delete-button"
-                (click)="onPhotoDelete(i)"
-              >
-                Удалить
-              </button>
+  <div *ngIf="FullProductInfoResponse" class="row g-4">
+    <div class="col-lg-7">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="name" class="form-label">Название товара</label>
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                formControlName="name"
+                required
+              />
             </div>
-          </div>
+
+            <div *ngIf="optionsForProduct.brands" class="mb-3">
+              <label for="brand" class="form-label">Бренд</label>
+              <select
+                class="form-select"
+                id="brand"
+                formControlName="brand"
+                required
+              >
+                <option
+                  *ngFor="let brand of optionsForProduct.brands"
+                  [value]="brand.brandId"
+                >
+                  {{ brand.name }}
+                </option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="country" class="form-label"
+                >Страна производства</label
+              >
+              <select
+                class="form-select"
+                id="country"
+                formControlName="country"
+                required
+              >
+                <option
+                  *ngFor="let country of optionsForProduct.countries"
+                  [value]="country.countryId"
+                >
+                  {{ country.name }}
+                </option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="category" class="form-label">Категория</label>
+              <select
+                class="form-select"
+                id="category"
+                formControlName="category"
+                (change)="getCategoryProperty($event)"
+                required
+              >
+                <option
+                  *ngFor="let category of optionsForProduct.productCategories"
+                  [value]="category.productCategoryId"
+                >
+                  {{ category.name }}
+                </option>
+              </select>
+            </div>
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="price" class="form-label">Цена</label>
+                <div class="input-group has-validation">
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="price"
+                    formControlName="price"
+                    min="0"
+                    step="0.01"
+                    required
+                  />
+                  <span class="input-group-text">руб.</span>
+                  <div class="invalid-feedback">
+                    Введите положительное число
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="quantity" class="form-label"
+                  >Количество на складе</label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  id="quantity"
+                  formControlName="quantity"
+                  min="0"
+                  required
+                />
+                <div class="invalid-feedback">Введите положительное число</div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="description" class="form-label">Описание</label>
+              <textarea
+                class="form-control"
+                id="description"
+                formControlName="description"
+                rows="3"
+              ></textarea>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">Фото товара (максимум 4)</label>
+              <div class="border rounded p-3">
+                <input
+                  type="file"
+                  id="photos"
+                  accept="image/*"
+                  multiple
+                  (change)="onPhotosChange($event)"
+                  style="display: none"
+                />
+
+                <div class="d-flex flex-wrap gap-3 mb-3">
+                  <div
+                    *ngFor="let photo of photos; let i = index"
+                    class="position-relative"
+                  >
+                    <img
+                      [src]="photosToView[i]"
+                      class="img-thumbnail cursor-zoom"
+                      style="width: 100px; height: 100px; object-fit: contain"
+                      (click)="openImageModal(photosToView[i])"
+                    />
+                    <button
+                      *ngIf="!FullProductInfoResponse.isArchive"
+                      type="button"
+                      class="btn btn-danger btn-sm position-absolute top-0 end-0 translate-middle rounded-circle"
+                      (click)="onPhotoDelete(i); $event.stopPropagation()"
+                    >
+                      <i class="bi bi-x"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <label
+                  *ngIf="
+                    !FullProductInfoResponse.isArchive && photos.length < 4
+                  "
+                  for="photos"
+                  class="btn btn-outline-primary"
+                >
+                  <i class="bi bi-plus"></i> Добавить фото
+                </label>
+                <div *ngIf="photos.length >= 4" class="text-muted small">
+                  Максимум 4 фото достигнут
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="d-flex justify-content-between align-items-center border-top pt-3"
+            >
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="exit()"
+              >
+                <i class="bi bi-arrow-left me-1"></i> Назад
+              </button>
+
+              <div class="d-flex gap-2">
+                <button
+                  type="button"
+                  class="btn btn-outline-warning"
+                  (click)="
+                    FullProductInfoResponse.isArchive
+                      ? changeArchiveStatus(false)
+                      : changeArchiveStatus(true)
+                  "
+                >
+                  <i class="bi bi-archive me-1"></i>
+                  {{
+                    FullProductInfoResponse.isArchive
+                      ? "Вернуть из архива"
+                      : "В архив"
+                  }}
+                </button>
+
+                <button
+                  *ngIf="!FullProductInfoResponse.isArchive"
+                  type="submit"
+                  class="btn btn-primary"
+                  [disabled]="productForm.invalid"
+                >
+                  <i class="bi bi-save me-1"></i> Сохранить
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
+    </div>
 
-      <div class="form-actions">
-        <button
-          class="archive-button"
-          type="button"
-          (click)="
-            FullProductInfoResponse.isArchive
-              ? changeArchiveStatus(false)
-              : changeArchiveStatus(true)
-          "
-        >
-          {{
-            FullProductInfoResponse.isArchive
-              ? "Вернуть из архива"
-              : "Переместить в архив"
-          }}
-        </button>
+    <div *ngIf="FullProductInfoResponse && propertiesForm" class="col-lg-5">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h2 class="h5 mb-4">Свойства товара</h2>
+          <form [formGroup]="propertiesForm">
+            <div *ngFor="let property of productProperties" class="mb-3">
+              <label [for]="property.productPropertyId" class="form-label">{{
+                property.name
+              }}</label>
+              <input
+                *ngIf="property.isRanged"
+                type="number"
+                class="form-control"
+                [formControlName]="property.productPropertyId"
+                [id]="property.productPropertyId"
+                min="0"
+                placeholder="Введите число"
+              />
+              <input
+                *ngIf="!property.isRanged"
+                type="text"
+                class="form-control"
+                [formControlName]="property.productPropertyId"
+                [id]="property.productPropertyId"
+                placeholder="Введите текст"
+              />
+            </div>
+          </form>
+        </div>
       </div>
-
-      <div *ngIf="!FullProductInfoResponse.isArchive" class="form-actions">
-        <button type="submit" class="save-button">Обновить товар</button>
-        <button type="button" class="cancel-button" (click)="exit()">
-          Отмена
-        </button>
-      </div>
-    </form>
-  </div>
-
-  <div
-    *ngIf="FullProductInfoResponse && propertiesForm"
-    class="properties-form"
-  >
-    <h2>Свойства товара</h2>
-    <form [formGroup]="propertiesForm">
-      <div *ngFor="let property of productProperties" class="form-group">
-        <label [for]="property.name">{{ property.name }}:</label>
-        <input
-          *ngIf="property.isRanged"
-          type="number"
-          [formControlName]="property.productPropertyId"
-          [id]="property.productPropertyId"
-          placeholder="Введите число"
-        />
-        <input
-          *ngIf="!property.isRanged"
-          type="text"
-          [formControlName]="property.productPropertyId"
-          [id]="property.productPropertyId"
-          placeholder="Введите текст"
-        />
-      </div>
-    </form>
+    </div>
   </div>
 </div>
+
+<!-- Модальное окно для увеличенного изображения -->
+<!-- <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <img [src]="selectedImage" class="img-fluid" style="max-height: 80vh" />
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <i class="bi bi-x-lg me-1"></i> Закрыть
+        </button>
+      </div>
+    </div>
+  </div>
+</div> -->

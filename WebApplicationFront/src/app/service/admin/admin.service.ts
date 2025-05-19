@@ -12,10 +12,26 @@ import { Country } from '../../data/interfaces/some/country.interface';
   providedIn: 'root',
 })
 export class AdminService {
-  public isAdmin: boolean = false;
+  // public isAdmin: boolean = false;
   private baseApiUrl = environment.apiUrl + '/api/';
 
   constructor(private http: HttpClient) {}
+
+  public isAdmin(token: string | null): boolean {
+    if (!token) return false;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return (
+        payload[
+          'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
+        ] === 'admin'
+      );
+    } catch (error) {
+      console.error('Ошибка декодирования токена:', error);
+      return false;
+    }
+  }
 
   public getProcessingOrders(): Observable<AdminPaidOrder[]> {
     return this.http.get<AdminPaidOrder[]>(

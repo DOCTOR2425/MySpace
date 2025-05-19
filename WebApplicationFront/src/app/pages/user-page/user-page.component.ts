@@ -25,7 +25,7 @@ export class UserPageComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
 
   constructor(
-    private userService: UserService,
+    public userService: UserService,
     private authService: AuthService,
     private fb: FormBuilder,
     private router: Router

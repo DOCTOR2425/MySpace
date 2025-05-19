@@ -1,10 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../service/product.service';
 import { Subject, takeUntil } from 'rxjs';
-import { UserProductCard } from '../../../data/interfaces/product/user-product-card.interface';
 import { BrandManageComponent } from './brand-manage/brand-manage.component';
 import { CountyManageComponent } from './country-manage/country-manage.component';
 import { AdminProductCard } from '../../../data/interfaces/product/admin-product-card.interface';
@@ -33,7 +32,7 @@ export class CatalogManageComponent implements OnInit, OnDestroy {
   public searchQuery = '';
   public archiveStatus: 'all' | 'active' | 'archived' = 'all';
 
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService, private router: Router) {}
 
   public ngOnInit(): void {
     this.loadProducts(this.page);
@@ -144,5 +143,12 @@ export class CatalogManageComponent implements OnInit, OnDestroy {
           this.applyFilters();
         },
       });
+  }
+
+  public handleRowClick(productId: string) {
+    const selection = window.getSelection();
+    if (!selection || selection.toString().length === 0) {
+      this.router.navigate(['/admin/update-product', productId]);
+    }
   }
 }

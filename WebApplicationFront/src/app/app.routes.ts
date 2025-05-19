@@ -22,6 +22,8 @@ import { UpdateCategoryComponent } from './pages/admin-pages/category-manage/upd
 import { PaidOrdersComponent } from './pages/user-page/paid-orders/paid-orders.component';
 import { CommentsComponent } from './pages/user-page/comments/comments.component';
 import { ProductsPendingReviewsComponent } from './pages/user-page/products-pending-reviews/products-pending-reviews.component';
+import { UserManageComponent } from './pages/admin-pages/user-manage/user-manage.component';
+import { UpdateUserComponent } from './pages/admin-pages/user-manage/update-user/update-user.component';
 
 export const routes: Routes = [
   {
@@ -58,6 +60,8 @@ export const routes: Routes = [
       { path: 'categories', component: CategoryManageComponent },
       { path: 'create-category', component: CreateCategoryComponent },
       { path: 'update-category/:id', component: UpdateCategoryComponent },
+      { path: 'users', component: UserManageComponent },
+      { path: 'update-user/:id', component: UpdateUserComponent },
     ],
   },
 ];

@@ -40,12 +40,14 @@ h1 {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   background: white;
   border-radius: 5px;
-  overflow-x: auto; /* На случай очень узких экранов */
+  overflow-x: auto;
+  /* На случай очень узких экранов */
 }
 
 .products-table {
   width: 100%;
-  min-width: 800px; /* Минимальная ширина всей таблицы */
+  min-width: 800px;
+  /* Минимальная ширина всей таблицы */
   display: flex;
   flex-direction: column;
 }
@@ -74,6 +76,7 @@ h1 {
   min-width: 60px;
   flex-shrink: 0;
 }
+
 .name-cell {
   flex: 3;
   min-width: 150px;
@@ -85,16 +88,19 @@ h1 {
   line-clamp: 2;
   -webkit-box-orient: vertical;
 }
+
 .price-cell {
   width: 80px;
   min-width: 80px;
   flex-shrink: 0;
 }
+
 .quantity-cell {
   width: 70px;
   min-width: 70px;
   flex-shrink: 0;
 }
+
 .category-cell {
   flex: 1;
   min-width: 100px;
@@ -102,6 +108,7 @@ h1 {
   white-space: normal;
   word-break: break-word;
 }
+
 .brand-cell {
   flex: 1;
   min-width: 100px;
@@ -109,11 +116,13 @@ h1 {
   white-space: normal;
   word-break: break-word;
 }
+
 .country-cell {
   width: 90px;
   min-width: 90px;
   flex-shrink: 0;
 }
+
 .actions-cell {
   min-width: 120px;
   justify-content: center;

@@ -6,6 +6,7 @@ import { ProductService } from '../../../service/product.service';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { ToastService } from '../../../service/toast/toast.service';
 
 @Component({
   selector: 'app-products-pending-reviews',
@@ -22,7 +23,8 @@ export class ProductsPendingReviewsComponent implements OnInit, OnDestroy {
 
   constructor(
     private userService: UserService,
-    private productService: ProductService
+    private productService: ProductService,
+    private toastService: ToastService
   ) {}
 
   public ngOnInit(): void {
@@ -75,7 +77,12 @@ export class ProductsPendingReviewsComponent implements OnInit, OnDestroy {
           );
           this.closeReviewPopup();
         },
-        error: (error) => {},
+        error: (error) => {
+          if (error.error.statusCode == 403) {
+            this.toastService.showError('Вам запрещено оставлять комментарии');
+            this.closeReviewPopup();
+          }
+        },
       });
   }
 }

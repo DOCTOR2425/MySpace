@@ -8,6 +8,7 @@ import { UserPaidOrder } from '../../data/interfaces/paid-order/user-paid-order.
 import { UserProductCard } from '../../data/interfaces/product/user-product-card.interface';
 import { UserProductStats } from '../../data/interfaces/product/user-product-stats.interface';
 import { CommentForUserResponse } from '../../data/interfaces/comment/comment-for-user-response.interface';
+import { AdminUser } from '../../data/interfaces/user/admin-user.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -53,5 +54,41 @@ export class UserService {
       `${this.baseApiUrl}get-user-product-stats/${productId}`,
       { withCredentials: true }
     );
+  }
+
+  public getUsersForAdmin(
+    searchQuery: string | undefined,
+    dateFrom: Date | undefined,
+    dateTo: Date | undefined,
+    isBlocked: boolean | undefined,
+    hasOrders: boolean | undefined
+  ): Observable<AdminUser[]> {
+    const params = new URLSearchParams({
+      searchQuery: searchQuery ? searchQuery : '',
+      dateFrom: dateFrom ? dateFrom.toString() : '',
+      dateTo: dateTo ? dateTo.toString() : '',
+      isBlocked: isBlocked !== undefined ? isBlocked.toString() : '',
+      hasOrders: hasOrders !== undefined ? hasOrders.toString() : '',
+    });
+
+    return this.http.get<AdminUser[]>(
+      `${this.baseApiUrl}get-users-for-admin?${params}`,
+      { withCredentials: true }
+    );
+  }
+
+  public blockUser(userId: string, blockDetails: string): Observable<any> {
+    return this.http.put(
+      `${this.baseApiUrl}block-user/${userId}?` +
+        `blockDetails=${blockDetails}`,
+      null,
+      { withCredentials: true }
+    );
+  }
+
+  public unblockUser(userId: string): Observable<any> {
+    return this.http.put(`${this.baseApiUrl}unblock-user/${userId}?`, null, {
+      withCredentials: true,
+    });
   }
 }

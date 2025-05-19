@@ -9,11 +9,11 @@ import { AdminPaidOrder } from '../../data/interfaces/paid-order/admin-paid-orde
 import { CommonModule } from '@angular/common';
 import { AdminService } from '../../service/admin/admin.service';
 import { Subject, takeUntil } from 'rxjs';
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-order',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './admin-order.component.html',
   styleUrls: ['./admin-order.component.scss'],
 })
@@ -22,7 +22,7 @@ export class AdminOrderComponent implements OnDestroy {
   @Input() order!: AdminPaidOrder;
   @Output() removeOrder = new EventEmitter<string>();
 
-  constructor(private adminService: AdminService) {}
+  constructor(private adminService: AdminService, private router: Router) {}
 
   public ngOnDestroy(): void {
     this.unsubscribe$.next();
@@ -85,5 +85,12 @@ export class AdminOrderComponent implements OnDestroy {
           this.removeOrder.emit(orderId);
         },
       });
+  }
+
+  public handleRowClick(paidOrderId: string) {
+    const selection = window.getSelection();
+    if (!selection || selection.toString().length === 0) {
+      this.router.navigate(['/admin/order', paidOrderId]);
+    }
   }
 }

@@ -18,7 +18,6 @@ export class AdminSidebarComponent {
   ) {}
 
   public exitFromAdminMode(): void {
-    this.adminService.isAdmin = false;
     this.cookiesManager.deleteAuthCookie();
     this.router.navigate(['/']);
   }

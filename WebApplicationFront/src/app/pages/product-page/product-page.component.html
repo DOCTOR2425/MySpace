@@ -7,14 +7,17 @@
             class="thumbnail"
             *ngFor="let img of product.images"
             (click)="selectImage(img)"
+            (mouseenter)="selectImage(img)"
+            (mouseleave)="unselectImage()"
           >
-            <img [src]="img" [alt]="product.name" />
+            <img [src]="img" [alt]="product.name" class="zoomable-image" />
           </div>
         </div>
         <div class="main-image">
           <img
             [src]="selectedImage || product.images[0]"
             [alt]="product.name"
+            class="zoomable-image"
           />
         </div>
       </div>
@@ -23,41 +26,40 @@
         <h1 class="title">{{ product.name }}</h1>
         <div class="price">{{ product.price }} руб.</div>
 
-        <div class="actions" *ngIf="userProductStats">
+        <div class="actions d-flex gap-2" *ngIf="userProductStats">
           <ng-container>
             <button
               *ngIf="userProductStats.cartCount == 0"
               id="addToCart"
-              class="cart-btn"
+              class="btn btn-primary cart-btn"
               (click)="addToCart()"
             >
               В корзину
             </button>
 
-            <div *ngIf="userProductStats.cartCount" class="quantity-control">
-              <button (click)="decreaseQuantity()" class="quantity-btn">
-                -
-              </button>
-              <span class="quantity-count">{{
-                userProductStats.cartCount
-              }}</span>
-              <button (click)="increaseQuantity()" class="quantity-btn">
-                +
-              </button>
+            <div
+              *ngIf="userProductStats.cartCount"
+              class="btn-group quantity-control"
+            >
+              <button (click)="decreaseQuantity()" class="btn">-</button>
+              <span class="quantity-count">
+                {{ userProductStats.cartCount }}
+              </span>
+              <button (click)="increaseQuantity()" class="btn">+</button>
             </div>
           </ng-container>
 
           <ng-container>
             <button
               *ngIf="!userProductStats.isInComparison"
-              class="compare-btn"
+              class="btn btn-outline-primary compare-btn"
               (click)="addToComparison()"
             >
               К сравнению
             </button>
             <button
               *ngIf="userProductStats.isInComparison"
-              class="compare-btn active"
+              class="btn btn-outline-secondary active compare-btn"
               (click)="deleteFromComparison()"
             >
               Удалить из сравнения
@@ -106,17 +108,21 @@
           maxlength="1000"
           rows="3"
         ></textarea>
-        <button (click)="addComment()" [disabled]="!newComment">
+        <button
+          class="btn btn-primary"
+          (click)="addComment()"
+          [disabled]="!newComment"
+        >
           Отправить
         </button>
       </div>
 
       <button
-        class="to-login-btn"
+        class="btn btn-outline-primary to-login-btn"
         [routerLink]="['/login']"
         *ngIf="!authService.isLoggedIn()"
       >
-        Зарегистрируйтесь, что бы оставлять комментарии
+        Зарегистрируйтесь, чтобы оставлять комментарии
       </button>
 
       <cdk-virtual-scroll-viewport
@@ -139,7 +145,10 @@
         </div>
       </cdk-virtual-scroll-viewport>
 
-      <button class="expand-btn" (click)="toggleViewportSize()">
+      <button
+        class="btn btn-outline-secondary expand-btn"
+        (click)="toggleViewportSize()"
+      >
         {{ expanded ? "Свернуть" : "Развернуть" }}
       </button>
     </div>

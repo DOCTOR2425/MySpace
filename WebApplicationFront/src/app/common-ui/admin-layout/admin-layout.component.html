@@ -1,4 +1,11 @@
-<app-admin-sidebar></app-admin-sidebar>
-<div class="admin-content">
-  <router-outlet></router-outlet>
+<ng-container *ngIf="isAdmin()">
+  <app-admin-sidebar></app-admin-sidebar>
+  <div class="admin-content">
+    <router-outlet></router-outlet>
+  </div>
+</ng-container>
+
+<div *ngIf="!isAdmin()">
+  <h1>Вы не авторизованы как администратор</h1>
+  <button (click)="exitFromAdminMode()">Выйти в режим пользователя</button>
 </div>

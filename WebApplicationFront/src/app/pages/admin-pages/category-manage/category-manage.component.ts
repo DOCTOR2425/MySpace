@@ -21,7 +21,10 @@ export class CategoryManageComponent implements OnInit, OnDestroy {
   public searchQuery = '';
   public visibilityStatus: 'all' | 'active' | 'archived' = 'all';
 
-  constructor(private productCategoryService: ProductCategoryService) {}
+  constructor(
+    private productCategoryService: ProductCategoryService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.productCategoryService
@@ -101,5 +104,12 @@ export class CategoryManageComponent implements OnInit, OnDestroy {
         .toLocaleLowerCase()
         .includes(this.searchQuery.toLocaleLowerCase())
     );
+  }
+
+  public handleRowClick(productCategoryId: string) {
+    const selection = window.getSelection();
+    if (!selection || selection.toString().length === 0) {
+      this.router.navigate(['/admin/update-category', productCategoryId]);
+    }
   }
 }

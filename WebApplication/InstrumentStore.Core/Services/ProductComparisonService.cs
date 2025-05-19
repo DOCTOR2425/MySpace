@@ -45,10 +45,11 @@ namespace InstrumentStore.Domain.Services
 		{
 			ProductComparisonItem? target = await _dbContext.ProductComparisonItem
 				.Include(i => i.Product)
-				.FirstOrDefaultAsync(i => i.Product.ProductId == productId);
+				.FirstOrDefaultAsync(i => i.User.UserId == userId &&
+					i.Product.ProductId == productId);
 
 			if (target != null)
-				return target.Product.ProductId;
+				return target.ProductComparisonItemId;
 
 			ProductComparisonItem item = new ProductComparisonItem()
 			{

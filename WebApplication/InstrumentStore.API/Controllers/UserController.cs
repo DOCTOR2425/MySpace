@@ -136,5 +136,44 @@ namespace InstrumentStore.API.Controllers
 
 			return Ok(userProductStats);
 		}
+
+		[Authorize(Roles = "admin")]
+		[HttpGet("get-users-for-admin")]
+		public async Task<ActionResult<List<AdminUserResponse>>> GetUsersForAdmin(
+			[FromQuery] string? searchQuery = "",
+			[FromQuery] DateTime? dateFrom = null,
+			[FromQuery] DateTime? dateTo = null,
+			[FromQuery] bool? isBlocked = null,
+			[FromQuery] bool? hasOrders = null)
+		{
+			List<User> users = await _usersService.GetUsersForAdmin(
+				searchQuery,
+				dateFrom,
+				dateTo,
+				isBlocked,
+				hasOrders);
+			List<AdminUserResponse> adminUsers = new List<AdminUserResponse>();
+
+			foreach (User user in users)
+				adminUsers.Add(await _usersService.GetAdminUserResponse(user));
+
+			return Ok(adminUsers);
+		}
+
+		[Authorize(Roles = "admin")]
+		[HttpPut("block-user/{userId:guid}")]
+		public async Task<IActionResult> BlockUser(
+			[FromRoute] Guid userId,
+			[FromQuery] string blockDetails)
+		{
+			return Ok(await _usersService.BlockUser(userId, blockDetails));
+		}
+
+		[Authorize(Roles = "admin")]
+		[HttpPut("unblock-user/{userId:guid}")]
+		public async Task<IActionResult> UnblockUser([FromRoute] Guid userId)
+		{
+			return Ok(await _usersService.UnblockUser(userId));
+		}
 	}
 }
