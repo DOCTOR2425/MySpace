@@ -4,6 +4,7 @@ using InstrumentStore.Domain.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InstrumentStore.Domain.Migrations
 {
     [DbContext(typeof(InstrumentStoreDBContext))]
-    partial class InstrumentStoreDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250520114426_catgoryName100")]
+    partial class catgoryName100
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

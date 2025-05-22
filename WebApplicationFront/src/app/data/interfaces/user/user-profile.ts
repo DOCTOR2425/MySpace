@@ -8,8 +8,12 @@ export interface UserProfile {
   houseNumber: string;
   entrance: string;
   flat: string;
+  registrationDate: Date;
 
   commentNumber: number;
   orderNumber: number;
   pendingReviewNumber: number;
+
+  blockDate: Date | null;
+  blockDetails: string | null;
 }

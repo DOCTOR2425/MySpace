@@ -17,8 +17,8 @@ import { ToastService } from '../../../service/toast/toast.service';
 export class ProductsPendingReviewsComponent implements OnInit, OnDestroy {
   public products!: UserProductCard[];
   public isReviewPopupOpen = false;
-  public selectedProduct: UserProductCard | null = null;
   public reviewText = '';
+  public selectedProduct: UserProductCard | null = null;
   private unsubscribe$ = new Subject<void>();
 
   constructor(

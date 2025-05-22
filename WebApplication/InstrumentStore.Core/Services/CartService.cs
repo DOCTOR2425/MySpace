@@ -5,6 +5,7 @@ using InstrumentStore.Domain.Contracts.Products;
 using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Authentication;
 
 namespace InstrumentStore.Domain.Services
 {
@@ -92,6 +93,9 @@ namespace InstrumentStore.Domain.Services
 
 		public async Task<Guid> OrderCartForRegistered(Guid userId, OrderRequest orderCartRequest)
 		{
+			User user = await _usersService.GetById(userId);
+			if (user.BlockDate != null)
+				throw new AuthenticationException("Запрещено оформлять заказы по причине бана");
 			if ((await GetUserCartItems(userId)).Any() == false)
 				throw new ArgumentNullException("В корзине нет ни одного товара");
 

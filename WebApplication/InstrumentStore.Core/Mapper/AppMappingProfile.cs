@@ -187,7 +187,7 @@ namespace InstrumentStore.Domain.Mapper
 
 			CreateMap<Comment, CommentResponse>()
 				 .ForPath(dest => dest.UserName, opt => opt.MapFrom(src => src.User.FirstName));
-			CreateMap<Comment, CommentForUserResponse>()
+			CreateMap<Comment, UserCommentResponse>()
 				 .ForPath(dest => dest.ProductId, opt => opt.MapFrom(src => src.Product.ProductId))
 				 .ForPath(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name));
 

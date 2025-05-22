@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
   styleUrl: './user-manage.component.scss',
 })
 export class UserManageComponent implements OnInit, OnDestroy {
-  public users!: AdminUser[];
+  public users: AdminUser[] = [];
   public page = 1;
   public loading = false;
   public hasMoreData = true;
@@ -37,8 +37,10 @@ export class UserManageComponent implements OnInit, OnDestroy {
   }
 
   public loadUsers(): void {
+    this.loading = true;
     this.userService
       .getUsersForAdmin(
+        this.page,
         this.searchQuery,
         this.dateFrom,
         this.dateTo,
@@ -47,8 +49,21 @@ export class UserManageComponent implements OnInit, OnDestroy {
       )
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((users) => {
-        this.users = users;
+        if (users.length === 0) {
+          this.hasMoreData = false;
+        } else {
+          this.users = this.users.concat(users);
+          this.page++;
+        }
+        this.loading = false;
       });
+  }
+
+  public loadUsersWithFilters() {
+    this.users = [];
+    this.page = 1;
+    this.hasMoreData = true;
+    this.loadUsers();
   }
 
   public isUserBlocked(user: AdminUser): boolean {
@@ -61,6 +76,9 @@ export class UserManageComponent implements OnInit, OnDestroy {
     this.dateTo = undefined;
     this.isBlocked = undefined;
     this.hasOrders = undefined;
+    this.users = [];
+    this.page = 1;
+    this.hasMoreData = true;
     this.loadUsers();
   }
 
@@ -79,12 +97,12 @@ export class UserManageComponent implements OnInit, OnDestroy {
         });
     } else {
       this.userService
-        .blockUser(user.userId, 'Бан')
+        .blockUser(user.userId, 'За нарушение правил площадки')
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe({
           next: () => {
             user.blockDate = new Date();
-            user.blockDetails = 'Blocked by admin';
+            user.blockDetails = 'За нарушение правил площадки';
           },
         });
     }

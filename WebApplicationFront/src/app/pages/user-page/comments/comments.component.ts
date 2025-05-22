@@ -8,7 +8,7 @@ import {
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { CommentForUserResponse } from '../../../data/interfaces/comment/comment-for-user-response.interface';
+import { UserCommentResponse } from '../../../data/interfaces/comment/user-comment-response.interface';
 import { UserService } from '../../../service/user/user.service';
 import { CommonModule } from '@angular/common';
 
@@ -20,7 +20,7 @@ import { CommonModule } from '@angular/common';
 })
 export class CommentsComponent implements OnInit, OnDestroy {
   public userName!: string;
-  public comments: CommentForUserResponse[] = [];
+  public comments: UserCommentResponse[] = [];
   public viewportHeight: string = '100vh';
   private unsubscribe$ = new Subject<void>();
 

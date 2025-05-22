@@ -19,6 +19,33 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
+.bloc-info {
+  background-color: #ffe6e6;
+  border-left: 4px solid #ff4d4d;
+  padding: 15px;
+  border-radius: 5px;
+  font-family: Arial, sans-serif;
+  margin-bottom: 16px;
+
+  h5 {
+    color: #d80000;
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .info-label {
+    font-weight: bold;
+    color: #333;
+    display: block;
+    margin-top: 8px;
+  }
+
+  .info-value {
+    color: #555;
+    display: block;
+  }
+}
+
 .user-info {
   margin-bottom: 24px;
 }
@@ -59,23 +86,37 @@
 }
 
 .sidebar-button {
-  display: block;
+  display: flex;
+  align-items: center;
   width: 100%;
-  padding: 10px;
-  margin-bottom: 8px;
+  padding: 10px 14px;
+  margin-bottom: 10px;
   background-color: #fff;
-  color: #333;
-  border: 1px solid #ddd;
+  color: #374151;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
   font-size: 14px;
+  font-weight: 500;
   text-align: left;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .sidebar-button:hover {
-  background-color: #f0f0f0;
-  border-color: #ccc;
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-button:active {
+  transform: translateY(0);
+}
+
+.button-icon {
+  margin-right: 10px;
+  opacity: 0.8;
 }
 
 .user-content {
@@ -88,16 +129,8 @@
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  // cursor: pointer;
-  // transition: all 0.3s ease;
   border: 1px solid #eee;
 }
-
-// .profile-edit-container:hover {
-//   transform: translateY(-3px);
-//   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-//   border-color: #ddd;
-// }
 
 .profile-edit-container h3 {
   font-size: 18px;

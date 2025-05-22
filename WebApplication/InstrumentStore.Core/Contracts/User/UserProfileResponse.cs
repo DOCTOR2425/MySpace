@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace InstrumentStore.Domain.Contracts.User
+﻿namespace InstrumentStore.Domain.Contracts.User
 {
 	public class UserProfileResponse
 	{
@@ -13,16 +11,13 @@ namespace InstrumentStore.Domain.Contracts.User
 		public string HouseNumber { get; set; } = string.Empty;
 		public string Entrance { get; set; } = string.Empty;
 		public string Flat { get; set; } = string.Empty;
+		public DateTime RegistrationDate { get; set; } = DateTime.Now;
 
 		public int CommentNumber { get; set; } = 0;
 		public int OrderNumber { get; set; } = 0;
 		public int PendingReviewNumber { get; set; } = 0;
 
-		//public DateTime RegistrationDate { get; set; } = DateTime.Now;
-		//[MaxLength(500)]
-		//public string RefreshToken { get; set; } = string.Empty;
-		//public DateTime? BlockDate { get; set; }
-		//[MaxLength(1000)]
-		//public string? BlockDetails { get; set; } = string.Empty;
+		public DateTime? BlockDate { get; set; }
+		public string? BlockDetails { get; set; } = string.Empty;
 	}
 }

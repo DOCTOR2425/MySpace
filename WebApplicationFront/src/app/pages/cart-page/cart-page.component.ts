@@ -34,6 +34,7 @@ export class CartPageComponent implements OnInit, OnDestroy {
   public orderOptions!: OrderOptions;
   public userOrderInfo!: UserOrderInfo;
   public orderForm: FormGroup;
+  public isLoading: boolean = false;
   private unsubscribe$ = new Subject<void>();
 
   constructor(
@@ -144,6 +145,7 @@ export class CartPageComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.isLoading = true;
     if (this.authService.isLoggedIn()) {
       const payload = {
         deliveryMethodId: this.orderForm.value.deliveryMethodId,
@@ -162,16 +164,20 @@ export class CartPageComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (val) => {
             this.router.navigate(['/user']);
+            // this.items = [];
+            // this.updateTotalPrice();
           },
           error: (error) => {
-            this.toastService.showError(error.error.error);
+            this.isLoading = true;
+            if (error.status == 403)
+              this.toastService.showError(
+                'Запрещено оформлять заказы по причине бана'
+              );
           },
         });
     } else {
       this.orderCartForUnregistered();
     }
-    this.items = [];
-    this.updateTotalPrice();
   }
 
   private orderCartForUnregistered(): void {
@@ -205,13 +211,17 @@ export class CartPageComponent implements OnInit, OnDestroy {
           this.userService.userEMailKey,
           this.orderForm.value.email
         );
+        this.cartService.clearLocalCart();
         this.router.navigate(['/user']);
       },
       error: (error) => {
-        this.toastService.showError(error);
+        this.isLoading = true;
+        if (error.status == 403)
+          this.toastService.showError(
+            'Запрещено оформлять заказы по причине бана'
+          );
       },
     });
-    this.cartService.clearLocalCart();
   }
 
   public isFieldInvalid(fieldName: string): boolean {

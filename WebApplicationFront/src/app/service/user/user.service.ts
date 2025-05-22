@@ -7,7 +7,7 @@ import { UpdateUserRequest } from '../../data/interfaces/user/update-user.interf
 import { UserPaidOrder } from '../../data/interfaces/paid-order/user-paid-order.interface';
 import { UserProductCard } from '../../data/interfaces/product/user-product-card.interface';
 import { UserProductStats } from '../../data/interfaces/product/user-product-stats.interface';
-import { CommentForUserResponse } from '../../data/interfaces/comment/comment-for-user-response.interface';
+import { UserCommentResponse } from '../../data/interfaces/comment/user-comment-response.interface';
 import { AdminUser } from '../../data/interfaces/user/admin-user.interface';
 
 @Injectable({
@@ -35,9 +35,15 @@ export class UserService {
     });
   }
 
-  public getUserComments(): Observable<CommentForUserResponse[]> {
-    return this.http.get<CommentForUserResponse[]>(
-      `${this.baseApiUrl}get-user-comments`,
+  public getUserComments(
+    userId: string | null = null
+  ): Observable<UserCommentResponse[]> {
+    const params = new URLSearchParams({
+      userId: userId ? userId : '',
+    });
+
+    return this.http.get<UserCommentResponse[]>(
+      `${this.baseApiUrl}get-user-comments?${params}`,
       { withCredentials: true }
     );
   }
@@ -57,6 +63,7 @@ export class UserService {
   }
 
   public getUsersForAdmin(
+    page: number,
     searchQuery: string | undefined,
     dateFrom: Date | undefined,
     dateTo: Date | undefined,
@@ -64,6 +71,7 @@ export class UserService {
     hasOrders: boolean | undefined
   ): Observable<AdminUser[]> {
     const params = new URLSearchParams({
+      page: page.toString(),
       searchQuery: searchQuery ? searchQuery : '',
       dateFrom: dateFrom ? dateFrom.toString() : '',
       dateTo: dateTo ? dateTo.toString() : '',
@@ -73,6 +81,13 @@ export class UserService {
 
     return this.http.get<AdminUser[]>(
       `${this.baseApiUrl}get-users-for-admin?${params}`,
+      { withCredentials: true }
+    );
+  }
+
+  public getUserForAdmin(userId: string): Observable<AdminUser> {
+    return this.http.get<AdminUser>(
+      `${this.baseApiUrl}get-user-for-admin/${userId}`,
       { withCredentials: true }
     );
   }

@@ -105,12 +105,17 @@ namespace InstrumentStore.API.Controllers
 		}
 
 		[HttpGet("get-user-comments")]
-		public async Task<IActionResult> GetUserComments()
+		public async Task<IActionResult> GetUserComments(
+			[FromQuery] Guid? userId = null)
 		{
-			List<CommentForUserResponse> comments = _mapper.Map<List<CommentForUserResponse>>(await
-				_commentService.GetCommentsByUser((await GetUserFromToken()).UserId));
+			if (userId == null)
+				userId = (await GetUserFromToken()).UserId;
 
-			foreach (CommentForUserResponse comment in comments)
+			List<UserCommentResponse> comments = _mapper
+				.Map<List<UserCommentResponse>>(
+					await _commentService.GetCommentsByUser((Guid)userId));
+
+			foreach (UserCommentResponse comment in comments)
 				comment.Image = "https://localhost:7295/images/" +
 					(await _imageService.GetByProductId(comment.ProductId))[0].Name;
 
@@ -140,24 +145,37 @@ namespace InstrumentStore.API.Controllers
 		[Authorize(Roles = "admin")]
 		[HttpGet("get-users-for-admin")]
 		public async Task<ActionResult<List<AdminUserResponse>>> GetUsersForAdmin(
+			[FromQuery] int page,
 			[FromQuery] string? searchQuery = "",
 			[FromQuery] DateTime? dateFrom = null,
 			[FromQuery] DateTime? dateTo = null,
 			[FromQuery] bool? isBlocked = null,
 			[FromQuery] bool? hasOrders = null)
 		{
-			List<User> users = await _usersService.GetUsersForAdmin(
+			List<AdminUserResponse> adminUsers = new List<AdminUserResponse>();
+			List<User> users = (await _usersService.GetUsersForAdmin(
 				searchQuery,
 				dateFrom,
 				dateTo,
 				isBlocked,
-				hasOrders);
-			List<AdminUserResponse> adminUsers = new List<AdminUserResponse>();
+				hasOrders))
+				.Skip(4 * (page - 1))
+				.Take(4)
+				.ToList();
 
 			foreach (User user in users)
 				adminUsers.Add(await _usersService.GetAdminUserResponse(user));
 
 			return Ok(adminUsers);
+		}
+
+		[Authorize(Roles = "admin")]
+		[HttpGet("get-user-for-admin/{userId:guid}")]
+		public async Task<ActionResult<AdminUserResponse>> GetUserForAdmin(
+			[FromRoute] Guid userId)
+		{
+			User user = await _usersService.GetById(userId);
+			return Ok(_mapper.Map<AdminUserResponse>(user));
 		}
 
 		[Authorize(Roles = "admin")]

@@ -41,7 +41,9 @@
             class="search-input"
           />
         </div>
-        <button class="btn apply-btn" (click)="loadUsers()">Применить</button>
+        <button class="btn apply-btn" (click)="loadUsersWithFilters()">
+          Применить
+        </button>
         <button class="btn reset-btn" (click)="resetFilters()">Сбросить</button>
       </div>
     </div>
@@ -87,5 +89,15 @@
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <div *ngIf="hasMoreData == false" class="text-center py-3 text-muted">
+    Нет данных для отображения
+  </div>
+
+  <div class="d-grid" *ngIf="!loading && hasMoreData">
+    <button class="btn btn-outline-primary" (click)="loadUsers()">
+      Загрузить ещё
+    </button>
   </div>
 </div>

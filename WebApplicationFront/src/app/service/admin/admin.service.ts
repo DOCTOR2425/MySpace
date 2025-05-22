@@ -90,6 +90,15 @@ export class AdminService {
     );
   }
 
+  public getUserPaidOrdersForAdmin(
+    userId: string
+  ): Observable<AdminPaidOrder[]> {
+    return this.http.get<AdminPaidOrder[]>(
+      `${this.baseApiUrl}PaidOrder/get-user-paid-orders-for-admin/${userId}`,
+      { withCredentials: true }
+    );
+  }
+
   public createBrand(brandName: string): Observable<any> {
     return this.http.post(
       `${this.baseApiUrl}Admin/create-brand/${brandName}`,

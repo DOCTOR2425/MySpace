@@ -1,1 +1,194 @@
-<p>update-user works!</p>
+<div class="user-admin-container">
+  <section class="user-profile-section" *ngIf="user">
+    <h2>Профиль пользователя</h2>
+    <div class="profile-card">
+      <div class="profile-row">
+        <span class="label">Имя:</span>
+        <span class="value">{{ user.firstName }} {{ user.surname }}</span>
+      </div>
+      <div class="profile-row">
+        <span class="label">Email:</span>
+        <span class="value">{{ user.email }}</span>
+      </div>
+      <div class="profile-row">
+        <span class="label">Телефон:</span>
+        <span class="value">{{ formatPhoneNumber(user.telephone) }}</span>
+      </div>
+      <div class="profile-row">
+        <span class="label">Дата регистрации:</span>
+        <span class="value">{{
+          user.registrationDate | date : "dd.MM.yyyy"
+        }}</span>
+      </div>
+      <div class="profile-row" *ngIf="user.blockDate">
+        <span class="label warning">Статус аккаунта:</span>
+        <span class="value warning"
+          >Заблокирован с {{ user.blockDate | date : "dd.MM.yyyy" }}</span
+        >
+      </div>
+      <div class="profile-row" *ngIf="user.blockDetails">
+        <span class="label warning">Причина блокировки:</span>
+        <span class="value warning">{{ user.blockDetails }}</span>
+      </div>
+    </div>
+    <div class="actions">
+      <button
+        class="btn"
+        [class]="user.blockDate ? 'unblock-btn' : 'block-btn'"
+        (click)="user.blockDate ? unblockUser() : openPopup()"
+      >
+        {{ user.blockDate ? "Разблокировать" : "Заблокировать" }}
+      </button>
+    </div>
+  </section>
+
+  <nav class="content-navigation">
+    <button
+      class="nav-btn"
+      [class.active]="activeTab === 'orders'"
+      (click)="activeTab = 'orders'"
+    >
+      Заказы ({{ usersPaidOrders.length }})
+    </button>
+    <button
+      class="nav-btn"
+      [class.active]="activeTab === 'comments'"
+      (click)="activeTab = 'comments'"
+    >
+      Комментарии ({{ usersComments.length }})
+    </button>
+  </nav>
+
+  <section
+    class="user-orders-section"
+    *ngIf="activeTab === 'orders' && usersPaidOrders"
+  >
+    <div class="order-filters">
+      <select [(ngModel)]="orderFilter" (change)="applyOrderFilter()">
+        <option value="all">Все заказы</option>
+        <option value="month">За последний месяц</option>
+        <option value="year">За последний год</option>
+      </select>
+    </div>
+
+    <div class="orders-list">
+      <div class="order-card" *ngFor="let order of filteredOrders">
+        <div class="order-header" (click)="toggleOrder(order.paidOrderId)">
+          <span
+            class="order-id"
+            [routerLink]="['/admin/order', order.paidOrderId]"
+            >Заказ #{{ order.paidOrderId | slice : 0 : 8 }}</span
+          >
+          <span class="order-date">{{
+            order.orderDate | date : "dd.MM.yyyy"
+          }}</span>
+          <span class="toggle-icon">{{
+            isOrderExpanded(order.paidOrderId) ? "−" : "+"
+          }}</span>
+        </div>
+        <div class="order-details" *ngIf="isOrderExpanded(order.paidOrderId)">
+          <div class="detail-row">
+            <span>Способ оплаты:</span>
+            <span>{{ order.paymentMethod }}</span>
+          </div>
+          <div class="detail-row">
+            <span>Доставка:</span>
+            <span>{{ order.deliveryMethod.name }}</span>
+          </div>
+          <div class="detail-row">
+            <span>Дата получения:</span>
+            <span>{{ order.receiptDate | date : "dd.MM.yyyy" }}</span>
+          </div>
+          <div
+            class="detail-row"
+            *ngIf="order.userOrderInfo.userDeliveryAddress"
+          >
+            <span>Адрес:</span>
+            <span>
+              {{ order.userOrderInfo.userDeliveryAddress.city }},
+              {{ order.userOrderInfo.userDeliveryAddress.street }},
+              {{ order.userOrderInfo.userDeliveryAddress.houseNumber }},
+              {{ order.userOrderInfo.userDeliveryAddress.flat }}
+            </span>
+          </div>
+          <div class="order-items">
+            <h4>Товары ({{ order.paidOrderItems.length }}):</h4>
+            <ul>
+              <li *ngFor="let item of order.paidOrderItems">
+                {{ item.productData.name }} - {{ item.quantity }} x
+                {{ item.price }} руб.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="no-orders" *ngIf="filteredOrders.length === 0">
+        Нет заказов для этого пользователя.
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="user-comments-section"
+    *ngIf="activeTab === 'comments' && usersComments"
+  >
+    <div class="comment-search">
+      <input
+        type="text"
+        placeholder="Поиск по комментариям..."
+        [(ngModel)]="commentSearch"
+        (input)="filterComments()"
+      />
+    </div>
+
+    <div class="comments-list">
+      <div class="comment" *ngFor="let comment of filteredComments">
+        <div
+          class="comment-body"
+          [routerLink]="['/admin/update-product', comment.productId]"
+        >
+          <img
+            class="comment-image"
+            [src]="comment.image"
+            alt="{{ comment.productName }}"
+          />
+          <div class="comment-details">
+            <span class="comment-date">{{
+              comment.creationDate | date : "dd.MM.yyyy"
+            }}</span>
+            <span class="comment-product-name">{{ comment.productName }}</span>
+          </div>
+        </div>
+        <p class="comment-text">{{ comment.text }}</p>
+      </div>
+      <div class="no-comments" *ngIf="filteredComments.length === 0">
+        Нет комментариев от этого пользователя.
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="block-reason-popup" *ngIf="isPopupOpen">
+  <div class="popup-content">
+    <h6>Выберите причину блокировки</h6>
+    <p
+      class="block-reason"
+      *ngFor="let reason of blockReasons"
+      [class.selected]="blockReasonText === reason"
+      (click)="selectReason(reason)"
+    >
+      {{ reason }}
+    </p>
+
+    <div class="popup-actions">
+      <button class="cancel-btn" (click)="closePopup()">Отмена</button>
+      <button
+        class="submit-btn"
+        (click)="blockUser()"
+        [disabled]="!blockReasonText"
+      >
+        Подтвердить
+      </button>
+    </div>
+  </div>
+</div>

@@ -113,7 +113,16 @@
           </div>
         </div>
       </div>
-      <button type="submit">Оформить заказ</button>
+      <button type="submit" id="orderButton" [disabled]="isLoading">
+        <span *ngIf="!isLoading">Оформить заказ</span>
+        <span
+          *ngIf="isLoading"
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+        <span *ngIf="isLoading">Отправка...</span>
+      </button>
     </form>
   </div>
 </div>

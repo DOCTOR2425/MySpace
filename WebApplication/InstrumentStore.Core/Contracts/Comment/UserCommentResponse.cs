@@ -1,6 +1,6 @@
 ﻿namespace InstrumentStore.Domain.Contracts.Comment
 {
-    public class CommentForUserResponse
+    public class UserCommentResponse
     {
         public string Text { get; set; } = string.Empty;
         public DateTime CreationDate { get; set; }
