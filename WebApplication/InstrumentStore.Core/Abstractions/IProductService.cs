@@ -7,7 +7,7 @@ namespace InstrumentStore.Domain.Abstractions
 {
 	public interface IProductService
 	{
-		public const int PageSize = 4;
+		public const int PageSize = 20;
 
 		Task<Guid> Create(Product product);
 		Task<Guid> Create(CreateProductRequest productRequest, List<IFormFile> images);

@@ -36,7 +36,7 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
 
   // Пагинация
   public currentPage: number = 1;
-  public itemsPerPage: number = 4; // Можно изменить на нужное количество
+  public itemsPerPage: number = 20; // Можно изменить на нужное количество
   public totalItems: number = 0;
   public totalPages: number = 0;
   public pages: number[] = [];
