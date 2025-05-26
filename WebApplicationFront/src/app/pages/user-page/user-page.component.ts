@@ -11,6 +11,7 @@ import { UserProfile } from '../../data/interfaces/user/user-profile';
 import { Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { ToastService } from '../../service/toast/toast.service';
 
 @Component({
   selector: 'app-user-page',
@@ -28,7 +29,8 @@ export class UserPageComponent implements OnInit, OnDestroy {
     public userService: UserService,
     private authService: AuthService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private toastService: ToastService
   ) {}
 
   public ngOnInit(): void {
@@ -44,7 +46,7 @@ export class UserPageComponent implements OnInit, OnDestroy {
   private initForm(): void {
     this.userForm = this.fb.group({
       firstName: ['', Validators.required],
-      surname: ['', Validators.required],
+      surname: [''],
       telephone: [
         '',
         [
@@ -87,11 +89,20 @@ export class UserPageComponent implements OnInit, OnDestroy {
     this.userService
       .updateUser(this.userForm.value)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((user) => {
-        this.user = user;
-        this.userForm.patchValue(this.user);
-        localStorage.setItem(this.userService.userEMailKey, user.email);
-        this.editMode = false;
+      .subscribe({
+        next: (user) => {
+          this.user = user;
+          this.userForm.patchValue(this.user);
+          localStorage.setItem(this.userService.userEMailKey, user.email);
+          this.editMode = false;
+        },
+        error: (error) => {
+          if (error.status == 400)
+            this.toastService.showError(
+              'Пользователь с таким email уже существует',
+              'Неверный email'
+            );
+        },
       });
   }
 

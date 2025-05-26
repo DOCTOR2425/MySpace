@@ -81,7 +81,11 @@
       <i class="icon-cart"></i> Товары ({{ order.paidOrderItems.length }})
     </h2>
     <div class="products-list">
-      <div class="product-item" *ngFor="let item of order.paidOrderItems">
+      <div
+        class="product-item"
+        *ngFor="let item of order.paidOrderItems"
+        (click)="handleRowClick(item.productData.productId)"
+      >
         <img
           [src]="item.productData.image"
           [alt]="item.productData.name"

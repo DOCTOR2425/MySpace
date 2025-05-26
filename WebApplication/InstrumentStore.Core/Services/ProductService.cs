@@ -337,57 +337,6 @@ namespace InstrumentStore.Domain.Service
 			}
 		}
 
-		//public async Task<List<Product>> GetProductsByPopularity(int page)
-		//{
-		//	var paidOrders = await _dbContext.PaidOrderItem
-		//		.GroupBy(item => item.Product.ProductId)
-		//		.Select(g => new { ProductId = g.Key, Count = g.Count() })
-		//		.ToListAsync();
-
-		//	var cartItems = await _dbContext.CartItem
-		//		.GroupBy(item => item.Product.ProductId)
-		//		.Select(g => new { ProductId = g.Key, Count = g.Count() })
-		//		.ToListAsync();
-
-		//	var comparisons = await _dbContext.ProductComparisonItem
-		//		.GroupBy(item => item.Product.ProductId)
-		//		.Select(g => new { ProductId = g.Key, Count = g.Count() })
-		//		.ToListAsync();
-
-		//	var paidOrdersDict = paidOrders.ToDictionary(x => x.ProductId, x => x.Count);
-		//	var cartItemsDict = cartItems.ToDictionary(x => x.ProductId, x => x.Count);
-		//	var comparisonsDict = comparisons.ToDictionary(x => x.ProductId, x => x.Count);
-
-		//	var allProductIds = paidOrdersDict.Keys
-		//		.Union(cartItemsDict.Keys)
-		//		.Union(comparisonsDict.Keys)
-		//		.ToList();
-
-		//	var products = await _dbContext.Product
-		//		.Where(p => allProductIds.Contains(p.ProductId))
-		//		.Include(p => p.Brand)
-		//		.Include(p => p.Country)
-		//		.Include(p => p.ProductCategory)
-		//		.ToListAsync();
-
-		//	var sortedProducts = products
-		//		.Select(p => new
-		//		{
-		//			Product = p,
-		//			TotalPopularity =
-		//				(paidOrdersDict.TryGetValue(p.ProductId, out var poCount) ? poCount : 0) +
-		//				(cartItemsDict.TryGetValue(p.ProductId, out var ciCount) ? ciCount : 0) +
-		//				(comparisonsDict.TryGetValue(p.ProductId, out var cCount) ? cCount : 0)
-		//		})
-		//		.OrderByDescending(x => x.TotalPopularity)
-		//		.Skip((page - 1) * IProductService.PageSize)
-		//		.Take(IProductService.PageSize)
-		//		.Select(x => x.Product)
-		//		.ToList();
-
-		//	return sortedProducts;
-		//}
-
 		public async Task<List<Product>> GetProductsByPopularity(int page)
 		{
 			var paidOrders = await _dbContext.PaidOrderItem

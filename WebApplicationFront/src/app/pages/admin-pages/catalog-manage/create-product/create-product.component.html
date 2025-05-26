@@ -1,7 +1,7 @@
 <h1>Добавление товара</h1>
 
 <div class="product-form-container">
-  <div *ngIf="optionsForProduct" class="product-form">
+  <div *ngIf="optionsForProduct" class="product-form col-lg-7">
     <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="name">Название товара:</label>
@@ -107,7 +107,7 @@
     </form>
   </div>
 
-  <div *ngIf="productProperties.length > 0" class="properties-form">
+  <div *ngIf="productProperties.length > 0" class="properties-form col-lg-5">
     <h2>Свойства товара</h2>
     <form [formGroup]="propertiesForm">
       <div *ngFor="let property of productProperties" class="form-group">

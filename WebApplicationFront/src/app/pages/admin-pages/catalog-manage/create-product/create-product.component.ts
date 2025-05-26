@@ -15,6 +15,7 @@ import { ProductService } from '../../../../service/product.service';
 import { OptionsForProduct } from '../../../../data/interfaces/some/options-for-order.interface';
 import { CreateProductRequest } from '../../../../data/interfaces/product/create-product-request.interface';
 import { Subject, takeUntil } from 'rxjs';
+import { ToastService } from '../../../../service/toast/toast.service';
 
 @Component({
   selector: 'app-create-product',
@@ -35,7 +36,8 @@ export class CreateProductComponent implements OnInit, OnDestroy {
     private router: Router,
     private fb: FormBuilder,
     private adminService: AdminService,
-    private productService: ProductService
+    private productService: ProductService,
+    private toastService: ToastService
   ) {
     this.productForm = fb.group({
       name: ['', Validators.required],
@@ -63,6 +65,12 @@ export class CreateProductComponent implements OnInit, OnDestroy {
   public onSubmit(): void {
     this.productForm.markAllAsTouched();
     this.propertiesForm.markAllAsTouched();
+    if (this.photos.length == 0)
+      this.toastService.showInfo(
+        'Нужно добавить для товара хотя бы одну картинку',
+        'Добавьте картинку'
+      );
+
     let product: CreateProductRequest = {
       name: this.productForm.value.name,
       description: this.productForm.value.description,

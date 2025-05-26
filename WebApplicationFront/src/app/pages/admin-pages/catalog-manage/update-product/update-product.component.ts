@@ -16,6 +16,7 @@ import { FullProductInfoResponse } from '../../../../data/interfaces/product/pro
 import { OptionsForProduct } from '../../../../data/interfaces/some/options-for-order.interface';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { CreateProductRequest } from '../../../../data/interfaces/product/create-product-request.interface';
+import { ToastService } from '../../../../service/toast/toast.service';
 
 @Component({
   selector: 'app-update-product',
@@ -39,7 +40,8 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private adminService: AdminService,
-    private productService: ProductService
+    private productService: ProductService,
+    private toastService: ToastService
   ) {}
 
   selectedImage: string = '';
@@ -141,6 +143,12 @@ export class UpdateProductComponent implements OnInit, OnDestroy {
   public onSubmit(): void {
     this.productForm.markAllAsTouched();
     this.propertiesForm.markAllAsTouched();
+    if (this.photos.length == 0)
+      this.toastService.showInfo(
+        'Нужно добавить для товара хотя бы одну картинку',
+        'Добавьте картинку'
+      );
+
     let product: CreateProductRequest = {
       name: this.productForm.value.name,
       description: this.productForm.value.description,

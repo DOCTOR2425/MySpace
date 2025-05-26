@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AdminPaidOrder } from '../../../../data/interfaces/paid-order/admin-paid-order.interface';
 import { AdminService } from '../../../../service/admin/admin.service';
 
@@ -18,7 +18,8 @@ export class OrderPageComponent implements OnInit {
 
   constructor(
     private adminService: AdminService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   public ngOnInit(): void {
@@ -83,5 +84,12 @@ export class OrderPageComponent implements OnInit {
 
   public isOrderCancelled(): boolean {
     return this.order.receiptDate.toString() == '9999-12-31T23:59:59.9999999';
+  }
+
+  public handleRowClick(productId: string) {
+    const selection = window.getSelection();
+    if (!selection || selection.toString().length === 0) {
+      this.router.navigate(['/admin/update-product', productId]);
+    }
   }
 }

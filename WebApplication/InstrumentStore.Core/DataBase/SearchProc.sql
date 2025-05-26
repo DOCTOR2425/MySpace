@@ -26,7 +26,7 @@ BEGIN
         INNER JOIN ProductCategory AS p0 ON p.ProductCategoryId = p0.ProductCategoryId
         INNER JOIN Brand AS b ON p.BrandId = b.BrandId
         INNER JOIN Country AS c ON p.CountryId = c.CountryId
-        WHERE LOWER(p.Name) LIKE LOWER(@input) + '%'
+        WHERE LOWER(p.Name) LIKE '%' + LOWER(@input) + '%'
     )
     SELECT 
         ProductId,

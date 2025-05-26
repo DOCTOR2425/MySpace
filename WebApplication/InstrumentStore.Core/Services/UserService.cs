@@ -62,8 +62,11 @@ namespace InstrumentStore.Domain.Services
 
 		public async Task<User> Update(Guid userId, UpdateUserRequest newUser)
 		{
-			User user = await GetById(userId);
+			User? withSameEmail = await GetByEmail(newUser.Email);
+			if (withSameEmail != null && withSameEmail.UserId != userId)
+				throw new ArgumentException("Exist user with same email");
 
+			User user = await GetById(userId);
 			user.FirstName = newUser.FirstName;
 			user.Surname = newUser.Surname;
 			user.Telephone = newUser.Telephone;

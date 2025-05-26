@@ -8,6 +8,7 @@ using InstrumentStore.Domain.DataBase.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace InstrumentStore.API.Controllers
 {
@@ -149,6 +150,10 @@ namespace InstrumentStore.API.Controllers
 							$"Format {image.ContentType} is not available");
 				}
 			}
+			else
+			{
+				throw new ArgumentNullException("No images in request");
+			}
 
 			return Ok(await _productService.Update(id, productRequest, images));
 		}
@@ -167,7 +172,7 @@ namespace InstrumentStore.API.Controllers
 			[FromForm] string productDto,
 			[FromForm] List<IFormFile> images)
 		{
-			var productRequest = JsonConvert
+			CreateProductRequest productRequest = JsonConvert
 				.DeserializeObject<CreateProductRequest>(productDto);
 
 			if (images != null && images.Any())
@@ -178,6 +183,10 @@ namespace InstrumentStore.API.Controllers
 						throw new BadImageFormatException(
 							$"Format {image.ContentType} is not available");
 				}
+			}
+			else
+			{
+				throw new ArgumentNullException("No images in request");
 			}
 
 			return Ok(await _productService.Create(productRequest, images));
