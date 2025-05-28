@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using InstrumentStore.Domain.Abstractions;
 using InstrumentStore.Domain.DataBase;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Text;
 using System.Text.Json;
 
@@ -20,6 +18,7 @@ namespace InstrumentStore.API.Controllers
 		private readonly IMapper _mapper;
 		private readonly IConfiguration _config;
 		private readonly InstrumentStoreDBContext _dbContext;
+		private readonly IPromoCodeService _promoCodeService;
 
 		public DeveloperController(IUserService usersService,
 			IDeliveryMethodService deliveryMethodService,
@@ -28,7 +27,8 @@ namespace InstrumentStore.API.Controllers
 			InstrumentStoreDBContext dbContext,
 			IFillDataBaseService fillDataBaseService,
 			IConfiguration config,
-			IAdminService adminService)
+			IAdminService adminService,
+			IPromoCodeService promoCodeService)
 		{
 			_deliveryMethodService = deliveryMethodService;
 			_paymentMethodService = paymentMethodService;
@@ -37,34 +37,15 @@ namespace InstrumentStore.API.Controllers
 			_config = config;
 			_adminService = adminService;
 			_mapper = mapper;
+			_promoCodeService = promoCodeService;
 		}
 
-		[HttpGet("error")]
-		public async Task<IActionResult> Get()
+		[HttpGet("create-promo-code/{promoName}")]
+		public async Task<IActionResult> CreatePromoCode(string promoName)
 		{
-			throw new Exception("Тестоваря ошибка -------- ЫЫАААААА");
-		}
+			await _promoCodeService.Create(promoName, 10);
 
-		[HttpGet("test")]
-		public async Task<IActionResult> Test()
-		{
-			return Ok(Guid.NewGuid());
-		}
-
-
-		[Authorize(Roles = "admin")]
-		[HttpGet("TestAdminAuth")]
-		public async Task<ActionResult<string>> TestAdminAuth()
-		{
-			return Ok("Work!!!\nadmin");
-		}
-
-		//[Authorize(Roles = "user")]
-		[Authorize]
-		[HttpGet("TestUserAuth")]
-		public async Task<ActionResult<string>> TestUserAuth()
-		{
-			return Ok("Work!!!\nuser");
+			return Ok();
 		}
 
 		[HttpGet("FillAll")]

@@ -20,7 +20,15 @@
       <div class="order-header">
         <h4>Заказ от {{ order.orderDate | date : "dd.MM.yyyy" }}</h4>
         <div class="order-details">
-          <span class="order-total">{{ getOrderTotal(order) }} руб.</span>
+          <span class="order-total">
+            {{ getOrderTotal(order) }} руб.
+            {{
+              order.promoCode
+                ? ` с промокодом ${order.promoCode.name} (${order.promoCode.amount} руб.)
+                  ${getOrderTotalWithPromoCode(order)} руб.`
+                :""
+            }}
+          </span>
           <span class="order-status"
             >{{ getStatusText(order) }}
             <span *ngIf="isOrderCompleted(order)">

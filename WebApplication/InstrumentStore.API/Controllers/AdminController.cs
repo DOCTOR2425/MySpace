@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 
-
 namespace InstrumentStore.API.Controllers
 {
 	[Route("api/[controller]")]

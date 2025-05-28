@@ -45,6 +45,7 @@ namespace InstrumentStore.API
 			builder.Services.AddScoped<IImageService, ImageService>();
 			builder.Services.AddScoped<IProductPropertyService, ProductPropertyService>();
 			builder.Services.AddScoped<IProductService, ProductService>();
+			builder.Services.AddScoped<IPromoCodeService, PromoCodeService>();
 			builder.Services.AddScoped<IReportService, ReportService>();
 			builder.Services.AddScoped<IUserService, UserService>();
 

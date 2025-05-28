@@ -5,7 +5,7 @@ namespace InstrumentStore.Domain.DataBase.Models
 	public class DeliveryAddress
 	{
 		public Guid DeliveryAddressId { get; set; }
-		[MaxLength(100)]
+		[MaxLength(35)]
 		public string Street { get; set; } = string.Empty;
 		[MaxLength(10)]
 		public string HouseNumber { get; set; } = string.Empty;
@@ -13,7 +13,7 @@ namespace InstrumentStore.Domain.DataBase.Models
 		public string Entrance { get; set; } = string.Empty;
 		[MaxLength(10)]
 		public string Flat { get; set; } = string.Empty;
-		[MaxLength(100)]
+		[MaxLength(35)]
 		public required string City { get; set; }
 
 		public required PaidOrder PaidOrder { get; set; }

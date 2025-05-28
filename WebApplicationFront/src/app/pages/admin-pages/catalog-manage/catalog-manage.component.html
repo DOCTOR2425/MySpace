@@ -104,7 +104,9 @@
             {{ product.name }}
           </td>
           <td>{{ product.price }} руб.</td>
-          <td>{{ product.quantity }}</td>
+          <td [class.negative-quantity]="product.quantity < 0">
+            {{ product.quantity }}
+          </td>
           <td class="text-truncate" style="max-width: 150px">
             {{ product.productCategory }}
           </td>

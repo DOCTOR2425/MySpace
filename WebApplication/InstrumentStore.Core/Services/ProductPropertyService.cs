@@ -94,7 +94,7 @@ namespace InstrumentStore.Domain.Services
 			{
 				string[] uniqueValues = await _dbContext.ProductPropertyValue
 					.Where(pv =>
-						pv.ProductProperty.ProductCategory.ProductCategoryId == categoryId &&
+						pv.ProductProperty.ProductPropertyId == property.ProductPropertyId &&
 						pv.Product.IsArchive == false)
 					.Select(pv => pv.Value)
 					.Distinct()
@@ -114,7 +114,9 @@ namespace InstrumentStore.Domain.Services
 				= new List<CollectionPropertyForFilter>();
 
 			string[] uniqueValues = await _dbContext.Product
-					.Where(p => p.ProductCategory.ProductCategoryId == categoryId)
+					.Where(p =>
+						p.ProductCategory.ProductCategoryId == categoryId &&
+						p.IsArchive == false)
 					.Select(p => p.Brand.Name)
 					.Distinct()
 					.ToArrayAsync();
@@ -163,7 +165,9 @@ namespace InstrumentStore.Domain.Services
 				= new List<RangePropertyForFilter>();
 
 			List<decimal> productPrices = await _dbContext.Product
-					.Where(p => p.ProductCategory.ProductCategoryId == categoryId)
+					.Where(p =>
+						p.ProductCategory.ProductCategoryId == categoryId &&
+						p.IsArchive == false)
 					.Select(p => p.Price).ToListAsync();
 
 			rangePropertyForFilters.Insert(0, new RangePropertyForFilter(

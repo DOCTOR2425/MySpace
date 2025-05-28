@@ -11,6 +11,7 @@ namespace InstrumentStore.Domain.Services
 		private readonly InstrumentStoreDBContext _dbContext;
 		private readonly IUserService _usersService;
 		private readonly IDeliveryMethodService _deliveryMethodService;
+		private readonly IPromoCodeService _promoCodeService;
 
 		private int PageSize { get; } = 5;
 		public static DateTime OrderPendingStatus { get; } = DateTime.MinValue;
@@ -18,11 +19,13 @@ namespace InstrumentStore.Domain.Services
 
 		public PaidOrderService(InstrumentStoreDBContext dbContext,
 			IUserService usersService,
-			IDeliveryMethodService deliveryMethodService)
+			IDeliveryMethodService deliveryMethodService,
+			IPromoCodeService promoCodeService)
 		{
 			_dbContext = dbContext;
 			_usersService = usersService;
 			_deliveryMethodService = deliveryMethodService;
+			_promoCodeService = promoCodeService;
 		}
 
 		public async Task<List<PaidOrder>> GetAllByUserId(Guid userId)
@@ -30,6 +33,7 @@ namespace InstrumentStore.Domain.Services
 			return await _dbContext.PaidOrder
 				.Include(o => o.User)
 				.Include(o => o.DeliveryMethod)
+				.Include(o => o.PromoCode)
 				.Where(c => c.User.UserId == userId)
 				.OrderByDescending(o => o.OrderDate)
 				.AsNoTracking()
@@ -41,6 +45,7 @@ namespace InstrumentStore.Domain.Services
 			return await _dbContext.PaidOrder
 				.Include(o => o.User)
 				.Include(o => o.DeliveryMethod)
+				.Include(o => o.PromoCode)
 				.FirstOrDefaultAsync(c => c.PaidOrderId == orderId);
 		}
 
@@ -67,6 +72,8 @@ namespace InstrumentStore.Domain.Services
 				DeliveryMethod = await _deliveryMethodService
 					.GetById(orderCartRequest.DeliveryMethodId),
 				PaymentMethod = orderCartRequest.PaymentMethod,
+				PromoCode = await _promoCodeService
+					.GetIfActive(orderCartRequest.PromoCode)
 			};
 
 			if (await _deliveryMethodService.IsHomeDelivery(orderCartRequest.DeliveryMethodId)
@@ -103,6 +110,10 @@ namespace InstrumentStore.Domain.Services
 		public async Task<Guid> CancelOrder(Guid orderId)
 		{
 			(await GetById(orderId)).ReceiptDate = OrderCanceledStatus;
+
+			foreach (var item in await GetAllItemsByOrder(orderId))
+				item.Product.Quantity += item.Quantity;
+
 			await _dbContext.SaveChangesAsync();
 
 			return orderId;
@@ -113,6 +124,7 @@ namespace InstrumentStore.Domain.Services
 			return await _dbContext.PaidOrder
 				.Include(o => o.User)
 				.Include(o => o.DeliveryMethod)
+				.Include(o => o.PromoCode)
 				.Where(o => o.ReceiptDate == OrderPendingStatus)
 				.OrderByDescending(o => o.OrderDate)
 				.ToListAsync();
@@ -132,6 +144,7 @@ namespace InstrumentStore.Domain.Services
 				.Take(PageSize)
 				.Include(o => o.User)
 				.Include(o => o.DeliveryMethod)
+				.Include(o => o.PromoCode)
 				.ToListAsync();
 		}
 

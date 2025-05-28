@@ -195,4 +195,42 @@ export class UpdateUserComponent implements OnInit, OnDestroy {
     document.body.style.position = 'fixed';
     document.body.style.width = '100%';
   }
+
+  public getOrderTotal(order: AdminPaidOrder): number {
+    return order.paidOrderItems.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+  }
+
+  public getOrderTotalWithPromoCode(order: AdminPaidOrder): number {
+    let amount = this.getOrderTotal(order);
+
+    if (order.promoCode)
+      if (amount - order.promoCode.amount > 0)
+        return amount - order.promoCode.amount;
+      else if (amount - order.promoCode.amount <= 0) return 0;
+
+    return amount;
+  }
+
+  public isOrderInProcess(order: AdminPaidOrder): boolean {
+    if (order.receiptDate.toString() == '0001-01-01T00:00:00') return true;
+    return false;
+  }
+
+  public isOrderReceipted(order: AdminPaidOrder): boolean {
+    if (
+      this.isOrderCanceled(order) == false &&
+      this.isOrderInProcess(order) == false
+    )
+      return true;
+    return false;
+  }
+
+  public isOrderCanceled(order: AdminPaidOrder): boolean {
+    if (order.receiptDate.toString() == '9999-12-31T23:59:59.9999999')
+      return true;
+    return false;
+  }
 }

@@ -82,10 +82,22 @@
           <span class="order-date">{{
             order.orderDate | date : "dd.MM.yyyy"
           }}</span>
+          <span class="order-total-wrapper">
+            <span class="order-total">
+              {{ getOrderTotal(order) }} руб.
+              {{
+        order.promoCode
+          ? ` с промокодом ${order.promoCode.name} (${order.promoCode.amount} руб.)
+            ${getOrderTotalWithPromoCode(order)} руб.`
+          :""
+              }}
+            </span>
+          </span>
           <span class="toggle-icon">{{
             isOrderExpanded(order.paidOrderId) ? "−" : "+"
           }}</span>
         </div>
+
         <div class="order-details" *ngIf="isOrderExpanded(order.paidOrderId)">
           <div class="detail-row">
             <span>Способ оплаты:</span>
@@ -95,10 +107,18 @@
             <span>Доставка:</span>
             <span>{{ order.deliveryMethod.name }}</span>
           </div>
-          <div class="detail-row">
+
+          <div class="detail-row" *ngIf="isOrderReceipted(order)">
             <span>Дата получения:</span>
             <span>{{ order.receiptDate | date : "dd.MM.yyyy" }}</span>
           </div>
+          <div class="detail-row" *ngIf="isOrderCanceled(order)">
+            <span>Заказ отменён</span>
+          </div>
+          <div class="detail-row" *ngIf="isOrderInProcess(order)">
+            <span>Заказ в обработке</span>
+          </div>
+
           <div
             class="detail-row"
             *ngIf="order.userOrderInfo.userDeliveryAddress"

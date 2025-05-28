@@ -61,6 +61,7 @@ export class CartPageComponent implements OnInit, OnDestroy {
       flat: [''],
       deliveryMethodId: ['', Validators.required],
       paymentMethod: ['', Validators.required],
+      promoCode: [''],
     });
   }
 
@@ -157,6 +158,7 @@ export class CartPageComponent implements OnInit, OnDestroy {
           entrance: this.orderForm.value.entrance,
           flat: this.orderForm.value.flat,
         } as UserDeliveryAddress,
+        promoCode: this.orderForm.value.promoCode,
       };
       this.cartService
         .orderCartForRegistered(payload)
@@ -164,14 +166,16 @@ export class CartPageComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (val) => {
             this.router.navigate(['/user']);
-            // this.items = [];
-            // this.updateTotalPrice();
           },
           error: (error) => {
             this.isLoading = true;
             if (error.status == 403)
               this.toastService.showError(
                 'Запрещено оформлять заказы по причине бана'
+              );
+            if (error.status == 409)
+              this.toastService.showError(
+                'Попытка заказать слишком много товара'
               );
           },
         });

@@ -5,13 +5,13 @@ namespace InstrumentStore.Domain.DataBase.Models
 	public class User
 	{
 		public Guid UserId { get; set; }
-		[MaxLength(100)]
+		[MaxLength(50)]
 		public string FirstName { get; set; } = string.Empty;
-		[MaxLength(100)]
+		[MaxLength(50)]
 		public string Surname { get; set; } = string.Empty;
 		[MaxLength(21)]
 		public string Telephone { get; set; } = string.Empty;
-		[MaxLength(255)]
+		[MaxLength(100)]
 		public string Email { get; set; } = string.Empty;
 
 		public DateTime RegistrationDate { get; set; } = DateTime.Now;

@@ -1,10 +1,13 @@
-﻿namespace InstrumentStore.Domain.Contracts.PaidOrders
+﻿using InstrumentStore.Domain.DataBase.Models;
+
+namespace InstrumentStore.Domain.Contracts.PaidOrders
 {
-    public class UserPaidOrderResponse
-    {
-        public Guid PaidOrderId { get; set; }
-        public DateTime OrderDate { get; set; }
-        public DateTime ReceiptDate { get; set; }
-        public List<PaidOrderItemResponse> PaidOrderItems { get; set; }
-    }
+	public class UserPaidOrderResponse
+	{
+		public Guid PaidOrderId { get; set; }
+		public DateTime OrderDate { get; set; }
+		public DateTime ReceiptDate { get; set; }
+		public List<PaidOrderItemResponse> PaidOrderItems { get; set; }
+		public PromoCode? PromoCode { get; set; }
+	}
 }

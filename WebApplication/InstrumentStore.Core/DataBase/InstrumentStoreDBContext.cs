@@ -28,6 +28,7 @@ namespace InstrumentStore.Domain.DataBase
 		public required DbSet<CartItem> CartItem { get; set; }
 		public required DbSet<Comment> Comment { get; set; }
 		public required DbSet<Country> Country { get; set; }
+		public required DbSet<DeliveryAddress> DeliveryAddress { get; set; }
 		public required DbSet<DeliveryMethod> DeliveryMethod { get; set; }
 		public required DbSet<Image> Image { get; set; }
 		public required DbSet<PaidOrder> PaidOrder { get; set; }
@@ -37,7 +38,7 @@ namespace InstrumentStore.Domain.DataBase
 		public required DbSet<ProductComparisonItem> ProductComparisonItem { get; set; }
 		public required DbSet<ProductProperty> ProductProperty { get; set; }
 		public required DbSet<ProductPropertyValue> ProductPropertyValue { get; set; }
+		public required DbSet<PromoCode> PromoCode { get; set; }
 		public required DbSet<User> User { get; set; }
-		public required DbSet<DeliveryAddress> DeliveryAddress { get; set; }
 	}
 }

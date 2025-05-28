@@ -99,6 +99,12 @@ namespace InstrumentStore.Domain.Services
 			if ((await GetUserCartItems(userId)).Any() == false)
 				throw new ArgumentNullException("В корзине нет ни одного товара");
 
+			foreach (var item in await GetUserCartItems(userId))
+			{
+				if (item.Quantity > item.Product.Quantity + 5)
+					throw new InvalidOperationException("more goods then we have");
+			}
+
 			Guid paidOrderId = await _paidOrderService.Create(userId, orderCartRequest);
 
 			await _adminService.SendAdminMailAboutOrder(paidOrderId);

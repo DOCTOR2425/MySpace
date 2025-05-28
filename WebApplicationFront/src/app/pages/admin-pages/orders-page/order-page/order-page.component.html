@@ -103,7 +103,14 @@
       </div>
     </div>
     <div class="order-total">
-      Итого: <strong>{{ getTotalPrice() | number }} руб.</strong>
+      <!-- Итого: <strong>{{ getTotalPrice() | number }} руб.</strong> -->
+      {{ getTotalPrice() }}
+      {{
+        order.promoCode
+        ? ` с промокодом ${order.promoCode.name} (${order.promoCode.amount} руб.)
+          ${getTotalPriceWithPromoCode()} руб.`
+        :""
+      }}
     </div>
   </div>
 

@@ -128,6 +128,7 @@ export class CartService implements OnDestroy {
     deliveryMethodId: string;
     paymentMethod: string;
     userDelivaryAddress: UserDeliveryAddress;
+    promoCode: string;
   }): Observable<Object> {
     return this.http.post(
       `${this.baseApiUrl}order-cart-for-registered`,

@@ -139,24 +139,42 @@
       margin-bottom: 15px;
 
       .order-header {
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: auto 120px minmax(200px, 1fr) auto;
+        align-items: center;
+        gap: 10px;
         margin-bottom: 10px;
         font-weight: 600;
         cursor: pointer;
 
         .order-id {
           color: #1976d2;
+          white-space: nowrap;
         }
 
         .order-date {
           color: #666;
           font-size: 0.9em;
+          text-align: center;
+          white-space: nowrap;
+        }
+
+        .order-total-wrapper {
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .order-total {
+          color: #666;
+          font-size: 0.8em;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         .toggle-icon {
-          margin-left: 10px;
           font-weight: bold;
+          text-align: right;
         }
       }
 

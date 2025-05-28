@@ -112,6 +112,11 @@
             <input type="text" id="flat" formControlName="flat" />
           </div>
         </div>
+
+        <div class="form-group full-width">
+          <label for="street">Промокод:</label>
+          <input type="text" id="promoCode" formControlName="promoCode" />
+        </div>
       </div>
       <button type="submit" id="orderButton" [disabled]="isLoading">
         <span *ngIf="!isLoading">Оформить заказ</span>

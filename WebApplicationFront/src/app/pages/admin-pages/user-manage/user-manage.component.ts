@@ -111,7 +111,7 @@ export class UserManageComponent implements OnInit, OnDestroy {
   public handleRowClick(userId: string) {
     const selection = window.getSelection();
     if (!selection || selection.toString().length === 0) {
-      this.router.navigate(['/admin/update-user', userId]);
+      this.router.navigate(['/admin/user', userId]);
     }
   }
 }

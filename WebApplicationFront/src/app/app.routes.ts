@@ -24,6 +24,7 @@ import { CommentsComponent } from './pages/user-page/comments/comments.component
 import { ProductsPendingReviewsComponent } from './pages/user-page/products-pending-reviews/products-pending-reviews.component';
 import { UserManageComponent } from './pages/admin-pages/user-manage/user-manage.component';
 import { UpdateUserComponent } from './pages/admin-pages/user-manage/update-user/update-user.component';
+import { PromoCodeManageComponent } from './pages/admin-pages/promo-code-manage/promo-code-manage.component';
 
 export const routes: Routes = [
   {
@@ -61,7 +62,8 @@ export const routes: Routes = [
       { path: 'create-category', component: CreateCategoryComponent },
       { path: 'update-category/:id', component: UpdateCategoryComponent },
       { path: 'users', component: UserManageComponent },
-      { path: 'update-user/:id', component: UpdateUserComponent },
+      { path: 'user/:id', component: UpdateUserComponent },
+      { path: 'promo-codes', component: PromoCodeManageComponent },
     ],
   },
 ];

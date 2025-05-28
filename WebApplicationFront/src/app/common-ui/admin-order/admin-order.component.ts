@@ -30,10 +30,17 @@ export class AdminOrderComponent implements OnDestroy {
   }
 
   public getTotalPrice(order: AdminPaidOrder): number {
-    return order.paidOrderItems.reduce(
+    let amount = order.paidOrderItems.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0
     );
+
+    if (order.promoCode)
+      if (amount - order.promoCode.amount > 0)
+        return amount - order.promoCode.amount;
+      else if (amount - order.promoCode.amount <= 0) return 0;
+
+    return amount;
   }
 
   public getStatusClass(): string {

@@ -54,6 +54,17 @@ export class PaidOrdersComponent implements OnInit, OnDestroy {
     );
   }
 
+  public getOrderTotalWithPromoCode(order: UserPaidOrder): number {
+    let amount = this.getOrderTotal(order);
+
+    if (order.promoCode)
+      if (amount - order.promoCode.amount > 0)
+        return amount - order.promoCode.amount;
+      else if (amount - order.promoCode.amount <= 0) return 0;
+
+    return amount;
+  }
+
   public goToProduct(productId: string): void {
     const selection = window.getSelection();
     if (selection && selection.toString().length > 0) {

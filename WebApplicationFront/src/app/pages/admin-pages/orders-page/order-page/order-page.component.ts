@@ -71,6 +71,17 @@ export class OrderPageComponent implements OnInit {
     );
   }
 
+  public getTotalPriceWithPromoCode(): number {
+    let amount = this.getTotalPrice();
+
+    if (this.order.promoCode)
+      if (amount - this.order.promoCode.amount > 0)
+        return amount - this.order.promoCode.amount;
+      else if (amount - this.order.promoCode.amount <= 0) return 0;
+
+    return amount;
+  }
+
   public isOrderActive(): boolean {
     return this.order.receiptDate.toString() == '0001-01-01T00:00:00';
   }
