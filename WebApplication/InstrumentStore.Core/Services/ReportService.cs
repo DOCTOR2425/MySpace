@@ -4,7 +4,7 @@ using InstrumentStore.Domain.DataBase;
 using InstrumentStore.Domain.DataBase.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System.Linq;
+using Microsoft.Office.Interop.Excel;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace InstrumentStore.Domain.Services
@@ -51,6 +51,18 @@ namespace InstrumentStore.Domain.Services
 			_config = config;
 			_jwtProvider = jwtProvider;
 			_productCategoryService = productCategoryService;
+		}
+
+		private void EndExcelWork(Worksheet table, Workbook workbook, Application excelApp)
+		{
+			File.Delete(NewExcelFileName);
+
+			Excel.Range usedRange = table.UsedRange;
+			usedRange.Columns.AutoFit();
+
+			workbook.SaveAs(NewExcelFileName);
+			workbook.Close(SaveChanges: false);
+			excelApp.Quit();
 		}
 
 		private IQueryable<PaidOrder> GetOrdersInTimeSpan(DateTime from, DateTime to)
@@ -211,10 +223,7 @@ namespace InstrumentStore.Domain.Services
 				}
 			}
 
-			File.Delete(NewExcelFileName);
-			workbook.SaveAs(NewExcelFileName);
-			workbook.Close(SaveChanges: false);
-			excelApp.Quit();
+			EndExcelWork(table, workbook, excelApp);
 
 			return NewExcelFileName;
 		}
@@ -294,10 +303,7 @@ namespace InstrumentStore.Domain.Services
 				.Select(group => group.Sum(item => item.Quantity * item.Price))
 				.Average();
 
-			File.Delete(NewExcelFileName);
-			workbook.SaveAs(NewExcelFileName);
-			workbook.Close(SaveChanges: false);
-			excelApp.Quit();
+			EndExcelWork(table, workbook, excelApp);
 
 			return NewExcelFileName;
 		}
@@ -356,11 +362,7 @@ namespace InstrumentStore.Domain.Services
 				currentRow++;
 			}
 
-			File.Delete(NewExcelFileName);
-			workbook.SaveAs(NewExcelFileName);
-
-			workbook.Close(SaveChanges: false);
-			excelApp.Quit();
+			EndExcelWork(table, workbook, excelApp);
 
 			return NewExcelFileName;
 		}
@@ -386,6 +388,108 @@ namespace InstrumentStore.Domain.Services
 				.Average();
 
 			return (usersOrderCount, usersAmountProfit, usersAverageProfit);
+		}
+
+		public async Task<string> GeneratePopylarProductsBySeasonsReport(DateTime from, DateTime to)
+		{
+			var excelApp = new Excel.Application();
+			var workbook = excelApp.Workbooks.Add();
+			var table = (Excel.Worksheet)workbook.Sheets[1];
+			table.Name = "Товары по популярности в сезоне";
+
+			table.Cells[1, 1] = "Сезон";
+			table.Cells[1, 2] = "Товар";
+			table.Cells[1, 3] = "Колличество заказов";
+
+			string[] seasons = new string[]
+			{
+				"Зима",
+				"Весна",
+				"Лето",
+				"Осень",
+			};
+
+			int currentRow = 2;
+			foreach (string season in seasons)
+			{
+				Dictionary<string, int> products =
+					(await GetProductsWithOrderCount(
+						await GetPaidOrdersBySeason(from, to, season)))
+					.Take(5)
+					.ToDictionary(x => x.Key, x => x.Value);
+
+				table.Cells[currentRow, 1] = season;
+
+				foreach (var product in products)
+				{
+					table.Cells[currentRow, 2] = product.Key;
+					table.Cells[currentRow, 3] = product.Value;
+					currentRow++;
+				}
+
+				if (!products.Any())
+					currentRow++;
+			}
+
+			EndExcelWork(table, workbook, excelApp);
+
+			return NewExcelFileName;
+		}
+
+		private async Task<List<PaidOrder>> GetPaidOrdersBySeason(
+			DateTime from,
+			DateTime to,
+			string season)
+		{
+			Dictionary<string, (int, int)> seasonDates = new()
+			{
+				["Зима"] = (12, 2),
+				["Весна"] = (3, 5),
+				["Лето"] = (6, 8),
+				["Осень"] = (9, 11)
+			};
+
+			if (!seasonDates.ContainsKey(season))
+				throw new ArgumentException("Некорректный сезон. Допустимые значения: зима, весна, лето, осень");
+
+			var (seasonStart, seasonEnd) = seasonDates[season];
+
+			if (season == "Зима")
+			{
+				return await _dbContext.PaidOrder.Where(o =>
+					(o.OrderDate.Month >= seasonStart && o.OrderDate <= to) ||
+					(o.OrderDate >= from && o.OrderDate.Month <= seasonEnd))
+					.ToListAsync();
+			}
+
+			return await _dbContext.PaidOrder.Where(o =>
+				o.OrderDate.Month >= seasonStart &&
+				o.OrderDate.Month <= seasonEnd &&
+				o.OrderDate >= from &&
+				o.OrderDate <= to)
+				.ToListAsync();
+		}
+
+		private async Task<Dictionary<string, int>> GetProductsWithOrderCount(List<PaidOrder> orders)
+		{
+			List<PaidOrderItem> orderItems = new List<PaidOrderItem>();
+			foreach (var order in orders)
+				orderItems.AddRange(await _paidOrderService.GetAllItemsByOrder(order.PaidOrderId));
+
+			Dictionary<string, int> products = new Dictionary<string, int>(orderItems.Count);
+			foreach (var item in orderItems)
+			{
+				try
+				{
+					products.Add(item.Product.Name, 1);
+				}
+				catch
+				{
+					products[item.Product.Name] += 1;
+				}
+			}
+
+			return products.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
 		}
 	}
 }

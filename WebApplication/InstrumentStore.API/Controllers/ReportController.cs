@@ -62,5 +62,17 @@ namespace InstrumentStore.API.Controllers
 
 			return File(fileBytes, mimeType, Path.GetFileName(filePath));
 		}
+
+		[HttpGet("generate-popylar-products-by-seasons-report")]
+		public async Task<ActionResult> GeneratePopylarProductsBySeasonsReport(
+			[FromQuery] DateTime from,
+			[FromQuery] DateTime to)
+		{
+			string filePath = await _reportService.GeneratePopylarProductsBySeasonsReport(from, to);
+			var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+			string mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+			return File(fileBytes, mimeType, Path.GetFileName(filePath));
+		}
 	}
 }

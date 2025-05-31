@@ -11,7 +11,7 @@
           id="name"
           formControlName="name"
           placeholder="Введите название промокода"
-          maxlength="20"
+          maxlength="15"
         />
         <small
           *ngIf="
@@ -121,14 +121,6 @@
             >
               {{ promo.isActive ? "Деактивировать" : "Активировать" }}
             </button>
-            <!-- <button
-              (click)="togglePromoCodeStatus(promo)"
-              [class]="
-                promo.isActive ? 'btn-outline-danger' : 'btn-outline-success'
-              "
-            >
-              {{ promo.isActive ? "Деактивировать" : "Активировать" }}
-            </button> -->
           </td>
         </tr>
       </tbody>

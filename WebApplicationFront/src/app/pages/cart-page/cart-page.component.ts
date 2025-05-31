@@ -168,7 +168,7 @@ export class CartPageComponent implements OnInit, OnDestroy {
             this.router.navigate(['/user']);
           },
           error: (error) => {
-            this.isLoading = true;
+            this.isLoading = false;
             if (error.status == 403)
               this.toastService.showError(
                 'Запрещено оформлять заказы по причине бана'
@@ -207,6 +207,7 @@ export class CartPageComponent implements OnInit, OnDestroy {
       cartItems,
       deliveryMethodId: this.orderForm.value.deliveryMethodId,
       paymentMethod: this.orderForm.value.paymentMethod,
+      promoCode: this.orderForm.value.promoCode,
     };
 
     this.cartService.orderCartForUnregistered(payload).subscribe({
@@ -219,11 +220,13 @@ export class CartPageComponent implements OnInit, OnDestroy {
         this.router.navigate(['/user']);
       },
       error: (error) => {
-        this.isLoading = true;
+        this.isLoading = false;
         if (error.status == 403)
           this.toastService.showError(
             'Запрещено оформлять заказы по причине бана'
           );
+        if (error.status == 409)
+          this.toastService.showError('Попытка заказать слишком много товара');
       },
     });
   }

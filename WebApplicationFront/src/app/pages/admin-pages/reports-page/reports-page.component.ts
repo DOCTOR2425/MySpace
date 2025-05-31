@@ -13,6 +13,8 @@ import { ToastService } from '../../../service/toast/toast.service';
 })
 export class ReportsPageComponent implements OnInit, OnDestroy {
   public selectedReportType: string = 'sales';
+  public selectedTimeSpan: string = 'all';
+  public reportName: string = 'report';
   public from!: string;
   public to!: string;
 
@@ -60,6 +62,36 @@ export class ReportsPageComponent implements OnInit, OnDestroy {
           this.reportService.generateProfitFromUsersReport(from, to)
         );
         break;
+      case 'popylarProducts':
+        let fromYear = '';
+        let toYear = '';
+        if (this.selectedTimeSpan == 'all') {
+          fromYear = '2000-01-01';
+          toYear = new Date(new Date().setDate(new Date().getDate() + 1))
+            .toISOString()
+            .split('T')[0];
+        } else if (this.selectedTimeSpan == 'current') {
+          fromYear = new Date(new Date().getFullYear(), 1, 1)
+            .toISOString()
+            .split('T')[0];
+          toYear = new Date(new Date().getFullYear(), 11, 31)
+            .toISOString()
+            .split('T')[0];
+        } else {
+          fromYear = new Date(new Date().getFullYear() - 1, 1, 1)
+            .toISOString()
+            .split('T')[0];
+          toYear = new Date(new Date().getFullYear() - 1, 11, 31)
+            .toISOString()
+            .split('T')[0];
+        }
+        this.subscription(
+          this.reportService.generatePopylarProductsBySeasonsReport(
+            fromYear,
+            toYear
+          )
+        );
+        break;
     }
   }
 
@@ -69,7 +101,7 @@ export class ReportsPageComponent implements OnInit, OnDestroy {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'report.xlsx';
+        a.download = this.reportName + '.xlsx';
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
@@ -81,5 +113,10 @@ export class ReportsPageComponent implements OnInit, OnDestroy {
         );
       },
     });
+  }
+
+  public onReportTypeChange(event: any) {
+    const selectedOption = event.target.options[event.target.selectedIndex];
+    this.reportName = selectedOption.text;
   }
 }

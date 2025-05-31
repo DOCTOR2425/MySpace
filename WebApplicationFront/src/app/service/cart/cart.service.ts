@@ -144,6 +144,7 @@ export class CartService implements OnDestroy {
     cartItems: AddToCartRequest[];
     deliveryMethodId: any;
     paymentMethod: any;
+    promoCode: string;
   }): Observable<{ orderId: string }> {
     return this.http.post<{ orderId: string }>(
       `${this.baseApiUrl}order-cart-for-unregistered`,

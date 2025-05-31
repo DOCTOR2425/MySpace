@@ -372,7 +372,6 @@ namespace InstrumentStore.Domain.Services
 			{
 				new DeliveryMethod { DeliveryMethodId = Guid.NewGuid(), Name = "Доставка до дома", Price = 6 },
 				new DeliveryMethod { DeliveryMethodId = Guid.NewGuid(), Name = "Самовывоз", Price = 0 },
-				new DeliveryMethod { DeliveryMethodId = Guid.NewGuid(), Name = "Экспресс-доставка", Price = 12 }
 			};
 
 			foreach (var method in deliveryMethods)

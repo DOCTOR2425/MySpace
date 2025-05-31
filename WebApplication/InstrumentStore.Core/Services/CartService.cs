@@ -101,7 +101,7 @@ namespace InstrumentStore.Domain.Services
 
 			foreach (var item in await GetUserCartItems(userId))
 			{
-				if (item.Quantity > item.Product.Quantity + 5)
+				if (item.Quantity > item.Product.Quantity)
 					throw new InvalidOperationException("more goods then we have");
 			}
 
@@ -121,7 +121,8 @@ namespace InstrumentStore.Domain.Services
 			{
 				DeliveryMethodId = request.DeliveryMethodId,
 				PaymentMethod = request.PaymentMethod,
-				UserDelivaryAddress = request.UserDelivaryAddress
+				UserDelivaryAddress = request.UserDelivaryAddress,
+				PromoCode = request.PromoCode,
 			};
 
 			return await OrderCartForRegistered(userId, orderCartRequest);

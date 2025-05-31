@@ -9,16 +9,17 @@
           id="report-type"
           name="report-type"
           [(ngModel)]="selectedReportType"
+          (change)="onReportTypeChange($event)"
         >
           <option value="sales">Отчет по продажам</option>
           <option value="stock">Отчет по остатку на складе</option>
           <option value="orders">Отчет по заказам</option>
           <option value="usersProfit">Доход от покупателей</option>
-          <!-- <option value="users">Отчет по активности пользователей</option> -->
+          <option value="popylarProducts">Популярные товары по сезонам</option>
         </select>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" *ngIf="selectedReportType != 'popylarProducts'">
         <label for="start-date">Дата начала:</label>
         <input
           type="date"
@@ -28,9 +29,22 @@
         />
       </div>
 
-      <div class="form-group">
+      <div class="form-group" *ngIf="selectedReportType != 'popylarProducts'">
         <label for="end-date">Дата окончания:</label>
         <input type="date" id="end-date" name="end-date" [(ngModel)]="to" />
+      </div>
+
+      <div class="form-group" *ngIf="selectedReportType == 'popylarProducts'">
+        <label for="report-type">Промежуток времени:</label>
+        <select
+          id="report-type"
+          name="report-type"
+          [(ngModel)]="selectedTimeSpan"
+        >
+          <option value="current">За текущий год</option>
+          <option value="previous">За прошлый год</option>
+          <option value="all">За всё время</option>
+        </select>
       </div>
 
       <div class="form-actions">

@@ -10,6 +10,6 @@ namespace InstrumentStore.Domain.Contracts.Cart
 		public required AddToCartRequest[] CartItems { get; set; }
 
 		public UserDeliveryAddress? UserDelivaryAddress { get; set; }
+		public string PromoCode { get; set; } = string.Empty;
 	}
-
 }

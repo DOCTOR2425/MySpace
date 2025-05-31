@@ -25,6 +25,7 @@ import { ProductsPendingReviewsComponent } from './pages/user-page/products-pend
 import { UserManageComponent } from './pages/admin-pages/user-manage/user-manage.component';
 import { UpdateUserComponent } from './pages/admin-pages/user-manage/update-user/update-user.component';
 import { PromoCodeManageComponent } from './pages/admin-pages/promo-code-manage/promo-code-manage.component';
+import { AboutPageComponent } from './pages/about-page/about-page.component';
 
 export const routes: Routes = [
   {
@@ -44,6 +45,7 @@ export const routes: Routes = [
       },
       { path: 'search/:search', component: SearchPageComponent },
       { path: 'comparison', component: ProductComparisonComponent },
+      { path: 'about', component: AboutPageComponent },
     ],
   },
   { path: 'login', component: LoginPageComponent },

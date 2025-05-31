@@ -58,4 +58,18 @@ export class ReportService {
       }
     );
   }
+
+  public generatePopylarProductsBySeasonsReport(
+    from: string,
+    to: string
+  ): Observable<Blob> {
+    return this.http.get(
+      `${this.baseApiUrl}generate-popylar-products-by-seasons-report` +
+        `?from=${from}&to=${to}`,
+      {
+        withCredentials: true,
+        responseType: 'blob',
+      }
+    );
+  }
 }

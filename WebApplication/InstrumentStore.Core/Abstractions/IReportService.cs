@@ -6,5 +6,6 @@
 		Task<string> GenerateStockOverTimeReport(DateTime from, DateTime to);
 		Task<string> GenerateOrdersReport(DateTime from, DateTime to);
 		Task<string> GenerateProfitFromUsersReport(DateTime from, DateTime to);
+		Task<string> GeneratePopylarProductsBySeasonsReport(DateTime from, DateTime to);
 	}
 }
