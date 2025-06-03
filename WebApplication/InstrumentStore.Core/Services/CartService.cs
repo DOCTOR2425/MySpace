@@ -82,10 +82,12 @@ namespace InstrumentStore.Domain.Services
 			return cartItem.CartItemId;
 		}
 
-		public async Task<Guid> RemoveFromCart(Guid productId)
+		public async Task<Guid> RemoveFromCart(Guid productId, Guid userId)
 		{
 			await _dbContext.CartItem
-				.Where(c => c.Product.ProductId == productId)
+				.Where(c =>
+					c.User.UserId == userId &&
+					c.Product.ProductId == productId)
 				.ExecuteDeleteAsync();
 
 			return productId;
@@ -103,6 +105,11 @@ namespace InstrumentStore.Domain.Services
 			{
 				if (item.Quantity > item.Product.Quantity)
 					throw new InvalidOperationException("more goods then we have");
+
+				if (item.Product.IsArchive)
+				{
+					//await RemoveFromCart()
+				}
 			}
 
 			Guid paidOrderId = await _paidOrderService.Create(userId, orderCartRequest);

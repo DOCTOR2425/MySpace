@@ -83,7 +83,8 @@ namespace InstrumentStore.API.Controllers
 		[HttpDelete("{productId:guid}")]
 		public async Task<ActionResult> RemoveFromCart([FromRoute] Guid productId)
 		{
-			return Ok(await _cartService.RemoveFromCart(productId));
+			return Ok(await _cartService.RemoveFromCart(productId,
+				await _jwtProvider.GetUserIdFromToken(GetToken())));
 		}
 
 		[HttpPost("order-cart-for-registered")]
@@ -108,16 +109,6 @@ namespace InstrumentStore.API.Controllers
 			});
 
 			return Ok(new { orderId });
-		}
-
-		[HttpPost("order-product")]
-		public async Task<ActionResult<Guid>> OrderProduct([FromBody] OrderProductRequest orderProductRequest)
-		{
-			return Ok(await _cartService.OrderProduct(
-				await _jwtProvider.GetUserIdFromToken(GetToken()),
-				orderProductRequest.ProductId,
-				orderProductRequest.Quantity,
-				orderProductRequest.OrderCartRequest));
 		}
 
 		[AllowAnonymous]
